@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<!-- 
+    程序入口
+    引入公用头文件
+    界面root嵌套模板
+    启动程序
+ -->
+
+<html lang="en" ng-controller="AppCtrl"> 
+ 
+
+
+<head> 
+
+
+    <!-- <div ng-include="include/include.html" ></div> -->
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Walker's angular ui-view single page app. ">
+    <meta name="Keywords" content="angular ui-view single page">
+    <meta name="author" content="Walker">
+    <title  >Walker's app</title> 
+    <link rel="icon" href="resource/image/hj.png" type="image/x-icon"> 
+
+
+    <!-- 第三方库引入开始//////////////////////////////////////////////////////////////////////////-->  
+    <!-- 样式引入开始 --> 
+    <!-- Bootstrap -->
+    <link href="include/bootstrap/css/bootstrap.css" rel="stylesheet"> 
+    <link href="include/bootstrap/css/bootstrap-datetimepicker.css" rel="stylesheet"> 
+    <link href="http://vjs.zencdn.net/5.0.2/video-js.css" rel="stylesheet">
+    <!-- 样式引入结束 --> 
+
+
+    <!-- 引入js文件开始 -->
+    <!-- jQuery文件 务必在bootstrap.js 之前引入 -->
+    <script src="include/js/jquery-3.2.1.js"></script>
+    <!-- Bootstrap -->
+    <script src="include/bootstrap/js/bootstrap.js"></script> 
+    <script src="include/bootstrap/js/bootstrap-datetimepicker.js"></script>
+    <!-- 图表插件Chart.js -->
+    <script src="include/js/echarts.js" ></script> 
+    <!-- socket.io 1.7 -->
+    <script src="include/socket.io/socket.io.js" ></script> 
+
+    <!-- 视频播放器video.js -->
+    <script src="include/video/ie8/videojs-ie8.min.js"></script>
+    <script src="include/video/video.js"></script>
+
+    <!-- AngularJs框架 -->
+    <script src="include/angular/angular.js" ></script> 
+    <script src="include/angular/angular-route.js"></script> 
+    <script src="include/angular/angular-ui-router.js"></script>   
+    <script src="include/angular/angular-ui-tree.js"></script>
+    <script src="include/angular/angular-treeview.js"></script> 
+    <script src="include/angular/angular-animate.js"></script>
+    <script src="include/angular/angular-cookies.js"></script>
+    <script src="include/angular/angular-mocks.js"></script>
+    <script src="include/angular/angular-sanitize.js"></script> 
+
+    <!-- 第三方库引入结束 //////////////////////////////////////////////////////////////////////////-->
+
+    <!-- 样式引入开始 --> 
+    <link href="common/style.css"  rel="stylesheet" > 
+    <link href="module/login/style.css"  rel="stylesheet" > 
+    <link href="module/main/style.css"  rel="stylesheet" > 
+    <link href="module/system/style.css"  rel="stylesheet" > 
+    <link href="module/tomcat/style.css"  rel="stylesheet" > 
+    <link href="module/student/style.css"  rel="stylesheet" >  
+    <!-- 样式引入结束 --> 
+
+    <!-- 引入js文件开始 --> 
+    <!-- 通用模块 --> 
+    <script src="common/tool.js"></script>
+    <script src="common/module.js"></script>
+    <script src="common/service/service.js"></script>   
+    <script src="common/service/msg.js"></script>   
+    <script src="common/service/socket.js"></script>   
+    <script src="common/filter/filter.js"></script> 
+    <script src="common/directive/directive.js"></script> 
+    <script src="common/controller/controller.js"></script>   
+    <!-- 登录模块 -->   
+    <script src="module/login/module.js"></script>  
+    <script src="module/login/controller.js"></script> 
+    <script src="module/login/service.js"></script>   
+
+    <!-- 主页面模块 --> 
+    <script src="module/main/module.js"></script>  
+    <script src="module/main/controller.js"></script> 
+    <script src="module/main/directive.js"></script> 
+    <script src="module/main/service.js"></script>   
+
+    <!-- system模块   -->  
+    <script src="module/system/module.js"></script> 
+    <script src="module/system/service.js"></script> 
+    <script src="module/system/controller.js"></script>   
+
+    <!-- tomcat监控模块   -->  
+    <script src="module/tomcat/module.js"></script> 
+    <script src="module/tomcat/service.js"></script> 
+    <script src="module/tomcat/controller.js"></script>   
+
+    <!-- 学生测试模块 加载顺序 moudele定义必须在最前 -->  
+    <script src="module/student/module.js"></script>
+    <script src="module/student/filter.js"></script>  
+    <script src="module/student/service.js"></script>  
+    <script src="module/student/directive.js"></script> 
+    <script src="module/student/controller.js"></script>   
+  
+    <!-- 文件上传下载 -->  
+    <script src="module/file/module.js"></script>
+    <script src="module/file/filter.js"></script>  
+    <script src="module/file/service.js"></script>  
+    <script src="module/file/directive.js"></script> 
+    <script src="module/file/controller.js"></script> 
+
+
+    <!-- 表管理 -->  
+    <script src="module/table/module.js"></script>
+    <script src="module/table/service.js"></script>  
+    <script src="module/table/controller.js"></script> 
+
+    <!-- 午饭管理 -->  
+    <script src="module/lunch/module.js"></script>
+    <script src="module/lunch/service.js"></script>  
+    <script src="module/lunch/controller.js"></script> 
+
+    <!-- 晚饭管理 -->  
+    <script src="module/dinner/module.js"></script>
+    <script src="module/dinner/service.js"></script>  
+    <script src="module/dinner/controller.js"></script> 
+
+    <!-- 配置 -->
+    <script src="config.js"></script>  
+ 
+    <!-- 引入js文件结束 --> 
+
+    <!-- 启动代码 -->
+    <script src="launch.js"></script>
+
+  
+</head>
+
+
+
+<!-- <div ng-include="header.html" ></div> -->
+
+<body >
+
+
+<script> 
+    angular.element(document).ready(function () {
+        angular.bootstrap(document, ['App']);
+        /*取代html里ng-app='app' 兼容低版本浏览器？*/
+    });
+</script>  
+ 
+
+
+   
+
+<div ng-if="!isLogined" ng-cloak class="ng-cloak" style="height:100%;">
+    <div ui-view > login ui-view</div>
+</div>
+<div  ng-if="isLogined" ng-cloak class="ng-cloak" single-dialog>
+    <div ui-view>
+       index.html ui-view div content
+    </div> 
+</div>
+
+
+</body>
+
+
+</html>
+
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,41 @@
+<div class="mask"></div>
+<div class="img_preview_container" id="preview_container" ng-style="containerStyle">
+    <div class="img_container" id="img_container">
+        <div class="img_wrp" id="img_dom" style="width: 126px; height: 126px; top: 30px; left: 617px;">
+            <!-- webkit 的 transform 有导致不 reflow 的bug，强行改变其子元素来强制reflow-->
+            <span ng-if="reflowFlag"></span>
+            <img ng-src="{{currentImageUrl | fileUrl:800}}" class="rotate{{rotateDeg}}" ng-show="true" id="img_preview"
+                fallback-src="resources/defaultImage.png"
+             />
+            <!-- a href="javascript:" ng-click="actions.close();" class="img_preview_close" title="关闭"><i class="web_wechat_close-window"></i></a -->
+        </div>
+    </div>
+    <div class="img_opr_container" id="img_opr_container">
+        <ul class="img_opr_list">
+            <li class="img_opr_item">
+                <a ng-click="actions.prev($event)" href="javascript:" title="查看上一个">
+                    <i class="web_wechat_left" ng-class="{'web_wechat_left_disable': current <= 0}"></i>
+                </a>
+            </li>
+
+            <li class="img_opr_item" ng-if="config.showDownload">
+                <!--<a download href="{{imageList[current] | getImgUrl}}" title="下载图片">-->
+                    <!--<i class="web_wechat_download"></i>-->
+                <!--</a>-->
+                <div ng-click="download($event,imageList[current])" title="下载图片">
+                   <i class="web_wechat_download"></i>
+                </div>
+            </li>
+            <li class="img_opr_item" ng-hide="isIE">
+                <a ng-click="actions.rotate($event)" href="javascript:" title="旋转图片">
+                    <i class="web_wechat_turn"></i>
+                </a>
+            </li>
+            <li class="img_opr_item">
+                <a ng-click="actions.next($event)" href="javascript:" title="查看下一个">
+                    <i class="web_wechat_right" ng-class="{'web_wechat_right_disable': current >= imageList.length - 1}"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

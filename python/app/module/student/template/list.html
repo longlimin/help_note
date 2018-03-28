@@ -1,0 +1,60 @@
+<div class="panel-heading">  
+    <div class="navbar-form navbar-left" >
+            <input type="text" ng-model="search.ID" class="form-control" placeholder="search.ID">
+            <input type="text" ng-model="search.NAME" class="form-control" placeholder="search.NAME">
+            <input type="text" ng-model="search.TIMEFROM" id="timefrom" data-date-format="yyyy-mm-dd hh:ii" class="form-control" placeholder="search.TIMEFROM">
+            <input type="text" ng-model="search.TIMETO" id="timeto" data-date-format="yyyy-mm-dd hh:ii" class="form-control" placeholder="search.TIMETO">
+
+            <button class="btn" ng-click="list()" >查询</button> 
+    </div>   
+    <div class="clear"></div>           
+    <a ui-sref="main.student.add" class="btn" >添加</a>  
+</div>  
+
+<div class="panel-body">
+    <table class="table table-hover"> 
+        <thead>
+                    <tr>
+                        <th> No. </th>
+                        <th ng-click="changeOrder('ID')" ng-class="{dropup:order === ''}">
+                            id
+                            <span ng-class="{orderColor:orderType === 'ID'}" class="caret"></span>
+                        </th>
+                        <th ng-click="changeOrder('NAME')" ng-class="{dropup:order === ''}">
+                            name
+                            <span ng-class="{orderColor:orderType === 'NAME'}" class="caret"></span>
+                        </th>
+                        <th ng-click="changeOrder('TIME')" ng-class="{dropup:order === ''}">
+                            time
+                            <span ng-class="{orderColor:orderType === 'TIME'}" class="caret"></span>
+                        </th> 
+                        <th> update </th>
+                        <th> delete </th>
+                    </tr> 
+        </thead>
+
+        <tbody>
+  <!-- | filter:search 查询功能 默认 filterQuery自定义过滤器 --> 
+<tr ng-repeat="item in httplist | filter:search | filterQuery:search  |    orderBy:order + orderType"    >   
+            <td class="info">{{$index + 1}}</td>   <!--  $index 在表格中显示出行号， -->
+            <td >{{item.ID}}</td>  
+            <td  >{{item.NAME }}</td>
+            <td class="error">{{item.TIME | date:'medium'}}</td>
+            <td> 
+                 <a ng-click="goUpdate(item.ID)" class="abtn" > 修改</a>  
+            </td>
+            <td>
+                 <a ng-click="ajaxDelete(item.ID)" class="abtn" > 删除</a>  
+            </td>
+</tr>   
+        </tbody>
+ 
+ 
+    </table>  
+
+       <ng-include  src="'common/template/list_table_foot.html'"></ng-include>
+
+
+    data.res={{httplist}}<br>
+    data.PAGE={{PAGE}}<br> 
+</div>

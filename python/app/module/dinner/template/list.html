@@ -1,0 +1,60 @@
+
+<div ng-show="refresh">
+
+</div>
+
+<div ng-show="!refresh">
+ 
+<div class="navbar-form navbar-left" > 
+    <input ng-repeat="item in cols track by $index" ng-model="search[item]" ng-keydown="keydown($event);" placeholder="{{item}}" style="width:140px; margin-right: 5px;" class="form-control">        
+    <button class="btn" ng-click="list()" >查询</button> 
+</div> 
+<div class="clear"/>
+
+<div class="panel-body">
+    <table class="table table-hover"> 
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th ng-repeat="item in cols track by $index" ng-click="changeOrder(item)" ng-class="{dropup:order === ''}">
+                    {{item}}
+                    <span ng-class="{orderColor:orderType === item}" class="caret"></span>
+                </th>
+                <th> UPDATE </th>
+                <th> DELETE </th>
+            </tr>
+        </thead>
+
+        <tbody> 
+        <!-- filter:search -->
+            <tr ng-repeat="item in httplist | mapSearch:search | orderBy:order + orderType"    >
+                <td class="info">{{$index + 1}}</td>
+                <td  ng-repeat="name in cols track by $index">{{item[name]}}</td>
+                <td>
+                    <a ng-click="goUpdate(item[cols[0]])" class="abtn" > 修改</a>
+                </td>
+                <td>
+                    <a ng-click="ajaxDelete(item[cols[0]])" class="abtn" > 删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="info">总计</td>
+                <td  ng-repeat="key in cols track by $index">{{sums[key]}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>  
+
+       <ng-include  src="'common/template/list_table_foot.html'"></ng-include>
+
+ 
+</div>
+
+
+
+</div>
+
+
+
+

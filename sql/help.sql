@@ -1,0 +1,201 @@
+asdf;a;
+--常用 dml dcl ddl sql语句
+sqlplus / as sysdba;
+select count(*) from v$process; --查看进程数量
+alter system set processes=500 scope=spfile; --设置进程数量
+alter system set sessions=500 scope=spfile;--(这个可以不要) 
+shutdown immediate;           --关闭  
+startup;     --启动
+show parameter processes;  --查看进程参数配置
+--表集合
+SELECT count(*) from user_tables;
+--查看用户列表 
+select * from dba_users; --查看数据库里面所有用户，前提是你是有dba权限的帐号，如sys,system
+select * from all_users; --查看你能管理的所有用户！
+select * from user_users; --查看当前用户信息 ！
+
+---查看表列名
+SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = upper('student') ORDER BY COLUMN_ID
+
+---
+--oracle sql 操作模板
+---
+create table test(id varchar(20), time date);
+insert into test values('0002', to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss') );
+SELECT  to_char(time, 'yyyy-mm-dd hh24:mi:ss' ), id  FROM test;
+
+SELECT  to_char(  to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') FROM dual
+
+
+
+
+
+
+
+--修改表 外码 外键
+alter table tb_a add  FOREIGN KEY(id ) REFERENCES tb_b(id);
+
+--修改表添加列 默认值
+alter table tb_group add( checked varchar(10) default 'true' );
+
+
+--删除表
+drop  table test  ;
+--创建表
+create table test ( id varchar(20) primary key, time date, num number(3, 1), test varchar(20) not null, value varchar(20) default 'about' );
+create table test2( id varchar(20), tid varchar(20), name varchar(30) );
+create table test3 AS select id,tid from test2 where 1=2; 
+
+--插入表
+insert into test(id, time, test, num) values ('1', sysdate, 'test', '12.1');
+insert into test(id, time, test, num) values ('3', sysdate, 'test3', '12.2');
+insert into test(id, time, test, num) 
+values ('2', to_date('1000-12-12 22:22:22','yyyy-mm-dd hh24:mi:ss'), 'test', '12.1');
+insert into test2 values('1212', '1', 'name1');
+insert into test2 values('1213', '2', 'name2');
+--修改表
+update  test set pwd=MD5('cc'||id||MD5('cc'||id||'qwer')) where id='admin';
+
+--查询表
+SELECT t.*,to_char(t.time, 'yyyy-mm-dd hh24:mi:ss') tochar FROM test t;
+--count group having 关联查询
+SELECT tid, count(tid)  FROM 
+(
+SELECT t1.*,t2.id ttid,t2.tid,t2.name FROM test t1, test2 t2
+where 1=1
+and t1.id>0 
+and t1.id=t2.tid(+)
+) t 
+where 1=1
+group by tid
+having count(tid) >= 0
+
+
+SELECT t1.*,count(t2.tid) FROM test t1 
+left join test2 t2
+on t1.id=t2.tid
+where 1=1
+and t1.id>0  
+group by t2.tid
+
+
+--分组查询
+select * from (
+select 
+row_number() over ( partition by t.test order by time desc) rn
+,t.* 
+from test t ) tt
+where 1=1
+and rn=1;
+
+
+
+--判断 
+select 
+ nvl(t.id,'id is null') idnull
+,nvl2(t.id,'not null','id is null') idnull
+,(case when t.id='1' then '省公司1' when t.id='2' then '省公司2' else '分公司' end) name
+ from test t;
+--补齐位数
+select lpad( nvl2(max(count), max(count)+1, 1) , 3, '0' ) from t_contract where con_id like '%SCJS%' 
+ 
+select   max(count)    from t_contract where con_id like '%SCJS%' 
+ id not in ('090101','090106','090123','090127','090128','09012A')
+
+
+
+--文件大小计算文本函数
+CREATE OR REPLACE FUNCTION FILE_SIZE(n IN VARCHAR2) RETURN VARCHAR2 IS retval varchar2(32);
+BEGIN
+ retval := '';
+ select
+(case
+when n>1024*1024*1024*1024 then trunc(n*10/1024/1024/1024/1024)/10||'TB'
+when n>1024*1024*1024 then trunc(n*10/1024/1024/1024)/10||'GB'
+when n>1024*1024 then trunc(n*10/1024/1024)/10||'MB'
+when n>1024 then trunc(n*10/1024)/10||'KB'
+else n||'B' 
+  end) res  into retval
+from dual  ;
+ RETURN retval;
+END;
+
+
+select file_size('12000300095550') from dual;
+
+--md5加密函数
+CREATE OR REPLACE FUNCTION MD5(passwd IN VARCHAR2) RETURN VARCHAR2 IS retval varchar2(32);
+BEGIN
+ retval := Lower(utl_raw.cast_to_raw( DBMS_OBFUSCATION_TOOLKIT.MD5(INPUT_STRING => passwd)) );
+ RETURN retval;
+END;
+--调用
+select md5('123456') from  dual;
+
+DELETE FROM info;
+SELECT * FROM info;
+
+--触发器
+CREATE OR REPLACE TRIGGER tr_info 
+   BEFORE insert --指定触发时机为删除操作前触发
+   ON info 
+   FOR EACH ROW   --说明创建的是行级触发器 
+BEGIN
+   --将修改前数据插入到日志记录表 del_emp ,以供监督使用。
+   update  info set about='1' where id like '%'||to_number(to_char(sysdate,'ss'))||'%' ;  
+   update  info set about='0' where id like '%'||to_number(to_char(sysdate,'mi'))||'%' ;  
+END; 
+
+insert into info(id,userid) values(seq_info.nextval, 'test1');
+ 
+
+--调用存储过程
+begin
+p_createRoomTest(800);
+commit;
+end;
+
+--循环存储过程
+--详见plsql.sql
+create or replace procedure p_createRoomTest(cc in integer) as
+i integer;
+begin
+  i := cc;     
+  WHILE i > 0 LOOP
+  begin
+    insert into   kfgl_fj(id,roomnum,roomtype,curpeople,roomstat,stationid) values(SEQ_test.Nextval, 'T-' || SEQ_test1.Nextval,'43eb189e-a2be-4538-8276-94bc27c2a2b1','0','0','5103211993' ) ;
+
+    i:= i - 1;
+  end;
+  end LOOP;
+
+end p_createRoomTest; 
+--序列
+create sequence SEQ_file_down_up
+minvalue 1
+maxvalue 99999999
+start with 1
+increment by 1
+cache 20;
+
+create table test_job(time date);
+CREATE OR REPLACE PROCEDURE P_JOB1_TEST AS
+BEGIN
+  INSERT INTO test_job values(sysdate);
+END;
+
+--job 任务
+VAR job1 NUMBER; 
+BEGIN 
+dbms_job.submit(:job1,'P_JOB1_TEST;',sysdate,'sysdate+1/1440'); 
+COMMIT; 
+END; 
+
+BEGIN 
+dbms_job.run(:job1); 
+END; 
+
+
+
+
+

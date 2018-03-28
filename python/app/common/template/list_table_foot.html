@@ -1,0 +1,33 @@
+<tfoot>
+        <tr >
+            <td colspan="998" ><center>
+    <!-- 
+    int SHOWNUM = defaultSHOWNUM;//每页数量
+    int NOWPAGE = 1;    //当前页码
+    int PAGENUM = 0;    //总页数
+    String ORDER;   //排序
+    String DESC;    //倒序 
+    -->
+     
+<button class="btn page" ng-click="PAGE.NOWPAGE=1;  list();"><<</button> 
+<button class="btn page" ng-click="PAGE.NOWPAGE=PAGE.NOWPAGE > 1 ? (PAGE.NOWPAGE-1) : 1;  list();"><</button> 
+
+<span  ng-repeat="item in ppp track by $index">
+<button  class="page-{{item == PAGE.NOWPAGE}}" ng-click="PAGE.NOWPAGE=item;  list();">{{item}} </button>
+</span>
+
+<button class="btn page" ng-click="PAGE.NOWPAGE=((PAGE.NOWPAGE+1) > PAGE.PAGENUM ? PAGE.PAGENUM : (PAGE.NOWPAGE+ 1));  list(); ">></button> 
+<button class="btn page" ng-click="PAGE.NOWPAGE=PAGE.PAGENUM;  list();">>></button> 
+当前第 
+<input type="text"  style="width:40px;" ng-model="PAGE.NOWPAGE"    />
+/
+{{PAGE.PAGENUM}}页  
+每页显示  
+<input style="width: 40px;" type="text" ng-model="PAGE.SHOWNUM"     />
+条，共{{PAGE.NUM}}条 
+<input type="hidden" style="width:0px;height:0px;" value="{{PAGE.ORDER}}"/>
+           
+
+            </center></td>
+        </tr>
+    </tfoot>

@@ -1,0 +1,18 @@
+
+
+.divpie{
+	float:left;
+	margin: 1em; 
+	width: 24em;
+	height: 24em;
+}
+
+.port-0{
+	background-color: #F00000;
+	width:3em;
+}
+.port-1{
+	background-color: #0F0FFF;
+	width:3em;
+
+}

@@ -1,0 +1,58 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>
+                信息管理系统
+            </h3>  
+            <div class="panel panel-success"> 
+                <div class="panel-body">
+                       <div class="navbar-form navbar-left" > 
+                            <input type="text" ng-model="chart.TIMEFROM" id="charttimefrom" data-date-format="yyyy" class="form-control" placeholder="chart.TIMEFROM">
+                            <input type="text" ng-model="chart.TIMETO" id="charttimeto" data-date-format="yyyy" class="form-control" placeholder="chart.TIMETO"> 
+                            <button class="btn" ng-click="statis()" >查询</button> 
+                        </div> 
+                </div> 
+                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                    <div id="echarts" class="echart-big"></div>
+                 
+            </div> 
+
+  
+
+   <div class="panel panel-info">
+ <ul class="nav nav-tabs">
+    <li class="active">
+        <a ng-click="goHome()" href="#">列表</a>
+    </li>
+    <li class="disabled">
+        <a href="#">管理</a>
+    </li>
+    <li class="dropdown pull-right">
+         <a href="#" data-toggle="dropdown" class="dropdown-toggle">更多<strong class="caret"></strong></a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#">操作</a>
+            </li> 
+            <li class="divider">
+            </li>
+            <li>
+                <a href="#">分割线</a>
+            </li>
+        </ul>
+    </li>
+</ul> 
+         
+               <div ui-view>
+                        子模块内容
+                </div>
+                
+            </div>  
+         
+
+
+        </div>
+
+    </div>
+</div>
+
+

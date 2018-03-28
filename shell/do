@@ -1,0 +1,79 @@
+#!/bin/bash  
+###########################################
+#do
+#一些常用简单功能脚本
+#./do commit <help>
+###########################################
+source constant.sh
+source tools.sh
+source do_git.sh
+source do_renames.sh
+source do_dirfile.sh
+source do_clean.sh
+
+source do_start.sh
+
+##-----------------------------------------
+
+function stop(){
+    stop_raspberry $@
+}
+function start(){
+    start_raspberry $@
+}
+function rename(){
+    renames_rename $@
+}
+function showdir(){
+    dirfile_init $@
+}
+function clean(){
+    cleanjava $@
+    cleanpython $@
+}
+function cleanjava(){
+    clean_cleanJava $@
+}
+function cleanpython(){
+    clean_clean $@
+}
+
+function do_main(){ 
+    echo
+    toolsShow $@
+    ##########################do something yourself
+    do_init $@
+    ##########################
+    toolsLineLong 
+    echo
+}
+
+function do_init(){  
+    method=$1
+    if [[ "$method" != "" ]]
+    then 
+        rootParams=($@)   
+        params=(${rootParams[@]:1}) 
+        toolsShowMethod $method "${params[*]}"
+        #echo ${params[@]}
+        $method ${params[@]}
+    else
+        echo 'eg:'
+        echo './do test "params of test"'
+    fi
+}
+
+
+function show(){  
+    echo '$0'">>"$0
+    echo '$*'">>"$*
+    echo '$@'">>"$@    
+    echo '$#'">>"$# 
+    echo '$$'">>"$$ 
+}
+
+
+ 
+#start
+do_main $@
+

@@ -1,0 +1,26 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+         
+            <div class="panel panel-primary"  > 
+                    <div class=panel-body>
+                        <div class="navbar-form navbar-left" >  
+                            <select class="form-control" ng-model="query" ng-change="urlChange()" > 
+                                <option ng-repeat="item in queryUrl">{{item}}</option>   
+                            </select>
+                            <button class="btn" ng-click="statis_count()" >查询</button> 
+                        </div> 
+                    </div>
+                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                    <div id="echarts_count" class="echart-big-small"></div>
+
+                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                    <div id="echarts" class="echart-big-small"></div> 
+            </div>    
+             
+         
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+    <h3>
+        {{mName}}管理
+    </h3>  
+
+    <div class="navbar-form navbar-left" > 
+        <input type="text" ng-model="table"  class="form-control" placeholder="tableName">
+        <button class="btn" ng-click="show()" >管理</button> 
+        <button class="btn" ng-click="goHome()" >列表</button> 
+        <button class="btn" ng-click="goAdd()" >添加</button> 
+
+    </div> 
+    <div class="clear"/>
+
+    <div class="panel panel-info">
+        <div ui-view>
+            子模块内容
+        </div>
+    </div>  
+         
+    <div class="panel panel-success"> 
+        <div class="panel-body">
+               <div class="navbar-form navbar-left" > 
+                    <input type="text" ng-model="chart.TIMEFROM" id="charttimefrom" data-date-format="yyyy-mm-dd" class="form-control" placeholder="chart.TIMEFROM">
+                    <input type="text" ng-model="chart.TIMETO" id="charttimeto" data-date-format="yyyy-mm-dd" class="form-control" placeholder="chart.TIMETO">
+                    <button class="btn" ng-click="statis()" >查询</button> 
+                </div> 
+        </div> 
+        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+        <div id="echarts" class="echart-big"></div>
+    </div> 
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+

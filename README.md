@@ -1,0 +1,3 @@
+# help_note
+the note about python shell sql angularjs cmd regular etc...
+and the test projects 
