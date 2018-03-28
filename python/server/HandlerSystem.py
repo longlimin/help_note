@@ -6,6 +6,7 @@ import tornado.web
 
 ########################################
 from system import System
+from ModelTurn import ModelTurn
 
 ############################
 
@@ -31,23 +32,43 @@ class HandlerSystem(tornado.web.RequestHandler):
         
         return
 
+
+
+
+    def cameraTurn(self, params):
+        # obj = json.loads(params)
+        if(params == "0"):
+            deta = 20
+        else:
+            deta = -20
+        (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+
+        res = {
+            "ifmove":ifMove,
+            "info":info,
+            "costtime":costTime,
+        }
+        print(res)
+        self.write(res)
+        return
+
     def setports(self, params):    
         port = params.split("-")[0]
         value = params.split("-")[1] 
         print(port, value)
         if(value == "0"):
-            System.closeport(int(port))
+            System().closeport(int(port))
         else:
-            System.openport(int(port))
+            System().openport(int(port))
             
         self.getports(params)
         return
 
     def getports(self, params): 
         res = {
-            "gin" : System.getGin(),
-            "gout" : System.getGout(),
-            "gnd" : System.getGnd(), 
+            "gin" : System().getGin(),
+            "gout" : System().getGout(),
+            "gnd" : System().getGnd(), 
         }
         print(res)
         

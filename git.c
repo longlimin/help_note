@@ -24,6 +24,9 @@ git merge tmp
 2. git pull：相当于是从远程获取最新版本并merge到本地
  git pull origin master
 
+//本地仓库为空 未添加文件 add 
+error: src refspec master does not match any.
+error: failed to push some refs to 'git@github.com:hahaha/ftpmanage.git'
 
 git add -A  //添加需要提交的<修改>文件以及 新建的文件
 git commit -am "update" //a表示自动添加 修改过的文件？ 但不包括新建的文件

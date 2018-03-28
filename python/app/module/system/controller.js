@@ -23,6 +23,17 @@ angular.module('com.system')
             $scope.ports = data;
         }, error); 
     }
+    $scope.clickTurnCamera = function(value){
+        var params = {'value':value}
+        systemService.setports(params).then(
+        function (data) { 
+            info(data);  
+        }, error); 
+    } 
+
+
+
+
     $scope.keydown = function(event){
         if (event.keyCode == 13) {
             $scope.clickWrite();

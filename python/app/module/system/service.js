@@ -30,6 +30,10 @@ angular.module('com.system')
     this.setports = function(params){ 
         return baseService.post("/do/system/setports/" + params.port + "-" + (1-params.value));
     };
+    this.turnCamera = function(params){ 
+        return baseService.post("/do/system/cameraTurn/" + params.value);
+    };
+
 
     this.sendSocketMsg = function(params){ 
         return baseService.sendSocketMsg(params);

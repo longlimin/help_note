@@ -9,7 +9,7 @@ import sys
 
 from HandlerTest import HandlerTest
 from HandlerStudent import HandlerStudent
-# from HandlerSystem import HandlerSystem
+from HandlerSystem import HandlerSystem
 
 
 
@@ -22,7 +22,7 @@ application = tornado.web.Application([
 
     (r"/", HandlerTest),
     (r"/+do/+student/+(?P<method>.+)/+(?P<params>.*)", HandlerStudent),
-    # (r"/+do/+system/+(?P<method>.+)/+(?P<params>.*)", HandlerSystem), #非raspberry上运行需要屏蔽此服务
+    (r"/+do/+system/+(?P<method>.+)/+(?P<params>.*)", HandlerSystem), #非raspberry上运行需要屏蔽此服务
 
 
 
