@@ -34,7 +34,7 @@ angular.module('com.system')
     this.turnCamera = function(params){ 
         return baseService.post("/do/system/cameraTurn/" + params.value);
     };
-    this.turnMove = function(params){ 
+    this.move = function(params){ 
         return baseService.post("/do/system/move/" + params.value);
     };
 

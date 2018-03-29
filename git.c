@@ -54,8 +54,8 @@ git push origin master  //推送上传
 git config --global user.name "Walker" //设置用户名 
 git config --global user.email "1424234500@qq.com" //设置邮箱
 git config --global credential.helper store //设置文件认证
-echo 'https://{username}:{password}@github.com' > .git-credentials //账号密码文件
-https://1424234500%40qq.com:1234qwer@github.com         @->$40
+echo 'http://{username}:{password}@github.com' > .git-credentials //账号密码文件
+http://1424234500%40qq.com:1234qwer@github.com         @->$40
 cat .gitconfig
 [user]
         name = Walker

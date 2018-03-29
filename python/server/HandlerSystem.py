@@ -36,7 +36,7 @@ class HandlerSystem(tornado.web.RequestHandler):
 
 
 # left right head back space stop
-    def move(self, params)
+    def move(self, params):
         if(params == 'left'):
             ModelMove().turnLeft()
         elif(params == 'right'):
@@ -49,6 +49,12 @@ class HandlerSystem(tornado.web.RequestHandler):
             ModelMove().space()
         elif(params == 'stop'):
             ModelMove().stop()
+        elif(params == 'faster'):
+            ModelMove().faster(1)
+        elif(params == 'slower'):
+            ModelMove().faster(-1)
+
+            
         res = {
             "control":params,
         }
@@ -78,9 +84,9 @@ class HandlerSystem(tornado.web.RequestHandler):
         value = params.split("-")[1] 
         print(port, value)
         if(value == "0"):
-            System().closeport(int(port))
+            System().closePort(int(port))
         else:
-            System().openport(int(port))
+            System().openPort(int(port))
             
         self.getports(params)
         return
@@ -91,7 +97,7 @@ class HandlerSystem(tornado.web.RequestHandler):
             "gout" : System().getGout(),
             "gnd" : System().getGnd(), 
         }
-        print(res)
+        # print(res)
         
         self.write(res)
         return

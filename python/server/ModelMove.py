@@ -32,15 +32,15 @@ m_dc_default = 60
 class ModelMove:
     def __init__(self):
 
-        self.m_hz = 20            #pwm 0 : no pwm
+        self.m_hz = 10            #pwm 0 : no pwm
         self.m_dc_start = 30
         self.m_dc_stop = 90
-        self.m_dc_default = (m_dc_start + m_dc_stop) / 2
+        self.m_dc_default = (self.m_dc_start + self.m_dc_stop) / 2
         self.m_dc_now_left =  m_dc_default
         self.m_dc_now_right = m_dc_default
         self.m_dc_deta = 20
-
-        self.m_ports =  [22, 23, 24, 25]
+                        #lb  lh  rb  rh
+        self.m_ports =  [31, 33, 35, 37]
         self.m_status = [0, 0, 0, 0]
 
         self.setPorts(0, 0, 0, 0)
@@ -56,14 +56,20 @@ class ModelMove:
     def setMovePortPwm(self, cc, value = 0, dc = m_dc_default):
         if(value == 1):
             if(dc > self.m_dc_stop):
-                System().closePortPwm(self.m_ports[cc])
-                System().setPort(self.m_ports[cc], value)
+                res, info = System().closePortPwm(self.m_ports[cc])
+                print(res, info)
+                res, info = System().setPort(self.m_ports[cc], value)
+                print(res, info)
             else:
-                System().openPortPwm(self.m_ports[cc], self.m_hz, dc)
+                res, info = System().openPortPwm(self.m_ports[cc], self.m_hz, dc)
+                print(res, info)
             self.m_status[cc] = dc
         else:
-            System().closePortPwm(self.m_ports[cc])
-            System().setPort(self.m_ports[cc], value)
+            res, info = System().closePortPwm(self.m_ports[cc])
+            print(res, info)
+            res, info = System().setPort(self.m_ports[cc], value)
+            print(res, info)
+
             self.m_status[cc] = 0
 
 #改变pwm 调速dc 0/100
@@ -71,7 +77,7 @@ class ModelMove:
         System().setPortPwm(self.m_ports[cc], self.m_hz, dc)
 
 # 根据values状态控制移动状态
-    def setPorts(self, values): 
+    def setPorts(self, *values): 
         self.setMovePortPwm(0, values[0], self.m_dc_now_left)
         self.setMovePortPwm(1, values[1], self.m_dc_now_left)
 
@@ -85,14 +91,14 @@ class ModelMove:
         self.updateMovePortPwm(2, self.m_dc_now_right)
         self.updateMovePortPwm(3, self.m_dc_now_right)
 # 速度调控 快 慢 分档 dc 0-100
-    def moveFaster(self, dc):
-        self.m_dc_now_right = self.m_dc_now_right + self.m_dc_deta
+    def moveFaster(self, flag = 1):
+        self.m_dc_now_right = self.m_dc_now_right + self.m_dc_deta * flag
         if(self.m_dc_now_right < self.m_dc_start):
             self.m_dc_now_right = self.m_dc_start
         elif(self.m_dc_now_right > self.m_dc_stop):
             self.m_dc_now_right = self.m_dc_stop
 
-        self.m_dc_now_left = self.m_dc_now_left + self.m_dc_deta
+        self.m_dc_now_left = self.m_dc_now_left + self.m_dc_deta * flag
         if(self.m_dc_now_left < self.m_dc_start):
             self.m_dc_now_left = self.m_dc_start
         elif(self.m_dc_now_left > self.m_dc_stop):
@@ -107,22 +113,34 @@ class ModelMove:
         return res
 
     def moveHead(self):
+        self.space()
+        #lb  lh  rb  rh
         self.setPorts(0, 1, 0, 1) 
 
     def moveBack(self):
+        self.space()
+        #lb  lh  rb  rh
         self.setPorts(1, 0, 1, 0) 
 
     def turnLeft(self):
-        self.setPorts(0, 1, 1, 1)
+        self.space()
+
+        #lb  lh  rb  rh
+        self.setPorts(1, 1, 0, 1)
 
     def turnRight(self):
-        self.setPorts(1, 1, 1, 0) 
+        self.space()
+
+        #lb  lh  rb  rh
+        self.setPorts(0, 1, 1, 1) 
 
     def stop(self):
-        self.setPorts(1, 1, 1, 1)   #1111
+        self.space()
+
+        # self.setPorts(1, 1, 1, 1)   #1111
 
     def space(self):
-        self.setPports(0, 0, 0, 0)  #0
+        self.setPorts(0, 0, 0, 0)  #0
 
 
-
+ModelMove()

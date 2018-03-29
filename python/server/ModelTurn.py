@@ -60,7 +60,7 @@ class ModelTurn:
         #return 复位90d
         System().openPortPwm(self.t_port, self.t_hz, self.t_dc_default)
         time.sleep(2)
-        System().closePortPwm(System(),self.t_port)
+        System().closePortPwm(self.t_port)
         return 
 
     def turnRight(self, deta = t_turn_default ):
@@ -139,7 +139,7 @@ class ModelTurn:
 
         return (ifOk, dcMoveF, dcMoveT, pEnd, info)
 
-
+ModelTurn()
 if __name__ == "__main__":
 
     m = ModelTurn()

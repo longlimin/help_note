@@ -21,8 +21,8 @@ from include import *
 class System: 
 
     #plan the ports to user
-    #           L6  R6  L7  L8  R8  R9  R11 L4     L-6 -5  -4 -3  -2
-    s_gpios = [ 11, 12, 13, 15, 16, 18, 22, 7,     29, 31, 33,35, 37 ]
+    #           L6  R6  L7  L8  R8  R9  R11 L4     L-6camera -5move  -4move -3move  -2move
+    s_gpios = [ 11, 12, 13, 15, 16, 18, 22, 7,     29,        31, 33,35, 37 ]
     #                R-5 R-3 -2  -1
     s_gpioshigh = [  32, 36, 38, 40 ]
     #          R3 L5 
@@ -140,38 +140,48 @@ class System:
         return res, info
     def closePortPwm(self, port):
         if(self.s_pwms.has_key(port)):
-            self.s_pwms[port].ChangeDutyCycle(dc)
-            self.pop(port)
+            self.s_pwms[port].stop()
+            self.s_pwms.pop(port)
             res = True
             info = 'close pwm port: ' + str(port)
         else:
             res = False
             info = 'no exist pwm port: ' + str(port)
-        self.s_pwms[port].stop()
         return res, info
 
 
 
 
     def setPort(self, port, value):
+        res = False
+        info = ''
         for i in range(len(self.s_gout)): 
             if(self.s_gout[i]["port"] == port):
                 self.s_gout[i]["value"] = value
                 GPIO.output(port, value)
-
+                res = True
+        info = str(res) + ' set port ' + str(port) + ' ' + str(value)
+        return res, info
     def openPort(self, port):
+        res = False
+        info = ''
         for i in range(len(self.s_gout)): 
             if(self.s_gout[i]["port"] == port):
                 self.s_gout[i]["value"] = 1
                 GPIO.output(port, 1)
-
-        
+                res = True
+        info = str(res) + ' open port ' + str(port) 
+        return res, info
     def closePort(self, port):
+        res = False
+        info = ''
         for i in range(len(self.s_gout)): 
             if(self.s_gout[i]["port"] == port):
                 self.s_gout[i]["value"] = 0
                 GPIO.output(port, 0)
-
+                res = True
+        info = str(res) + ' close port ' + str(port) 
+        return res, info
     
     def inputPort(self, arr): 
         res = range(0, len(arr))
