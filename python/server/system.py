@@ -13,18 +13,8 @@ except RuntimeError:
     print("Error importint RPI.GPIO!") 
 
 
+from include import *
 
-
-# 单例装饰器
-def singleton(cls):
-    instances = {}
- 
-    def wrapper(*args, **kwargs):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kwargs)
-        return instances[cls]
- 
-    return wrapper
 
 ######################################
 @singleton
@@ -40,7 +30,7 @@ class System:
     s_gin = []
     s_gout = []
     s_gnd = []
-
+    s_pwms = {} #pwm s
 
     def __init__(self):
         print('system.init')
@@ -67,7 +57,7 @@ class System:
 
 
 # 同步async 异步sync
-# 
+# 摄像头舵机宣旋转
 # 完全控制 生成dc区间序列 周期控制渐变 dc
 # port, hz, dcFrom, dcTo, dcDeta, sleepTime
     def controlPwmAsync(self, port, hz, dcFrom, dcTo, dcDeta, sleepTime):
@@ -130,20 +120,35 @@ class System:
         p.stop()
 
     def openPortPwm(self, port, hz, dc):
-        self.p = GPIO.PWM(port, hz) #通道12 50hz
-        self.p.start(dc) 
-        # p.ChangeDutyCycle(dc)
-        # time.sleep(0.005)  
-        # p.stop()
-        return
-    @staticmethod
+        if(self.s_pwms.has_key(port)):
+            res = False
+            info = '已经开启了该pwm: ' + str(port)
+        else:
+            self.s_pwms[port] = GPIO.PWM(port, hz) #通道12 50hz
+            self.s_pwms[port].start(dc) 
+            res = True
+            info = 'open pwm port: ' + str(port) + ' hz: ' + str(hz) + ' dc: ' + str(dc)
+        return res, info
     def setPortPwm(self, port, hz, dc):
-        self.p.ChangeDutyCycle(dc)
-        return
-    @staticmethod
+        if(self.s_pwms.has_key(port)):
+            self.s_pwms[port].ChangeDutyCycle(dc)
+            res = True
+            info = 'turn pwm port: ' + str(port) + ' hz: ' + str(hz) + ' dc->: ' + str(dc)
+        else:
+            res = False
+            info = 'no exist pwm port: ' + str(port)
+        return res, info
     def closePortPwm(self, port):
-        self.p.stop()
-        return
+        if(self.s_pwms.has_key(port)):
+            self.s_pwms[port].ChangeDutyCycle(dc)
+            self.pop(port)
+            res = True
+            info = 'close pwm port: ' + str(port)
+        else:
+            res = False
+            info = 'no exist pwm port: ' + str(port)
+        self.s_pwms[port].stop()
+        return res, info
 
 
 

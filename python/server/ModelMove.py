@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
-
+from include import *
 
 #####################
 from system import System
@@ -26,92 +26,103 @@ from system import System
 # 左空置 0       0
 # 左刹车 1       1
 ########################################
-
-m_hz = 20            #pwm 0 : no pwm
-m_dc_start = 30
-m_dc_stop = 100
-m_dc_default = (m_dc_start + m_dc_stop) / 2
-m_dc_now_left =  m_dc_default
-m_dc_now_right = m_dc_default
-m_dc_deta = 20
-
-m_ports =  [22, 23, 24, 25]
-m_status = [0, 0, 0, 0]
-
+m_dc_default = 60
 ################################################
+@singleton
 class ModelMove:
-    
+    def __init__(self):
+
+        self.m_hz = 20            #pwm 0 : no pwm
+        self.m_dc_start = 30
+        self.m_dc_stop = 90
+        self.m_dc_default = (m_dc_start + m_dc_stop) / 2
+        self.m_dc_now_left =  m_dc_default
+        self.m_dc_now_right = m_dc_default
+        self.m_dc_deta = 20
+
+        self.m_ports =  [22, 23, 24, 25]
+        self.m_status = [0, 0, 0, 0]
+
+        self.setPorts(0, 0, 0, 0)
+
+
+
 #开启或关闭0/1 
-    @staticmethod
-    def setMovePort(cc, value):
-        System.setPort(m_ports[cc], value)
+    def setMovePort(self, cc, value):
+        System().setPort(self.m_ports[cc], value)
+        self.m_status[cc] = value
 
 #开启或关闭pwm/0
-    @staticmethod
-    def setMovePortPwm(cc, value = 0, dc = m_dc_default):
+    def setMovePortPwm(self, cc, value = 0, dc = m_dc_default):
         if(value == 1):
-            System.openPortPwm(m_ports[cc], m_hz, dc)
+            if(dc > self.m_dc_stop):
+                System().closePortPwm(self.m_ports[cc])
+                System().setPort(self.m_ports[cc], value)
+            else:
+                System().openPortPwm(self.m_ports[cc], self.m_hz, dc)
+            self.m_status[cc] = dc
         else:
-            System.closePortPwm(m_ports[cc])
+            System().closePortPwm(self.m_ports[cc])
+            System().setPort(self.m_ports[cc], value)
+            self.m_status[cc] = 0
 
 #改变pwm 调速dc 0/100
-    @staticmethod
-    def updateMovePortPwm(cc, dc = m_dc_default):
-        System.setPortPwm(m_ports[cc], m_hz, dc)
-   
-    @staticmethod
-    def setPorts(values):
-        i = 0
+    def updateMovePortPwm(self, cc, dc = m_dc_default):
+        System().setPortPwm(self.m_ports[cc], self.m_hz, dc)
 
-        if(m_dc_now > 90): #不调速
-            for value in values :
-                setMovePort(m_ports[i], value)
-                i = i + 1
-        else:
-            setMovePortPwm(m_ports[i], values[i], m_dc_now_left)
-            i = i + 1
-            setMovePortPwm(m_ports[i], values[i], m_dc_now_left)
-            i = i + 1
-            setMovePortPwm(m_ports[i], values[i], m_dc_now_right)
-            i = i + 1
-            setMovePortPwm(m_ports[i], values[i], m_dc_now_right)
+# 根据values状态控制移动状态
+    def setPorts(self, values): 
+        self.setMovePortPwm(0, values[0], self.m_dc_now_left)
+        self.setMovePortPwm(1, values[1], self.m_dc_now_left)
 
-    @staticmethod
-    def init():
-        setPorts(0, 0, 0, 0)
+        self.setMovePortPwm(2, values[2], self.m_dc_now_right)
+        self.setMovePortPwm(3, values[3], self.m_dc_now_right)
+# 根据新修改过的dc left/right更新pwm if已经开启了pwm
+    def updatePorts(self): 
+        self.updateMovePortPwm(0, self.m_dc_now_left)
+        self.updateMovePortPwm(1, self.m_dc_now_left)
 
+        self.updateMovePortPwm(2, self.m_dc_now_right)
+        self.updateMovePortPwm(3, self.m_dc_now_right)
 # 速度调控 快 慢 分档 dc 0-100
-    @staticmethod
-    def moveFaster(dc):
-        m_dc_now_right = m_dc_now_right + m_dc_deta
-        if(m_dc_now_right < m_dc_start):
-            m_dc_now_right = m_dc_start
-        elif(m_dc_now_right > m_dc_stop):
-            m_dc_now_right = m_dc_stop
+    def moveFaster(self, dc):
+        self.m_dc_now_right = self.m_dc_now_right + self.m_dc_deta
+        if(self.m_dc_now_right < self.m_dc_start):
+            self.m_dc_now_right = self.m_dc_start
+        elif(self.m_dc_now_right > self.m_dc_stop):
+            self.m_dc_now_right = self.m_dc_stop
 
-        m_dc_now_left = m_dc_now_left + m_dc_deta
-        if(m_dc_now_left < m_dc_start):
-            m_dc_now_left = m_dc_start
-        elif(m_dc_now_left > m_dc_stop):
-            m_dc_now_left = m_dc_stop
+        self.m_dc_now_left = self.m_dc_now_left + self.m_dc_deta
+        if(self.m_dc_now_left < self.m_dc_start):
+            self.m_dc_now_left = self.m_dc_start
+        elif(self.m_dc_now_left > self.m_dc_stop):
+            self.m_dc_now_left = self.m_dc_stop
 
-    @staticmethod
-    def moveHead():
-        setPorts(0, 1, 0, 1) 
+        self.updatePorts()
 
-    @staticmethod
-    def moveBack():
-        setPorts(1, 0, 1, 0) 
+    def getStatus(self):
+        res = 0
+        for ss in self.m_status:
+            res = (res + ss ) * 10
+        return res
 
-    @staticmethod
-    def turnLeft():
-        setPorts(0, 1, 1, 1)
+    def moveHead(self):
+        self.setPorts(0, 1, 0, 1) 
 
-    @staticmethod
-    def trunRight():
-        setPorts(1, 1, 1, 0) 
+    def moveBack(self):
+        self.setPorts(1, 0, 1, 0) 
 
+    def turnLeft(self):
+        self.setPorts(0, 1, 1, 1)
 
+    def turnRight(self):
+        self.setPorts(1, 1, 1, 0) 
+
+    def stop(self):
+        self.setPorts(1, 1, 1, 1)   #1111
+
+    def space(self):
+        self.setPports(0, 0, 0, 0)  #0
 
 
 

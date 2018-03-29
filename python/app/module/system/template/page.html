@@ -39,9 +39,25 @@
     <h4>
         行为控制
     </h4>
-    摄像头旋转
-    <button class="btn" ng-click="clickTurnCamera(0)">左转</button> 
-    <button class="btn" ng-click="clickTurnCamera(1)">右转</button> 
+    <table class="table" style="margin-bottom: 0px;" >
+            <tr>
+                <td> 摄像头旋转 </td>
+                <td><button class="btn" ng-click="clickTurnCamera(0)">左转</button> </td>
+                <td><button class="btn" ng-click="clickTurnCamera(1)">右转</button> </td>
+            </tr>
+            <tr>
+                <td> 移动控制 </td> 
+                <td><button class="btn" ng-click="clickMove('left')">左转</button> </td>
+                <td><button class="btn" ng-click="clickMove('right')">右转</button> </td>
+                <td><button class="btn" ng-click="clickMove('head')">前进</button> </td>
+                <td><button class="btn" ng-click="clickMove('back')">后退</button> </td>
+                <td><button class="btn" ng-click="clickMove('space')">空置</button> </td>
+                <td><button class="btn" ng-click="clickMove('stop')">停止</button> </td>
+            </tr>
+
+    </table>
+    
+    
 
 
 </div> 

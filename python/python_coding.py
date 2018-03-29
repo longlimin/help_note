@@ -92,6 +92,12 @@ print( "keys:", )
 print(  dict2.keys() )
 print( " " + "values:", )
 print( dict2.values() )
+1：dict.copy：返回一个字典的浅复制
+2:dict.get(key,default=None):返回指定键的值，如果值不在字典中返回default值）
+3:dict.has_key(key):如果键在字典dict里返回true，否则返回false
+dict.pop(key) 移除
+4：dict.keys()
+5:dict.items() ：以列表的形式返回遍历的键值对元组数组
 #遍历字典 编码utf unicode
 for key in data:
         print(key+':'+data[key])
@@ -214,7 +220,7 @@ print( cal )
 %% %号本身
 """
 
-
+############################################
 #函数
 #可写函数说明 用参数名匹配参数值 默认值
 def printme( str , age = 35 ):
@@ -223,10 +229,65 @@ def printme( str , age = 35 ):
  
 #调用print(me函数 )
 printme( str = "My string");
+#############################################
+#装饰器 环绕执行
+def deco(func):
+    def wrapper(): #无参
+    def wrapper(a, b):#定参
+    def wrapper(*args, **kwargs):#带有不定参数的装饰器
+    
+        startTime = time.time()
+        func()
+        endTime = time.time()
+        msecs = (endTime - startTime)*1000
+        print("time is %d ms" %msecs)
+    return wrapper
+@deco12
+@deco
+def functionName():
+    print("hello")
+    time.sleep(1)
+    print("world")
 
+#######################################
+#单例模式
+#1.python的模块就是天然的单例模式，因为模块在第一次导入时，会生成.pyc文件，当第二次导入时，就会直接加载.pyc文件，而不会再次执行模块代码
+# mysingle.py
+class MySingle:
+　　def foo(self):
+　　　　pass
+
+sinleton = MySingle()
+
+#将上面的代码保存在文件mysingle.py中，然后这样使用：
+from mysingle import sinleton
+singleton.foo()
+
+#2.
+class ClassName(object):
+    def __new__(cls):
+        # 关键在于这，每一次实例化的时候，我们都只会返回这同一个instance对象
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(ClassName, cls).__new__(cls)
+        return cls.instance
+
+#3.装饰器
+def singleton(cls):
+    instances = {}
+    def getinstance(*args,**kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args,**kwargs)
+        return instances[cls]
+    return getinstance
+    
+@singleton
+class MyClass:
+    a = 1
+
+##########################################
 #全局变量
 globvar = 1;
-# 动态个数参数  
+# 动态个数参数   元组()
 def info(arg1, *vartuple ) :
    global globvar    # 使用 global 声明全局变量
    print( "输出: " )

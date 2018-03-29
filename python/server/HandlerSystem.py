@@ -7,6 +7,7 @@ import tornado.web
 ########################################
 from system import System
 from ModelTurn import ModelTurn
+from ModelMove import ModelMove
 
 ############################
 
@@ -34,7 +35,27 @@ class HandlerSystem(tornado.web.RequestHandler):
 
 
 
-
+# left right head back space stop
+    def move(self, params)
+        if(params == 'left'):
+            ModelMove().turnLeft()
+        elif(params == 'right'):
+            ModelMove().turnRight()
+        elif(params == 'head'):
+            ModelMove().moveHead()
+        elif(params == 'back'):
+            ModelMove().moveBack()
+        elif(params == 'space'):
+            ModelMove().space()
+        elif(params == 'stop'):
+            ModelMove().stop()
+        res = {
+            "control":params,
+        }
+        print(res)
+        self.write(res)
+        return
+# 0 1 
     def cameraTurn(self, params):
         # obj = json.loads(params)
         if(params == "0"):
@@ -51,7 +72,7 @@ class HandlerSystem(tornado.web.RequestHandler):
         print(res)
         self.write(res)
         return
-
+# 20-0  20-1
     def setports(self, params):    
         port = params.split("-")[0]
         value = params.split("-")[1] 
@@ -76,29 +97,7 @@ class HandlerSystem(tornado.web.RequestHandler):
         return
 
     def home(self, params) : 
-        print("exec home")
-        #print(params)   
-        uptime = Tools.exe("uptime")
-#top - 14:15:23 up 5 days, 51 min,  3 users,  load average: 0.01, 0.01, 0.00
-#Tasks: 139 total,   1 running, 138 sleeping,   0 stopped,   0 zombie
-#%Cpu(s):  0.2 us,  0.2 sy,  0.0 ni, 99.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
-#KiB Mem :   949580 total,   400472 free,    50768 used,   498340 buff/cache
-#KiB Swap:   102396 total,   102396 free,        0 used.   833200 avail Mem       
-        mem = Tools.exe("top -n 1 | grep 'KiB Mem' ") 
-        print(mem)
-        #print(chardet.detect(mem) )  
-  
-        
-       #mem = re.split(r'.*: +|, +| ',mem)     
-        swap = Tools.exe("top -n 1 | grep 'KiB Swap' ")
-        
-        obj = {
-            "uptime": uptime,
-            "mem": mem,
-            "swap": swap, 
-        }
-        
-        res = json.dumps(obj)
+        res = 'home'
         print(res)
         self.write(res)
         return

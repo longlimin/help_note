@@ -20,6 +20,7 @@ angular.module('com.system')
     this.do = function(url, params){ 
         return baseService.post(url, params);
     }; 
+
     this.statis = function(params){ 
         return baseService.post("/do/system/home/tocken", params);
     };
@@ -33,7 +34,9 @@ angular.module('com.system')
     this.turnCamera = function(params){ 
         return baseService.post("/do/system/cameraTurn/" + params.value);
     };
-
+    this.turnMove = function(params){ 
+        return baseService.post("/do/system/move/" + params.value);
+    };
 
     this.sendSocketMsg = function(params){ 
         return baseService.sendSocketMsg(params);

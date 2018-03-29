@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-  
+#-*- coding:utf-8 -*- 
+from include import *
 
+@singleton
 class Template:
     """A simple example class""" 
 

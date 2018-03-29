@@ -61,12 +61,7 @@ kmk5meml
 红vcc
 橙信号
 灰gnd
-p = GPIO.PWM(12, 50) #通道12 50hz
-p.start(0)
-time.sleep(0.005)  
-p.ChangeDutyCycle(dc)
-time.sleep(0.005)  
-p.stop() 
+pwm#通道12 50hz
 // T 20ms
 # 0.5ms--------------0 度；      
 #  1.0ms------------45 度；       
@@ -104,6 +99,15 @@ MP4Box -fps 30 -add keychain.h264 keychain.mp4
 
 
 
+//Pwm模块
+树莓派3有两路硬件pwm四个输出口，BCM12与18为一组，13与19为一组。
+
+p = GPIO.PWM(12, 50) 
+p.start(0)
+time.sleep(0.005)  
+p.ChangeDutyCycle(dc)
+time.sleep(0.005)  
+p.stop() 
 
 
 

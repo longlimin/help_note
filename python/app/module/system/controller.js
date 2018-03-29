@@ -25,7 +25,14 @@ angular.module('com.system')
     }
     $scope.clickTurnCamera = function(value){
         var params = {'value':value}
-        systemService.setports(params).then(
+        systemService.turnCamera(params).then(
+            function (data) { 
+                info(data);  
+        }, error); 
+    } 
+    $scope.clickMove = function(value){
+        var params = {'value':value}
+        systemService.move(params).then(
         function (data) { 
             info(data);  
         }, error); 

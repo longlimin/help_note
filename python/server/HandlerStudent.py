@@ -4,10 +4,8 @@ import sys
 import tornado.ioloop
 import tornado.web
 
+from include import *
 
-sys.path.append("../")
-#####################self
-from python_tool import *
 
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
-import time
+from include import *
 
 #####################
 from system import System
@@ -19,18 +19,6 @@ from system import System
 t_time_default = 4000
 t_default = 90
 t_turn_default = 15 #默认左右转动15d
-
-
-# 单例装饰器
-def singleton(cls):
-    instances = {}
- 
-    def wrapper(*args, **kwargs):
-        if cls not in instances:
-            instances[cls] = cls(*args, **kwargs)
-        return instances[cls]
- 
-    return wrapper
 
 ######################################
 @singleton
