@@ -40,41 +40,81 @@ class ModelMove:
         self.m_dc_now_right = m_dc_default
         self.m_dc_deta = 20
                         #lb  lh  rb  rh
-        self.m_ports =  [31, 33, 35, 37]
-        self.m_status = [0, 0, 0, 0]
+        self.m_ports =      [31, 33, 35, 37]
+        self.m_status =     [0, 0, 0, 0]    #端口使用状态  0关闭  / 1pwm开 / 2pwm关普通开
 
         self.setPorts(0, 0, 0, 0)
 
 
-
-#开启或关闭0/1 
-    def setMovePort(self, cc, value):
-        System().setPort(self.m_ports[cc], value)
-        self.m_status[cc] = value
-
-#开启或关闭pwm/0
+    def openPortPwm(self, port, hz, dc):
+# pwm/非pwm开关控制 
+# port[0] value=1 dc=80
+# port[1] value=1 dc=90
     def setMovePortPwm(self, cc, value = 0, dc = m_dc_default):
-        if(value == 1):
-            if(dc > self.m_dc_stop):
-                res, info = System().closePortPwm(self.m_ports[cc])
-                print(res, info)
-                res, info = System().setPort(self.m_ports[cc], value)
-                print(res, info)
-            else:
-                res, info = System().openPortPwm(self.m_ports[cc], self.m_hz, dc)
-                print(res, info)
-            self.m_status[cc] = dc
-        else:
-            res, info = System().closePortPwm(self.m_ports[cc])
-            print(res, info)
-            res, info = System().setPort(self.m_ports[cc], value)
-            print(res, info)
+        print('setMovePortPwm', self.m_ports[cc], value, dc)
+        if(value == 1): #打开
+            if(dc >= self.m_dc_stop):   #无需pwm
+                if(self.m_status[cc] == 0):     #关闭状态
+                    res, info = System().setPort(self.m_ports[cc], value)   #开启端口
+                    self.m_status[cc] = 2 
+                elif(self.m_status[cc] == 1):   #pwm开启状态
+                    res, info = System().closePortPwm(self.m_ports[cc])     #关闭pwm
+                    print(res, info)
+                    self.m_status[cc] = 0 
+                    res, info = System().setPort(self.m_ports[cc], value)   #开启端口
+                    self.m_status[cc] = 2 
+                elif(self.m_status[cc] == 2):   #已经开启端口
+                    res = False
+                    info = 'have open port ' + str(self.m_ports[cc])        #不操作
+            else:                       #需要pwm
+                if(self.m_status[cc] == 0):     #关闭状态
+                    res, info = System().openPortPwm(self.m_ports[cc], self.m_hz, dc)     #开启pwm
+                    self.m_status[cc] = 1 
+                elif(self.m_status[cc] == 1):   #pwm开启状态
+                    res = False
+                    info = 'have open pwm ' + str(self.m_ports[cc])        #不操作
+                elif(self.m_status[cc] == 2):   #已经开启端口
+                    res, info = System().closePort(self.m_ports[cc])     #关闭端口
+                    print(res, info)
+                    self.m_status[cc] = 0
+                    res, info = System().openPortPwm(self.m_ports[cc], self.m_hz, dc)     #开启pwm
+                    self.m_status[cc] = 1 
+        else:       #关闭
+            if(self.m_status[cc] == 0):     #关闭状态
+                res, info = System().closePort(self.m_ports[cc])        #不操作 再确认关闭端口
+            elif(self.m_status[cc] == 1):   #pwm开启状态
+                res, info = System().closePortPwm(self.m_ports[cc])     #关闭pwm
+                self.m_status[cc] = 0 
+            elif(self.m_status[cc] == 2):   #已经开启端口
+                res, info = System().closePort(self.m_ports[cc])     #关闭端口
+                self.m_status[cc] = 0 
 
-            self.m_status[cc] = 0
+        print(res, info)
 
-#改变pwm 调速dc 0/100
+# pwm 更新 调速dc 0/100
     def updateMovePortPwm(self, cc, dc = m_dc_default):
-        System().setPortPwm(self.m_ports[cc], self.m_hz, dc)
+        print('updateMovePortPwm', cc, dc)
+
+        if(dc >= self.m_dc_stop):   #无需pwm
+            if(self.m_status[cc] == 1):   #pwm开启状态
+                res, info = System().closePortPwm(self.m_ports[cc])     #关闭pwm
+                print(res, info)
+                self.m_status[cc] = 0 
+                res, info = System().setPort(self.m_ports[cc], value)   #开启端口
+                self.m_status[cc] = 2 
+            elif(self.m_status[cc] == 2):   #已经开启端口
+                res = False
+                info = 'have update to open port ' + str(self.m_ports[cc])        #不操作
+        else:                       #需要pwm
+            if(self.m_status[cc] == 1):   #pwm开启状态
+                res, info = System().setPortPwm(self.m_ports[cc], self.m_hz, dc)    #更新pwm
+            elif(self.m_status[cc] == 2):   #已经开启端口
+                res, info = System().closePort(self.m_ports[cc])     #关闭端口
+                print(res, info)
+                self.m_status[cc] = 0
+                res, info = System().openPortPwm(self.m_ports[cc], self.m_hz, dc)     #开启pwm
+                self.m_status[cc] = 1 
+        print(res, info)
 
 # 根据values状态控制移动状态
     def setPorts(self, *values): 
@@ -83,7 +123,7 @@ class ModelMove:
 
         self.setMovePortPwm(2, values[2], self.m_dc_now_right)
         self.setMovePortPwm(3, values[3], self.m_dc_now_right)
-# 根据新修改过的dc left/right更新pwm if已经开启了pwm
+# 根据新修改过的dc left/right更新速度 90dc上下修改pwm为端口开闭
     def updatePorts(self): 
         self.updateMovePortPwm(0, self.m_dc_now_left)
         self.updateMovePortPwm(1, self.m_dc_now_left)
@@ -107,37 +147,31 @@ class ModelMove:
         self.updatePorts()
 
     def getStatus(self):
-        res = 0
+        res = ''
         for ss in self.m_status:
-            res = (res + ss ) * 10
+            res = res + str(ss)
         return res
 
     def moveHead(self):
-        self.space()
         #lb  lh  rb  rh
         self.setPorts(0, 1, 0, 1) 
 
     def moveBack(self):
-        self.space()
         #lb  lh  rb  rh
         self.setPorts(1, 0, 1, 0) 
 
     def turnLeft(self):
-        self.space()
 
         #lb  lh  rb  rh
         self.setPorts(1, 1, 0, 1)
 
     def turnRight(self):
-        self.space()
 
         #lb  lh  rb  rh
         self.setPorts(0, 1, 1, 1) 
 
     def stop(self):
-        self.space()
-
-        # self.setPorts(1, 1, 1, 1)   #1111
+        self.setPorts(1, 1, 1, 1)   #1111
 
     def space(self):
         self.setPorts(0, 0, 0, 0)  #0

@@ -5,6 +5,9 @@ import tornado.ioloop
 import tornado.web
 
 ########################################
+from include import *
+
+
 from system import System
 from ModelTurn import ModelTurn
 from ModelMove import ModelMove
@@ -19,19 +22,22 @@ class HandlerSystem(tornado.web.RequestHandler):
     def get(self, method, params):
         params = params.encode('utf-8')
         method = method.encode('utf-8')
-        print("class:  " + self.__class__.__name__)    #className
-        print("method: " + method)    #list
-        print("params: " + params)    #{arg1: 'a1', arg2: 'a2' }
-        #检查成员
-        ret = hasattr(self, method) #因为有func方法所以返回True 
-        if(ret == True) :
-            #获取成员
-            method = getattr(self, method)#获取的是个对象
-            method(params) 
-        else :
-            print("该方法不存在")
         
-        return
+
+        tool.doMethod(self, method, params)
+        # print("class:  " + self.__class__.__name__)    #className
+        # print("method: " + method)    #list
+        # print("params: " + params)    #{arg1: 'a1', arg2: 'a2' }
+        # #检查成员
+        # ret = hasattr(self, method) #因为有func方法所以返回True 
+        # if(ret == True) :
+        #     #获取成员
+        #     method = getattr(self, method)#获取的是个对象
+        #     method(params) 
+        # else :
+        #     print("该方法不存在")
+        
+        # return
 
 
 

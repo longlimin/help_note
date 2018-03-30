@@ -11,22 +11,32 @@ print( "start-------------------" )
 print( "Base data types Numbers[int,long,float,complex], String, List, Tuple, Dictionary" )
 dir()#访问域
 dir(os)
+
 #类属性self
 a = Student()
+#当前方法名
 print('the name of method is ## {} ##'.format(sys._getframe().f_code.co_name))
+#当前类名
 print('the name of class is ## {} ##'.format(self.__class__.__name__))
 a.__name__
 getattr(a,'__name__')
-dir(time)#获取类所有方法
+#获取类所有方法
+dir(time)
 sys._getframe().f_code.co_name
-#检查成员
+#检查类方法成员
 ret = hasattr(obj,'func')#因为有func方法所以返回True
 print(ret)
 if(ret == True) :
-	#获取成员
+#获取类方法l成员
 	ret = getattr(obj, 'func')#获取的是个对象
 	r = ret()
 	print(r)
+#反向类构建
+file_name  模块名  
+ module = __import__(file_name)
+ AClass = getattr(module, class_name_str)()
+ obj = AClass()
+ obj = new.instance(AClass)
 
 a = b = c = 1;
 count, cc, str = 1, 2, "string";
@@ -98,7 +108,10 @@ print( dict2.values() )
 dict.pop(key) 移除
 4：dict.keys()
 5:dict.items() ：以列表的形式返回遍历的键值对元组数组
+#数组 长度
 #遍历字典 编码utf unicode
+for i in range(len(arr)):
+  arr[i]
 for key in data:
         print(key+':'+data[key])
         print(type(key))

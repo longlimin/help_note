@@ -7,6 +7,6 @@ angular.module('com.common')
     $scope.goHome = function(){ 
         $state.go('main.home');
     }
- 
+  
 }]) 
 

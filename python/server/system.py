@@ -46,7 +46,6 @@ class System:
         self.s_gnd = self.makePort(self.s_gnds)
 
     def getGin(self):
-        print(self.s_gin)
         return self.s_gin
     def getGout(self):
         return self.s_gout
@@ -75,9 +74,7 @@ class System:
         if(dcTo > dcFrom):  #递增
             while (dcNow <= dcTo):
                 pwm.ChangeDutyCycle(dcNow)    #改变占比
-
                 time.sleep(sleepTime)
-
 
                 if(dcNow >= dcTo):
                     break
@@ -87,9 +84,7 @@ class System:
         elif(dcTo < dcFrom): #递减
             while (dcNow >= dcTo):
                 pwm.ChangeDutyCycle(dcNow)    #改变占比
-
                 time.sleep(sleepTime)
-
 
                 if(dcNow <= dcTo):
                     break
@@ -113,7 +108,7 @@ class System:
         self.p.ChangeDutyCycle(dc)
         time.sleep(2)
 
-        for d in range(15):
+        for d in range(15): 
             self.p.ChangeDutyCycle(d)
             time.sleep(0.3)
         # time.sleep(0.005)  
@@ -122,7 +117,7 @@ class System:
     def openPortPwm(self, port, hz, dc):
         if(self.s_pwms.has_key(port)):
             res = False
-            info = '已经开启了该pwm: ' + str(port)
+            info = 'have open pwm: ' + str(port)
         else:
             self.s_pwms[port] = GPIO.PWM(port, hz) #通道12 50hz
             self.s_pwms[port].start(dc) 
@@ -160,7 +155,7 @@ class System:
                 self.s_gout[i]["value"] = value
                 GPIO.output(port, value)
                 res = True
-        info = str(res) + ' set port ' + str(port) + ' ' + str(value)
+        info = ' set port ' + str(port) + ' ' + str(value)
         return res, info
     def openPort(self, port):
         res = False
@@ -170,7 +165,7 @@ class System:
                 self.s_gout[i]["value"] = 1
                 GPIO.output(port, 1)
                 res = True
-        info = str(res) + ' open port ' + str(port) 
+        info = ' open port ' + str(port) 
         return res, info
     def closePort(self, port):
         res = False
@@ -180,7 +175,7 @@ class System:
                 self.s_gout[i]["value"] = 0
                 GPIO.output(port, 0)
                 res = True
-        info = str(res) + ' close port ' + str(port) 
+        info = ' close port ' + str(port) 
         return res, info
     
     def inputPort(self, arr): 

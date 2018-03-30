@@ -80,9 +80,8 @@ class database :
         args = self.turnArray(args)
         count = self.getCount(sql, args)
 
-        pageSql = "select * from ( " + sql + " ) limit 5 offset 0 "
-        #args.append(num)
-        #args.append(int(num) * (int(page) - 1) )
+        offset = (int(num) * (int(page) - 1) )
+        pageSql = "select * from ( " + sql + " ) limit " + str(num) + " offset " + str(offset) + " "
         self.out(pageSql, args) 
         conn = self.getConn()
         cursor = conn.cursor()

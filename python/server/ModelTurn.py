@@ -59,7 +59,7 @@ class ModelTurn:
         
         #return 复位90d
         System().openPortPwm(self.t_port, self.t_hz, self.t_dc_default)
-        time.sleep(2)
+        time.sleep(1)
         System().closePortPwm(self.t_port)
         return 
 
@@ -86,9 +86,8 @@ class ModelTurn:
             # port, hz, dcFrom, dcTo, dcDeta, sleepTime
             costTime = System().controlPwmAsync(self.t_port, self.t_hz, dcMoveFrom, dcMoveTo, self.t_dc_deta, sleepTime)
             self.t_dc_now = dcMoveTo  #更新当前dc为新dc
-
-        print('耗时: ' + str(costTime))
-        time.sleep(0.5)
+            print('耗时: ' + str(costTime))
+            time.sleep(0.2)
         return (ifMove, info, costTime)
 
 

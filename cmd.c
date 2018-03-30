@@ -9,8 +9,8 @@ dxdiag 查看direct 和 硬件设备信息 系统版本 windows10 专业版64(10
 第三步：双击你刚新建军的"qq"字符串值项,即：
 编辑字符串数值数据：将第三步找到的软件目录复制到下面图的“数值数据栏内” 
 确定后，关闭注册表，OK，你的XP系统启动项设置成功了
-P.S.
-1.Run键
+P.S. 
+1.Run键r
 　　Run键是病毒最青睐的自启动之所，该键位置是[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]和[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run]，其下的所有程序在每次启动登录时都会按顺序自动执行。
 　　还有一个不被注意的Run键，位于注册表[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run]和[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run]，也要仔细查看。
 
