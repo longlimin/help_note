@@ -24,20 +24,20 @@ class HandlerSystem(tornado.web.RequestHandler):
         method = method.encode('utf-8')
         
 
-        tool.doMethod(self, method, params)
-        # print("class:  " + self.__class__.__name__)    #className
-        # print("method: " + method)    #list
-        # print("params: " + params)    #{arg1: 'a1', arg2: 'a2' }
-        # #检查成员
-        # ret = hasattr(self, method) #因为有func方法所以返回True 
-        # if(ret == True) :
-        #     #获取成员
-        #     method = getattr(self, method)#获取的是个对象
-        #     method(params) 
-        # else :
-        #     print("该方法不存在")
+        # tool.doMethod(self, method, params)
+        print("class:  " + self.__class__.__name__)    #className
+        print("method: " + method)    #list
+        print("params: " + params)    #{arg1: 'a1', arg2: 'a2' }
+        #检查成员
+        ret = hasattr(self, method) #因为有func方法所以返回True 
+        if(ret == True) :
+            #获取成员
+            method = getattr(self, method)#获取的是个对象
+            method(params) 
+        else :
+            print("该方法不存在")
         
-        # return
+        return
 
 
 
@@ -56,9 +56,11 @@ class HandlerSystem(tornado.web.RequestHandler):
         elif(params == 'stop'):
             ModelMove().stop()
         elif(params == 'faster'):
-            ModelMove().faster(1)
+            ModelMove().moveFaster(1)
         elif(params == 'slower'):
-            ModelMove().faster(-1)
+            ModelMove().moveFaster(-1)
+        elif(params == 'turnrevert'):
+            ModelMove().turnRevert()
 
             
         res = {
@@ -72,9 +74,13 @@ class HandlerSystem(tornado.web.RequestHandler):
         # obj = json.loads(params)
         if(params == "0"):
             deta = 20
-        else:
+            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+        elif(params == "1"):
             deta = -20
-        (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+        else:
+            deta = 0
+            (ifMove, info, costTime) = ModelTurn().turnTo()
 
         res = {
             "ifmove":ifMove,

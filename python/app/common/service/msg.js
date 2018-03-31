@@ -9,6 +9,7 @@
 
 var SOCKET_MSG = "socket:msg"; //普通消息
 var SOCKET_MV = "socket:mv";  //socket图片流
+var SOCKET_SYSTEM= "socket:system";  //system控制
 
 
 var _socketKeyName = "socket_key";

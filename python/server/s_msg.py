@@ -69,6 +69,10 @@ class Msg:
 
 
             print('1==2')
+        elif(socket_key == 'socket:system'):
+            method = self.getValue(map, "method")
+            params = self.getValue(map, "params")
+            HandleSystem().get(method, params)
         else:
             handRes[name_value] = 'else'
 

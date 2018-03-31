@@ -41,13 +41,17 @@
     </h4>
     <table class="table" style="margin-bottom: 0px;" >
             <tr>
-                <td> 摄像头旋转 </td>
+                <td> 摄像头</td>
                 <td><button class="btn" ng-click="clickTurnCamera(0)">左转</button> </td>
+                <td><button class="btn" ng-click="clickTurnCamera(2)">复位</button> </td>
                 <td><button class="btn" ng-click="clickTurnCamera(1)">右转</button> </td>
+
+
+
             </tr>
             <tr>
-                <td> 移动控制 </td> 
-                <td><button class="btn" ng-click="clickMove('left')">左转</button> </td>
+                <td> 移动</td> 
+                <td><button  class="btn" ng-click="clickMove('left')">左转</button> </td>
                 <td><button class="btn" ng-click="clickMove('right')">右转</button> </td>
                 <td><button class="btn" ng-click="clickMove('head')">前进</button> </td>
                 <td><button class="btn" ng-click="clickMove('back')">后退</button> </td>
@@ -55,11 +59,35 @@
                 <td><button class="btn" ng-click="clickMove('stop')">停止</button> </td>
                 <td><button class="btn" ng-click="clickMove('faster')">加速</button> </td>
                 <td><button class="btn" ng-click="clickMove('slower')">减速</button> </td>
-
             </tr>
+            <tr>
+                <td colspan="998">
 
+  
+<div style="100%;height:300px">
+    <div style="height:32%;width:100%;text-align: center;">
+        <button style="height:100%;width:12%;" class="btn" ng-click="clickMove('faster')">加速</button>
+        <button style="height:100%;width:60%;" class="btn"   ng-mousedown="clickMove('head')" ng-mouseup="clickMove('space')">前进</button>
+
+        <button style="height:100%;width:12%;" class="btn" ng-click="clickMove('slower')">减速</button>
+    </div>
+
+    <div style="height:32%;width:100%;text-align: center;margin:5px 0px;">
+        <button style="height:100%;width:32%;" class="btn" ng-mousedown="clickMove('left')" ng-mouseup="clickMove('turnrevert')">左转</button>
+        <button style="height:100%;width:14%;" class="btn" ng-click="clickMove('stop')">刹车</button>
+        <button style="height:100%;width:14%;"class="btn" ng-click="clickMove('space')">空置</button>
+        <button style="height:100%;width:32%;" class="btn" ng-mousedown="clickMove('right')" ng-mouseup="clickMove('turnrevert')">右转</button>                        
+    </div>
+
+    <div style="height:32%;width:100%;text-align: center;">
+        <button style="height:100%;width:60%;" class="btn" ng-mousedown="clickMove('back')" ng-mouseup="clickMove('space')">后退</button>
+    </div>
+</div>
+
+                </td>
+            </tr>
     </table>
-    
+  
     
 
 
