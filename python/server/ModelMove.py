@@ -39,14 +39,11 @@ class ModelMove:
         self.m_dc_now_left =  m_dc_default
         self.m_dc_now_right = m_dc_default
         self.m_dc_deta = 20
-                        #lb  lh  rb  rh
-        self.m_ports =      [31, 33, 35, 37]
+                            #rh黄-IN1  rb绿-IN2  lh蓝-IN3  lb红-IN4 39灰-地
+        self.m_ports =      [31,       33,       35,       37]
         self.m_status =     [0, 0, 0, 0]    #端口使用状态  0关闭  / 1pwm开 / 2pwm关普通开
 
         self.setPorts(0, 0, 0, 0)
-
-
-    def openPortPwm(self, port, hz, dc):
 # pwm/非pwm开关控制 
 # port[0] value=1 dc=80
 # port[1] value=1 dc=90
@@ -55,13 +52,13 @@ class ModelMove:
         if(value == 1): #打开
             if(dc >= self.m_dc_stop):   #无需pwm
                 if(self.m_status[cc] == 0):     #关闭状态
-                    res, info = System().setPort(self.m_ports[cc], value)   #开启端口
+                    res, info = System().setPort(self.m_ports[cc], 1)   #开启端口
                     self.m_status[cc] = 2 
                 elif(self.m_status[cc] == 1):   #pwm开启状态
                     res, info = System().closePortPwm(self.m_ports[cc])     #关闭pwm
                     print(res, info)
                     self.m_status[cc] = 0 
-                    res, info = System().setPort(self.m_ports[cc], value)   #开启端口
+                    res, info = System().setPort(self.m_ports[cc], 1)   #开启端口
                     self.m_status[cc] = 2 
                 elif(self.m_status[cc] == 2):   #已经开启端口
                     res = False
@@ -96,7 +93,10 @@ class ModelMove:
         print('updateMovePortPwm', cc, dc)
 
         if(dc >= self.m_dc_stop):   #无需pwm
-            if(self.m_status[cc] == 1):   #pwm开启状态
+            if(self.m_status[cc] == 0):   #已经关闭端口
+                res = False
+                info = 'have close port ' + str(self.m_ports[cc])        #不操作
+            elif(self.m_status[cc] == 1):   #pwm开启状态
                 res, info = System().closePortPwm(self.m_ports[cc])     #关闭pwm
                 print(res, info)
                 self.m_status[cc] = 0 
@@ -106,7 +106,10 @@ class ModelMove:
                 res = False
                 info = 'have update to open port ' + str(self.m_ports[cc])        #不操作
         else:                       #需要pwm
-            if(self.m_status[cc] == 1):   #pwm开启状态
+            if(self.m_status[cc] == 0):   #已经关闭端口
+                res = False
+                info = 'have close port ' + str(self.m_ports[cc])        #不操作
+            elif(self.m_status[cc] == 1):   #pwm开启状态
                 res, info = System().setPortPwm(self.m_ports[cc], self.m_hz, dc)    #更新pwm
             elif(self.m_status[cc] == 2):   #已经开启端口
                 res, info = System().closePort(self.m_ports[cc])     #关闭端口
@@ -116,20 +119,31 @@ class ModelMove:
                 self.m_status[cc] = 1 
         print(res, info)
 
+
 # 根据values状态控制移动状态
     def setPorts(self, *values): 
-        self.setMovePortPwm(0, values[0], self.m_dc_now_left)
-        self.setMovePortPwm(1, values[1], self.m_dc_now_left)
+        self.setMovePortPwm(0, values[0], self.m_dc_now_right)
+        self.setMovePortPwm(1, values[1], self.m_dc_now_right)
 
-        self.setMovePortPwm(2, values[2], self.m_dc_now_right)
-        self.setMovePortPwm(3, values[3], self.m_dc_now_right)
+        self.setMovePortPwm(2, values[2], self.m_dc_now_left)
+        self.setMovePortPwm(3, values[3], self.m_dc_now_left)
+
+# 单独更新dc 不变状态 value= 0~1 单边调速
+    def updateLeft(self, value = 1):
+        self.updateMovePortPwm(2, value * self.m_dc_now_left)
+        self.updateMovePortPwm(3, value * self.m_dc_now_left)
+# 单独更新dc 不变状态 value= 0~1 单边调速
+    def updateRight(self, value = 1):
+        self.updateMovePortPwm(0, value * self.m_dc_now_right)
+        self.updateMovePortPwm(1, value * self.m_dc_now_right)
+
 # 根据新修改过的dc left/right更新速度 90dc上下修改pwm为端口开闭
     def updatePorts(self): 
-        self.updateMovePortPwm(0, self.m_dc_now_left)
-        self.updateMovePortPwm(1, self.m_dc_now_left)
+        self.updateMovePortPwm(0, self.m_dc_now_right)
+        self.updateMovePortPwm(1, self.m_dc_now_right)
 
-        self.updateMovePortPwm(2, self.m_dc_now_right)
-        self.updateMovePortPwm(3, self.m_dc_now_right)
+        self.updateMovePortPwm(2, self.m_dc_now_left)
+        self.updateMovePortPwm(3, self.m_dc_now_left)
 # 速度调控 快 慢 分档 dc 0-100
     def moveFaster(self, flag = 1):
         self.m_dc_now_right = self.m_dc_now_right + self.m_dc_deta * flag
@@ -153,22 +167,29 @@ class ModelMove:
         return res
 
     def moveHead(self):
-        #lb  lh  rb  rh
-        self.setPorts(0, 1, 0, 1) 
-
-    def moveBack(self):
-        #lb  lh  rb  rh
+        #rh黄-IN1  rb绿-IN2  lh蓝-IN3  lb红-IN4 39灰-地
         self.setPorts(1, 0, 1, 0) 
 
-    def turnLeft(self):
+    def moveBack(self):
+        #rh黄-IN1  rb绿-IN2  lh蓝-IN3  lb红-IN4 39灰-地
+        self.setPorts(0, 1, 0, 1) 
 
-        #lb  lh  rb  rh
-        self.setPorts(1, 1, 0, 1)
 
-    def turnRight(self):
+    def turnRevert(self): #取消单边降速状态
+        self.updateLeft(1)
+        self.updateRight(1)
 
-        #lb  lh  rb  rh
-        self.setPorts(0, 1, 1, 1) 
+    def turnLeft(self): #R 快 L慢/0/刹车 单边降速
+
+        #rh黄-IN1  rb绿-IN2  lh蓝-IN3  lb红-IN4 39灰-地
+        # self.setPorts(1, 0, 0, 0.5)
+        self.updateLeft(0.5)
+
+    def turnRight(self): #L 快 R慢/0/刹车
+
+        #rh黄-IN1  rb绿-IN2  lh蓝-IN3  lb红-IN4 39灰-地
+        # self.setPorts(0, 1, 1, 1) 
+        self.updateRight(0.5)
 
     def stop(self):
         self.setPorts(1, 1, 1, 1)   #1111
@@ -177,4 +198,5 @@ class ModelMove:
         self.setPorts(0, 0, 0, 0)  #0
 
 
+# init
 ModelMove()

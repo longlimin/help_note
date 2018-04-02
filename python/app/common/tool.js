@@ -51,9 +51,43 @@ function toStr(json){
 }
 
 
+/*
 
+AngularJS事件大集合
 
+ng-click ( 适用标签 ：所有，触发事件：单击)；
 
+ngDblclick（ 适用标签 ：所有，触发事件：双击）；
+
+ngBlur（适用标签 : a,input,select,textarea，触发事件：失去焦点）；
+
+ngFocus（适用标签 : a,input,select,textarea，触发事件：获取焦点）；
+
+ngChange（适用标签 : a,input,select,textarea，触发事件：model更新）；
+
+ngkeydown（适用标签 : 所有，触发事件：键盘按键按下，要把$event传过去）；
+
+ngKeyup（适用标签 :大部分用在input、textarea， 但适用所有标签，触发事件：键盘按键按下并松开，但要把$event 传过去）；
+
+ngKeypress（同上）；
+
+ngMousedown（适用标签 : 所有，触发事件：鼠标按下，左右中间都会触发）；
+
+ngMouseup（适用标签 : a,input,select,textarea，触发事件：鼠标按下弹起，左右中间都会触发）；
+
+ngMouseenter（适用标签 :所有，触发事件：鼠标进入）；
+
+ngMouseleave（适用标签 :所有，触发事件：鼠标离开）；
+
+ngMousemove（适用标签 :所有，触发事件：鼠标移动）；
+
+ngMouseover（适用标签 :所有，触发事件：鼠标进入）；
+
+注意：
+
+所有标签均为驼峰命名法，但是用的时候要用小写的。如： 
+ngClick，ngMouseover要写成ng-click，ng-mouseover的形式。
+*/
 
 
 

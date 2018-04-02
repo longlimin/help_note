@@ -38,6 +38,7 @@ python setup.py install
 chmod +x
 sudo ./xxxegg
 https://github.com/miguelgrinberg/python-socketio/
+
 sudo pip install python-socketio
 sudo pip install eventlet
 sudo pip install flask
