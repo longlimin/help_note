@@ -167,9 +167,46 @@ git tag -a start.1.0 重要的阶段，并希望永远记住那个特别的提�
 git tag -a start.1.0 558151a 忘了给某个提交打标签，又将它发布了，我们可以给它追加标签。 在相同的命令末尾加上提交的 SHA
 
 
+//git 日志格式化
+git log --pretty=format:"%H %an %cd %cr"
+git log --pretty=format:"%H %an %cd %cr" --after="2018-4-09 17:37:42" --before="2022-11-06 17:45:42"
+// aa6492c71ea38371d95f26fc705ebc9be1edfd19 chenpenghui Wed Apr 11 10:41:03 2018 +0800 36 minutes ago
+// e4514488d2772ea2acb8e62442eaea6e3331dbec chenpenghui Tue Apr 10 15:34:20 2018 +0800 20 hours ago
+// e68d8075414572e8097e312dd02e2dfefc45a358 chenpenghui Mon Apr 9 18:42:27 2018 +0800 2 days ago
+
+//使用diff导出差异文件列表
+git diff aa6492c71ea38371d95f26fc705ebc9be1edfd19 e4514488d2772ea2acb8e62442eaea6e3331dbec --stat --name-only
+// app/modules/home/controllers/homeLeftCtrl.js
+// app/modules/home/directives/homeDirectives.js
+// app/modules/home/templates/todo/moreTodo.html
+// app/modules/home/templates/todo/tableSort.html
+// app/modules/home/templates/todo/todoTable.html
 
 
+%H 提交对象（commit）的完整哈希字串
+%h 提交对象的简短哈希字串
+%T 树对象（tree）的完整哈希字串
+%t 树对象的简短哈希字串
+%P 父对象（parent）的完整哈希字串
+%p 父对象的简短哈希字串
+%an 作者（author）的名字
+%ae 作者的电子邮件地址
+%ad 作者修订日期（可以用-date= 选项定制格式）
+%ar 作者修订日期，按多久以前的方式显示
+%cn 提交者(committer)的名字
+%ce 提交者的电子邮件地址
+%cd 提交日期
+%cr 提交日期，按多久以前的方式显示
+%s 提交说明
 
+git log --after="2018-4-09 17:37:42" --before="2022-11-06 17:45:42" --name-status --abbrev-commit --left-right branchA...branchB > log.txt
+
+--after ：从这个时间之后   
+--before ： 从这个时间之前 
+--name-status ：显示新增、修改、删除的文件清单。 
+--abbrev-commit ：仅显示 SHA-1 的前几个字符，而非所有的 40 个字符
+--left-right:每个提交是在哪个分支上,左箭头 < 表示是 branchA 的，右箭头 > 表示是 branchB的
+... : 并集关系，两个分支共同的修改记录
 
 
 
