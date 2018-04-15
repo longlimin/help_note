@@ -1,0 +1,177 @@
+#!/bin/bash
+###########################################
+#git版本差异化 期间类补丁 文件覆盖制作
+#
+#
+##-------------------------------- 
+ 
+#app 下面复制到desktop下面 而git路径在echat_desktop下面所以需要路径转换映射
+dirs_from=('/mnt/e/workspace/echat_desktop'     '/mnt/e/workspace/OBCP-Server'            )   #git目录
+dirs_diff=('/mnt/e/workspace/echat_desktop/app' '/mnt/e/workspace/OBCP-Server/src'        )   #源路径截取 把源文件app下面的东西按照原有路径层次同步到目标路径
+dirs_to=('/mnt/e/workspace/obcpweb/pro/desktop' '/mnt/e/workspace/obcpweb/src'            )   #覆盖同步路径
+dir_open=''
+
+
+# //git 日志格式化
+# git log --pretty=format:"%H %an %cd %cr"
+# git log --pretty=format:"%H %an %cd %cr" --after="2018-4-09 17:37:42" --before="2022-11-06 17:45:42"
+# aa6492c71ea38371d95f26fc705ebc9be1edfd19 chenpenghui Wed Apr 11 10:41:03 2018 +0800 36 minutes ago
+# e4514488d2772ea2acb8e62442eaea6e3331dbec chenpenghui Tue Apr 10 15:34:20 2018 +0800 20 hours ago
+# e68d8075414572e8097e312dd02e2dfefc45a358 chenpenghui Mon Apr 9 18:42:27 2018 +0800 2 days ago
+# //使用diff导出差异文件列表
+# git diff aa6492c71ea38371d95f26fc705ebc9be1edfd19 e4514488d2772ea2acb8e62442eaea6e3331dbec --stat --name-only
+
+# ./help_git.sh time_from time_to
+function make(){
+    dir_open=`pwd`  #记录使用脚本的路径
+
+    time_from='2018-4-10'
+    time_to='2099-11-06'
+
+    if [ "$#" = "2" ]   #2018-4-10 2018-11-1
+    then
+        time_from=$1
+        time_to=$2
+    else
+        if [ "$#" = "1" ] #2018-4-10
+        then
+            time_from=$1
+            time_to=`date "+%Y-%m-%d" `
+        else
+            time_from=`date "+%Y-%m-%d" -d yesterday`
+            time_to=`date "+%Y-%m-%d" `
+        fi
+    fi
+    echo '时间 '$time_from' -> '$time_to
+
+    echo ${#dirs_from[@]}
+    for ((i=0; i<${#dirs_from[@]}; i++))
+    do
+        local dir_from=${dirs_from[$i]}
+        local dir_diff=${dirs_diff[$i]}
+        local dir_to=${dirs_to[$i]}   
+        line
+        echo '同步开始 '$dir_diff' -> '$dir_to 
+        line
+        log $dir_from $dir_diff $dir_to $time_from $time_to &   #异步同步等待 
+        wait
+
+        echo '同步完成 '$dir_diff' -> '$dir_to
+        line
+        echo
+    done
+    cd $dir_open    #回到当初位置
+}
+
+function log(){
+    # echo $@
+    local nowdir=$1
+    local diffdir=$2
+    local todir=$3
+    local timefrom=$4
+    local timeto=$5
+    cd $nowdir  #进入源目录
+    local cmd="git log --pretty=format:%H --after=$time_from --before=$time_to"
+    echo $cmd
+    line
+    local branchs=`$cmd`    #期间分支集合
+    # echo $branchs
+    git log --pretty=format:"%h %an %cr %s " --after=$time_from --before=$time_to
+
+    local arr=(` echo $branchs | tr ' ' "\n" `)
+    if (( ${#arr[@]} < 2 ))
+    then
+        echo '期间未提交新的分支'
+        line
+    else
+        local branch_from=${arr[-1]}
+        local branch_to=${arr[0]}
+        diff $branch_from $branch_to $nowdir $diffdir $todir   #比对分支差异文件并复制移动
+    fi    
+    
+
+
+}
+function diff(){
+    if [ "$#" = "5" ] 
+    then
+        local nowdir=$3
+        local diffdir=$4
+        local todir=$5
+
+        local diffdirLen=${#diffdir}+1  #/斜杠占位
+        line
+        local cmd="git diff $1 $2 --stat --name-only"
+        echo $cmd
+        local files=( `$cmd` )
+        line
+        echo '共计差异文件 '${#files[@]}' 个. '
+        line
+        #echo ${files[@]}
+        echo '路径 '$diffdir' -> '$todir' '
+
+        for ((i=0; i<${#files[@]}; i++))
+        do
+            local itemdiff=${files[$i]}                    #app/modules/chat/services/chatService.js
+            local fileFromPath=$nowdir'/'$itemdiff         #/mnt/e/workspace/echat_desktop                 /app    /modules/chat/services/chatService.js 源文件真实路径
+            local newItemDiff=${fileFromPath:$diffdirLen}  #                                                       /modules/chat/services/chatService.js 目标相对路径
+            local fileToPath=$todir'/'$newItemDiff         #/mnt/e/workspace/obcpweb/pro/desktop                   /modules/chat/services/chatService.js 目标真实路径
+            echo $i' '$newItemDiff
+            # echo $i' '$fileFromPath' -> '$fileToPath
+            mkFileDir $fileToPath   #确保文件所在目录存在 否则cp失败
+            cp $fileFromPath $fileToPath #-v
+        done
+        line
+
+    else
+        echo '比对分支并移动需要 版本号from to 和 源路径 目标路径 args:'$@
+    fi
+}
+
+
+
+function mkFileDir(){
+    myPath=$1
+    local fileDir=${myPath%/*}
+    if [ ! -d $fileDir ]; then
+        mkdir $fileDir -p
+    fi
+}
+
+function line(){
+    echo "---------------------------------"
+}
+
+function help(){
+    echo "-------make --------"
+}
+
+function git_main(){
+    echo
+    ##########################do something yourself
+    git_init $@
+    echo
+}
+
+function git_init(){
+    method=$1
+    if [[ "$method" != "" ]]
+    then
+        rootParams=($@)
+        params=(${rootParams[@]:1})
+        $method ${params[@]}
+    else
+        help 
+    fi
+} 
+
+
+# 单独执行文件时操作如下 引入时提示
+_temp='help_git.sh'
+if [[ $0 =~ $_temp ]]
+then
+    # git_main $@
+    make $@
+else
+    echo 'source '$_temp
+fi 

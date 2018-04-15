@@ -51,6 +51,22 @@ var=`命令` # 注意此处不是普通的单引号
     ##*/    删除最多匹配*/
     %/*    倒数 删除最少的/*               */
     %%/*   倒数 删除最多的/*    */
+1、提取文件名
+[root@localhost log]# var=/dir1/dir2/file.txt
+[root@localhost log]# echo ${var##*/}
+file.txt
+2、提取后缀
+[root@localhost log]# echo ${var##*.}
+txt
+3、提取不带后缀的文件名，分两步
+[root@localhost log]# tmp=${var##*/}
+[root@localhost log]# echo $tmp
+file.txt
+[root@localhost log]# echo ${tmp%.*}
+file
+4、提取目录
+;//[root@localhost log]# echo ${var%/*}
+/dir1/dir2
     echo ${var:0:5}
     其中的 0 表示左边第一个字符开始，5 表示字符的总个数。
     结果是：http:
@@ -61,8 +77,31 @@ var=`命令` # 注意此处不是普通的单引号
      结果是：123
     echo ${var:0-7}
     表示从右边第七个字符开始，一直到结束。
-     结果是：123.htm 
+    结果是：123.htm 
+    
+
+     #字符串分割
+    info='abcd;efgh'
+    arr=(`echo $info|tr ";" "\n"`)
 } 
+#日期格式化
+[root@root ~]# date "+%Y-%m-%d"  
+2013-02-19  
+[root@root ~]# date "+%H:%M:%S"  
+13:13:59  
+[root@root ~]# date "+%Y-%m-%d %H:%M:%S"  
+2013-02-19 13:14:19  
+[root@root ~]# date "+%Y_%m_%d %H:%M:%S"    
+2013_02_19 13:14:58  
+[root@root ~]# date -d today   
+Tue Feb 19 13:10:38 CST 2013  
+[root@root ~]# date -d now  
+Tue Feb 19 13:10:43 CST 2013  
+[root@root ~]# date -d tomorrow  
+Wed Feb 20 13:11:06 CST 2013  
+[root@root ~]# date -d yesterday  
+Mon Feb 18 13:11:58 CST 2013  
+
 
 //ll找不到 ll = ls -alF 
 //if else  test  判断  
@@ -95,6 +134,8 @@ var=`命令` # 注意此处不是普通的单引号
 
 //循环
 { 
+    local i #局部变量
+    //for循环的i除外是局部的 否则默认全局的
     for ((i=1; i<=8; i++))
     for i in {0..5}
     for i in ${arr[@]}  //*
