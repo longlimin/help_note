@@ -44,7 +44,7 @@ function make(){
     fi
     echo '时间 '$time_from' -> '$time_to
 
-    echo ${#dirs_from[@]}
+    # echo ${#dirs_from[@]}
     for ((i=0; i<${#dirs_from[@]}; i++))
     do
         local dir_from=${dirs_from[$i]}
@@ -109,20 +109,36 @@ function diff(){
         line
         #echo ${files[@]}
         echo '路径 '$diffdir' -> '$todir' '
-
+        local delFileCount=0    # 差异删除文件数
+        local cpFileCount=0     # 差异覆盖/添加文件数
+        local delFileCountRel=0 # 实际删除文件数
         for ((i=0; i<${#files[@]}; i++))
         do
             local itemdiff=${files[$i]}                    #app/modules/chat/services/chatService.js
             local fileFromPath=$nowdir'/'$itemdiff         #/mnt/e/workspace/echat_desktop                 /app    /modules/chat/services/chatService.js 源文件真实路径
             local newItemDiff=${fileFromPath:$diffdirLen}  #                                                       /modules/chat/services/chatService.js 目标相对路径
             local fileToPath=$todir'/'$newItemDiff         #/mnt/e/workspace/obcpweb/pro/desktop                   /modules/chat/services/chatService.js 目标真实路径
-            echo $i' '$newItemDiff
             # echo $i' '$fileFromPath' -> '$fileToPath
             mkFileDir $fileToPath   #确保文件所在目录存在 否则cp失败
-            cp $fileFromPath $fileToPath #-v
+            if [ -f $fileFromPath ] # 源文件存在 
+            then
+                echo "$i cp $newItemDiff"
+                cpFileCount=$[cpFileCount+1]
+                # echo "cp $fileFromPath $fileToPath "
+                cp $fileFromPath $fileToPath #-v    修改/添加文件 则覆盖文件
+            else
+                echo "$i rm $newItemDiff"
+                delFileCount=$[delFileCount+1]
+                # echo "rm $fileToPath"
+                if [ -f $fileToPath ] # 目标文件存在 
+                then
+                    delFileCountRel=$[delFileCountRel+1]
+                    rm $fileToPath  # 删除文件 源不存在了 目标存在的情况 就删除目标文件
+                fi
+            fi    
         done
         line
-
+        echo "差异添加/修改: $cpFileCount  差异删除: $delFileCount  实际删除: $delFileCountRel"
     else
         echo '比对分支并移动需要 版本号from to 和 源路径 目标路径 args:'$@
     fi
