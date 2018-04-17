@@ -37,11 +37,7 @@ git_help_note=$_root'/help_note'
 git_base=$_root'/workspace_my/base'
 git_BaseSSM=$_root'/workspace_my/BaseSSM'
 git_cc_old=$_root'/workspace_my/cc_old'
-<<<<<<< HEAD
 git_cc=$_root'/workspace_android/cc'
-git_GraphicsTools=$_root'/workspace_my/GraphicsTools'
-=======
->>>>>>> 035e312a93c53e084d41ef78564f35355add5a38
 git_GraphicsTools=$_root'/workspace_my/GraphicsTools'
 
 git_local_dirs=($git_help_note $git_base $git_BaseSSM $git_cc_old $git_cc $git_GraphicsTools)
@@ -51,10 +47,6 @@ git_remote_help_note='https://github.com/1424234500/help_note.git'     #-> E:/ h
 git_remote_base='https://github.com/1424234500/base.git'           #-> E:/ workspqce_my/ * 
 git_remote_BaseSSM='https://github.com/1424234500/BaseSSM.git'
 git_remote_cc_old='https://github.com/1424234500/cc_old.git'
-<<<<<<< HEAD
-=======
-git_remote_GraphicsTools='https://github.com/1424234500/GraphicsTools.git'
->>>>>>> 035e312a93c53e084d41ef78564f35355add5a38
 git_remote_cc='https://github.com/1424234500/cc.git'
 git_remote_GraphicsTools='https://github.com/1424234500/GraphicsTools.git'
 
