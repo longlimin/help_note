@@ -7,17 +7,17 @@
  
 #app 下面复制到desktop下面 而git路径在echat_desktop下面所以需要路径转换映射
 dirs_from=('/mnt/e/workspace/echat_desktop'     '/mnt/e/workspace/OBCP-Server'            )   #git目录
-dirs_diff=('/mnt/e/workspace/echat_desktop/app' '/mnt/e/workspace/OBCP-Server/src'        )   #源路径截取 把源文件app下面的东西按照原有路径层次同步到目标路径
-dirs_to=('/mnt/e/workspace/obcpweb/pro/desktop' '/mnt/e/workspace/obcpweb/src'            )   #覆盖同步路径
+dirs_diff=('/mnt/e/workspace/echat_desktop/app' '/mnt/e/workspace/OBCP-Server'        )   #源路径截取 把源文件app下面的东西按照原有路径层次同步到目标路径
+dirs_to=('/mnt/e/workspace/obcpweb/pro/desktop' '/mnt/e/workspace/obcpweb'            )   #覆盖同步路径
 dir_open=''
 
 
 # //git 日志格式化
 # git log --pretty=format:"%H %an %cd %cr"
 # git log --pretty=format:"%H %an %cd %cr" --after="2018-4-09 17:37:42" --before="2022-11-06 17:45:42"
-# aa6492c71ea38371d95f26fc705ebc9be1edfd19 chenpenghui Wed Apr 11 10:41:03 2018 +0800 36 minutes ago
-# e4514488d2772ea2acb8e62442eaea6e3331dbec chenpenghui Tue Apr 10 15:34:20 2018 +0800 20 hours ago
-# e68d8075414572e8097e312dd02e2dfefc45a358 chenpenghui Mon Apr 9 18:42:27 2018 +0800 2 days ago
+# aa6492c71ea38371d95f26fc705ebc9be1edfd19 walker Wed Apr 11 10:41:03 2018 +0800 36 minutes ago
+# e4514488d2772ea2acb8e62442eaea6e3331dbec walker Tue Apr 10 15:34:20 2018 +0800 20 hours ago
+# e68d8075414572e8097e312dd02e2dfefc45a358 walker Mon Apr 9 18:42:27 2018 +0800 2 days ago
 # //使用diff导出差异文件列表
 # git diff aa6492c71ea38371d95f26fc705ebc9be1edfd19 e4514488d2772ea2acb8e62442eaea6e3331dbec --stat --name-only
 
