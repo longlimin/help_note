@@ -1,28 +1,40 @@
 
-#项目组件架构   Tomcat    python-web<GPIO>   python-socket 
+#项目组件架构   Tomcat    python-web<GPIO>   python-socket  
 #nginx          链接代理转发请求  并提供 图片/视频流推送-服务
 #运行环境       PC  Raspberry sqlite数据库
- 
+
+# socket-python ----  socket-java ---- socket-android
+
 
 #项目部署流程
 //启动脚本 cd shell ./do start
 
-Tomcat 8080     <PC>
-    tomcat/bin/start.sh
-    #http://127.0.0.1:8088/BaseSSM/lunch/list.do
+<PC>
 
-Python 8086     <Raspberry>
+    tomcat 8080    
+        tomcat/bin/start.sh
+        #http://127.0.0.1:8088/BaseSSM/lunch/list.do
+    socket-server 8086
+    socket-web  app    
+    http-web    app
+    
+<Raspberry>
+
 //  web tornado         短连接     图片/视频流生成-加工
     python /help_note/python/server/server_web.py
     #http://127.0.0.1:8088/do/student/mm/a
 
-//  socket-io           长连接
+//  socket-io           长连接-web
     python /help_note/python/server/server_socket.py
     #127.0.0.1:8087 emit onMsg
 
-//  python GPIO opencv  工具控制类  供python通信服务器调用 控制设备行为
+//  socket              长连接-socket
+    python /help_note/python/server/server_socket.py
+    #127.0.0.1:8086 emit onMsg
 
-Nginx  8088     <Raspberry>
+    python GPIO opencv  工具控制类  供python通信服务器调用 控制设备行为
+
+//  Nginx  8088     <Raspberry>
     静态路由    前端页面    静态资源
     app/html-angular
     app/resource
@@ -32,8 +44,8 @@ Nginx  8088     <Raspberry>
     ->Tomcat
     ->Python
         -web
-        -socket 
-
+        -socketIo server 
+        -socket client
  
 
 

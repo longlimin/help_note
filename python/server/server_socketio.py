@@ -8,7 +8,7 @@ import thread
 from flask import Flask, render_template
 
 ########################################
-from s_msg import Msg
+from server_msg_do import Msg
 
 ############################
 

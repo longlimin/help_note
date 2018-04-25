@@ -8,11 +8,13 @@
 
 项目开发-----------------
 
+多服务器 启动-关闭-日志-监控 批量统一配置管理系统
+
 第三方推送平台服务器
 设计跳板机 socket 路由表 路由器
 
 
-TCP/IP socket/应用层协议/mqtt/http/自己的协议@
+//TCP/IP socket/应用层协议/mqtt/http/自己的协议@
 Android 进程 jni 从底层向上 模拟系统信息 工具连点器
 Android 设备控制器 - 设备socket - socketServer<net> - 终端socket
 设备端 socket适配管理
