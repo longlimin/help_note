@@ -9,7 +9,7 @@ sys.path.append("../opencv/")
 
 from cv_makecolor import MakeColor
 ############################
-class Msg:
+class ServiceMsg:
     """A simple example class""" 
 
     id = ""

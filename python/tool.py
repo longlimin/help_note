@@ -41,7 +41,8 @@ def doMethod(cls, methodName, *params):
         print("Error! 该方法不存在")
     return ''
 
-
+def sleep(mills):
+    time.sleep(mills)
 
 
 

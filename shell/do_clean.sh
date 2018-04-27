@@ -11,9 +11,9 @@ source tools.sh
 
 
 function clean_clean(){
-    clean_cleanExe $_opencv
-    clean_cleanExe $_server
-    clean_cleanExe $_python
+    # clean_cleanExe $_opencv
+    # clean_cleanExe $_server
+    # clean_cleanExe $_python
 } 
 function clean_cleanExe(){
     ##删除python临时文件 *.pyc res_* build目录

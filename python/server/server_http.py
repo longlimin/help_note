@@ -38,7 +38,7 @@ application = tornado.web.Application([
 '''
 
 if __name__ == "__main__":
-
+    print("Start server http ")
     application.listen(8086)
     tornado.ioloop.IOLoop.instance().start()
 

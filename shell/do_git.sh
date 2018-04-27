@@ -70,7 +70,7 @@ function git_add_commit_pull(){
 function git_add_commit_push(){
     echo 'upload clean/add/commit/push: '$1
     # clean java bin build
-    clean_cleanJavaProject $1
+    # clean_cleanJavaProject $1
 
     cd $1
     toolsLineLong >> $git_log
