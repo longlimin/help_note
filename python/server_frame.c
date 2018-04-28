@@ -3,7 +3,9 @@
 #nginx          链接代理转发请求  并提供 图片/视频流推送-服务
 #运行环境       PC  Raspberry sqlite数据库
 
-# socket-python ----  socket-java ---- socket-android
+# socket-python ----  socket-java ---- socket-android1
+                                  ---- socket-android2
+                                  ---- socket-android3
 
 
 #项目部署流程
