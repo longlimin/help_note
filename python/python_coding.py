@@ -118,6 +118,8 @@ for key in data:
 
         kt = key.encode("utf-8")
         vt = data[key].encode("utf-8")
+
+
 #数据类型转换
 #str(object) -> string
 #int(x[, base]) -> int 
@@ -137,6 +139,7 @@ else :
 # 函数  描述
 string = json.dumps(obj) # 将 Python 对象编码成 JSON 字符串
 obj = json.loads(string) # 将已编码的 JSON 字符串解码为 Python 对象
+yaml.safe_load(list_dump)# 关于string 转obj unicode编码问题
 v = obj['key']
 
 #数学运算

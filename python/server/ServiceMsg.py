@@ -9,15 +9,7 @@ sys.path.append("../opencv/")
 
 from cv_makecolor import MakeColor
 ############################
-class ServiceMsg:
-    """A simple example class""" 
-
-    id = ""
-    name = ""
-
-    def __init__(self):
-        self.id = "test id"
-        self.name = "test name"
+class ServiceMsg: 
         
     def set(self, id, name):
         self.id = id
