@@ -43,7 +43,7 @@ sudo pip install python-socketio
 sudo pip install eventlet
 sudo pip install flask
 sudo pip install twisted //socket frame of python
-sudo apt-get install python-twisted
+// sudo apt-get install python-twisted
 sudo pip install json2yaml==1.0.1 
 
 查找Python 安装路径： THIS 

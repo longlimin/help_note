@@ -6,7 +6,7 @@
 # socket-python ----  socket-java ---- socket-android1
                                   ---- socket-android2
                                   ---- socket-android3
-
+24:0A:64:14:55:0D
 
 #项目部署流程
 //启动脚本 cd shell ./do start

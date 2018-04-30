@@ -3,6 +3,9 @@
 from include import *
 from Msg import Msg
 
+from ModelTurn import ModelTurn
+from ModelMove import ModelMove
+
 @singleton
 class ServiceServer:
     """ 
@@ -49,13 +52,56 @@ class ServiceServer:
             msg.data["info"] = "该方法不存在"
             return msg
 
+# left right head back space stop
     def move(self, msg, params):
         print("move", params)
 
+        if(params == 'left'):
+            ModelMove().turnLeft()
+        elif(params == 'right'):
+            ModelMove().turnRight()
+        elif(params == 'head'):
+            ModelMove().moveHead()
+        elif(params == 'back'):
+            ModelMove().moveBack()
+        elif(params == 'space'):
+            ModelMove().space()
+        elif(params == 'stop'):
+            ModelMove().stop()
+        elif(params == 'faster'):
+            ModelMove().moveFaster(1)
+        elif(params == 'slower'):
+            ModelMove().moveFaster(-1)
+        elif(params == 'turnrevert'):
+            ModelMove().turnRevert()
 
+
+
+        msg.data["info"] = "move"
         return msg
 
+# 0 1 
+    def cameraTurn(self, params):
+        # obj = json.loads(params)
+        if(params == "0"):
+            deta = 20
+            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+        elif(params == "1"):
+            deta = -20
+            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+        else:
+            deta = 0
+            (ifMove, info, costTime) = ModelTurn().turnTo()
 
+        res = {
+            "ifmove":ifMove,
+            "info":info,
+            "costtime":costTime,
+        }
+        print(res)
+        
+        msg.data["res"] = json.dumps(res)
+        return msg
 
 
 

@@ -166,14 +166,14 @@ def onReceive(client, jsonstr):
         msg = ServiceServer().do(fromMsg)
         sendImpl(client, msg.toString())
     else:
-        print("非法类型")
+        print("不理解的消息类型")
         print(fromMsg)
 
 
 def loginOn(client):
     msg = Msg()
     msg.msgType = 0
-    msg.toKey = "pwd"
+    msg.toKey = "qwer"
     msg.fromKey = "f"
     msg.fromSysKey = "fs"
     sendImpl(client, msg.toString())
@@ -196,7 +196,7 @@ def loginOn(client):
 
 
 if __name__ == '__main__':
-    main = start("127.0.0.1", 8092)
+    main = start("192.168.1.6", 8092)
     while 1:
         pass
 
