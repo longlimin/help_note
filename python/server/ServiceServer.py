@@ -53,9 +53,9 @@ class ServiceServer:
             return msg
 
 # left right head back space stop
-    def move(self, msg, params):
-        print("move", params)
-
+    def move(self, msg, param):
+        print("move", param)
+        params = param.split("-")[0]
         if(params == 'left'):
             ModelMove().turnLeft()
         elif(params == 'right'):
@@ -72,6 +72,10 @@ class ServiceServer:
             ModelMove().moveFaster(1)
         elif(params == 'slower'):
             ModelMove().moveFaster(-1)
+        elif(params == 'movefasterto'):
+            dc = param.split("-")[1]
+            dc = int(dc)
+            ModelMove().moveFaster(dc)
         elif(params == 'turnrevert'):
             ModelMove().turnRevert()
 
@@ -83,15 +87,18 @@ class ServiceServer:
 # 0 1 
     def cameraTurn(self, params):
         # obj = json.loads(params)
+        ff = int(params)
         if(params == "0"):
             deta = 20
             (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
         elif(params == "1"):
             deta = -20
             (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
-        else:
+        elif(ff == -1):
             deta = 0
             (ifMove, info, costTime) = ModelTurn().turnTo()
+        else:
+            (ifMove, info, costTime) = ModelTurn().turnTo(ff)
 
         res = {
             "ifmove":ifMove,

@@ -159,7 +159,16 @@ class ModelMove:
             self.m_dc_now_left = self.m_dc_stop
 
         self.updatePorts()
+    def moveFasterTo(self, dc = m_dc_default):
+        if(dc > self.m_dc_stop):
+            dc = self.m_dc_stop
+        elif(dc < self.m_dc_start):
+            dc = self.m_dc_start
 
+        self.m_dc_now_right = dc
+        self.m_dc_now_left = dc
+        
+        self.updatePorts()
     def getStatus(self):
         res = ''
         for ss in self.m_status:

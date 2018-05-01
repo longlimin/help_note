@@ -87,7 +87,7 @@ class ModelTurn:
             costTime = System().controlPwmAsync(self.t_port, self.t_hz, dcMoveFrom, dcMoveTo, self.t_dc_deta, sleepTime)
             self.t_dc_now = dcMoveTo  #更新当前dc为新dc
             print('耗时: ' + str(costTime))
-            time.sleep(0.2)
+            # time.sleep(0.2)
         return (ifMove, info, costTime)
 
 
