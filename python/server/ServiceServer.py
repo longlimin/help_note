@@ -75,7 +75,7 @@ class ServiceServer:
         elif(params == 'movefasterto'):
             dc = param.split("-")[1]
             dc = int(dc)
-            ModelMove().moveFaster(dc)
+            ModelMove().moveFasterTo(dc)
         elif(params == 'turnrevert'):
             ModelMove().turnRevert()
 
@@ -85,7 +85,7 @@ class ServiceServer:
         return msg
 
 # 0 1 
-    def cameraTurn(self, params):
+    def cameraTurn(self, msg, params):
         # obj = json.loads(params)
         ff = int(params)
         if(params == "0"):
