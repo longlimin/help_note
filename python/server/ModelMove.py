@@ -100,7 +100,7 @@ class ModelMove:
                 res, info = System().closePortPwm(self.m_ports[cc])     #关闭pwm
                 print(res, info)
                 self.m_status[cc] = 0 
-                res, info = System().setPort(self.m_ports[cc], value)   #开启端口
+                res, info = System().setPort(self.m_ports[cc], 1)   #开启端口
                 self.m_status[cc] = 2 
             elif(self.m_status[cc] == 2):   #已经开启端口
                 res = False
