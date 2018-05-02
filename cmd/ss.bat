@@ -30,7 +30,7 @@ cd /workspace/echat_desktop
 tasklist|find /i "node.exe" || start "node" node proxy.js 
  
 ::github tool
-tasklist|find /i "SourceTree" || start "SourceTree" "D:\Program Files (x86)\Atlassian\SourceTree\SourceTree.exe" 
+tasklist|find /i "SourceTree" || start "SourceTree" "C:\Users\ThinkPad\AppData\Local\SourceTree\SourceTree.exe" 
 
 
 
