@@ -11,8 +11,8 @@ source tools.sh
 
 
 function clean_clean(){
-    # clean_cleanExe $_opencv
-    # clean_cleanExe $_server
+    clean_cleanExe $_opencv
+    clean_cleanExe $_server
     clean_cleanExe $_python
     a=1
 }
