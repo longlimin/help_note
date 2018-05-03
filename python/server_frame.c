@@ -136,6 +136,15 @@ ffmpeg -f dshow -i video="Integrated Camera" -s 320x240 -f flv rtmp://127.0.0.1:
 ffmpeg -f dshow -i video="Integrated Camera" -f flv rtmp://127.0.0.1:1935/myapp/test1 
 ffplay -f dshow video="Integrated Camera"  
 
+ffmpeg -f dshow -i video="Integrated Camera" -s 640x480 -f flv rtmp://127.0.0.1:1935/myapp/test1 
+rtmp://127.0.0.1:1935/myapp/test1
+rtmp://192.168.191.1:1935/myapp/test1
+
+
+
+
+
+
 
 1、将文件当做直播送至live
 ffmpeg -re -i localFile.mp4 -c copy -f flv rtmp://server/live/streamName
