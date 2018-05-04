@@ -51,6 +51,41 @@ sudo pip install json2yaml==1.0.1
 >>> print(get_python_lib())
 
 
+编译nginx rtmp 依赖环境
+wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz
+wget http://www.openssl.org/source/openssl-1.0.1c.tar.gz
+wget http://www.zlib.net/zlib-1.2.11.tar.gz
+cd nginx-1.10.1 
+./configure --sbin-path=/usr/local/nginx/nginx --conf-path=/usr/local/nginx/nginx.conf --pid-path=/usr/local/nginx/nginx.pid --with-http_ssl_module --with-pcre=../pcre-8.38 --with-zlib=../zlib-1.2.11 --with-openssl=../openssl-1.0.1c --with-http_stub_status_module --add-module=../nginx-rtmp-module-master
+make
+make install
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+--prefix                       #nginx安装目录，默认在/usr/local/nginx
+--conf-path=/usr/local/nginx/nginx.conf  #nginx。配置路径名
+--pid-path=/usr/local/nginx/nginx.pid    #pid问件位置，默认在logs目录
+--lock-path                    #lock问件位置，默认在logs目录
+--with-http_ssl_module         #开启HTTP SSL模块，以支持HTTPS请求。
+--with-http_dav_module         #开启WebDAV扩展动作模块，可为文件和目录指定权限
+--with-http_flv_module         #支持对FLV文件的拖动播放
+--with-http_realip_module      #支持显示真实来源IP地址
+--with-http_gzip_static_module #预压缩文件传前检查，防止文件被重复压缩
+--with-http_stub_status_module #取得一些nginx的运行状态
+--with-mail                     #允许POP3/IMAP4/SMTP代理模块
+--with-mail_ssl_module          #允许POP3／IMAP／SMTP可以使用SSL／TLS
+--with-pcre=../pcre-8.11        #注意是未安装的pcre路径
+--with-zlib=../zlib-1.2.5       #注意是未安装的zlib路径
+--with-debug                    #允许调试日志
+--http-client-body-temp-path    #客户端请求临时文件路径
+--http-proxy-temp-path          #设置http proxy临时文件路径
+--http-fastcgi-temp-path        #设置http fastcgi临时文件路径
+--http-uwsgi-temp-path=/usr/local/nginx/uwsgi #设置uwsgi 临时文件路径
+--http-scgi-temp-path=/usr/local/nginx/scgi   #设置scgi 临时文件路径
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+--add-module=../nginx-rtmp-module-master
+
 
 
 --   Python 2:

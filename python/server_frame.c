@@ -6,6 +6,7 @@
 # socket-python ----  socket-java ---- socket-android1
                                   ---- socket-android2
                                   ---- socket-android3
+PI-mac
 24:0A:64:14:55:0D
 
 #项目部署流程
@@ -16,7 +17,7 @@
     tomcat 8080    
         tomcat/bin/start.sh
         #http://127.0.0.1:8088/BaseSSM/lunch/list.do
-    socket-server 8086
+    socket-server 8092
     socket-web  app    
     http-web    app
     
@@ -137,13 +138,16 @@ ffmpeg -f dshow -i video="Integrated Camera" -f flv rtmp://127.0.0.1:1935/myapp/
 ffplay -f dshow video="Integrated Camera"  
 
 ffmpeg -f dshow -i video="Integrated Camera" -s 640x480 -f flv rtmp://127.0.0.1:1935/myapp/test1 
+ffmpeg -f dshow -i video="Integrated Camera" -s 640x480 -f flv rtmp://39.107.26.100:1935/myapp/test1 
 rtmp://127.0.0.1:1935/myapp/test1
 rtmp://192.168.191.1:1935/myapp/test1
+rtmp://39.107.26.100:1935:1935/myapp/test1
 
 
 
 
-
+ffmpeg -f dshow -i video="Integrated Camera" -tune zerolatency -vcodec libx264 -preset ultrafast -b:v 400k -s 720x576 -r 25 -f flv rtmp://39.107.26.100:1935/myapp/test1 
+ffmpeg -f dshow -i video="Integrated Camera" -vcodec libx264 -b:v 400k -s 720x576 -r 25 -f flv rtmp://39.107.26.100:1935/myapp/test1 
 
 
 1、将文件当做直播送至live

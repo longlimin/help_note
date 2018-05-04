@@ -27,3 +27,17 @@ chen_peng_hui@outlook.com
     aes-256-cfb
 
 代理配置 Omega.*.bak 网盘
+
+//测试
+实例名称:icbc_web 
+公网IP：39.107.26.100  
+内网IP：10.81.34.25  
+root 
+RUAho1234
+
+
+/usr/local/nginx
+
+
+
+
