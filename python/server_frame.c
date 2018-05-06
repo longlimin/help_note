@@ -7,7 +7,8 @@
                                   ---- socket-android2
                                   ---- socket-android3
 PI-mac
-24:0A:64:14:55:0D
+IP:  192.168.1.10
+MAC: B8:27:EB:85:06:17
 
 #项目部署流程
 //启动脚本 cd shell ./do start

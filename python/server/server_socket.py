@@ -196,7 +196,8 @@ def loginOn(client):
 
 
 if __name__ == '__main__':
-    main = start("192.168.1.6", 8092)
+    # main = start("192.168.1.6", 8092)
+    main = start("39.107.26.100", 8092)
     while 1:
         pass
 

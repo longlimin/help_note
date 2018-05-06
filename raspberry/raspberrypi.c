@@ -97,16 +97,20 @@ eg: 红2红2黑0橙10^3=1000=1k棕误差1%  -> 220 kΩ
 
 
 
-//摄像头模块
+//摄像头模块 开机状态下插拔烧坏了!!!!!!!!!!!!!!!!!!!!!!!
 通过raspi-config工具更新了操作并使能摄像头之后，它会告诉树莓派摄像头已经连接成功，并增加了两个命令行工具以供用户使用摄像头。
 
 raspistill
 raspivid 
+测试模块
+raspistill -v -o test.jpg
 raspistill -o image.jpg -t 2000
 raspivid -o mv.h264 -t 10000 -w 1280 -h 720
 sudo apt-get install -y gpac 
 MP4Box -fps 30 -add keychain.h264 keychain.mp4
 
+
+//引脚 gpio
 1、功能物理引脚：
 从左到右，从上到下：左边基数，右边偶数：1-40
 2、BCM:
