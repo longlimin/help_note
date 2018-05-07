@@ -126,7 +126,7 @@ ffplay -list_devices true -f dshow video=0
 ffplay -f dshow video="Integrated Camera"
 这句话打开了我的摄像头 -i 输出文件流
 3、捕获  
-ffmpeg -f dshow -i video="Integrated Camera" e:/nginx-rtmp/get.mp4 
+ffmpeg -f dshow -i video="Integrated Camera" e:/nginx-rtmp/test.mp4 
 这句话开始采集视频。音频部分未加上。
 
 ffmpeg -f dshow -i video="Integrated Camera" flv rtmp://127.0.0.1:1935/myapp/test1
@@ -140,12 +140,20 @@ ffplay -f dshow video="Integrated Camera"
 
 ffmpeg -f dshow -i video="Integrated Camera" -s 640x480 -f flv rtmp://127.0.0.1:1935/myapp/test1 
 ffmpeg -f dshow -i video="Integrated Camera" -s 640x480 -f flv rtmp://39.107.26.100:1935/myapp/test1 
+ffmpeg -i sbingo.png -an -vcodec libx264 -coder 1 -flags +loop -cmp +chroma -subq 10 -qcomp 0.6 -qmin 10 -qmax 51 -qdiff 4 -flags2 +dct8x8 -trellis 2 -partitions +parti8x8+parti4x4 -crf 24 -threads 0 -r 25 -g 25 -y  -f flv rtmp://39.107.26.100:1935/myapp/test1
+ffmpeg -i sbingo.png -f flv rtmp://39.107.26.100:1935/myapp/test1
+ffmpeg -y -f rawvideo -vcodec rawvideo -pix_fmt bgr24 -i - -c:v libx264 -pix_fmt yuv420p -preset ultrafast -f flv rtmp://39.107.26.100:1935/myapp/test1
+
 rtmp://127.0.0.1:1935/myapp/test1
 rtmp://192.168.191.1:1935/myapp/test1
 rtmp://39.107.26.100:1935:1935/myapp/test1
 
-
-
+ffmpeg -f image2pipe -r 10 -vcodec mjpeg -i /tmp/my_fifo
+-f强制指定了输入文件的格式，就是从流中读取数据
+-r指定了帧率
+-vcodec应该是指定了该流的文件格式
+/tmp/my_fifo 是自己提前创建好的fifo，通过mkfifo /tmp/my_fifo创建
+执行这条指令之后，ffmpeg会阻塞监听直到my_fifo中有数据并且pipe关闭为止
 
 ffmpeg -f dshow -i video="Integrated Camera" -tune zerolatency -vcodec libx264 -preset ultrafast -b:v 400k -s 720x576 -r 25 -f flv rtmp://39.107.26.100:1935/myapp/test1 
 ffmpeg -f dshow -i video="Integrated Camera" -vcodec libx264 -b:v 400k -s 720x576 -r 25 -f flv rtmp://39.107.26.100:1935/myapp/test1 

@@ -421,7 +421,7 @@ x\{m,n\}：匹配其前面的字符“x”至少m次，至多n次
  \s  匹配任何空白字符， 
   \S  匹配任何非空白字符， 
   \w  匹配任何字母数字字符，相当于[a-zA-Z0-9] 
- \W 匹配任何非字母数字字符，相当于[^a-zA-Z0-9] 
+ \W 匹配任何非字母数字字符，相当于[^a-zA-Z0-9]  ' 
  \\  匹配"\" 
  \( \) 分组后项引用  \1 引用第一个左括号以及与之对应的右括号所包括的所有内容。    \2 \3 … 
 扩展正则表达式中增加了几个与正则表达式有区别的新内容： 
@@ -436,8 +436,8 @@ x\{m,n\}：匹配其前面的字符“x”至少m次，至多n次
 {
     for i in `seq -w 10`; do touch stu\_$i\_linux.jpg ; done
     rename \_linux '' *.jpg
-    rename '\_linux' '' *.jpg
-mv命令既可以重命名，又可以移动文件或文件夹。
+    rename '\_linux' '' *.jpg       
+mv命令既可以重命名，又可以移动文件或文件夹。     '
 例子：将目录A重命名为B
 mv A B
 例子：将/a目录移动到/b下，并重命名为c
@@ -586,8 +586,8 @@ unzip file.zip //解压zip
 # 如果加 z 参数，则以 .tar.gz 或 .tgz 来代表 gzip 压缩过的 tar file ～
 # 如果加 j 参数，则以 .tar.bz2 来作为附档名啊～
 # 上述指令在执行的时候，会显示一个警告讯息：
-# 『tar: Removing leading `/" from member names』那是关於绝对路径的特殊设定。
-范例二：查阅上述 /tmp/etc.tar.gz 文件内有哪些文件？
+# '『tar: Removing leading `/" from member names』那是关於绝对路径的特殊设定。 '
+范例二：查阅上述 /tmp/etc.tar.gz 文件内有哪些文件？ 
 [root@linux ~]# tar -ztvf /tmp/etc.tar.gz
 # 由於我们使用 gzip 压缩，所以要查阅该 tar file 内的文件时，
 # 就得要加上 z 这个参数了！这很重要的！
@@ -664,5 +664,51 @@ usermod -l walker walkerdust
 
 ps 查看tty？
 top来对进程排序，结束进程等.
+
+
+
+
+
+
+//openssl安装
+    这里需要特别的注意：openssl 版本不能太高，太高有些接口与libRTMP 的接口不一样，会导致libRTMP编译不能通过。我这里安装的是openssl-1.0.1f。
+1、下载地址：http://www.openssl.org/source/ 下一个新版本的OpenSSL，我下的版本是：openssl-1.0.1f
+2、在下载的GZ目录中，用命令执行：tar -xvf openssl-1.0.1f.tar.gz
+3、进入解压的目录：openssl-1.0.1f  [.......]#cd openssl-1.0.1f
+4、[.....openssl-1.0.1f]# ./config --prefix=/usr/local/openssl
+5[...../openssl-1.0.1f]# ./config -t
+6[...../openssl-1.0.1f]# make depend
+7[...../openssl-1.0.1f]# cd /usr/local
+8/usr/local]# ln -s openssl ssl
+9 [...../openssl-1.0.1f]#sudo make install
+10在/etc/ld.so.conf文件的最后面，添加如下内容：
+/usr/local/openssl/lib
+11...]# ldconfig
+12添加OPESSL的环境变量：
+在etc／的profile的最后一行，添加：
+export OPENSSL=/usr/local/openssl/bin
+export PATH=$OPENSSL:$PATH:$HOME/bin
+13退出命令界面，再从新登录。
+14、以上OPENSSL就安装完毕，下面进行一些检查。
+15依次如下执行：
+[root@localhost /]# cd /usr/local
+[root@localhost local]# ldd /usr/local/openssl/bin/openssl
+会出现类似如下信息：
+        linux-vdso.so.1 =>  (0x00007fff2116a000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f378e239000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f378de7c000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f378e44f000)
+16查看路径
+...]# which openssl
+/usr/local/openssl/bin/openssl
+17查看版本
+...]# openssl version
+OpenSSL 1.0.1f 6 Jan 2014
+
+
+
+
+
+
 
 

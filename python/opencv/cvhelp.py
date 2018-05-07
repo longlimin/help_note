@@ -3,13 +3,28 @@
 import cv2
 import numpy
 import numpy as np
+import time
+import sys
+import subprocess as sp
 
+sys.path.append("../")
+# 导入单例装饰器函数 : @singleton
+from python_singleton import singleton
+from Librtmp import Librtmp
 from Sudo import *
 from FileUtil import *
 
-
+@singleton
 class CvHelp:
+
     """ My OpenCv helper """ 
+# 初始化
+    def __init__(self):
+        self.id = "test id"
+        self.name = "test name"
+        self.classfier = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")  
+
+#################################################################
 
     #轮廓检测绘制
     def getContours(self, img):
@@ -326,9 +341,11 @@ class CvHelp:
 
         return histImg;   
 
+#################################################################
+
     #画圆
     def drawCircle(self, image, point=(100,100), radius=60, rgb=(255,128,255), line_width=4, line_type=8):
-        cv.circle(image, circle_center, radius, rgb, line_width, line_type)
+        cv.circle(image, point, radius, rgb, line_width, line_type)
         return image
     #画线 
     def drawLine(self, image, start_point=(0,0), end_point=(0,0), rgb=(255,128,255), line_width=4, line_type=8):
@@ -338,13 +355,21 @@ class CvHelp:
     def drawRect(self, image, start_point=(0,0), end_point=(10,20), rgb=(255,128,255), fill=False, line_width=4, line_type=8):
         # print(rgb, fill)
         if(fill):
-            points = numpy.array([ start_point, [start_point[0], end_point[1]], end_point, [end_point[0],start_point[1]] ], numpy.int32)#[1，3]，[4，8],[1,9]为要填充的轮廓坐标
+            points = numpy.array([ start_point, [start_point[0], end_point[1]], end_point, [end_point[0],start_point[1]] ], numpy.int32)
+            #[1，3]，[4，8],[1,9]为要填充的轮廓坐标
             # print(points)
             cv2.fillConvexPoly(image, points, rgb)
         else:
-            cv.rectangle(image, start_point, end_point, rgb, line_width, line_type)
+            cv2.rectangle(image, start_point, end_point, rgb, line_width, line_type)
         return image
-    
+    #画text
+    def drawText(self, image, point=(100,100), string="drawText", rgb=(0,64,64)):
+        cv2.putText(image,str(string),  point,      0,      0.45,       rgb,      1)
+        # 照片/添加的文字/              左上角坐标/ 字体/   字体大小/ 颜色/     字体粗细
+        return image
+
+#################################################################
+
     #创建图片 大小
     def createImage(self, width=256, height=256, rgb=(0,255,0)):
         image = np.zeros((height, width, 3), dtype=np.uint8)
@@ -436,20 +461,26 @@ class CvHelp:
         img = self.getBinary(img)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (width, height))
         fill = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
-        return fill
-    
+        return fill  
+
+
     #人脸检测
     def findFace(self, img):
         image = img.copy()
-        # 获取训练好的人脸的参数数据，这里直接从GitHub上使用默认值
-        classfier = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")  
+
         # 探测图片中的人脸
-        faces = classfier.detectMultiScale(image,scaleFactor=1.1,minNeighbors=5,minSize=(5,5))
+        faces = self.classfier.detectMultiScale(image,scaleFactor=1.1,minNeighbors=5,minSize=(5,5))
 
         for (x, y, w, h) in faces:
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
         return faces, image
+
+
+
+
+
+
 
     # # 数独图片提取数字矩形框
     def testSudoGetNumber(self, imgg, cc=0):
@@ -626,6 +657,13 @@ class CvHelp:
         res = results.ravel()[0]
 
         return res
+
+
+
+
+
+
+
     # #识别数独图片数字 形成参数矩阵 
     def testPraseNumber(self, img, model):
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -719,6 +757,13 @@ class CvHelp:
 
 
 
+
+
+####################################################################################
+# 测试
+####################################################################################
+
+
 def test1():
     mycv = CvHelp()
 
@@ -749,14 +794,167 @@ def test1():
 
     (_, cnts, hierarchy) = cv2.findContours(fill.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     mycv.save("aa8res.png", mycv.drawImage(img, cnts))
- 
+
+def testFindFace():
+    mycv = CvHelp()
+
+    img = mycv.openGray("sperson.jpg")
+    faces, image = mycv.findFace(img)
+    print(faces)
+    mycv.save("res_findface.png", image)
+
+# 打开视频流 识别处理 发送
+def testFindFaceMv():
+    mycv = CvHelp()
+    
+    rtmp = RtmpWriter()
+    camera = cv2.VideoCapture("/mnt/e/nginx-rtmp/test.mp4") # 从文件读取视频
+    # camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
+    # 判断视频是否打开
+    # if (camera.isOpened()):
+    #     print 'Open camera'
+    # else:
+    #     print 'Fail to open camera!'
+    #     return
+
+    
+
+    # 视频属性
+    size = (int(camera.get(cv2.CAP_PROP_FRAME_WIDTH)), int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+    fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/s
+
+    print 'mv size:'+repr(size)
+
+# ffmpeg -f dshow -i video="Integrated Camera" -s 640x480 -f flv rtmp://39.107.26.100:1935/myapp/test1 
+
+    # command = ['ffmpeg',
+    #     '-f', 'image2pipe',
+    #     '-i',
+    #     '-f', 'flv',
+    #     'rtmp://39.107.26.100:1935/myapp/test1'
+    # ]
+    # proc = sp.Popen(command, stdin=sp.PIPE,shell=False)
+    
+
+
+    # Define the codec and create VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter('res_mv.avi',fourcc, 20.0, size)
+    count = 0
+    faces = []
+    while True:
+        ###########################图片采集
+        count = count + 1
+        ret, frame = camera.read() # 逐帧采集视频流
+        if not ret:
+            break
+
+        if(count % 5 == 0):
+        ###########################图片处理
+            # 探测图片中的人脸 延帧检测
+            faces = mycv.classfier.detectMultiScale(frame,scaleFactor=1.1,minNeighbors=5,minSize=(5,5))
+        for (x, y, w, h) in faces:
+            # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            mycv.drawRect(frame, (x, y), (x+w, y+h), (128, 64, 255), line_width=2 )
+
+        # print(len(faces))
+        fpsshow = "Fps  :" + str(int(fps)) + "  Frame:" + str(count)
+        print(fpsshow)
+        mycv.drawText(frame, (0, 20), fpsshow )
+        mycv.drawText(frame, (0, 40), "Play :" + str(int(count / 30)) )
+        mycv.drawText(frame, (0, 60), "Time :" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) )
+
+        ############################图片输出
+        # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
+        out.write(frame)
+        rtmp.write(frame.tostring())
+        # proc.stdin.write(frame.tostring()) #frame is read using opencv
+
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     break
+    camera.release()
+    # Release everything if job is finished
+    out.release()
+    print("Over!")
+
+
 if __name__ == '__main__':
     mycv = CvHelp()
-    mycv.testSudo()
+    # mycv.testSudo()
 
-    # img = mycv.openGray("sperson.jpg")
-    # faces, image = mycv.findFace(img)
-    # print(faces)
-    # mycv.save("res_findface.png", image)
+    # testFindFace()
+
+    testFindFaceMv()
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+# CAP_PROP_POS_MSEC   
+# Current position of the video file in milliseconds.
+# CAP_PROP_POS_FRAMES     
+# 0-based index of the frame to be decoded/captured next.
+# CAP_PROP_POS_AVI_RATIO  
+# Relative position of the video file: 0=start of the film, 1=end of the film.
+# CAP_PROP_FRAME_WIDTH    
+# Width of the frames in the video stream.
+# CAP_PROP_FRAME_HEIGHT   
+# Height of the frames in the video stream.
+# CAP_PROP_FPS    
+# Frame rate.
+# CAP_PROP_FOURCC     
+# 4-character code of codec. see VideoWriter::fourcc .
+# CAP_PROP_FRAME_COUNT    
+# Number of frames in the video file.
+# CAP_PROP_FORMAT     
+# Format of the Mat objects returned by VideoCapture::retrieve().
+# CAP_PROP_MODE   
+# Backend-specific value indicating the current capture mode.
+# CAP_PROP_BRIGHTNESS     
+# Brightness of the image (only for cameras).
+# CAP_PROP_CONTRAST   
+# Contrast of the image (only for cameras).
+# CAP_PROP_SATURATION     
+# Saturation of the image (only for cameras).
+# CAP_PROP_HUE    
+# Hue of the image (only for cameras).
+# CAP_PROP_GAIN   
+# Gain of the image (only for cameras).
+# CAP_PROP_EXPOSURE   
+# Exposure (only for cameras).
+# CAP_PROP_CONVERT_RGB    
+# Boolean flags indicating whether images should be converted to RGB.
+# CAP_PROP_WHITE_BALANCE_BLUE_U   
+# Currently unsupported.
+# CAP_PROP_RECTIFICATION  
+# Rectification flag for stereo cameras (note: only supported by DC1394 v 2.x backend currently).
+# CAP_PROP_MONOCHROME      
+# CAP_PROP_SHARPNESS   
+# CAP_PROP_AUTO_EXPOSURE  
+# DC1394: exposure control done by camera, user can adjust reference level using this feature.
+# CAP_PROP_GAMMA   
+# CAP_PROP_TEMPERATURE     
+# CAP_PROP_TRIGGER     
+# CAP_PROP_TRIGGER_DELAY   
+# CAP_PROP_WHITE_BALANCE_RED_V     
+# CAP_PROP_ZOOM    
+# CAP_PROP_FOCUS   
+# CAP_PROP_GUID    
+# CAP_PROP_ISO_SPEED   
+# CAP_PROP_BACKLIGHT   
+# CAP_PROP_PAN     
+# CAP_PROP_TILT    
+# CAP_PROP_ROLL    
+# CAP_PROP_IRIS    
+# CAP_PROP_SETTINGS    
+# CAP_PROP_BUFFERSIZE     
+# Pop up video/camera filter dialog (note: only supported by DSHOW backend currently. Property value is ignored)
