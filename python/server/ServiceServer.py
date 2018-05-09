@@ -78,8 +78,10 @@ class ServiceServer:
             ModelMove().moveFasterTo(dc)
         elif(params == 'turnrevert'):
             ModelMove().turnRevert()
-
-
+        elif(params == 'moveleft'):
+            ModelMove().moveLeft()
+        elif(params == 'moveright'):
+            ModelMove().moveRight()
 
         msg.data["info"] = "move"
         return msg

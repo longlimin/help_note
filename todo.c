@@ -36,15 +36,15 @@ Shell多进程队列同步工具
 内核驱动编写test
 
 
-//Java学习-------------------------------------------------------
-thread 并发 同步锁 几种方式
-看书 通读 详细 Thinking in Java
+//Java学习----------------------------------看书 Thinking in Java---------------------
+#thread 并发 同步锁 几种方式
+看书 通读 详细 
 netyy spring 源码解析
-IO
+I/O IO/NIO
 JVM的性能
 
 
-ThreadLocal Context上下文 全局变量 
+#ThreadLocal Context上下文 全局变量 
 #线程池 - 单/多线程池队列 -> 高并发 - 定时任务调度《队列 生产者 消费者模型》
 #进程通信 远程调用RPC 共享内存IPC
 #classloader 注入原理 工具

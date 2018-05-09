@@ -182,7 +182,11 @@ class ModelMove:
     def moveBack(self):
         #rh黄-IN1  rb绿-IN2  lh蓝-IN3  lb红-IN4 39灰-地
         self.setPorts(0, 1, 0, 1) 
-
+        
+    def moveLeft(self): #原地转向
+        self.setPorts(0.5, 0, 0, 0)
+    def moveRight(self): #原地转向
+        self.setPorts(0, 0, 0.5, 0) 
 
     def turnRevert(self): #取消单边降速状态
         self.updateLeft(1)
