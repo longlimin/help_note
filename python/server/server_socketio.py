@@ -11,7 +11,7 @@ from flask import Flask, render_template
 from ServiceMsg import ServiceMsg
 
 ############################
-
+# 已废弃使用
 sio = socketio.Server()
 app = Flask(__name__)
 
@@ -47,10 +47,10 @@ def msg(sid, data):
         vt = data[key].encode("utf-8")
         map[kt] = vt
 
-    msg = Msg()
-    data = msg.handler(map)
-    print('>>>>>>>>>>>>>>>', data)
-    sio.emit('msg', data, room=sid)
+    msg = ServiceServer().do(fromMsg)
+
+    print('>>>>>>>>>>>>>>>', msg)
+    sio.emit('msg', msg, room=sid)
 
 @sio.on('event', namespace='/')
 def event(sid, data):

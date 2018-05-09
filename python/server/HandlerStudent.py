@@ -6,9 +6,6 @@ import tornado.web
 
 from include import *
 
-
-
-
 ############################
 #/do/student/home/aaa
 class HandlerStudent(tornado.web.RequestHandler):

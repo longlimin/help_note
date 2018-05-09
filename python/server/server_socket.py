@@ -9,22 +9,11 @@ import struct
 import yaml
 from Msg import Msg
 ########################################
-# from ServiceServer import ServiceServer
+from ServiceServer import ServiceServer
 
 ############################
 
 
-# 线程读取socket
-class ThreadRun (threading.Thread):
-    def __init__(self, name, runCallback):
-        threading.Thread.__init__(self)
-        self.name = name
-        self.runCallback = runCallback
-
-    def run(self):
-        print "Thread Start " + self.name
-        self.runCallback()
-        print "Thread Stop  " + self.name
 
 @singleton
 class ServerSocket:
@@ -43,7 +32,7 @@ class ServerSocket:
             while (self._socket_thread_read):
                 jsonstr = self.readImpl(self.client)
                 if(jsonstr):
-                    self.onReceive(self.client, jsonstr)
+                    self.onReceive(jsonstr)
                 time.sleep(self.threadReadDeta)
             print("threadReadRun stop")
             time.sleep(self.threadReturnDeta)
@@ -63,7 +52,7 @@ class ServerSocket:
                 msg.msgType = -2        #广播所有 测试用
                 msg.data = {"broadcast":cmd}
                 # print("make", jsonstr)
-                self.sendImpl(self.client, msg.toString())
+                self.sendImpl(msg.toString())
                 time.sleep(self.threadReadDeta)
             print("threadInputRun stop" + str(threadInputCount))
             threadInputCount = threadInputCount + 1
@@ -105,8 +94,8 @@ class ServerSocket:
 
 
     # 读取一条消息
-    def readImpl(self, client):
-        data = client.recv(self._head_size)
+    def readImpl(self):
+        data = self.client.recv(self._head_size)
         res = ""                 #读取结果缓冲区
         if(data):
             # 读取包头
@@ -124,13 +113,13 @@ class ServerSocket:
                     readLength = lastReadLen
                     lastReadLen = 0
 
-                data = client.recv(readLength)
+                data = self.client.recv(readLength)
                 # print("recv body", data)
                 res = res + data
             res = res
         return res
     # 发送一条消息       
-    def sendImpl(self, client, jsonstr):
+    def sendImpl(self, jsonstr):
         length = len(jsonstr)
         # byte4 = struct.pack('<i', length)   # 转换 int 4byte 低位前置
         # bytejson = bytes(jsonstr)
@@ -142,10 +131,10 @@ class ServerSocket:
         # struct中:!代表Network order，3I代表3个unsigned int数据
         headPack = struct.pack("!1I", *header)
         data = headPack+jsonstr.encode('utf-8')
-        client.send(data)
+        self.client.send(data)
 
     # 当收到一条消息
-    def onReceive(self, client, jsonstr):
+    def onReceive(self, jsonstr):
         print("recv<<<<<<<<<<<<<<<<")
         print(jsonstr) 
         fromMsg = yaml.safe_load(jsonstr)
@@ -158,26 +147,26 @@ class ServerSocket:
                 print("SysKey: " + fromMsg["fromSysKey"] + "  key: " + fromMsg["fromKey"])
             else:
                 print("重新认证")
-                self.loginOn(client)
+                self.loginOn()
         elif(msgType == 1):
             print("发送结果:" + fromMsg["ok"])
         elif(msgType == 10):
             # print(fromMsg)
-            # msg = ServiceServer().do(fromMsg)
+            msg = ServiceServer().do(fromMsg)
             msg = fromMsg
-            self.sendImpl(client, msg.toString())
+            self.sendImpl(msg.toString())
         else:
             print("不理解的消息类型")
             print(fromMsg)
 
 
-    def loginOn(self, client):
+    def loginOn(self):
         msg = Msg()
         msg.msgType = 0
         msg.toKey = "qwer"
         msg.fromKey = "f"
         msg.fromSysKey = "fs"
-        self.sendImpl(client, msg.toString())
+        self.sendImpl(msg.toString())
 
 
 

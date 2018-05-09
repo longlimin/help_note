@@ -7,7 +7,7 @@ from librtmp import *
 
 
 
-class RtmpWriter():  # camera可以通过一个类文件的对象来输出，实现write方法即可
+class RtmpUtil():  # camera可以通过一个类文件的对象来输出，实现write方法即可
     conn = None  # rtmp连接
     sps = None  # 记录sps帧，发过以后就不需要再发了（抓包看到ffmpeg是这样的）
     pps = None  # 同上

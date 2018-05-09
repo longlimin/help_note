@@ -33,6 +33,17 @@ from template import Template
 
 
 
+# 线程读取socket
+class ThreadRun (threading.Thread):
+    def __init__(self, name, runCallback):
+        threading.Thread.__init__(self)
+        self.name = name
+        self.runCallback = runCallback
+
+    def run(self):
+        print "Thread Start " + self.name
+        self.runCallback()
+        print "Thread Stop  " + self.name
 
 def json_load_byteified(file_handle):
     return _byteify(

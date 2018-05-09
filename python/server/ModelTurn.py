@@ -6,11 +6,11 @@ from include import *
 from system import System
 
 #####################
-# //舵机转向模块
+# 舵机转向模块
 # 红vcc
-# 橙信号
+# 橙信号   29端口 pwm控位
 # 灰gnd
-#
+#  
 # 转动规则 pwm 
 # 频率 50hz / T:20ms
 # 转动角度    周期内持续时间
@@ -30,6 +30,7 @@ class ModelTurn:
         ########################################
         # 20ms周期中 调整dc以控制角度 dc=k角度 dc的持续变动非跃迁 以实现角度的持续变动    T=T20+sleep
         #                                      1-sleep-2-sleep-3-sleep-4-sleep-5          10 20 30 40 50 
+        #              端口29
         self.t_port = 29
         self.t_hz = 50           #20ms 周期 1s 50T 舵机需要周期决定 
         self.t_t = 1000 / self.t_hz   #T 20ms
@@ -137,7 +138,7 @@ class ModelTurn:
         dcMoveT = pEnd * self.t_turn_degree2dc + self.t_dc_start
 
         return (ifOk, dcMoveF, dcMoveT, pEnd, info)
-
+# init
 ModelTurn()
 if __name__ == "__main__":
 

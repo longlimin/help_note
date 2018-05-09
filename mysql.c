@@ -7,7 +7,7 @@ user mysql;
 show tables;
 select * from User;	//数据库用户信息表 
 update user set host = '%' where user = 'root';
-update user set password<authentication_string> = pasword('ruaho1234") where user = 'root';
+update user set password<authentication_string> = pasword('ruaho1234') where user = 'root';
 //安全模式
 safemode
 
@@ -90,7 +90,7 @@ INSERT into person(p_id,p_name,p_sex,p_age) value("asdsadssdsadfff","addsdsa","d
 NOT NULL auto_increment,
 一.MYSQL的命令行模式的设置：
 桌面->我的电脑->属性->环境变量->新建->
-PATH=“；path\mysql\bin;”其中path为MYSQL的安装路径。
+PATH="；path\mysql\bin;"其中path为MYSQL的安装路径。
 二.简单的介绍一下命令行进入MYSQL的方法：
 1.C:\>mysql -h hostname -u username -p
 按ENTER键，等待然后输入密码。这里hostname为服务器的名称，如localhost，username为MYSQL的用户名，如root。
@@ -127,7 +127,7 @@ c:\>mysql -h localhost -u root -p mydb2 < e:\mysql\mydb2.sql
 可以同时修改其他两项memory_limit=250M  post_max_size=200M
 这样就可以导入200M以下的.sql文件了。
 
-使用MySQL数据库的时候，经常会遇到这么一个问题，就是“Can not connect to MySQL server. Too many connections”-mysql 1040错误，这是因为访问MySQL且还未释放的连接数目已经达到MySQL的上限。通常，mysql的最大连接数默认是100, 最大可以达到16384。
+使用MySQL数据库的时候，经常会遇到这么一个问题，就是"Can not connect to MySQL server. Too many connections"-mysql 1040错误，这是因为访问MySQL且还未释放的连接数目已经达到MySQL的上限。通常，mysql的最大连接数默认是100, 最大可以达到16384。
 
      在Windows下常用的有两种方式修改最大连接数。
 
@@ -179,7 +179,7 @@ c:\>mysql -h localhost -u root -p mydb2 < e:\mysql\mydb2.sql
 在DOS方式下，运行：
 d:/mysql/bin/mysql -u root -p
 ?出现提示符，此时已进入mysql的交互操作方式。
-如果出现 "ERROR 2003: Can‘t connect to MySQL server on ‘localhost‘ (10061)“，说明你的MySQL还没有启动。
+如果出现 "ERROR 2003: Can‘t connect to MySQL server on ‘localhost‘ (10061)"，说明你的MySQL还没有启动。
 
 3、退出MySQL操作界面
 ?在mysql>提示符下输入quit可以随时退出交互操作界面：
@@ -204,7 +204,7 @@ mysql>Select (20+5)*4,sin(pi()/3);
 mysql>Select (20+5)*4 AS Result,sin(pi()/3); (AS: 指定假名为Result)
 
 5、多行语句
-一条命令可以分成多行输入，直到出现分号“；”为止：
+一条命令可以分成多行输入，直到出现分号"；"为止：
 mysql> select
 ? -> USER()
 ? -> ,
@@ -370,7 +370,7 @@ mysql> select title,writer,birthaddr,birth from mytable,title
 mysql> alter table mytable add column single char(1);
 
 16、修改记录
-将abccs的single记录修改为“y”：
+将abccs的single记录修改为"y"：
 mysql> update mytable set single=‘y‘ where name=‘abccs‘;
 
 现在来看看发生了什么：
