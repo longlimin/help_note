@@ -1,1 +1,1 @@
-ssh root@39.107.26.100
+sshpass -p "RUAho1234" ssh root@39.107.26.100

@@ -4,21 +4,24 @@
 from include import *
 ########################################
 from server_socket import ServerSocket
+from server_http import ServerHttp
 
- 
+from SrviceCamera import ServerCamera
+
 
 ############################
-# 启动后台
+# 启动后台s
 
-# 线程 Socket后台
+# Socket后台
 serverSocket = ServerSocket()
-main = serverSocket.start("39.107.26.100", 8092)
+serverSocket.start("39.107.26.100", 8092)
 
-# ServiceServer 处理普通消息
-
+# ServiceHttp 处理http请求
+serverHttp = ServerHttp()
+serverHttp.start(8086)
 
 # 线程 Opencv监控摄像头 识别图像 调用socket推送消息
-
+serviceCamera = serviceCamera(serverSocket)
 
 
 

@@ -275,7 +275,7 @@ ubuntu 14.04中打开telnet服务步骤
 //ssh 通过winscp 和 putty<终端>  依靠ip/端口/用户名密码 远程登录
 {
     
-    在计算机之间传递文件（使用scp）
+在计算机之间传递文件（使用scp）
 X-forwarding – 连接到远端的机器，并且开启一个GUI应用，看起来它们就像在本地开启的一样，即使远端的机器并没有提供X服务。
 端口转发 – 将到本地端口的连接转发到远端机器的端口，或者将到远端机器端口的连接转发到本地端口
 SOCKS 代理 – 允许你将一个支持SOCKET代理的应用上的所有连接转发到远端机器。这对于如何更安全使用公共wifi浏览网络和绕过严格的防火墙是很有用的。
@@ -289,6 +289,17 @@ SOCKS 代理 – 允许你将一个支持SOCKET代理的应用上的所有连接
 E: 无法修正错误，因为您要求某些软件包保持现状，就是它们破坏了软件包间的依赖关系。
 sudo apt-get install openssh-client=1:6.6p1-2ubuntu1
 openssh-server是依赖于openssh-clien的,那ubuntu不是自带了openssh-client吗?原由是自带的openssh-clien与所要安装的openssh-server所依赖的版本不同,这里所依赖的版本是
+
+//免密码登录ssh
+对于debian/ubuntu系统来说，安装方式很简单：
+sudo apt-get install sshpass
+对于其他的linux,可以编译sshpass的源码安装：
+wget http://sourceforge.net/projects/sshpass/files/sshpass/1.05/sshpass-1.05.tar.gz  
+tar xvzf sshpass-1.05.tar.gz  
+./configure 
+make  
+sudo make install
+sshpass -p "XXX" ssh user@IP
 }
 
 //管道 多进程 并发

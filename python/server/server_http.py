@@ -5,6 +5,9 @@ import tornado.web
 import tornado.httpserver  
 import sys
 
+from include import *
+
+########################################
 #####################self
 
 from HandlerTest import HandlerTest
@@ -15,21 +18,21 @@ from HandlerSystem import HandlerSystem
 
 
 #####################
+@singleton
+class ServerHttp:
 
+    application = tornado.web.Application([ 
+        (r"/", HandlerTest),
+        (r"/+do/+student/+(?P<method>.+)/+(?P<params>.*)", HandlerStudent),
+        (r"/+do/+system/+(?P<method>.+)/+(?P<params>.*)", HandlerSystem), #非raspberry上运行需要屏蔽此服务
 
+ 
+    ])
 
-application = tornado.web.Application([ 
-
-    (r"/", HandlerTest),
-    (r"/+do/+student/+(?P<method>.+)/+(?P<params>.*)", HandlerStudent),
-    (r"/+do/+system/+(?P<method>.+)/+(?P<params>.*)", HandlerSystem), #非raspberry上运行需要屏蔽此服务
-
-
-
-
-
-
-])
+    def start(self, port=8086):
+        print("Start server http " + str(port))
+        application.listen(port)
+        tornado.ioloop.IOLoop.instance().start()
 
 '''
 1、在路由映射条件里用正则匹配访问路径后缀
@@ -38,9 +41,12 @@ application = tornado.web.Application([
 '''
 
 if __name__ == "__main__":
-    print("Start server http ")
-    application.listen(8086)
-    tornado.ioloop.IOLoop.instance().start()
+    serverHttp = ServerHttp()
+    serverHttp.start(8086)
+    
+    # print("Start server http ")
+    # application.listen(8086)
+    # tornado.ioloop.IOLoop.instance().start()
 
 
 

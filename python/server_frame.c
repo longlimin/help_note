@@ -24,15 +24,15 @@ MAC: B8:27:EB:85:06:17
     
 <Raspberry>
 
-//  web tornado         短连接     图片/视频流生成-加工
+//  web tornado         短连接         <根据即时消息>获取静态资源
     python /help_note/python/server/server_web.py
     #http://127.0.0.1:8088/do/student/mm/a
 
-//  socket-io           长连接-web
+//  socket-io           长连接-web     
     python /help_note/python/server/server_socket.py
     #127.0.0.1:8087 emit onMsg
 
-//  socket              长连接-socket
+//  socket              长连接-socket  推送即时信息
     python /help_note/python/server/server_socket.py
     #127.0.0.1:8086 emit onMsg
 

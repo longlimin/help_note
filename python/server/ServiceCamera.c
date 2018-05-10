@@ -12,6 +12,7 @@ class ServiceCamera:
         Service 
         管理摄像头 识别opencv 判断处理 发送监控提醒socket推送
     """ 
+
     def doMethod(self, method, params):
         # params = params.encode('utf-8')
         # method = method.encode('utf-8')
@@ -30,8 +31,9 @@ class ServiceCamera:
             print("Error ! 该方法不存在")
             return ""
 
-    def __init__():
+    def __init__(serverSocket):
         self.ifRtmpPush = "0"
+        self.serverSocket = serverSocket    # 通过此来推送关键消息
 
 # 开启摄像头监控识别
     def start():
