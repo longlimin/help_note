@@ -1,8 +1,37 @@
 
+ffmpeg  -f v4l2 -s 640x480 -r 25 -i /dev/video0 -vcodec h264 -preset veryfast -tune zerolatency  -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
+ffmpeg  -f v4l2 -s 640x480 -r 5 -i /dev/video0 -vcodec h264 -preset veryfast -tune zerolatency  -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
+ffmpeg  -f v4l2 -s 800x600 -r 1 -i /dev/video0 -vcodec h264 -preset medium -tune zerolatency  -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
+ffmpeg  -f v4l2 -s 800x600 -r 1 -i /dev/video0 -vcodec h264  -profile:v baseline  -preset veryfast -tune zerolatency  -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
+
+
+
+
+ffmpeg  -f v4l2 -s 200x150 -r 5 -i /dev/video0 -vcodec h264 -preset veryfast -tune zerolatency  -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
+
+
+raspivid -t 0 -w 320 -h 240 -o - | ffmpeg -i - -s 320x240 -f mpeg1video -b 800k -r 30 rtmp://39.107.26.100:1935:1935/myapp/test1
+
+
+sudo ffmpeg -f v4l2 -i /dev/video0 -c libx264 -profile:v high -preset:v medium \
+   -b:v 300k -s 800x600 -r 30 -an \
+    -f flv -y rtmp://39.107.26.100:1935:1935/myapp/test1
+
+sudo ffmpeg -f v4l2 -i /dev/video0 -c libx264 -profile:v main -preset:v medium \
+   -b:v 300k -s 800x600 -r 25 -an \
+    -f flv -y rtmp://39.107.26.100:1935:1935/myapp/test1
+2560x1920  -fflags nobuffer 
+rtmp://127.0.0.1:1935/myapp/test1
+rtmp://192.168.191.1:1935/myapp/test1
+rtmp://39.107.26.100:1935:1935/myapp/test1
+2560*1920 
+可以修改 profile 为 high, main, baseline 
+可是修改 preset 为 veryfast, fast, medium, slow, slower
 
 //采集视频
 1、列表本机的视音频设备 
 ffplay -list_devices true -f dshow video=0
+ffmpeg -list_devices true -f dshow video=0
 "Integrated Camera"
 "Internal Microphone (Conexant SmartAudio HD)"
 这句话列出了我电脑上的摄像头和音频设备

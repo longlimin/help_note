@@ -94,8 +94,23 @@ eg: 红2红2黑0橙10^3=1000=1k棕误差1%  -> 220 kΩ
 
 
 
+// dev/video0 驱动配置
+/etc/modules中添加bcm2835-v412就可以（请注意，是v412)，但我试了，不行。
+bcm2835-v4l2  是l不是1
+
+摄像头并输出RTMP：
+sudo ffmpeg -f v4l2 -i /dev/video0 \
+    -c libx264 -profile:v main -preset:v fast \
+    -b:v 300k -s 640x480 -r 25 \
+    -an \
+    -f flv -y rtmp://127.0.0.1/live/livestream
 
 
+还可以使用raspivid编码后用ffmpeg转封装输出：
+
+sudo raspivid -fl -t 0 -w 640 -h 480 -b 1200000 -fps 15 \
+    -pf baseline -o - | ffmpeg -f h264 -i - \
+    -c copy -an -f flv -y rtmp://127.0.0.1/live/livestream
 
 //摄像头模块 开机状态下插拔烧坏了!!!!!!!!!!!!!!!!!!!!!!!
 通过raspi-config工具更新了操作并使能摄像头之后，它会告诉树莓派摄像头已经连接成功，并增加了两个命令行工具以供用户使用摄像头。

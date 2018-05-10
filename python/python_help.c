@@ -6,8 +6,8 @@
 sudo killall -9 nginx 
 sudo nginx
 
-
-
+//指定版本降级安装
+sudo apt-get install libffi6=3.1-2+deb8u1
 
 //nginx
 sudo apt-get install nginx
@@ -54,13 +54,14 @@ sudo pip install python-librtmp
 >>> print(get_python_lib())
 
 
-编译nginx rtmp 依赖环境
+
+//nginx rtmp 依赖环境
 wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.gz
 wget http://www.openssl.org/source/openssl-1.0.1c.tar.gz
 wget http://www.zlib.net/zlib-1.2.11.tar.gz
 cd nginx-1.10.1 
 ./configure --sbin-path=/usr/local/nginx/nginx --conf-path=/usr/local/nginx/nginx.conf --pid-path=/usr/local/nginx/nginx.pid --with-http_ssl_module --with-pcre=../pcre-8.38 --with-zlib=../zlib-1.2.11 --with-openssl=../openssl-1.0.1c --with-http_stub_status_module --add-module=../nginx-rtmp-module-master
-make
+makez
 make install
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 --prefix                       #nginx安装目录，默认在/usr/local/nginx
@@ -97,7 +98,86 @@ make install
 --     numpy:           /home/walker/.local/lib/python2.7/site-packages/numpy/core/include (ver 1.13.3)
 --     packages path:   lib/python2.7/dist-packages
 
+//python-rtmp
+（一）openssl安装
+    这里需要特别的注意：openssl 版本不能太高，太高有些接口与libRTMP 的接口不一样，会导致libRTMP编译不能通过。我这里安装的是openssl-1.0.1f。
+1、下载地址：http://www.openssl.org/source/ 下一个新版本的OpenSSL，我下的版本是：openssl-1.0.1f
+2、在下载的GZ目录中，用命令执行：tar -xvf openssl-1.0.1f.tar.gz
+3、进入解压的目录：openssl-1.0.1f  [.......]#cd openssl-1.0.1f
+4、[.....openssl-1.0.1f]# ./config --prefix=/usr/local/openssl
+5[...../openssl-1.0.1f]# ./config -t
+6[...../openssl-1.0.1f]# make depend
+7[...../openssl-1.0.1f]# cd /usr/local
+8/usr/local]# ln -s openssl ssl
+9 [...../openssl-1.0.1f]#sudo make install
+10在/etc/ld.so.conf文件的最后面，添加如下内容：
+/usr/local/openssl/lib
+11...]# ldconfig
+12添加OPESSL的环境变量：
+在etc／的profile的最后一行，添加：
+export OPENSSL=/usr/local/openssl/bin
+export PATH=$OPENSSL:$PATH:$HOME/bin  
+15依次如下执行：
+[root@localhost /]# cd /usr/local
+[root@localhost local]# ldd /usr/local/openssl/bin/openssl
+会出现类似如下信息：
+        linux-vdso.so.1 =>  (0x00007fff2116a000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f378e239000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f378de7c000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f378e44f000)
+16查看路径
+...]# which openssl
+/usr/local/openssl/bin/openssl
+17查看版本
+...]# openssl version
+OpenSSL 1.0.1f 6 Jan 2014
+
+（二）zlib安装
+    安装的版本为zlib-1.2.11.tar.gz ,可直接安装
+1 lcb@ubuntu:~/test/RTMP$ tar xvf zlib-1.2.11.tar.gz 
+2 lcb@ubuntu:~/test/RTMP$ cd zlib-1.2.11/
+3 lcb@ubuntu:~/test/RTMP/zlib-1.2.11$ sudo ./configure 
+4 lcb@ubuntu:~/test/RTMP/zlib-1.2.11$ make
+5 lcb@ubuntu:~/test/RTMP/zlib-1.2.11$ sudo make install
+
+（三）libssl-dev 安装
+    libssl-dev 的安装，可直接使用命令安装：
+    sudo apt-get install libssl-dev
+
+（四）编译libRTMP
+1 添加openssl的头文件查找路径：在/etc/profile文件最后面添加上
+C_INCLUDE_PATH=/usr/local/openssl/include/
+export C_INCLUDE_PATH 
+CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/local/openssl/include/
+export CPLUS_INCLUDE_PATH
+2 下载rtmpdump-2.3 可直接编译安装, rtmpdump主页： http://rtmpdump.mplayerhq.hu/
+tar -xvf  rtmpdump-2.3.tgz
+cd rtmpdump-2.3
+make
+make install
+
 //opencv安装
+//1.树莓派专用方式?
+// 软件源更新
+sudo apt-get update 
+// 升级本地所有安装包，最新系统可以不升级，版本过高反而需要降级才能安装
+sudo apt-get upgrade
+// 升级树莓派固件，固件比较新或者是Ubuntu则不用执行
+sudo rpi-update
+// 安装build-essential、cmake、git和pkg-config
+sudo apt-get install build-essential cmake git pkg-config 
+// 安装jpeg格式图像工具包
+sudo apt-get install libjpeg8-dev 
+// 安装tif格式图像工具包
+sudo apt-get install libtiff5-dev 
+// 安装JPEG-2000图像工具包
+sudo apt-get install libjasper-dev 
+// 安装png图像工具包
+sudo apt-get install libpng12-dev 
+
+sudo apt-get install libjpeg62-turbo-dev libtiff5-dev  libjasper-dev libpng12-dev 
+
+//2.普通安装方式
 {
 //依赖
 sudo apt-get install \ 
