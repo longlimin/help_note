@@ -1,20 +1,22 @@
 /*
-记录需要用的 地址 账号 密码
-
-
+    something not important ?
 */
 1q
 p36
 
-//微软
+//micro
 chen_peng_hui@outlook.com
 
 
 
+// tv
+722895183
+2qc4q4
+WALKER
+1q
 
 
-
-//翻墙
+//fq
 插件 switchyOmega.crx 网盘
 软件 shadowsock.exe   网盘/github
     ubuntu_server
@@ -28,10 +30,8 @@ chen_peng_hui@outlook.com
 
 代理配置 Omega.*.bak 网盘
 
-//测试
-实例名称:icbc_web 
-公网IP：39.107.26.100  
-内网IP：10.81.34.25  
+//web
+39.107.26.100  
 root 
 RUAho1234
 
