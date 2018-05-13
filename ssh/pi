@@ -1,1 +1,2 @@
-sshpass -p "qwer" ssh pi@192.168.1.10
+sshpass -p "qwer" ssh pi@192.168.1.11
+

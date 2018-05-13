@@ -120,6 +120,7 @@ raspivid
 测试模块
 raspistill -v -o test.jpg
 raspistill -o image.jpg -t 2000
+raspistill -o image.jpg  -w 1280 -h 720
 raspivid -o mv.h264 -t 10000 -w 1280 -h 720
 sudo apt-get install -y gpac 
 MP4Box -fps 30 -add keychain.h264 keychain.mp4
@@ -336,3 +337,34 @@ B+改进
 
 
 
+中科大
+deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ stretch main contrib non-free rpi 
+清华
+deb https://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ stretch main contrib non-free rpi
+大连东软
+deb http://mirrors.neusoft.edu.cn/raspbian/raspbian/ stretch main contrib non-free rpi
+重庆大学
+deb http://mirrors.cqu.edu.cn/Raspbian/raspbian/ stretch main contrib non-free rpi
+浙江大学
+deb http://mirrors.zju.edu.cn/raspbian/raspbian/ stretch main contrib non-free rpi
+阿里云
+deb http://mirrors.aliyun.com/raspbian/raspbian/ stretch main contrib non-free rpi 
+搜狐
+deb http://mirrors.sohu.com/raspbian/raspbian/ stretch main contrib non-free rpi 
+元智大学（中国台湾）
+deb http://ftp.cse.yzu.edu.tw/Linux/raspbian/raspbian/ stretch main contrib non-free rpi 
+北陆先端科学技术大学院大学（日本知名镜像站，日常出口带宽2g）
+deb http://ftp.jaist.ac.jp/raspbian/ stretch main contrib non-free rpi
+牛津大学
+deb http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian/  stretch main contrib non-free rpi
+美国Berkely大学
+deb http://mirrors.ocf.berkeley.edu/raspbian/raspbian/ stretch main contrib non-free rpi
+美国俄克拉荷马大学
+deb http://reflection.oss.ou.edu/raspbian/raspbian/ stretch main contrib non-free rpi
+南非知名软件源
+deb http://mirror.liquidtelecom.com/raspbian/raspbian/ stretch main contrib non-free rpi 
+默认源（带重定向by mirrorbrain）
+deb http://mirrordirector.raspbian.org/raspbian/ stretch main contrib non-free rpi
+官方源
+deb https://archive.raspbian.org/raspbian/ stretch main contrib non-free rpi
+ 

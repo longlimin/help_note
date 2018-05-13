@@ -102,10 +102,26 @@ sudo apt-cache rdepends package 查看该包被哪些包依赖
 sudo apt-get source package  下载该包的源代码
 sudo apt-get clean && sudo apt-get autoclean 清理无用的包
 sudo apt-get check 检查是否有损坏的依赖
+//指定版本安装
+apt-cache madison <<package name>>
+将列出所有来源的版本。如下输出所示：
+apt-cache madison vim
+   vim | 2:7.3.547-1 | http://debian.mirrors.tds.net/debian/ unstable/main amd64 Packages
+   vim | 2:7.3.429-2 | http://debian.mirrors.tds.net/debian/ testing/main amd64 Packages
+   vim | 2:7.3.429-2 | http://http.us.debian.org/debian/ testing/main amd64 Packages
+   vim | 2:7.3.429-2 | http://debian.mirrors.tds.net/debian/ testing/main Sources
+   vim | 2:7.3.547-1 | http://debian.mirrors.tds.net/debian/ unstable/main Sources
+apt-get install <<package name>>=<<version>>
+sudo apt-get install openssh-client=1:6.6p1-2ubuntu1
 }
 //源配置
 {
 $ vim /etc/apt/sources.list                                                 
+deb http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib
+deb-src http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib
+
+deb http://mirrordirector.raspbian.org/raspbian/ wheezy main non-free contrib
+
 
 # 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
@@ -220,6 +236,63 @@ ps -ef|grep LOCAL=NO|grep -v grep|cut -c 9-15|xargs kill -9
 ps -ef|grep /usr/local/apache-tomcat-document/|grep -v grep|cut -c 9-15|xargs kill -9
 
 }
+//opencv
+{
+//整理树形版本依赖! !!!!!!!!!!!!!
+apt-cache madison vim
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!需要配置专业的源pi专用最新 自动识别依赖
+// 安装build-essential、cmake、git和pkg-config
+sudo apt-get install build-essential cmake git pkg-config
+// 安装jpeg格式图像工具包
+sudo apt-get install libjpeg8-dev 
+// 安装tif格式图像工具包 
+sudo apt-get install libtiff5-dev   
+// 安装JPEG-2000图像工具包
+sudo apt-get install libjasper-dev 
+// 安装png图像工具包
+sudo apt-get install libpng12-dev 
+//再安装视频I/O包（注意最后一个包的数字“4”后面是“L”）：
+sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+//下面安装gtk2.0（树莓派很可能下载错误，更换中科大或者清华源即可，ubuntu有可能出现包版本过高的情况，需要将依赖包降级安装）：
+sudo apt-get install libgtk2.0-dev
+//优化函数包：
+sudo apt-get install libatlas-base-dev gfortran
+ 打开源码文件夹，这里以我修改文章时最新的3.4.1为例
+//开始编译
+cd opencv-3.4.1
+之后我们新建一个名为release的文件夹用来存放cmake编译时产生的临时文件：
+// 新建release文件夹
+mkdir release
+// 进入release文件夹
+cd release
+设置cmake编译参数，安装目录默认为/usr/local ，注意参数名、等号和参数值之间不能有空格，但每行末尾“\”之前有空格，参数值最后是两个英文的点：
+
+// CMAKE_BUILD_TYPE是编译方式，CMAKE_INSTALL_PREFIX是安装目录，OPENCV_EXTRA_MODULES_PATH是加载额外模块，INSTALL_PYTHON_EXAMPLES是安装官方python例程，BUILD_EXAMPLES是编译例程（这两个可以不加，不加编译稍微快一点点，想要C语言的例程的话，在最后一行前加参数INSTALL_C_EXAMPLES=ON \）
+
+sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D BUILD_EXAMPLES=ON ..
+之后开始正式编译过程（如果之前一步因为网络问题导致cmake下载缺失文件失败的话，可以尝试使用手机热点，并将release文件夹删除掉，重新创建release文件夹并cmake）：
+
+// 编译，以管理员身份，否则容易出错
+sudo make
+// 安装
+sudo make install
+// 更新动态链接库
+sudo ldconfig 
+
+}
+
+
+
+//php环境
+{
+sudo apt-get install nginx php7.0-fpm php7.0-cli php7.0-curl php7.0-gd php7.0-mcrypt php7.0-cgi
+sudo apt-get install nginx php5.0-fpm php5.0-cli php5.0-curl php5.0-gd php5.0-mcrypt php5.0-cgi
+
+}
 
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
 {
@@ -284,7 +357,7 @@ SOCKS 代理 – 允许你将一个支持SOCKET代理的应用上的所有连接
 
   sudo service ssh start   
  /etc/init.d/ssh restart
-下列软件包有未满足的依赖关系：
+下列软件包有未满足的依赖关系： 版本
  openssh-server : 依赖: openssh-client (= 1:6.6p1-2ubuntu1)
 E: 无法修正错误，因为您要求某些软件包保持现状，就是它们破坏了软件包间的依赖关系。
 sudo apt-get install openssh-client=1:6.6p1-2ubuntu1
