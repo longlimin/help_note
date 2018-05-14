@@ -283,6 +283,11 @@ sudo make install
 // 更新动态链接库
 sudo ldconfig 
 
+
+sudo pip install --upgrade setuptools
+sudo pip install numpy Matplotlib
+sudo pip install opencv-python
+
 }
 
 
