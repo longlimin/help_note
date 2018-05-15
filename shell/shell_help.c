@@ -287,7 +287,9 @@ sudo ldconfig
 sudo pip install --upgrade setuptools
 sudo pip install numpy Matplotlib
 sudo pip install opencv-python
-
+ 
+sudo apt-get install libopencv-dev //??????????
+sudo apt-get install python-opencv
 }
 
 
