@@ -277,7 +277,7 @@ sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D INSTALL_PYTHON_EXAMPLES=ON \
     -D BUILD_EXAMPLES=ON ..
 
-cmake -D CMAKE_BUILD_TYPE=RELEASE \
+sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
  -D CMAKE_INSTALL_PREFIX=/usr/local \
  -D INSTALL_C_EXAMPLES=ON \
  -D INSTALL_PYTHON_EXAMPLES=ON \
@@ -297,8 +297,10 @@ sudo ldconfig
 sudo pip install --upgrade setuptools
 sudo pip install numpy Matplotlib scipy
 //////////////////////////////////////////////////////////
-在release目录下寻找lib目录里的cv2.so，这个是python需要的，将其拷贝到python的库目录里。一般情况下是在“/usr/local/lib/python2.7/dist-packages”里。
-
+在release目录下寻找lib目录里的cv2.so，
+这个是python需要的，将其拷贝到python的库目录里。一般情况下是在
+“/usr/local/lib/python2.7/dist-packages”里。
+sudo cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
  
 sudo apt-get install libopencv-dev //??????????自编译非此
 sudo apt-get install python-opencv
