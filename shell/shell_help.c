@@ -118,11 +118,8 @@ sudo apt-get install openssh-client=1:6.6p1-2ubuntu1
 }
 //源配置
 {
-$ vim /etc/apt/sources.list                                                 
-deb http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib
-deb-src http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib
-
-deb http://mirrordirector.raspbian.org/raspbian/ wheezy main non-free contrib
+sudo vim /etc/apt/sources.list                                                 
+deb http://mirrors.aliyun.com/raspbian/raspbian/ stretch main contrib non-free rpi 
 
 
 # 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
@@ -246,7 +243,7 @@ apt-cache madison vim
 // 安装build-essential、cmake、git和pkg-config
 sudo apt-get install build-essential cmake git pkg-config
 // 安装jpeg格式图像工具包
-sudo apt-get install libjpeg8-dev 
+sudo apt-get install libjpeg8-dev  
 // 安装tif格式图像工具包 
 sudo apt-get install libtiff5-dev   
 // 安装JPEG-2000图像工具包

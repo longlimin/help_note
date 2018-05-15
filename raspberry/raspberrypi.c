@@ -335,6 +335,7 @@ B+改进
 
 
 
+sudo vim /etc/apt/sources.list                                                 
 
 
 中科大
