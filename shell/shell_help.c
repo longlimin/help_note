@@ -11,6 +11,8 @@ touch test.txt //创建文件
 
 //基本命令
 {
+    find / -name librtmp.so.1
+
     ls -d /imgs/        只显示目录
     ls -F | grep '/$'
     ls -I | grep '^d'
@@ -274,6 +276,14 @@ sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
     -D INSTALL_PYTHON_EXAMPLES=ON \
     -D BUILD_EXAMPLES=ON ..
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+ -D CMAKE_INSTALL_PREFIX=/usr/local \
+ -D INSTALL_C_EXAMPLES=ON \
+ -D INSTALL_PYTHON_EXAMPLES=ON \
+ -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
+ -D BUILD_EXAMPLES=ON ..
+
 之后开始正式编译过程（如果之前一步因为网络问题导致cmake下载缺失文件失败的话，可以尝试使用手机热点，并将release文件夹删除掉，重新创建release文件夹并cmake）：
 
 // 编译，以管理员身份，否则容易出错
@@ -285,10 +295,12 @@ sudo ldconfig
 
 
 sudo pip install --upgrade setuptools
-sudo pip install numpy Matplotlib
-sudo pip install opencv-python
+sudo pip install numpy Matplotlib scipy
+//////////////////////////////////////////////////////////
+在release目录下寻找lib目录里的cv2.so，这个是python需要的，将其拷贝到python的库目录里。一般情况下是在“/usr/local/lib/python2.7/dist-packages”里。
+
  
-sudo apt-get install libopencv-dev //??????????
+sudo apt-get install libopencv-dev //??????????自编译非此
 sudo apt-get install python-opencv
 }
 
@@ -756,7 +768,27 @@ usermod -l walker walkerdust
 ps 查看tty？
 top来对进程排序，结束进程等.
 
+//python-rtmp
+{   
+sudo pip install python-librtmp     //只需要此
 
+
+sudo apt-get install gcc* python-dev libffi-dev* -y
+git clone git://git.ffmpeg.org/rtmpdump
+cd rtmpdump/librtmp
+make && make install 
+wget -S https://pypi.python.org/packages/83/3c/00b553fd05ae32f27b3637f705c413c4ce71290aa9b4c4764df694e906d9/cffi-1.7.0.tar.gz#md5=34122a545060cee58bab88feab57006d
+cd cffi-1.7.0
+sudo python setup.py install
+wget -S https://pypi.python.org/packages/48/a6/33b1a5864e22de3e59dd29fcbc2602462511c04a31057b16baec639d7d4f/python-librtmp-0.3.0.tar.gz#md5=f7afe8d463214072281998fa84553927
+cd python-librtmp-0.3.0
+sudo python setup.py install 
+python
+import librtmp
+find / -name librtmp.so.1
+ldconfig    //自动统计导入so文件
+
+}
 
 
 

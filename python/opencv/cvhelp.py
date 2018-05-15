@@ -10,7 +10,6 @@ import subprocess as sp
 sys.path.append("../")
 # 导入单例装饰器函数 : @singleton
 from python_singleton import singleton
-from Librtmp import Librtmp
 from Sudo import *
 from FileUtil import *
 

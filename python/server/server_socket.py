@@ -30,7 +30,7 @@ class ServerSocket:
         while(1):
             print("threadReadRun start")
             while (self._socket_thread_read):
-                jsonstr = self.readImpl(self.client)
+                jsonstr = self.readImpl()
                 if(jsonstr):
                     self.onReceive(jsonstr)
                 time.sleep(self.threadReadDeta)
@@ -44,7 +44,7 @@ class ServerSocket:
             print("threadInputRun start" + str(threadInputCount))
 
             # 能发送前先 认证系统
-            self.loginOn(self.client)
+            self.loginOn()
 
             while (self._socket_thread_read):
                 cmd=raw_input("Input words to broadcast:")

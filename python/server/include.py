@@ -9,12 +9,13 @@ import json
 import re
 import codecs
 import time
-
+import threading
 
 
 ##############################
 # 导入父目录为可引用路径
 sys.path.append("../")
+sys.path.append("../opencv/")
 
 ##########################
 # 导入单例装饰器函数 : @singleton

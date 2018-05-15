@@ -6,7 +6,7 @@ from include import *
 from server_socket import ServerSocket
 from server_http import ServerHttp
 
-from SrviceCamera import ServerCamera
+from ServiceCamera import ServiceCamera
 
 
 ############################
@@ -21,8 +21,8 @@ serverHttp = ServerHttp()
 serverHttp.start(8086)
 
 # 线程 Opencv监控摄像头 识别图像 调用socket推送消息
-serviceCamera = serviceCamera(serverSocket)
-
+serviceCamera = ServiceCamera(serverSocket)
+serviceCamera.start()
 
 
 while 1:

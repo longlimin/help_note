@@ -21,17 +21,17 @@ from HandlerSystem import HandlerSystem
 @singleton
 class ServerHttp:
 
-    application = tornado.web.Application([ 
-        (r"/", HandlerTest),
-        (r"/+do/+student/+(?P<method>.+)/+(?P<params>.*)", HandlerStudent),
-        (r"/+do/+system/+(?P<method>.+)/+(?P<params>.*)", HandlerSystem), #非raspberry上运行需要屏蔽此服务
+    def __init__(self):
+        self.application = tornado.web.Application([ 
+            (r"/", HandlerTest),
+            (r"/+do/+student/+(?P<method>.+)/+(?P<params>.*)", HandlerStudent),
+            (r"/+do/+system/+(?P<method>.+)/+(?P<params>.*)", HandlerSystem), #非raspberry上运行需要屏蔽此服务
 
- 
-    ])
-
+        ])
+        return 
     def start(self, port=8086):
         print("Start server http " + str(port))
-        application.listen(port)
+        self.application.listen(port)
         tornado.ioloop.IOLoop.instance().start()
 
 '''
