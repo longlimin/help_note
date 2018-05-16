@@ -24,10 +24,6 @@ from python_singleton import singleton
 # 导入工具 模块 .py : tool.exe()
 import tool
 
-
-# 导入测试 模块
-import testModel
-
 # 导入普通类
 from template import Template
 

@@ -251,7 +251,7 @@ sudo apt-get install libjasper-dev
 // 安装png图像工具包
 sudo apt-get install libpng12-dev 
 //再安装视频I/O包（注意最后一个包的数字“4”后面是“L”）：
-sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev
+sudo apt-get install ffmpeg libavcodec-dev libavformat-dev  libavdevice-dev libswscale-dev libv4l-dev
 //下面安装gtk2.0（树莓派很可能下载错误，更换中科大或者清华源即可，ubuntu有可能出现包版本过高的情况，需要将依赖包降级安装）：
 sudo apt-get install libgtk2.0-dev
 //优化函数包：
@@ -299,8 +299,27 @@ sudo pip install numpy Matplotlib scipy
 “/usr/local/lib/python2.7/dist-packages”里。
 sudo cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
  
-sudo apt-get install libopencv-dev //??????????自编译非此
-sudo apt-get install python-opencv
+默认pkg-config(笔者的安装版本） 只会寻找 
+/usr/share/pkgconfig/*.pc 和 */
+/usr/lib/pkgconfig/*.pc ， */
+/usr/lib64/pkgconfig/*.pc 。 '*/
+而我通过源码方式安装的时候， 
+对应的库的pc文件 默认安装到了 
+/usr/local/lib/pkgconfig/。
+ 所以pkg-config找不到，也就认为没有安装了。 
+ 经过笔者测试，如果通过 yum 安装的方式，则pc文件会放到 /usr/lib 或者 /usr/lib64/ 里，所以就没有这个问题。
+解决方法：
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig;$PKG_CONFIG_PATH
+
+
+sudo apt-get install gtk+-3.0 gstreamer-base-1.0 gstreamer-video-1.0 gstreamer-app-1.0 gstreamer-riff-1.0 gstreamer-pbutils-1.0 libdc1394-2 libdc1394 
+
+sudo apt-get install libgphoto2-dev gstreamer0.10-* libdc1394-*
+sudo apt-get install libgphoto2-dev
+sudo apt-get install gstreamer0.10-*
+sudo apt-get install libdc1394-*
+// sudo apt-get install libopencv-dev //??????????自编译非此
+// sudo apt-get install python-opencv
 }
 
 
@@ -391,6 +410,8 @@ tar xvzf sshpass-1.05.tar.gz
 make  
 sudo make install
 sshpass -p "XXX" ssh user@IP
+//首次需要ssh 直接登录一次 
+//之后才能使用sshpass登录?
 }
 
 //管道 多进程 并发
@@ -789,7 +810,16 @@ ldconfig    //自动统计导入so文件
 
 }
 
-
+//编译安装ffmpeg
+{
+wget -c http://ffmpeg.org/releases/ffmpeg-3.0.tar.bz2 
+tar xvf ffmpeg-3.0.tar.bz2 
+cd ffmpeg-3.0 
+sudo apt-get install yasm 
+./configure --host-cppflags=-fPIC --host-cflags=-fPIC --enable-shared 
+make 
+sudo make install
+}
 
 
 //openssl安装

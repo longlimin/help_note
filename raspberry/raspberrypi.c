@@ -334,7 +334,7 @@ B+改进
 
 
 
-
+//专用源配置
 sudo vim /etc/apt/sources.list                                                 
 
 

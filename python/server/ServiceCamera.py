@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
+import cv2
 from include import *
 from Msg import Msg
 
@@ -14,7 +15,7 @@ class ServiceCamera:
         Service 
         管理摄像头 识别opencv 判断处理 发送监控提醒socket推送
     """ 
-    def __init__(serverSocket):
+    def __init__(self, serverSocket):
         self.ifRtmpPush = "0"
         self.serverSocket = serverSocket    # 通过此来推送关键消息
         return
@@ -41,19 +42,19 @@ class ServiceCamera:
     def start(self):
         mycv = CvHelp()
     
-        rtmp = RtmpUtil()
-        # camera = cv2.VideoCapture("/mnt/e/nginx-rtmp/test.mp4") # 从文件读取视频
-        camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
-        # 判断视频是否打开
-        if (camera.isOpened()):
-            print 'Open camera'
-        else:
-            print 'Fail to open camera!'
-            return
+        # rtmp = RtmpUtil()
+        camera = cv2.VideoCapture("test.mp4") # 从文件读取视频
+        # camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
+        
+        # if (camera.isOpened()):# 判断视频是否打开 
+        #     print 'Open camera'
+        # else:
+        #     print 'Fail to open camera!'
+        #     return
 
         # 视频属性
         size = (int(camera.get(cv2.CAP_PROP_FRAME_WIDTH)), int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-        fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/s
+        fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/self
 
         print 'mv size:'+repr(size)
 
@@ -78,7 +79,7 @@ class ServiceCamera:
                 mycv.drawRect(frame, (x, y), (x+w, y+h), (128, 64, 255), line_width=2 )
 
             # print(len(faces))
-            fpsshow = "Fps  :" + str(int(fps)) + "  Frame:" + str(count)
+            fpsshow = "Fps  :" + str(int(fps)) + "  Frame:" + str(count) + " time:" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
             print(fpsshow)
             mycv.drawText(frame, (0, 20), fpsshow )
             mycv.drawText(frame, (0, 40), "Play :" + str(int(count / 30)) )
@@ -87,10 +88,12 @@ class ServiceCamera:
             ############################图片输出
             # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
             out.write(frame)
-            rtmp.write(frame.tostring())
+            # rtmp.write(frame.tostring())
 
             # if cv2.waitKey(1) & 0xFF == ord('q'):
             #     break
+            if(count > 300):
+                break;
         camera.release()
         # Release everything if job is finished
         out.release()
@@ -117,4 +120,10 @@ class ServiceCamera:
 
         return res
 
-        
+
+if __name__ == '__main__':
+    serviceCamera = ServiceCamera(1)
+
+    serviceCamera.start()
+    while 1:
+        pass

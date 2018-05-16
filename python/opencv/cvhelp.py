@@ -806,7 +806,7 @@ def testFindFace():
 def testFindFaceMv():
     mycv = CvHelp()
     
-    rtmp = RtmpWriter()
+    # rtmp = RtmpWriter()
     camera = cv2.VideoCapture("/mnt/e/nginx-rtmp/test.mp4") # 从文件读取视频
     # camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
     # 判断视频是否打开
@@ -866,7 +866,7 @@ def testFindFaceMv():
         ############################图片输出
         # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
         out.write(frame)
-        rtmp.write(frame.tostring())
+        # rtmp.write(frame.tostring())
         # proc.stdin.write(frame.tostring()) #frame is read using opencv
 
         # if cv2.waitKey(1) & 0xFF == ord('q'):
