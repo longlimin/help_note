@@ -88,6 +88,7 @@ touch test.txt //创建文件
 
 //apt-get
 {
+sudo apt autoremove 自动删除无依赖包
 sudo apt-get update  更新源
 sudo apt-get install package 安装包
 sudo apt-get remove package 删除包
@@ -135,6 +136,147 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 # 预发布软件源，不建议启用
 # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+}
+
+//opencv
+{
+//这是win10下的子系统ubuntu终端使用的依赖
+sudo apt-get install \ 
+    libopencv-dev \         ##
+    build-essential \ 
+    checkinstall \ 
+    cmake \ 
+    pkg-config \ 
+    yasm \ 
+    libjpeg-dev \ 
+    libpng-dev \ 
+    libgphoto2-dev \ 
+    libtiff5-dev \ 
+    libjasper-dev \ 
+    libavcodec-dev \ 
+    libavformat-dev \ 
+    libwebp-dev \
+    libswscale-dev \ 
+    libdc1394-22-dev \ 
+    libxine2-dev \ 
+    libgstreamer0.10-dev \ 
+    libgstreamer-plugins-base0.10-dev \ 
+    libv4l-dev \ 
+    python-dev \ 
+    python-numpy \ 
+    libtbb-dev \ 
+    libqt4-dev \    ##
+    libgtk2.0-dev \ 
+    libfaac-dev \   #libfaad-dev
+    libmp3lame-dev \ 
+    libopencore-amrnb-dev \ 
+    libopencore-amrwb-dev \ 
+    libtheora-dev \ 
+    libvorbis-dev \ 
+    libxvidcore-dev \ 
+    x264 \ 
+    v4l-utils \ 
+    ffmpeg \ 
+    gstreamer-plugins-base-devel \ ##
+    qt5-default \ 
+
+
+//整理树形版本依赖! !!!!!!!!!!!!!
+apt-cache madison vim
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!需要配置专业的源pi专用最新 自动识别依赖
+// 安装build-essential、cmake、git和pkg-config
+sudo apt-get install build-essential cmake git pkg-config
+// 安装jpeg格式图像工具包
+sudo apt-get install libjpeg8-dev  
+// 安装tif格式图像工具包 
+sudo apt-get install libtiff5-dev   
+// 安装JPEG-2000图像工具包
+sudo apt-get install libjasper-dev 
+// 安装png图像工具包
+sudo apt-get install libpng12-dev 
+//再安装视频I/O包（注意最后一个包的数字“4”后面是“L”）：
+sudo apt-get install ffmpeg libavcodec-dev libavformat-dev  libavdevice-dev libswscale-dev libv4l-dev
+//下面安装gtk2.0（树莓派很可能下载错误，更换中科大或者清华源即可，ubuntu有可能出现包版本过高的情况，需要将依赖包降级安装）：
+sudo apt-get install libgtk2.0-dev
+//优化函数包：
+sudo apt-get install libatlas-base-dev gfortran
+ 打开源码文件夹，这里以我修改文章时最新的3.4.1为例
+//开始编译
+cd opencv-3.4.1
+之后我们新建一个名为release的文件夹用来存放cmake编译时产生的临时文件：
+// 新建release文件夹
+mkdir release
+// 进入release文件夹
+cd release
+设置cmake编译参数，安装目录默认为/usr/local ，注意参数名、等号和参数值之间不能有空格，但每行末尾“\”之前有空格，参数值最后是两个英文的点：
+
+// CMAKE_BUILD_TYPE是编译方式，CMAKE_INSTALL_PREFIX是安装目录，OPENCV_EXTRA_MODULES_PATH是加载额外模块，INSTALL_PYTHON_EXAMPLES是安装官方python例程，BUILD_EXAMPLES是编译例程（这两个可以不加，不加编译稍微快一点点，想要C语言的例程的话，在最后一行前加参数INSTALL_C_EXAMPLES=ON \）
+
+sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D BUILD_EXAMPLES=ON ..
+
+sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+ -D CMAKE_INSTALL_PREFIX=/usr/local \
+ -D INSTALL_C_EXAMPLES=ON \
+ -D INSTALL_PYTHON_EXAMPLES=ON \
+ -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
+ -D BUILD_EXAMPLES=ON ..
+
+-- WARNING: Can't build ffmpeg test code ' 模块丢失
+打开详细提示
+So I uncommented cmake/OpenCVFindLibsVideo.cmake:238 :
+message(FATAL_ERROR "FFMPEG: test check build log:\n${TRY_OUT}")
+之后开始正式编译过程（如果之前一步因为网络问题导致cmake下载缺失文件失败的话，可以尝试使用手机热点，并将release文件夹删除掉，重新创建release文件夹并cmake）：
+
+// 编译，以管理员身份，否则容易出错
+sudo make
+// 安装
+sudo make install
+// 更新动态链接库
+sudo ldconfig 
+
+
+sudo pip install --upgrade setuptools
+sudo pip install numpy Matplotlib scipy
+//////////////////////////////////////////////////////////
+在release目录下寻找lib目录里的cv2.so，
+这个是python需要的，将其拷贝到python的库目录里。一般情况下是在
+“/usr/local/lib/python2.7/dist-packages”里。
+sudo cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
+ 
+默认pkg-config(笔者的安装版本） 只会寻找 
+/usr/share/pkgconfig/*.pc 和 */
+/usr/lib/pkgconfig/*.pc ， */
+/usr/lib64/pkgconfig/*.pc 。 '*/
+而我通过源码方式安装的时候， 
+对应的库的pc文件 默认安装到了 
+/usr/local/lib/pkgconfig/。
+ 所以pkg-config找不到，也就认为没有安    装了。 
+ 经过笔者测试，如果通过 yum 安装的方式，则pc文件会放到 /usr/lib 或者 /usr/lib64/ 里，所以就没有这个问题。
+解决方法：
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig;$PKG_CONFIG_PATH
+
+
+sudo apt-get install gtk+-3.0 gstreamer-base-1.0 gstreamer-video-1.0 gstreamer-app-1.0 gstreamer-riff-1.0 gstreamer-pbutils-1.0 libdc1394-2 libdc1394 
+
+sudo apt-get install libgphoto2-dev gstreamer0.10-* libdc1394-*
+sudo apt-get install libgphoto2-dev
+sudo apt-get install gstreamer0.10-*
+sudo apt-get install libdc1394-*
+// sudo apt-get install libopencv-dev //??????????自编译非此
+// sudo apt-get install python-opencv
+}
+
+
+
+//php环境
+{
+sudo apt-get install nginx php7.0-fpm php7.0-cli php7.0-curl php7.0-gd php7.0-mcrypt php7.0-cgi
+sudo apt-get install nginx php5.0-fpm php5.0-cli php5.0-curl php5.0-gd php5.0-mcrypt php5.0-cgi
+
 }
 //设置DNS
 {
@@ -235,102 +377,6 @@ ps -ef|grep LOCAL=NO|grep -v grep|cut -c 9-15|xargs kill -9
 ps -ef|grep /usr/local/apache-tomcat-document/|grep -v grep|cut -c 9-15|xargs kill -9
 
 }
-//opencv
-{
-//整理树形版本依赖! !!!!!!!!!!!!!
-apt-cache madison vim
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!需要配置专业的源pi专用最新 自动识别依赖
-// 安装build-essential、cmake、git和pkg-config
-sudo apt-get install build-essential cmake git pkg-config
-// 安装jpeg格式图像工具包
-sudo apt-get install libjpeg8-dev  
-// 安装tif格式图像工具包 
-sudo apt-get install libtiff5-dev   
-// 安装JPEG-2000图像工具包
-sudo apt-get install libjasper-dev 
-// 安装png图像工具包
-sudo apt-get install libpng12-dev 
-//再安装视频I/O包（注意最后一个包的数字“4”后面是“L”）：
-sudo apt-get install ffmpeg libavcodec-dev libavformat-dev  libavdevice-dev libswscale-dev libv4l-dev
-//下面安装gtk2.0（树莓派很可能下载错误，更换中科大或者清华源即可，ubuntu有可能出现包版本过高的情况，需要将依赖包降级安装）：
-sudo apt-get install libgtk2.0-dev
-//优化函数包：
-sudo apt-get install libatlas-base-dev gfortran
- 打开源码文件夹，这里以我修改文章时最新的3.4.1为例
-//开始编译
-cd opencv-3.4.1
-之后我们新建一个名为release的文件夹用来存放cmake编译时产生的临时文件：
-// 新建release文件夹
-mkdir release
-// 进入release文件夹
-cd release
-设置cmake编译参数，安装目录默认为/usr/local ，注意参数名、等号和参数值之间不能有空格，但每行末尾“\”之前有空格，参数值最后是两个英文的点：
-
-// CMAKE_BUILD_TYPE是编译方式，CMAKE_INSTALL_PREFIX是安装目录，OPENCV_EXTRA_MODULES_PATH是加载额外模块，INSTALL_PYTHON_EXAMPLES是安装官方python例程，BUILD_EXAMPLES是编译例程（这两个可以不加，不加编译稍微快一点点，想要C语言的例程的话，在最后一行前加参数INSTALL_C_EXAMPLES=ON \）
-
-sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
-    -D BUILD_EXAMPLES=ON ..
-
-sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
- -D CMAKE_INSTALL_PREFIX=/usr/local \
- -D INSTALL_C_EXAMPLES=ON \
- -D INSTALL_PYTHON_EXAMPLES=ON \
- -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
- -D BUILD_EXAMPLES=ON ..
-
-之后开始正式编译过程（如果之前一步因为网络问题导致cmake下载缺失文件失败的话，可以尝试使用手机热点，并将release文件夹删除掉，重新创建release文件夹并cmake）：
-
-// 编译，以管理员身份，否则容易出错
-sudo make
-// 安装
-sudo make install
-// 更新动态链接库
-sudo ldconfig 
-
-
-sudo pip install --upgrade setuptools
-sudo pip install numpy Matplotlib scipy
-//////////////////////////////////////////////////////////
-在release目录下寻找lib目录里的cv2.so，
-这个是python需要的，将其拷贝到python的库目录里。一般情况下是在
-“/usr/local/lib/python2.7/dist-packages”里。
-sudo cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
- 
-默认pkg-config(笔者的安装版本） 只会寻找 
-/usr/share/pkgconfig/*.pc 和 */
-/usr/lib/pkgconfig/*.pc ， */
-/usr/lib64/pkgconfig/*.pc 。 '*/
-而我通过源码方式安装的时候， 
-对应的库的pc文件 默认安装到了 
-/usr/local/lib/pkgconfig/。
- 所以pkg-config找不到，也就认为没有安装了。 
- 经过笔者测试，如果通过 yum 安装的方式，则pc文件会放到 /usr/lib 或者 /usr/lib64/ 里，所以就没有这个问题。
-解决方法：
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig;$PKG_CONFIG_PATH
-
-
-sudo apt-get install gtk+-3.0 gstreamer-base-1.0 gstreamer-video-1.0 gstreamer-app-1.0 gstreamer-riff-1.0 gstreamer-pbutils-1.0 libdc1394-2 libdc1394 
-
-sudo apt-get install libgphoto2-dev gstreamer0.10-* libdc1394-*
-sudo apt-get install libgphoto2-dev
-sudo apt-get install gstreamer0.10-*
-sudo apt-get install libdc1394-*
-// sudo apt-get install libopencv-dev //??????????自编译非此
-// sudo apt-get install python-opencv
-}
-
-
-
-//php环境
-{
-sudo apt-get install nginx php7.0-fpm php7.0-cli php7.0-curl php7.0-gd php7.0-mcrypt php7.0-cgi
-sudo apt-get install nginx php5.0-fpm php5.0-cli php5.0-curl php5.0-gd php5.0-mcrypt php5.0-cgi
-
-}
-
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
 {
      sudo service openbsd-inetd start  
@@ -812,11 +858,12 @@ ldconfig    //自动统计导入so文件
 
 //编译安装ffmpeg
 {
+        http://ffmpeg.org/releases/ffmpeg-2.8.11.tar.gz
 wget -c http://ffmpeg.org/releases/ffmpeg-3.0.tar.bz2 
 tar xvf ffmpeg-3.0.tar.bz2 
 cd ffmpeg-3.0 
-sudo apt-get install yasm 
 ./configure --host-cppflags=-fPIC --host-cflags=-fPIC --enable-shared 
+
 make 
 sudo make install
 }
