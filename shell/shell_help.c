@@ -66,6 +66,20 @@ touch test.txt //创建文件
     #去掉控制台颜色代码##########
     top | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 
+    设置时间
+    sudo ntpd -s -d  //自动同步 
+    sudo date --s="2014-08-21 12:33:22" //手动设置
+    配置服务
+    sudo vim /etc/ntpconf
+    # You do need to talk to an NTP server or two (or three).
+    # server ntp.your-provider.example
+    在下面添加以下内容，是一些亲测可用的ntp服务器。第一行最后的perfer表示优先使用此服务器，也就是复旦大学的ntp服务器。添加之后按Ctrl+X保存退出。
+    server ntp.fudan.edu.cn iburst perfer
+    server time.asia.apple.com iburst
+    server asia.pool.ntp.org iburst
+    server ntp.nict.jp iburst
+    server time.nist.gov iburst
+    sudo /etc/init.d/ntp restart    //重启
 
 日期date格式化
 1.date "+%Y-%m-%d"  
@@ -259,6 +273,7 @@ sudo cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
 解决方法：
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig;$PKG_CONFIG_PATH
 
+//需要清理build 重新cmake
 
 sudo apt-get install gtk+-3.0 gstreamer-base-1.0 gstreamer-video-1.0 gstreamer-app-1.0 gstreamer-riff-1.0 gstreamer-pbutils-1.0 libdc1394-2 libdc1394 
 
@@ -278,6 +293,18 @@ sudo apt-get install nginx php7.0-fpm php7.0-cli php7.0-curl php7.0-gd php7.0-mc
 sudo apt-get install nginx php5.0-fpm php5.0-cli php5.0-curl php5.0-gd php5.0-mcrypt php5.0-cgi
 
 }
+
+//nginx搭建
+http://blog.csdn.net/shuxiaogd/article/details/47662115
+sudo apt-get install nginx  默认目录/usr/local/nginx。 
+pi: /etc/nginx
+ln -s /etc/nginx ~/nginx/nginx
+代理静态html angularJs
+转发后台请求python web tornado
+配置/etc/nginx/nginx.conf server  upstream 
+
+
+
 //设置DNS
 {
     DNS是用来解析域名用的，平时我们访问网站都是直接输入一个网址，

@@ -362,8 +362,8 @@ class CvHelp:
             cv2.rectangle(image, start_point, end_point, rgb, line_width, line_type)
         return image
     #画text
-    def drawText(self, image, point=(100,100), string="drawText", rgb=(0,64,64)):
-        cv2.putText(image,str(string),  point,      0,      0.45,       rgb,      1)
+    def drawText(self, image, point=(100,100), string="drawText", rgb=(0,64,64), textSize=0.45, lineWidth=1):
+        cv2.putText(image,str(string),  point,      0,      textSize,       rgb,     lineWidth)
         # 照片/添加的文字/              左上角坐标/ 字体/   字体大小/ 颜色/     字体粗细
         return image
 

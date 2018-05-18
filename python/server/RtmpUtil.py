@@ -1,13 +1,16 @@
 # -- coding: utf-8 --
 # http://blog.csdn.net/luhanglei
+import picamera
 import time
 import traceback
 import ctypes
 from librtmp import *
 
+global meta_packet
+global start_time
 
 
-class RtmpUtil():  # camera可以通过一个类文件的对象来输出，实现write方法即可
+class Writer():  # camera可以通过一个类文件的对象来输出，实现write方法即可
     conn = None  # rtmp连接
     sps = None  # 记录sps帧，发过以后就不需要再发了（抓包看到ffmpeg是这样的）
     pps = None  # 同上
@@ -16,44 +19,8 @@ class RtmpUtil():  # camera可以通过一个类文件的对象来输出，实�
 
     time_stamp = 0
 
-    def __init__(self):
-
-        self.conn = RTMP( 'rtmp://192.168.199.154/oflaDemo/test', live=True)
-        librtmp.RTMP_EnableWrite(conn.rtmp)
-        self.conn.connect()
-        self.start_time = time.time()
-        # 拼装视频格式的数据包
-        self.meta_body_array = [get_meta_string('@setDataFrame'), get_meta_string('onMetaData'),
-                           bytes(bytearray([0x08, 0x00, 0x00, 0x00, 0x06])),  # 两个字符串和ECMA array头，共计6个元素,注释掉了音频相关数据
-                           self.get_property_string('width'), self.get_meta_double(640.0),
-                           self.get_property_string('height'), self.get_meta_double(480.0),
-                           self.get_property_string('videodatarate'), self.get_meta_double(0.0),
-                           self.get_property_string('framerate'), self.get_meta_double(25.0),
-                           self.get_property_string('videocodecid'), self.get_meta_double(7.0),
-                           # get_property_string('audiodatarate'), get_meta_double(125.0),
-                           # get_property_string('audiosamplerate'), get_meta_double(44100.0),
-                           # get_property_string('audiosamplesize'), get_meta_double(16.0),
-                           # get_property_string('stereo'), get_meta_boolean(True),
-                           # get_property_string('audiocodecid'), get_meta_double(10.0),
-                           self.get_property_string('encoder'), self.get_meta_string('Lavf57.56.101'),
-                           bytes(bytearray([0x00, 0x00, 0x09]))
-                           ]
-        self.meta_body = ''.join(meta_body_array)
-        print ("meta_body : " + str(self.meta_body.encode('hex')))
-        self.meta_packet = RTMPPacket(type=PACKET_TYPE_INFO, format=PACKET_SIZE_LARGE, channel=0x04, timestamp=0, body=meta_body)
-        self.meta_packet.packet.m_nInfoField2 = 1  # 修改stream id
-        self.stream = conn.create_stream(writeable=True)
-
-        # with picamera.PiCamera() as camera:
-        #     camera.start_preview()
-        #     time.sleep(2)
-        #     camera.start_recording(Writer(conn), format='h264', resize=(640, 480), intra_period=25,
-        #                            quality=25)  # 开始录制，数据输出到Writer的对象里
-        #     while True:#永远不停止
-        #         time.sleep(60)
-        #     camera.stop_recording()
-        #     camera.stop_preview()
-
+    def __init__(self, conn):
+        self.conn = conn
 
     def write(self, data):
         try:
@@ -137,29 +104,67 @@ class RtmpUtil():  # camera可以通过一个类文件的对象来输出，实�
         pass
 
 
-    def get_property_string(self, string):  # 返回两字节string长度及string
-        length = len(string)
-        return ''.join([chr((length >> 8) & 0xff), chr(length & 0xff), string])
+def get_property_string(string):  # 返回两字节string长度及string
+    length = len(string)
+    return ''.join([chr((length >> 8) & 0xff), chr(length & 0xff), string])
 
 
-    def get_meta_string(self, string):  # 按照meta packet要求格式返回bytes,带02前缀
-        return ''.join([chr(0x02), self.get_property_string(string)])
+def get_meta_string(string):  # 按照meta packet要求格式返回bytes,带02前缀
+    return ''.join([chr(0x02), get_property_string(string)])
 
 
-    def get_meta_double(self, db):
-        nums = [0x00]
-        fp = ctypes.pointer(ctypes.c_double(db))
-        cp = ctypes.cast(fp, ctypes.POINTER(ctypes.c_longlong))
-        for i in range(7, -1, -1):
-            nums.append((cp.contents.value >> (i * 8)) & 0xff)
-        return ''.join(bytes(bytearray(nums)))
+def get_meta_double(db):
+    nums = [0x00]
+    fp = ctypes.pointer(ctypes.c_double(db))
+    cp = ctypes.cast(fp, ctypes.POINTER(ctypes.c_longlong))
+    for i in range(7, -1, -1):
+        nums.append((cp.contents.value >> (i * 8)) & 0xff)
+    return ''.join(bytes(bytearray(nums)))
 
 
-    def get_meta_boolean(self, isTrue):
-        nums = [0x01]
-        if (isTrue):
-            nums.append(0x01)
-        else:
-            nums.append(0x00)
-        return ''.join(bytes(bytearray(nums)))
+def get_meta_boolean(isTrue):
+    nums = [0x01]
+    if (isTrue):
+        nums.append(0x01)
+    else:
+        nums.append(0x00)
+    return ''.join(bytes(bytearray(nums)))
 
+
+conn = RTMP(
+    'rtmp://39.107.26.100:1935:1935/myapp/test1',  # 推流地址
+    live=True)
+librtmp.RTMP_EnableWrite(conn.rtmp)
+conn.connect()
+start_time = time.time()
+# 拼装视频格式的数据包
+meta_body_array = [get_meta_string('@setDataFrame'), get_meta_string('onMetaData'),
+                   bytes(bytearray([0x08, 0x00, 0x00, 0x00, 0x06])),  # 两个字符串和ECMA array头，共计6个元素,注释掉了音频相关数据
+                   get_property_string('width'), get_meta_double(640.0),
+                   get_property_string('height'), get_meta_double(480.0),
+                   get_property_string('videodatarate'), get_meta_double(0.0),
+                   get_property_string('framerate'), get_meta_double(25.0),
+                   get_property_string('videocodecid'), get_meta_double(7.0),
+                   # get_property_string('audiodatarate'), get_meta_double(125.0),
+                   # get_property_string('audiosamplerate'), get_meta_double(44100.0),
+                   # get_property_string('audiosamplesize'), get_meta_double(16.0),
+                   # get_property_string('stereo'), get_meta_boolean(True),
+                   # get_property_string('audiocodecid'), get_meta_double(10.0),
+                   get_property_string('encoder'), get_meta_string('Lavf57.56.101'),
+                   bytes(bytearray([0x00, 0x00, 0x09]))
+                   ]
+meta_body = ''.join(meta_body_array)
+print meta_body.encode('hex')
+meta_packet = RTMPPacket(type=PACKET_TYPE_INFO, format=PACKET_SIZE_LARGE, channel=0x04,
+                         timestamp=0, body=meta_body)
+meta_packet.packet.m_nInfoField2 = 1  # 修改stream id
+stream = conn.create_stream(writeable=True)
+with picamera.PiCamera() as camera:
+    camera.start_preview()
+    time.sleep(2)
+    camera.start_recording(Writer(conn), format='h264', resize=(640, 480), intra_period=25,
+                           quality=25)  # 开始录制，数据输出到Writer的对象里
+    while True:#永远不停止
+        time.sleep(60)
+    camera.stop_recording()
+    camera.stop_preview()

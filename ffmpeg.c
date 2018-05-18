@@ -5,6 +5,7 @@ ffmpeg  -f v4l2 -s 800x600 -r 1 -i /dev/video0 -vcodec h264 -preset medium -tune
 ffmpeg  -f v4l2 -s 800x600 -r 1 -i /dev/video0 -vcodec h264  -profile:v baseline  -preset veryfast -tune zerolatency  -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
 
 
+ffmpeg  -f v4l2 -s 800x600 -r 1 -i /dev/video0 -vcodec h264     -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
 
 
 ffmpeg  -f v4l2 -s 200x150 -r 5 -i /dev/video0 -vcodec h264 -preset veryfast -tune zerolatency  -g 6 -threads 4 -f flv rtmp://39.107.26.100:1935:1935/myapp/test1
@@ -39,7 +40,7 @@ ffmpeg -list_devices true -f dshow video=0
 ffplay -f dshow video="Integrated Camera"
 这句话打开了我的摄像头 -i 输出文件流
 3、捕获  
-ffmpeg -f dshow -i video="Integrated Camera" e:/nginx-rtmp/test.mp4 
+ffmpeg -f dshow -i video="Integrated Camera" e:/nginx-rtmp/test2.mp4 
 这句话开始采集视频。音频部分未加上。
 
 ffmpeg -f dshow -i video="Integrated Camera" flv rtmp://127.0.0.1:1935/myapp/test1

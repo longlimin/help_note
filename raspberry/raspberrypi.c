@@ -125,7 +125,15 @@ raspivid -o mv.h264 -t 10000 -w 1280 -h 720
 sudo apt-get install -y gpac 
 MP4Box -fps 30 -add keychain.h264 keychain.mp4
 
-
+500万像素
+分辨率：2952×1944
+摄像头参数：
+CMOS尺寸：1/4英寸
+视场角（Diagonal）：72度
+传感器最佳像素：1080p
+支持1080P 30，720P 60，640*480P 60/90 视频录像
+适用场合：航拍、小车实时拍照、室内外监控、拍照、录像。。。。
+尺寸：25mm × 24mm× 9MM
 //引脚 gpio
 1、功能物理引脚：
 从左到右，从上到下：左边基数，右边偶数：1-40
@@ -135,7 +143,7 @@ MP4Box -fps 30 -add keychain.h264 keychain.mp4
   编号侧重实现逻辑，把扩展GPIO端口从0开始编号，这种编号方便编程。正如图3 WiringPi一栏。
 
 
-
+//500w  2560*1920
 //Pwm模块
 树莓派3有两路硬件pwm四个输出口，BCM12与18为一组，13与19为一组。
 
@@ -165,6 +173,9 @@ sudo passwd walkerdust 修改密码
 //Raspbian系统版本 更新系统： 
 sudo apt-get update
 sudo apt-get upgrade
+//配置时区
+sudo dpkg-reconfigure tzdata  
+Aisa Shanghai
 
 //配置
 debian 
@@ -200,17 +211,6 @@ apt-cache depends vim 版本错误 vim 依赖
 sudo apt-get remove vim 卸载重装
 sudo apt-get install vim 卸载重装
 sudo apt-get install git	
-
-nginx搭建
-http://blog.csdn.net/shuxiaogd/article/details/47662115
-sudo apt-get install nginx	默认目录/usr/local/nginx。 
-pi: /etc/nginx
-ln -s /etc/nginx ~/nginx/nginx
-代理静态html angularJs
-转发后台请求python web tornado
-配置/etc/nginx/nginx.conf server  upstream 
-
-
 
 
 使支持ll命令
