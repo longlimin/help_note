@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
 import cv2
+import subprocess as sp
+
 from include import *
 from Msg import Msg
 
-from ModelTurn import ModelTurn
-from ModelMove import ModelMove
+# from ModelTurn import ModelTurn
+# from ModelMove import ModelMove
 from cvhelp import CvHelp
-from RtmpUtil import RtmpUtil
+# from RtmpUtil import RtmpUtil
 
 @singleton
 class ServiceCamera:
@@ -40,10 +42,13 @@ class ServiceCamera:
 
 # 开启摄像头监控识别
     def start(self):
+        rtmpUrl = 'rtmp://39.107.26.100:1935:1935/myapp/test1'
+
         mycv = CvHelp()
-    
-        rtmp = RtmpUtil('rtmp://39.107.26.100:1935:1935/myapp/test1')
-        camera = cv2.VideoCapture("test2.mp4") # 从文件读取视频
+
+        # 视频来源
+        filePath='/mnt/e/nginx-rtmp/'
+        camera = cv2.VideoCapture(filePath+"test2.mp4") # 从文件读取视频
 
         # camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
         # if (camera.isOpened()):# 判断视频是否打开 
@@ -57,14 +62,33 @@ class ServiceCamera:
 
         # 视频属性
         size = (int(camera.get(cv2.CAP_PROP_FRAME_WIDTH)), int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        sizeStr = str(size[0]) + 'x' + str(size[1])
         fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/self
         fps = int(fps)
         hz = int(1000.0 / fps)
-        print 'size:'+repr(size) + ' fps:' + str(fps) + ' hz:' + str(hz)
+        print 'size:'+ sizeStr + ' fps:' + str(fps) + ' hz:' + str(hz)
 
-        # Define the codec and create VideoWriter object
+        # 视频文件保存
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out = cv2.VideoWriter('res_mv.avi',fourcc, fps, size)
+        out = cv2.VideoWriter(filePath+'res_mv.avi',fourcc, fps, size)
+        # 管道输出 ffmpeg推送rtmp
+        command = ['ffmpeg',
+            '-y',
+            '-f', 'rawvideo',
+            '-vcodec','rawvideo',
+            '-pix_fmt', 'bgr24',
+            '-s', sizeStr,
+            '-r', str(fps),
+            '-i', '-',
+            '-c:v', 'libx264',
+            '-pix_fmt', 'yuv420p',
+            '-preset', 'ultrafast',
+            '-f', 'flv', 
+            rtmpUrl]
+        # pipe = sp.Popen(command, stdout = sp.PIPE, bufsize=10**8)
+        pipe = sp.Popen(command, stdin=sp.PIPE) #,shell=False
+        # pipe.stdin.write(frame.tostring())  
+
         lineWidth = 1 + int((size[1]-400) / 400)# 400 1 800 2 1080 3
         textSize = size[1] / 1000.0# 400 0.45 
         heightDeta = size[1] / 20 + 10# 400 20
@@ -77,35 +101,39 @@ class ServiceCamera:
             if not ret:
                 break
 
-            if(count % 1 == 0):
+            if(count % fps == 0):
             ###########################图片处理
                 # 探测图片中的人脸 延帧检测
                 faces = mycv.classfier.detectMultiScale(frame,scaleFactor=1.1,minNeighbors=5,minSize=(5,5))
                 pass
             for (x, y, w, h) in faces:
+                pass
                 # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 mycv.drawRect(frame, (x, y), (x+w, y+h), (128, 64, 255), line_width=lineWidth )
+                # 当发现人脸 进行 操作 
+                # 保存图片文件 
+                # 记录数据库  
+                # 推送提醒socket 
 
+                pass
+
+            # 绘制推送图片帧信息
             # print(len(faces))
             fpsshow = "Fps  :" + str(int(fps)) + "  Frame:" + str(count)  
             nframe  = "Play :" + str(int(count / fps))
             ntime   = "Time :" + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             if(count % fps == 0):
                 print(fpsshow + " " + ntime)
-            mycv.drawText(frame, (0, heightDeta), fpsshow, textSize=textSize, lineWidth=lineWidth )
+            mycv.drawText(frame, (0, heightDeta * 1), fpsshow, textSize=textSize, lineWidth=lineWidth )
             mycv.drawText(frame, (0, heightDeta * 2), nframe, textSize=textSize, lineWidth=lineWidth )
             mycv.drawText(frame, (0, heightDeta * 3), ntime, textSize=textSize, lineWidth=lineWidth )
 
             ############################图片输出
             # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
-            out.write(frame)
-            rtmp.write(frame.tostring())
+            out.write(frame)    # 存入视频文件
+            pipe.stdin.write(frame.tostring())  # 存入管道
 
-            # if cv2.waitKey(1) & 0xFF == ord('q'):
-            #     break
-            # cv2.waitKey(hz)
-            if(count > fps * 10):
-                break;
+            pass
         camera.release()
         # Release everything if job is finished
         out.release()
@@ -114,7 +142,7 @@ class ServiceCamera:
 
 # 关闭监控识别
     def stop(self):
-        passwd
+        pass
 
 # 开启推送视频
     def openPush(self):

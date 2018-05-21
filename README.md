@@ -12,6 +12,7 @@ python后台通信服务提供以及树莓派专用的GPIO控制
 
     * server_socket.py  基于python-socket模块提供的socket后台服务
     * ServiceServer.py  socket的树莓派系统业务处理
+    * ServiceCamera.py  树莓派视频采集识别推送rtmp模块
 
     * server_socketio.py 基于Flask socketio模块提供的websocket后台服务
 
