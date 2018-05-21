@@ -21,17 +21,16 @@ t_default = 90
 t_turn_default = 15 #默认左右转动15d
 
 ######################################
-@singleton
 class ModelTurn:
     test = ''
 # default位置角度 
-    def __init__(self):
+    def __init__(self, port=29):
         print('ModelTurn.init')
         ########################################
         # 20ms周期中 调整dc以控制角度 dc=k角度 dc的持续变动非跃迁 以实现角度的持续变动    T=T20+sleep
         #                                      1-sleep-2-sleep-3-sleep-4-sleep-5          10 20 30 40 50 
         #              端口29
-        self.t_port = 29
+        self.t_port = port
         self.t_hz = 50           #20ms 周期 1s 50T 舵机需要周期决定 
         self.t_t = 1000 / self.t_hz   #T 20ms
         self.t_count = 80        #转动180d 需要变换100c  最快变换速度1s/50c -> 2s移动完毕
@@ -139,7 +138,7 @@ class ModelTurn:
 
         return (ifOk, dcMoveF, dcMoveT, pEnd, info)
 # init
-ModelTurn()
+# ModelTurn()
 if __name__ == "__main__":
 
     m = ModelTurn()

@@ -42,7 +42,7 @@ class ServiceCamera:
 
 # 开启摄像头监控识别
     def start(self):
-        rtmpUrl = 'rtmp://39.107.26.100:1935:1935/myapp/test1'
+        self.rtmpUrl = 'rtmp://39.107.26.100:1935:1935/myapp/test1'
 
         mycv = CvHelp()
 
@@ -65,8 +65,7 @@ class ServiceCamera:
         sizeStr = str(size[0]) + 'x' + str(size[1])
         fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/self
         fps = int(fps)
-        hz = int(1000.0 / fps)
-        print 'size:'+ sizeStr + ' fps:' + str(fps) + ' hz:' + str(hz)
+        print 'size:'+ sizeStr + ' fps:' + str(fps)  
 
         # 视频文件保存
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -84,7 +83,7 @@ class ServiceCamera:
             '-pix_fmt', 'yuv420p',
             '-preset', 'ultrafast',
             '-f', 'flv', 
-            rtmpUrl]
+            self.rtmpUrl]
         # pipe = sp.Popen(command, stdout = sp.PIPE, bufsize=10**8)
         pipe = sp.Popen(command, stdin=sp.PIPE) #,shell=False
         # pipe.stdin.write(frame.tostring())  
@@ -100,20 +99,17 @@ class ServiceCamera:
             ret, frame = camera.read() # 逐帧采集视频流
             if not ret:
                 break
-
+            detectCount = 0
             if(count % fps == 0):
             ###########################图片处理
                 # 探测图片中的人脸 延帧检测
                 faces = mycv.classfier.detectMultiScale(frame,scaleFactor=1.1,minNeighbors=5,minSize=(5,5))
+                detectCount = len(faces)
                 pass
             for (x, y, w, h) in faces:
                 pass
                 # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 mycv.drawRect(frame, (x, y), (x+w, y+h), (128, 64, 255), line_width=lineWidth )
-                # 当发现人脸 进行 操作 
-                # 保存图片文件 
-                # 记录数据库  
-                # 推送提醒socket 
 
                 pass
 
@@ -128,6 +124,22 @@ class ServiceCamera:
             mycv.drawText(frame, (0, heightDeta * 2), nframe, textSize=textSize, lineWidth=lineWidth )
             mycv.drawText(frame, (0, heightDeta * 3), ntime, textSize=textSize, lineWidth=lineWidth )
 
+            # 当发现人脸 进行 操作 
+            # 保存图片文件 
+            # 记录数据库  
+            # 推送提醒socket 
+            if(detectCount > 0):
+                msg = Msg()
+                fileId = 'res_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '_' + str(count) + '.png'
+                msg.data['res'] = fileId
+                msg.data['type'] = 'broadcast'
+                mycv.save(filePath + fileId, frame)
+                if(self.serverSocket):
+                    self.serverSocket.sendImpl(jsonstr)
+
+                    pass
+
+                pass
             ############################图片输出
             # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
             out.write(frame)    # 存入视频文件
@@ -162,6 +174,6 @@ class ServiceCamera:
 
 
 if __name__ == '__main__':
-    serviceCamera = ServiceCamera(1)
+    serviceCamera = ServiceCamera(False)
 
     serviceCamera.start()
