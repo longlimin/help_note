@@ -32,6 +32,9 @@ runas /user:administrator "cmd /k"
 
 netplwiz”打开“用户账户”面板
 
+启动配置
+msconfig
+
 
 重置网络连接
 netsh int ip reset

@@ -7,7 +7,7 @@ tasklist|find /i "notepad" || start "notepad" "C:\ProgramData\Microsoft\Windows\
 
 tasklist|find /i "bash" || start bash
 
-::tasklist|find /i "chrome.exe" || start "google chrome" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" 
+tasklist|find /i "chrome" || start "google chrome" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" 
 
 tasklist|find /i "360chrome" || start "360chrome" "D:\360\360Chrome\Chrome\Application\360chrome" 
 ::tasklist|find /i "TIM.exe" || start "TIM" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\TIM"
