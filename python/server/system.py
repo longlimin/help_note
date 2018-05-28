@@ -27,9 +27,9 @@ class System:
     s_gpioshigh = [  32, 36, 38, 40 ]
     #          R3 L5 
     s_gnds = [ 6, 9, 14, 20, 25, 30, 34, 39 ] 
-    s_gin = []
-    s_gout = []
-    s_gnd = []
+    s_gin = {}
+    s_gout = {}
+    s_gnd = {}
     s_pwms = {} #pwm s
 
     def __init__(self):
@@ -44,7 +44,7 @@ class System:
         self.s_gin = self.inputPort(self.s_gpioshigh)
         self.s_gout = self.makePort(self.s_gpios)
         self.s_gnd = self.makePort(self.s_gnds)
-
+        return
     def getGin(self):
         return self.s_gin
     def getGout(self):
@@ -63,11 +63,9 @@ class System:
         timeStart = int(time.time()*1000)
 
         # print('from', dcFrom,'to->', dcTo,'deta', dcDeta, sleepTime) 
-        
         pwm = GPIO.PWM(port, hz) #通道12 50hz
         pwm.start(0)    #空置
 
-        
         # 12 15 deta:2 -> 12,14,16/15
         dcNow = dcFrom
 
@@ -97,10 +95,6 @@ class System:
         timeDeta = timeStop - timeStart
 
         return timeDeta
-
-
-
-    
 
     def testPwm(self, port, hz, dc):
         self.p = GPIO.PWM(port, hz) #通道12 50hz
@@ -146,52 +140,51 @@ class System:
 
 
 
-
-    def setPort(self, port, value):
-        res = False
-        info = ''
-        for i in range(len(self.s_gout)): 
-            if(self.s_gout[i]["port"] == port):
-                self.s_gout[i]["value"] = value
-                GPIO.output(port, value)
-                res = True
+    def getPort(self, port):
+        res = GPIO.input(port)
+        self.gin[port] = res
+        return res
+    def setPort(self, port, value=0):
+        port = int(port)
+        value = int(value)
+        self.s_gout[port] = value
+        GPIO.output(port, value)
+        res = True
         info = ' set port ' + str(port) + ' ' + str(value)
         return res, info
+    def setPorts(self, ports, value=0):
+        for port in ports:
+            self.setPort(port, value)
+        return
     def openPort(self, port):
-        res = False
-        info = ''
-        for i in range(len(self.s_gout)): 
-            if(self.s_gout[i]["port"] == port):
-                self.s_gout[i]["value"] = 1
-                GPIO.output(port, 1)
-                res = True
-        info = ' open port ' + str(port) 
-        return res, info
+        return self.setPort(port, 1)
+    def openPorts(self, ports):
+        self.setPorts(ports, 1)
+        return
     def closePort(self, port):
-        res = False
-        info = ''
-        for i in range(len(self.s_gout)): 
-            if(self.s_gout[i]["port"] == port):
-                self.s_gout[i]["value"] = 0
-                GPIO.output(port, 0)
-                res = True
-        info = ' close port ' + str(port) 
-        return res, info
-    
+        return self.setPort(port, 0)
+    def closePorts(self, ports):
+        self.setPorts(ports, 0)
+        return
+
+
+
+
+        
     def inputPort(self, arr): 
-        res = range(0, len(arr))
+        res = {}
         i = 0
         for port in arr: 
             status = GPIO.input(port)  
-            res[i] = { "port" : port, "value" : status }
-            i += 1 
+            res[port] = status
+            i += 1
         return res
 
     def makePort(self, arr):
-        res = range(0, len(arr))
+        res = {}
         i = 0
         for port in arr:  
-            res[i] = { "port" : port, "value" : 0 }
+            res[port] = 0
             i += 1   
         return res
     

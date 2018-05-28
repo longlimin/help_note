@@ -30,17 +30,18 @@ from template import Template
 
 
 
-# 线程读取socket
+# 线程操作类
 class ThreadRun (threading.Thread):
-    def __init__(self, name, runCallback):
+    def __init__(self, name, runCallback, daemon=True):
         threading.Thread.__init__(self)
         self.name = name
         self.runCallback = runCallback
+        self.setDaemon(daemon)  # 子线程随主线程退出
 
     def run(self):
-        print "Thread Start " + self.name
+        print ">>>>>>>>>>Thread Start " + self.name
         self.runCallback()
-        print "Thread Stop  " + self.name
+        print "<<<<<<<<<<Thread Stop  " + self.name
 
 def json_load_byteified(file_handle):
     return _byteify(

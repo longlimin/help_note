@@ -76,11 +76,9 @@ class ServerSocket:
                 self._socket_thread_read = 1
 
                 threadRead = ThreadRun("read", self.threadReadRun)
-                threadRead.setDaemon(True)  # 子线程随主线程退出
                 threadRead.start()
                 
                 threadInput = ThreadRun("input", self.threadInputRun)
-                threadInput.setDaemon(True)
                 threadInput.start()
                 
 
