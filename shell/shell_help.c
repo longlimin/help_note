@@ -11,6 +11,7 @@ touch test.txt //创建文件
 
 //基本命令
 {
+
     find / -name librtmp.so.1
 
     ls -d /imgs/        只显示目录

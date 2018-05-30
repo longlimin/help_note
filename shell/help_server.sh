@@ -9,59 +9,59 @@
 ##-----------------------------------------
 cmd='tail -n 10 -f do_git.sh'
 # cmd='/opt/application/resin-3.1.12/bin/httpd.sh -conf /opt/application/resin-3.1.12/conf/mccp.conf'
-logfile='/opt/resin/logs/log.log'
+logfile='/log.log'
 #shutdown the process by the grep pids by the cmd name  Warning ! the space
-greparg='obcp_conf'
+greparg='do_git'
 
 about='./server.sh method ( <log> <show> <start> <stop> <restart> : <params> ) '
 taillog='tail -n 200 -f '"$logfile"
 #如何将变量中的值取出来作为绝对字符串'' 所以暂用直接获取pids
-pids=`ps -ef | grep "$greparg" | grep -v grep | cut -c 9-15`
+pids="ps -ef | grep "$greparg" | grep -v grep | cut -c 9-15"
 #通过ps管道删除接收
 # ps -ef | grep $greparg | grep -v grep | cut -c 9-15 | xargs kill -9
   
 ##------------------------------------------
 function start(){
-    ids=$pids
+    ids=`eval $pids`
     if [[ "$ids" != "" ]]
     then
         show
     else
+        tcmd="nohup $cmd  > $logfile &"
         line
-        echo "$cmd  > $logfile &"
-        line
-        nohup $cmd  > $logfile &
-        echo 'Server started'
+        echo $tcmd
+        eval $tcmd
+        show
         log
     fi
 }
 function stop(){    
+    ids=`eval $pids`
+    tcmd="kill -9 $ids"
     line
-    echo "kill -9 $pids"
-    line
-    kill -9 $pids
-    echo 'Server stop'
-    pids='' #clear stoped pids
-    line
+    echo $tcmd
+    eval $tcmd
+    show
 }
 function restart(){
-    stop
+    ids=`eval $pids`
+    if [[ "$ids" != "" ]]
+    then
+        stop
+    else
+        show
+    fi
     start
 }
 
 function log(){
     line
-    echo "$taillog"
-    line
-    $taillog
-    line
+    echo $taillog
+    eval $taillog
 }
-
 function show(){
-    line
-    ids=$pids
-    echo "ps -ef | grep $greparg | grep -v grep | cut -c 9-15"
-    line
+    # echo $pids
+    ids=`eval $pids`
     if [[ "$ids" != "" ]]
     then
         echo 'Have been started, Pids:'
@@ -69,7 +69,6 @@ function show(){
     else
         echo 'Stoped ! '
     fi
-    line
 }
 function help(){
     line

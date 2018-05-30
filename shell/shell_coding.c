@@ -5,7 +5,6 @@
 var=$(命令) 
 var=`命令` # 注意此处不是普通的单引号
 //变量
-{
     函数变量 和 全局变量 冲突域 公用？ 递归注意？
     a=1     =不要空格
     str="abc" / '123' / `cat text.txt`      绝对字符串'' 可编译嵌入变量"" 命令返回结果``
@@ -18,7 +17,7 @@ var=`命令` # 注意此处不是普通的单引号
     val=`expr 2 + 2`
     val=$((2 + 2))
     
-    #数组
+//数组
     arr=(1 2 3)     一对括号表示是数组，数组元素用“空格”符号分割开
     echo $arr   /   ${a[*]}      *或者@ 得到整个数组内容
     len=${#arr[@]}  长度
@@ -27,19 +26,19 @@ var=`命令` # 注意此处不是普通的单引号
     unset arr[2]    删除某个元素    unset数组[下标] 可以清除相应的元素，不带下标，清除整个数据。
     echo ${a[@]:1:4}    截取数组输出
     arrChild=(${a[@]:1:4})  切片数组   
-    #字符串 
+//字符串 
     len=${#str}     长度
     $value1=home
     $value2=${value1}"="
     echo $value2 
 
-    #字符串包含
+//字符串包含
     result=$(echo $strA | grep "${strB}")
     if [[ "$result" != "" ]] 包含
     if [[ $strA =~ $strB ]]
     if [[ $A == *$B* ]]
 
-    #字符串截取      # % 保留左右
+//字符串截取      # % 保留左右
     var=http://www.aaa.com/123.htm.  
     echo ${var#*//} # *// 删除匹配到的 *//之前
     即删除 http://
@@ -51,22 +50,22 @@ var=`命令` # 注意此处不是普通的单引号
     ##*/    删除最多匹配*/
     %/*    倒数 删除最少的/*               */
     %%/*   倒数 删除最多的/*    */
-1、提取文件名
-[root@localhost log]# var=/dir1/dir2/file.txt
-[root@localhost log]# echo ${var##*/}
-file.txt
-2、提取后缀
-[root@localhost log]# echo ${var##*.}
-txt
-3、提取不带后缀的文件名，分两步
-[root@localhost log]# tmp=${var##*/}
-[root@localhost log]# echo $tmp
-file.txt
-[root@localhost log]# echo ${tmp%.*}
-file
-4、提取目录
-;//[root@localhost log]# echo ${var%/*}
-/dir1/dir2
+        1、提取文件名
+        [root@localhost log]# var=/dir1/dir2/file.txt
+        [root@localhost log]# echo ${var##*/}
+        file.txt
+        2、提取后缀
+        [root@localhost log]# echo ${var##*.}
+        txt
+        3、提取不带后缀的文件名，分两步
+        [root@localhost log]# tmp=${var##*/}
+        [root@localhost log]# echo $tmp
+        file.txt
+        [root@localhost log]# echo ${tmp%.*}
+        file
+        4、提取目录
+        ;//[root@localhost log]# echo ${var%/*}
+        /dir1/dir2
     echo ${var:0:5}
     其中的 0 表示左边第一个字符开始，5 表示字符的总个数。
     结果是：http:
@@ -80,27 +79,14 @@ file
     结果是：123.htm 
     
 
-     #字符串分割
+//字符串分割
     info='abcd;efgh'
     arr=(`echo $info|tr ";" "\n"`)
-} 
-#日期格式化
-[root@root ~]# date "+%Y-%m-%d"  
-2013-02-19  
-[root@root ~]# date "+%H:%M:%S"  
-13:13:59  
-[root@root ~]# date "+%Y-%m-%d %H:%M:%S"  
-2013-02-19 13:14:19  
-[root@root ~]# date "+%Y_%m_%d %H:%M:%S"    
-2013_02_19 13:14:58  
-[root@root ~]# date -d today   
-Tue Feb 19 13:10:38 CST 2013  
-[root@root ~]# date -d now  
-Tue Feb 19 13:10:43 CST 2013  
-[root@root ~]# date -d tomorrow  
-Wed Feb 20 13:11:06 CST 2013  
-[root@root ~]# date -d yesterday  
-Mon Feb 18 13:11:58 CST 2013  
+
+//字符串 命令 解释器
+st="ls | more"
+`$st`   //将 | 和 more 看成了参数，而不是将文件按页显示
+eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php shell
 
 
 //ll找不到 ll = ls -alF 
@@ -184,7 +170,27 @@ total 0
 -rw-r--r-- 1 root root 0 Oct 9 21:27 stu_02_linux.jpg 
 -rw-r--r--
 }
-#进程并发数控制
+
+//日期格式化
+[root@root ~]# date "+%Y-%m-%d"  
+2013-02-19  
+[root@root ~]# date "+%H:%M:%S"  
+13:13:59  
+[root@root ~]# date "+%Y-%m-%d %H:%M:%S"  
+2013-02-19 13:14:19  
+[root@root ~]# date "+%Y_%m_%d %H:%M:%S"    
+2013_02_19 13:14:58  
+[root@root ~]# date -d today   
+Tue Feb 19 13:10:38 CST 2013  
+[root@root ~]# date -d now  
+Tue Feb 19 13:10:43 CST 2013  
+[root@root ~]# date -d tomorrow  
+Wed Feb 20 13:11:06 CST 2013  
+[root@root ~]# date -d yesterday  
+Mon Feb 18 13:11:58 CST 2013  
+
+
+//进程并发数控制 管道 同步
 {
 最近小A需要生产2015年全年的KPI数据报表，现在小A已经将生产脚本写好了，生产脚本一次只能生产指定一天的KPI数据，假设跑一次生产脚本需要5分钟，那么： 
 * 如果是循环顺序执行，那么需要时间：5 * 365 = 1825 分钟，约等于 6 天 
