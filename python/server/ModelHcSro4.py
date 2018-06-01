@@ -20,12 +20,12 @@ from system import System
 
 ########################################
 ################################################
-@singleton
+# @singleton
 class ModelHcSro4:
     def __init__(self):
                             #trig   echo
         self.m_ports =      [31,       33]
-        self.m_status =     [0, 0]    #端口使用状态  0关闭  / 0-1pwm开 / 1普通开
+        self.m_status =     [0, 0]
 
         System.closePorts(self.m_ports)
 
