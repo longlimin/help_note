@@ -139,11 +139,20 @@ class System:
         return res, info
 
 
-
+# 重复设置输入输输出
+    def turnOut(self, port, value=0):
+        #输出配置
+        GPIO.setup(port, GPIO.OUT, initial=0)
+        return
+    def turnIn(self, port):
+        #输入配置 
+        GPIO.setup(port, GPIO.IN) 
+# 读取端口
     def getPort(self, port):
         res = GPIO.input(port)
         self.gin[port] = res
         return res
+# 设置输出端口值
     def setPort(self, port, value=0):
         port = int(port)
         value = int(value)

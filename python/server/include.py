@@ -29,6 +29,20 @@ from template import Template
 
 
 
+def sleep(mills):
+    time.sleep(mills)
+# 日志
+def out(objs):
+    print(objs)
+
+    return
+# 耗时
+def timeMark():
+    return int(time.time()*1000)
+def timeOut(timeStart, info=''):
+    timeStop = int(time.time()*1000)
+    timeDeta = timeStop - timeStart
+    out(info + ' cost ' + str(timeDeta))
 
 # 线程操作类
 class ThreadRun (threading.Thread):

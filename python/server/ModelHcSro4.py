@@ -6,7 +6,7 @@ from include import *
 from system import System
 
 #####################
-# 超声波模块
+# 超声波模块HcSro4
 # VCC 5v 15mA
 # GND
 # TRIG  触发控制信号输入10uS TTL脉冲
@@ -29,7 +29,7 @@ class ModelHcSro4:
 
         System.closePorts(self.m_ports)
 
-    def querySpan(self, callback):
+    def get(self, callback):
         self.callback = callback
         ThreadRun("qeurySpan", self.threadQueryRun).start()
         return

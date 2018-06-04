@@ -24,6 +24,8 @@ serverHttp.start(8086)
 serviceCamera = ServiceCamera(serverSocket)
 serviceCamera.start()
 
+# 线程 各种传感器监控 轮循监控
+
 
 while 1:
     pass
