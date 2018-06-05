@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
-import os
-import json
-import re
-import codecs
-import sys
-import time
 
 try:
     import RPi.GPIO as GPIO    

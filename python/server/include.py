@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-  
-
 #############################
 # 导入常用工具模块
 import sys
@@ -10,6 +9,15 @@ import re
 import codecs
 import time
 import threading
+import thread
+import subprocess as sp
+import numpy as np
+import socket
+import struct
+import yaml
+import random   # int(random.uniform(1, 10))
+
+import cv2
 
 
 ##############################
@@ -20,21 +28,17 @@ sys.path.append("../opencv/")
 ##########################
 # 导入单例装饰器函数 : @singleton
 from python_singleton import singleton
-
 # 导入工具 模块 .py : tool.exe()
 import tool
-
-# 导入普通类
-from template import Template
+from cvhelp import CvHelp
 
 
 
 def sleep(mills):
-    time.sleep(mills)
+    tool.sleep(mills)
 # 日志
-def out(objs):
+def out(*objs):
     print(objs)
-
     return
 # 耗时
 def timeMark():
@@ -53,9 +57,9 @@ class ThreadRun (threading.Thread):
         self.setDaemon(daemon)  # 子线程随主线程退出
 
     def run(self):
-        print ">>>>>>>>>>Thread Start " + self.name
+        print "============Thread Start " + self.name
         self.runCallback()
-        print "<<<<<<<<<<Thread Stop  " + self.name
+        print "==Thread Stop  " + self.name
 
 def json_load_byteified(file_handle):
     return _byteify(
@@ -85,3 +89,50 @@ def _byteify(data, ignore_dicts = False):
         }
     # if it's anything else, return it in its original form
     return data
+
+
+
+
+
+
+
+
+from python_sqlite import Database
+
+# 数据库工具
+from ServiceDb import ServiceDb 
+
+# 导入普通类
+from template import Template
+from cv_makecolor import MakeColor
+
+# 导入模块Class
+# from system import System
+# from ModelTurn import ModelTurn
+# from ModelMove import ModelMove
+from ModelOn import ModelOn
+# from ModelHcSro4 import ModelHcSro4
+# from ModelDht11 import ModelDht11
+
+# 导入服务
+from Msg import Msg
+
+from ServiceServer import ServiceServer
+
+from server_socket import ServerSocket
+# from server_http import ServerHttp
+
+
+from ServerCamera import ServerCamera
+from ServerSensor import ServerSensor
+
+
+
+
+
+
+
+
+
+
+

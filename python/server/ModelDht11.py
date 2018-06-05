@@ -3,9 +3,6 @@
 from include import *
 
 #####################
-from system import System
-
-#####################
 # 温湿度模块Dht11
 # VCC 3v
 # GND

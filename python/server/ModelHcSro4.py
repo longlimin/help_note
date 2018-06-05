@@ -3,9 +3,6 @@
 from include import *
 
 #####################
-from system import System
-
-#####################
 # 超声波模块HcSro4
 # VCC 5v 15mA
 # GND

@@ -6,12 +6,6 @@ import tornado.web
 
 ########################################
 from include import *
-
-
-from system import System
-from ModelTurn import ModelTurn
-from ModelMove import ModelMove
-
 ############################
 
 #/do/system/home/aaa

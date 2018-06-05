@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
 from include import *
-from Msg import Msg
-
-from ModelTurn import ModelTurn
-from ModelMove import ModelMove
 
 @singleton
 class ServiceServer:
@@ -23,11 +19,14 @@ class ServiceServer:
         msg.toKey = fromMsg["fromKey"]
         msg.data = {}
         msg.msgType = 10                #单点回传
-        msg.data["res"] = "true"
+        msg.data["res"] = "1"
         msg.data["info"] = "info"
         msg.data["method"] = data.get("method", "no method ? ")
-
-        msg = self.doMethod(msg, msg.data["method"], data.get("params", ""))
+        try:
+            msg = self.doMethod(msg, msg.data["method"], data["params"])
+        except Exception as e:
+            print(e)
+            msg.data["info"] = 'exception'
         return msg
  
 
@@ -38,8 +37,8 @@ class ServiceServer:
 
         # tool.doMethod(self, method, params)
         print("class:  " + self.__class__.__name__)    #className
-        print("method: " + method)    #list
-        print("params: " + params)    #{arg1: 'a1', arg2: 'a2' }
+        print("method: ", method)    #list
+        print("params: ", params)    #{arg1: 'a1', arg2: 'a2' }
         #检查成员
         ret = hasattr(self, method) #因为有func方法所以返回True 
         if(ret == True) :
@@ -102,19 +101,26 @@ class ServiceServer:
         else:
             (ifMove, info, costTime) = ModelTurn().turnTo(ff)
 
-        res = {
-            "ifmove":ifMove,
-            "info":info,
-            "costtime":costTime,
-        }
-        print(res)
-        
-        msg.data["res"] = json.dumps(res)
+        msg.data["res"] = 1
+        msg.data["info"] = info + " " + str(costTime)
+        msg.data["cmd"] = 2
         return msg
 
 
 
 
+# 文件下载
+    def file(self, msg, params):
+        print(params)
+
+        pass
+
+
+    def login(self, msg, params):
+        msg.data["info"] = params["id"] + "-" + params["pwd"]
+        msg.data["res"] = 1
+        msg.data["cmd"] = 2
+        return msg
 
 
 

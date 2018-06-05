@@ -3,9 +3,6 @@
 from include import *
 
 #####################
-from system import System
-
-#####################
 # 通用型 开关量传感器模块
 # 
 # 烟雾模块Mq2   是否有害气体
@@ -23,7 +20,7 @@ class ModelOn:
         self.m_status = {}
     def get(self, callback):
         self.callback = callback
-        ThreadRun("getOn", self.threadQueryRun).start()
+        ThreadRun("Get status", self.threadQueryRun).start()
         return
     def threadQueryRun(self):
         tm = timeMark()
@@ -31,7 +28,8 @@ class ModelOn:
         res = []
         i = 0
         for port in self.m_ports:
-            res[i] = System().getPort(port)
+            # res[i] = System().getPort(port)
+            res.append(int(random.uniform(1, 10)))
             self.m_status[port] = res[i]
             i += 1
 

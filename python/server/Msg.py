@@ -17,7 +17,7 @@ class Msg:
     def __init__(self):
         self.info = "from terminal"
 
-        self.msgType = -1                #默认广播本系统
+        self.msgType = -2                #默认广播本系统
         self.toSysKey = "raspberrypi"    #默认发给本系统 
         # msg.toKey = "1000"
         

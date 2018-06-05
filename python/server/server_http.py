@@ -3,8 +3,6 @@
 import tornado.ioloop
 import tornado.web  
 import tornado.httpserver  
-import sys
-
 from include import *
 
 ########################################
@@ -21,7 +19,8 @@ from HandlerSystem import HandlerSystem
 @singleton
 class ServerHttp:
 
-    def __init__(self):
+    def __init__(self, port):
+        self.port = port
         self.application = tornado.web.Application([ 
             (r"/", HandlerTest),
             (r"/+do/+student/+(?P<method>.+)/+(?P<params>.*)", HandlerStudent),
@@ -29,7 +28,8 @@ class ServerHttp:
 
         ])
         return 
-    def start(self, port=8086):
+    def start(self):
+        port = self.port
         print("Start server http " + str(port))
         self.application.listen(port)
         tornado.ioloop.IOLoop.instance().start()
@@ -41,8 +41,8 @@ class ServerHttp:
 '''
 
 if __name__ == "__main__":
-    serverHttp = ServerHttp()
-    serverHttp.start(8086)
+    serverHttp = ServerHttp(8086)
+    serverHttp.start()
     
     # print("Start server http ")
     # application.listen(8086)

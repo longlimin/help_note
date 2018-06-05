@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
 from include import *
-from Msg import Msg
-
-from ModelTurn import ModelTurn
-from ModelMove import ModelMove
-
 ##########################
 # 自学习移动 地图生成
 ###########################

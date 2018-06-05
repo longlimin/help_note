@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-  
-import json
-import os
-import thread
-import sys
-sys.path.append("../opencv/")
-########################################
+from include import *
 
-from cv_makecolor import MakeColor
 ############################
 class ServiceMsg: 
         

@@ -13,7 +13,7 @@ import os
 #   count = db.getCount("select * from student ")
 #   db.close()
 #
-class database :
+class Database :
     dbfile = "sqlite.db"
     memory = ":memory:"
     conn = None
@@ -146,7 +146,7 @@ class database :
 
 ####################################测试
 def main():
-    db = database()
+    db = Database()
     db.execute(
         ''' 
         create table if not exists student(

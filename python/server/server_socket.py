@@ -1,21 +1,9 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-  
 from include import *
-import threading
-import json
-import thread
-import socket
-import struct
-import yaml
-from Msg import Msg
 ########################################
-from ServiceServer import ServiceServer
-
-############################
 
 
-
-@singleton
 class ServerSocket:
     _socket_thread_read = 1
     client = {}
@@ -23,7 +11,12 @@ class ServerSocket:
     maxReadLen = 1024        #一次性读取最大长度
     threadReadDeta = 0.05    #无数据时读取间隔s
     threadReturnDeta = 1    #异常恢复间隔s
+    def __init__(self, ip, port):
+        self.ip = ip
+        self.port = port
 
+        self.ifRtmpPush = "0"
+        return
     # 监听消息
     def threadReadRun(self):
 
@@ -49,8 +42,8 @@ class ServerSocket:
             while (self._socket_thread_read):
                 cmd=raw_input("Input words to broadcast:")
                 msg = Msg()
-                msg.msgType = -2        #广播所有 测试用
-                msg.data = {"broadcast":cmd}
+                msg.msgType = -1       #广播所有 测试用
+                msg.data = {"info":cmd}
                 # print("make", jsonstr)
                 self.sendImpl(msg.toString())
                 time.sleep(self.threadReadDeta)
@@ -60,7 +53,13 @@ class ServerSocket:
 
 
     # 链接服务器中转站
-    def start(self, ip, port):
+    def start(self):
+        ThreadRun("startSocket", self.run).start()
+        pass
+    def run(self):
+        ip = self.ip
+        port = self.port
+
         print("Start client socket")
         self.client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)      #定义socket类型，网络通信，TCP
         
@@ -88,7 +87,6 @@ class ServerSocket:
                 print("Connected error！" + str(e)) 
                 time.sleep(self.threadReturnDeta)
 
-     
 
 
     # 读取一条消息
@@ -134,27 +132,27 @@ class ServerSocket:
     # 当收到一条消息
     def onReceive(self, jsonstr):
         print("recv<<<<<<<<<<<<<<<<")
-        print(jsonstr) 
+        # print(jsonstr) 
         fromMsg = yaml.safe_load(jsonstr)
         # print(fromMsg)
 
         msgType = fromMsg["msgType"]
         if(msgType == 0):
             if(fromMsg["ok"] == "true"):
-                print("认证成功！")
+                print("认证服务器成功！")
                 print("SysKey: " + fromMsg["fromSysKey"] + "  key: " + fromMsg["fromKey"])
             else:
                 print("重新认证")
                 self.loginOn()
         elif(msgType == 1):
-            print("发送结果:" + fromMsg["ok"])
-        elif(msgType == 10):
-            # print(fromMsg)
+            print("发送echo:" + fromMsg["ok"])
+        elif(msgType == 10):    # 文本消息 脱离中转站 属于客户端和服务端的通信消息
+            print(fromMsg)
             msg = ServiceServer().do(fromMsg)
-            msg = fromMsg
+            # msg = fromMsg
             self.sendImpl(msg.toString())
         else:
-            print("不理解的消息类型")
+            print("非文本中转 非登录")
             print(fromMsg)
 
 
@@ -184,10 +182,10 @@ class ServerSocket:
 
 
 if __name__ == '__main__':
-    serverSocket = ServerSocket()
+    serverSocket = ServerSocket(False, "39.107.26.100", 8092)
 
     # main = start("192.168.1.6", 8092)
-    main = serverSocket.start("39.107.26.100", 8092)
+    main = serverSocket.start()
     while 1:
         pass
 

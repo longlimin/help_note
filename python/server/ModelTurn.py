@@ -3,9 +3,6 @@
 from include import *
 
 #####################
-from system import System
-
-#####################
 # 舵机转向模块
 # 红vcc
 # 橙信号   29端口 pwm控位

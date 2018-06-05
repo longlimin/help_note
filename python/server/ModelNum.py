@@ -3,9 +3,6 @@
 from include import *
 
 #####################
-from system import System
-
-#####################
 # 数码管F3461BH
 # 译码器38
 # 9端口 

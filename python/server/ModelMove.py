@@ -3,9 +3,6 @@
 from include import *
 
 #####################
-from system import System
-
-#####################
 # //H桥电机模块
 # 前进      左右前
 # 后退      左右退
