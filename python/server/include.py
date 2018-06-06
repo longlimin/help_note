@@ -16,6 +16,7 @@ import socket
 import struct
 import yaml
 import random   # int(random.uniform(1, 10))
+import uuid
 
 import cv2
 

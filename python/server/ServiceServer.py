@@ -11,12 +11,12 @@ class ServiceServer:
     """ 
 
     def do(self, fromMsg):
-        data = fromMsg["data"]
+        data = fromMsg.data
 
         #消息处理 默认发给请求者
         msg = Msg()
-        msg.toSysKey = fromMsg["fromSysKey"]
-        msg.toKey = fromMsg["fromKey"]
+        msg.toSysKey = fromMsg.fromSysKey
+        msg.toKey = fromMsg.fromKey
         msg.data = {}
         msg.msgType = 10                #单点回传
         msg.data["res"] = "1"
@@ -29,7 +29,25 @@ class ServiceServer:
             msg.data["info"] = 'exception'
         return msg
  
+    def doInput(self, cmd):
 
+
+        msg = Msg()
+        msg.data = {"info":cmd}
+        msg.info = "输入控制"
+        if(cmd == "show"):
+            msg.msgType = -1000
+            msg.data["info"] = "显示用户列表"
+        elif(cmd == "local"):
+            msg.data["info"] = "本地广播"
+            msg.msgType = -1
+            pass
+        else:
+            pass
+
+
+
+        return msg
 
     def doMethod(self, msg, method, params):
         # params = params.encode('utf-8')

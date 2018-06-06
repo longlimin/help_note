@@ -40,11 +40,8 @@ class ServerSocket:
             self.loginOn()
 
             while (self._socket_thread_read):
-                cmd=raw_input("Input words to broadcast:")
-                msg = Msg()
-                msg.msgType = -1       #广播所有 测试用
-                msg.data = {"info":cmd}
-                # print("make", jsonstr)
+                cmd=raw_input("")
+                msg = ServiceServer().doInput(cmd)
                 self.sendImpl(msg.toString())
                 time.sleep(self.threadReadDeta)
             print("threadInputRun stop" + str(threadInputCount))
@@ -82,6 +79,12 @@ class ServerSocket:
                 
 
                 print("Connect ok! ==============================")
+                print("""
+                        输入命令控制：
+                            show : 查看用户列表
+
+
+                    """)
                 break
             except Exception as e:
                 print("Connected error！" + str(e)) 
@@ -132,22 +135,25 @@ class ServerSocket:
     # 当收到一条消息
     def onReceive(self, jsonstr):
         print("recv<<<<<<<<<<<<<<<<")
-        # print(jsonstr) 
-        fromMsg = yaml.safe_load(jsonstr)
+        print(jsonstr) 
+        fromMsg = Msg()
+        fromMsg.init(jsonstr)
         # print(fromMsg)
 
-        msgType = fromMsg["msgType"]
+        msgType = int(fromMsg.msgType)
         if(msgType == 0):
-            if(fromMsg["ok"] == "true"):
+            if(fromMsg.ok == "1"):
                 print("认证服务器成功！")
-                print("SysKey: " + fromMsg["fromSysKey"] + "  key: " + fromMsg["fromKey"])
+                print("SysKey: " + fromMsg.fromSysKey + "  key: " + fromMsg.fromKey)
             else:
                 print("重新认证")
                 self.loginOn()
+        elif(msgType == -2):
+            print("广播消息")
         elif(msgType == 1):
-            print("发送echo:" + fromMsg["ok"])
+            print("发送结果=" + fromMsg.ok)
         elif(msgType == 10):    # 文本消息 脱离中转站 属于客户端和服务端的通信消息
-            print(fromMsg)
+            # print(fromMsg)
             msg = ServiceServer().do(fromMsg)
             # msg = fromMsg
             self.sendImpl(msg.toString())
