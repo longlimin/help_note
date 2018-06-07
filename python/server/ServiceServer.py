@@ -103,9 +103,9 @@ class ServiceServer:
             id = self.keys.get(msg.toKey)
             key = msg.toKey
             if(cmd == MSGTYPE.GET_CHAT_SESSIONS):       #会话列表
-                msg = self.sendSession(msg, id)
+                msg = self.sendSession(id)
             elif(cmd == MSGTYPE.CONTACT_USER_GROUP_MAP):    #好友列表
-                msg = self.sendContact(msg, id)
+                msg = self.sendContact(id)
             elif(cmd == MSGTYPE.FIND_USERS_GROUPS_BY_ID):    #搜索用户列表
                 value = params["value0"]
                 list1 = db.getUsersAdd(id, value)
@@ -120,34 +120,69 @@ class ServiceServer:
                 if(dc.ifAddUser(id, toid) is None):
                     map = dc.getAddApply(id, toid)
                     if(map is None):
-                        dao.execSQL(" insert into "+C.TB_ADD_APPLY+" (type,status,fromid,toid,yanzhen,nickname,time ) values(?,?,?,?,?,?,? ",type,"0",id,  toid,yanzhen,nickname, str(tool.getNowTime()) )
+                        dao.execSQL(" insert into "+C.TB_ADD_APPLY+" (type,status,fromid,toid,yanzhen,nickname,time ) values(?,?,?,?,?,?,?) ",type,"0",id,  toid,yanzhen,nickname, tool.getNowTime() )
                     #更新为未发送状态，若已存在
-                    dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "未发送", id, toid)
+                    dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "0", id, toid)
                     if(toid != C.robotId):
                         #插入会话列表，系统提示消息@@@@@@@@@@@
-                        if(dc.getUserSession(toid, id) == null):#这是不应该有的，未添加好友，可重复添加呢？
+                        if(dc.getUserSession(toid, id) is None):#这是不应该有的，未添加好友，可重复添加呢？
                             dao.execSQL("insert into tb_user_session (id,toid,type) values (?,?,?) ", toid, id, "adduser")
                         
                         if(self.keys.get(msg.toKey, "") != ""):     #在线发送会话添加
                             #dc.getClientById(id).send(MSG.GET_ADD_USER_GROP_BY_MAP, dc.getAddApply(id,toid))
-                            msgs.append(self.sendSession(msg, toid))
-                            dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "已发送", id, toid)
+                            msgs.append(self.sendSession(toid))
+                            dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "1", id, toid)
                         msg.makeMsg("true","已发送请求")
                     else:#机器人直接添加
-                        dao.execSQL("insert into tb_user_user(userid,friendid,nickname,time) values(?,?,?,to_date(?,'yyyy-mm-dd')) ", id, C.robotId,"CC",Tools.getNowTime())
-                        dao.execSQL("insert into tb_user_user(userid,friendid,nickname,time) values(?,?,?,to_date(?,'yyyy-mm-dd')) ", C.robotId,id, "",Tools.getNowTime())
+                        dao.execSQL("insert into tb_user_user(userid,friendid,nickname,time) values(?,?,?,?) ", id, C.robotId,"CC",Tools.getNowTime())
+                        dao.execSQL("insert into tb_user_user(userid,friendid,nickname,time) values(?,?,?,?) ", C.robotId,id, "",Tools.getNowTime())
                         dao.execSQL("insert into tb_user_session (id,toid,type) values (?,?,?) ", id, toid, "user")
                         msgs.append(self.sendSession(msg, id))
                         msgs.append(self.sendContact(msg, id))
                 else:
                     msg.makeMsg("false","您已经添加了该用户")   
-            elif(cmd == MSGTYPE.FIND_USERS_GROUPS_BY_ID):
-                value = params["value0"]
-                list1 = db.getUsersAdd(id, value)
-                list2 = db.getGroupsAdd(id, value)
-                list1 = list1 + list2
-                msg.makeMsg("true", list1)
-                
+            elif(cmd == MSGTYPE.RESULT_USER_GROP_BY_TYPE_ID_RESULT_NICKNAME):
+                type = params["value0"]
+                toid = params["value1"]
+                if(type == "user"):
+                #并发送提示添加成功？添加会话消息          #删除会话 
+                    dao.execSQL("delete from tb_user_session where (id=? and toid=?) or (id=? and toid=?) ", id,toid,toid, id)
+                 #更新添加记录表，并回送
+                    if(params.get("value2","") == "1"):
+                        #直接成功添加好友 测试 从申请表中提取信息加入好友关系表
+                        map = dc.getAddApply(toid, id)
+                        dao.execSQL(" insert into " + C.TB_USER_USER + "(userid,friendid,nickname,time) values(?,?,?,? )  ", map["fromid"],map["toid"],map["nickname"],tool.getNowTime() )
+                        dao.execSQL(" insert into " + C.TB_USER_USER + "(userid,friendid,nickname,time) values(?,?,?,? )  ", map["toid"],map["fromid"], params.get("value3", ""),tool.getNowTime() )
+                        dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "2", toid, id)
+                        
+                        msg.makeMsg("true","Have add friend:"+dc.getUser(toid).get("username"))
+                        #并发送消息更新两边的好友列表
+                        msgs.append(self.sendContact(id))
+                        msgs.append(self.sendContact(toid))
+                        dao.execSQL("insert into tb_user_session (id,toid,type) values (?,?,?) ", id, toid, type)
+                        dao.execSQL("insert into tb_user_session (id,toid,type) values (?,?,?) ", toid, id, type)
+                        msgs.append(self.sendSession(id))
+                        msgs.append(self.sendSession(toid))
+                    else:
+                        dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "4", toid, id)
+            elif(cmd == MSGTYPE.SEND_CHATMSG_BY_GTYPE_TOID_TYPE_TIME_MSG):
+                #发送消息
+                gtype = params["value0"]
+                toid = params["value1"]
+                type = params["value2"]
+                time = tool.getNowTime()
+                msgg = params["value4"]
+                if(gtype == "user"): 
+                    # if(dc.ifAddUser(id) is None ):
+                    #     return;
+                    status = "0";   #0未推送
+                    dao.execSQL("insert into tb_user_msg(fromid,toid,type,status,time,msg) values(?,?,?,?,?,?)", id,toid,type,status, time,msgg)
+                    msg2 = msg.makeMsg("true", dc.getUserMsgBy(id,toid,type,time,msgg))
+                    msg2.toKey = self.users.get(toid, "")
+                    msgs.append(msg2)
+                    #若目标没有与其的会话列表,则添加
+                    if(dc.getUserSession(toid, id) is None):
+                        dao.execSQL("insert into tb_user_session (id,toid,type) values (?,?,?) ", toid, id, gtype);
             else:
                 print(cmd, params, msg)
                 pass
@@ -157,11 +192,15 @@ class ServiceServer:
         return msgs
 
 #发送会话列表
-    def sendSession(self, msg, id):
+    def sendSession(self, id):
         dc = self.db
-        if(self.users.get(id, "") == ""):#不在线
-            return "" 
-
+        # if(self.users.get(id, "") == ""):#不在线
+        #     return "" 
+        msg = Msg()
+        msg.msgType = 10
+        msg.data["cmd"] = MSGTYPE.GET_CHAT_SESSIONS
+        msg.toKey = self.users.get(id, "")
+        print("====Session list", id)
         listMap = dc.getUserSessionsById(id)
         #组装每个会话的最新消息
         for lmap in listMap:
@@ -183,15 +222,26 @@ class ServiceServer:
                 lmap["STATUS"] = "[在线]"
                 pass
          
+         
+        listMap = listMap + dc.getAddApplySessionUser(id)
+        listMap = listMap + dc.getAddApplySessionGroup(id)
+        
+
         if(listMap is None or len(listMap) <= 0):
             msg.makeMsg("false", "没有任何会话")
         else:
             msg.makeMsg("true", listMap)
+        print("====Res", listMap)
+        return msg
 #发送好友列表
-    def sendContact(self, msg, id):
+    def sendContact(self, id):
         dc = self.db
-        if(self.users.get(id, "") == ""):#不在线
-            return "" 
+        # if(self.users.get(id, "") == ""):#不在线
+        #     return "" 
+        msg = Msg()
+        msg.msgType = 10
+        msg.data["cmd"] = MSGTYPE.CONTACT_USER_GROUP_MAP
+        msg.toKey = self.users.get(id, "")
         i=0
         onlineCount = 0
         friendCount = 0
@@ -206,7 +256,7 @@ class ServiceServer:
             id = lmap["id"]
             if(type == "user"): #查看好友是否在线并附加字段
                 friendCount += 1
-                if(dc.getClientById(id) is None and id != C.robotId):
+                if(self.users.get(id, "") == "" and id != C.robotId):
                     lmap["STATUS"] = "[离线]"
                 else:
                     lmap["STATUS"] = "[在线]"
@@ -234,7 +284,7 @@ class ServiceServer:
 
         
      
-
+        return msg
 
 
 # 输入控制

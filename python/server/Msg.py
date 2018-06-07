@@ -50,4 +50,4 @@ class Msg:
         for var in args:
             self.data["value" + str(i)] = var
             i += 1
-        return
+        return self

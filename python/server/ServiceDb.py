@@ -116,7 +116,7 @@ class ServiceDb:
     
     #查询对某人聊天记录
     def getUserMsgBy(self, id,  toid,  type,  time,  msg) :
-        return self.db.executeQuery( " select  'user' sessiontype, ifnull(uu.nickname,u.username) username,u.profilepath,um.fromid,um.toid,um.type,um.time,msg from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? )  ) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid and type=? and msg=? and um.time=to_date(?,'yyyy-mm-dd hh24:mi:ss')  " , id, toid, type,msg,time)
+        return self.db.executeQuery( " select  'user' sessiontype, ifnull(uu.nickname,u.username) username,u.profilepath,um.fromid,um.toid,um.type,um.time,msg from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? )  ) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid and type=? and msg=? and um.time=?  " , id, toid, type,msg,time)
     
     #查询对某人聊天记录
     def getGroupMsgs(self, groupid,  starttime,  size) :
