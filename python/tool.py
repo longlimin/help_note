@@ -44,6 +44,8 @@ def doMethod(cls, methodName, *params):
 def sleep(mills):
     time.sleep(mills)
 
+def getNowTime():
+    return int(time.time()*1000)
 
 
 

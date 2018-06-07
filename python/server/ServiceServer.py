@@ -1,54 +1,262 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
 from include import *
+import MSGTYPE
 
 @singleton
 class ServiceServer:
+    users = {}
+    keys = {}
     """ 
         Service 
         Return map by map
         Control the system
     """ 
-
+    def __init__(self):
+        self.db = ServiceDb()
+        self.dao = Database()
     def do(self, fromMsg):
         data = fromMsg.data
-
+        cmd = data.get("cmd", "")
         #消息处理 默认发给请求者
         msg = Msg()
         msg.toSysKey = fromMsg.fromSysKey
         msg.toKey = fromMsg.fromKey
         msg.data = {}
         msg.msgType = 10                #单点回传
-        msg.data["res"] = "1"
-        msg.data["info"] = "info"
-        msg.data["method"] = data.get("method", "no method ? ")
-        try:
-            msg = self.doMethod(msg, msg.data["method"], data["params"])
-        except Exception as e:
-            print(e)
-            msg.data["info"] = 'exception'
-        return msg
- 
+
+        if(cmd != ""):
+            msg.data["cmd"] = cmd
+            msgs = self.doCmd(cmd, data, msg)
+        else:
+            # msg.data["res"] = "1"
+            # msg.data["info"] = "info"
+            msg.data["method"] = data.get("method", "no method ? ")
+            try:
+                msgs = self.doMethod(msg, msg.data["method"], data["params"])
+            except Exception as e:
+                print(e)
+                msg.data["info"] = 'exception'
+                msgs = [msg]
+        return msgs
+
+# cmd类型控制 
+    def doCmd(self, cmd, params, msg):
+        dc = self.db
+        db = self.db
+        dao = self.dao
+
+        msgs = []
+        # cmd: int GET_CHAT_SESSIONS = 10 
+        # params: :"value":1, "value1":2
+        # res msg
+        if(cmd == MSGTYPE.REGISTE_BY_USERNAME_EMAIL_SEX_PWD):
+            username = params["value0"]
+            email = params["value1"]
+            sex = params["value2"]
+            pwd = params["value3"]
+            res = -2
+            map = dao.executeQuery("SELECT * FROM TB_USER WHERE EMAIL=? ", email)
+            if(map is None or len(map) <= 0):
+                id = (str(uuid.uuid1())).split("-")[0]
+                # pwd = MD5.make(id,MD5.make(id, pwd))
+                dao.execute("INSERT INTO TB_USER(ID, USERNAME, EMAIL, SEX, PWD,PROFILEPATH,PROFILEPATHWALL) VALUES(?, ?, ? ,?, ?,?,?) ", id, username, email, sex, pwd,"", "")
+                res = 1
+                info = id
+            if(res == -2):#有重复
+                res = "false"
+                info = "该邮件已经被注册过了"
+            elif(res == -1):#插入失败
+                res = "false"
+                info = "添加用户数据失败"
+            elif(res >= 0):#插入成功,返回生成的用户id
+                res = "true"
+                #添加机器人cc好友
+                dao.execute("INSERT INTO TB_USER_USER(USERID,FRIENDID,NICKNAME,TIME) VALUES(?,?,?,?) ", id, "1424234500","CC", tool.getNowTime())
+                dao.execute("INSERT INTO TB_USER_USER(USERID,FRIENDID,NICKNAME,TIME) VALUES(?,?,?,?) ", C.robotId,id, "", tool.getNowTime())
+            msg.makeMsg(res, info)
+            pass
+        elif(cmd == MSGTYPE.LOGIN_BY_ID_PWD):
+            id = params["value0"]
+            pwd = params["value1"]
+            # pwd = MD5.make(id, pwd)  #客户端发送时先 MD5(cc+id+pwd)加密，这里再次加密,MD5(cc+id+MD5(cc+id+pwd))
+            listMap = dao.executeQuery("SELECT * FROM TB_USER WHERE (EMAIL=? OR ID=?) AND PWD=?  ", id, id, pwd)
+            if(listMap is not None and len(listMap) > 0):    #登陆成功
+
+                map = listMap[0]
+                msg.makeMsg("true", map)
+                # client.loginOk(map)
+                dao.execute("INSERT INTO TB_LOGIN_INFO(TIME, ID,  USERNAME, IP, STATUS) VALUES(?, ?, ?, ?, ?) ", tool.getNowTime(), map["id"], map["username"], "", "0")
+                #向该用户的在线好友们发送通知上线下线
+                msg2 = Msg()
+                msg2.msgType = -1
+                msg2.data["cmd"] = MSGTYPE.LINE_STATUS_ID_TYPE
+                msg2.makeMsg("true", id)
+                msgs.append(msg2)
+                # 记录本地 syskey key 对应用户id 双向索引
+                self.users[map["id"]] = msg.toKey
+                self.keys[msg.toKey] = map["id"]
+            else:
+                msg.makeMsg("false", "账号或密码错误")
+            pass
+        if(True or self.keys.get(msg.toKey, "") != "" ) :
+            id = self.keys.get(msg.toKey)
+            key = msg.toKey
+            if(cmd == MSGTYPE.GET_CHAT_SESSIONS):       #会话列表
+                msg = self.sendSession(msg, id)
+            elif(cmd == MSGTYPE.CONTACT_USER_GROUP_MAP):    #好友列表
+                msg = self.sendContact(msg, id)
+            elif(cmd == MSGTYPE.FIND_USERS_GROUPS_BY_ID):    #搜索用户列表
+                value = params["value0"]
+                list1 = db.getUsersAdd(id, value)
+                list2 = db.getGroupsAdd(id, value)
+                list1 = list1 + list2
+                msg.makeMsg("true", list1)
+            elif(cmd == MSGTYPE.ADD_USER_GROP_BY_TYPE_ID_YANZHEN_NICKNAME):    #添加好友请求
+                type = params["value0"]
+                toid = params["value1"]
+                nickname = params["value3"]
+                yanzhen = params["value2"]
+                if(dc.ifAddUser(id, toid) is None):
+                    map = dc.getAddApply(id, toid)
+                    if(map is None):
+                        dao.execSQL(" insert into "+C.TB_ADD_APPLY+" (type,status,fromid,toid,yanzhen,nickname,time ) values(?,?,?,?,?,?,? ",type,"0",id,  toid,yanzhen,nickname, str(tool.getNowTime()) )
+                    #更新为未发送状态，若已存在
+                    dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "未发送", id, toid)
+                    if(toid != C.robotId):
+                        #插入会话列表，系统提示消息@@@@@@@@@@@
+                        if(dc.getUserSession(toid, id) == null):#这是不应该有的，未添加好友，可重复添加呢？
+                            dao.execSQL("insert into tb_user_session (id,toid,type) values (?,?,?) ", toid, id, "adduser")
+                        
+                        if(self.keys.get(msg.toKey, "") != ""):     #在线发送会话添加
+                            #dc.getClientById(id).send(MSG.GET_ADD_USER_GROP_BY_MAP, dc.getAddApply(id,toid))
+                            msgs.append(self.sendSession(msg, toid))
+                            dao.execSQL(" update "+C.TB_ADD_APPLY+" set status=? where fromid=? and toid=? ", "已发送", id, toid)
+                        msg.makeMsg("true","已发送请求")
+                    else:#机器人直接添加
+                        dao.execSQL("insert into tb_user_user(userid,friendid,nickname,time) values(?,?,?,to_date(?,'yyyy-mm-dd')) ", id, C.robotId,"CC",Tools.getNowTime())
+                        dao.execSQL("insert into tb_user_user(userid,friendid,nickname,time) values(?,?,?,to_date(?,'yyyy-mm-dd')) ", C.robotId,id, "",Tools.getNowTime())
+                        dao.execSQL("insert into tb_user_session (id,toid,type) values (?,?,?) ", id, toid, "user")
+                        msgs.append(self.sendSession(msg, id))
+                        msgs.append(self.sendContact(msg, id))
+                else:
+                    msg.makeMsg("false","您已经添加了该用户")   
+            elif(cmd == MSGTYPE.FIND_USERS_GROUPS_BY_ID):
+                value = params["value0"]
+                list1 = db.getUsersAdd(id, value)
+                list2 = db.getGroupsAdd(id, value)
+                list1 = list1 + list2
+                msg.makeMsg("true", list1)
+                
+            else:
+                print(cmd, params, msg)
+                pass
+        else:
+            pass
+        msgs.append(msg)
+        return msgs
+
+#发送会话列表
+    def sendSession(self, msg, id):
+        dc = self.db
+        if(self.users.get(id, "") == ""):#不在线
+            return "" 
+
+        listMap = dc.getUserSessionsById(id)
+        #组装每个会话的最新消息
+        for lmap in listMap:
+            map = db.getUserMsg(id, lmap["id"])
+            j = dc.getUserMsgCount(id, lmap["id"] )
+            if(map is not None):
+                lmap["MSG"] = map["msg"]
+                lmap["TIME"] = map["time"]
+                lmap["MSGTYPE"] = map["msgtype"]
+                lmap["NUM"] = j
+            else:
+                lmap["MSG"] = ""
+                lmap["MSGTYPE"] = ""
+                lmap["TIME"] = ""
+                lmap["NUM"] = j
+            if(self.users.get("id", "") == "" and lmap["id"] != C.robotId ):
+                lmap["STATUS"] = "[离线]"
+            else:
+                lmap["STATUS"] = "[在线]"
+                pass
+         
+        if(listMap is None or len(listMap) <= 0):
+            msg.makeMsg("false", "没有任何会话")
+        else:
+            msg.makeMsg("true", listMap)
+#发送好友列表
+    def sendContact(self, msg, id):
+        dc = self.db
+        if(self.users.get(id, "") == ""):#不在线
+            return "" 
+        i=0
+        onlineCount = 0
+        friendCount = 0
+        groupCount = 0
+
+        list1 = dc.getMyFriendsById( id)
+        list2 = dc.getMyGroupsById(id)        #组装每个会话的最新消息
+        listMap = list1 + list2
+
+        for lmap in listMap:
+            type = lmap["type"]
+            id = lmap["id"]
+            if(type == "user"): #查看好友是否在线并附加字段
+                friendCount += 1
+                if(dc.getClientById(id) is None and id != C.robotId):
+                    lmap["STATUS"] = "[离线]"
+                else:
+                    lmap["STATUS"] = "[在线]"
+                    onlineCount += 1
+            elif(type == "group"):
+                groupCount += 1
+        map  = {}
+        listType = []
+        map["USERNAME"] = "我的好友"
+        map["NUM"] = friendCount
+        map["ONNUM"] = onlineCount
+        map["START"] = 0
+        listType.append(map)
+        map  = {}
+        map["USERNAME"] = "群组"
+        map["NUM"] = groupCount
+        map["ONNUM"] = groupCount 
+        map["START"] = friendCount 
+        listType.append(map)
+            
+        if(listMap is None or len(listMap) <= 0):
+            msg.makeMsg("false", "没有任何会话")
+        else:
+            msg.makeMsg("true", listType, listMap)
+
+        
+     
+
+
+
+# 输入控制
     def doInput(self, cmd):
-
-
+        msgs = []
         msg = Msg()
         msg.data = {"info":cmd}
         msg.info = "输入控制"
         if(cmd == "show"):
             msg.msgType = -1000
             msg.data["info"] = "显示用户列表"
+            print("本地存储登录用户列表：" + str(len(self.users)))
+            print(self.users)
         elif(cmd == "local"):
             msg.data["info"] = "本地广播"
             msg.msgType = -1
             pass
         else:
             pass
-
-
-
+        msgs.append(msg)
         return msg
-
+# 系统方法控制
     def doMethod(self, msg, method, params):
         # params = params.encode('utf-8')
         # method = method.encode('utf-8')
@@ -56,7 +264,7 @@ class ServiceServer:
         # tool.doMethod(self, method, params)
         print("class:  " + self.__class__.__name__)    #className
         print("method: ", method)    #list
-        print("params: ", params)    #{arg1: 'a1', arg2: 'a2' }
+        print("params: ", params)    #:arg1: 'a1', arg2: 'a2' 
         #检查成员
         ret = hasattr(self, method) #因为有func方法所以返回True 
         if(ret == True) :
@@ -67,7 +275,7 @@ class ServiceServer:
             print("Error ! 该方法不存在")
             msg.data["res"] = "false"
             msg.data["info"] = "该方法不存在"
-            return msg
+            return [msg]
 
 # left right head back space stop
     def move(self, msg, param):
@@ -101,7 +309,7 @@ class ServiceServer:
             ModelMove().moveRight()
 
         msg.data["info"] = "move"
-        return msg
+        return [msg]
 
 # 0 1 
     def cameraTurn(self, msg, params):
@@ -122,7 +330,7 @@ class ServiceServer:
         msg.data["res"] = 1
         msg.data["info"] = info + " " + str(costTime)
         msg.data["cmd"] = 2
-        return msg
+        return [msg]
 
 
 
@@ -138,7 +346,7 @@ class ServiceServer:
         msg.data["info"] = params["id"] + "-" + params["pwd"]
         msg.data["res"] = 1
         msg.data["cmd"] = 2
-        return msg
+        return [msg]
 
 
 

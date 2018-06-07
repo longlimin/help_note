@@ -31,6 +31,7 @@ sys.path.append("../opencv/")
 from python_singleton import singleton
 # 导入工具 模块 .py : tool.exe()
 import tool
+import C
 from cvhelp import CvHelp
 
 

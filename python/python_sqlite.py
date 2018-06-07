@@ -32,15 +32,15 @@ class Database :
     #获取连接
     def getConn(self):
         if(self.conn is None):
-            conn = sqlite3.connect(self.dbfile)
+            conn = sqlite3.connect(self.dbfile, check_same_thread=False )
             if(conn is None):
-                conn = sqlite3.connect(self.memory)
+                conn = sqlite3.connect(self.memory, check_same_thread=False )
             if(conn is None):
                 print("dbfile : " + self.dbfile + " is not found && the memory connect error ! ")
             else:
                 conn.row_factory = self.dict_factory #字典解决方案
                 self.conn = conn
-            self.out("db init conn ok ! ")
+            # self.out("db init conn ok ! ")
         else:
             conn = self.conn
 
@@ -96,6 +96,16 @@ class Database :
         cursor = conn.cursor()
         res = cursor.execute(sql, args).fetchall()
         return res   
+    def executeQueryOne(self, sql, *args):
+        args = self.turnArray(args)
+        listMap = self.executeQuery(sql, args)
+        if(listMap is not None and len(listMap) > 0):
+            return listMap[0]
+        else:
+            return None
+    def execSQL(self, sql, *args):
+        args = self.turnArray(args)
+        return self.execute(sql, args)
     #执行sql或者查询列表 并提交
     def execute(self, sql, *args):
         args = self.turnArray(args)

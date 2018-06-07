@@ -5,6 +5,8 @@ from include import *
 ############################
 # 启动后台
 
+# 初始化数据库
+ServiceDb().init()
 
 
 # Socket后台

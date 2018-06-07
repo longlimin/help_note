@@ -79,12 +79,7 @@ class ServerSocket:
                 
 
                 print("Connect ok! ==============================")
-                print("""
-                        输入命令控制：
-                            show : 查看用户列表
-
-
-                    """)
+                print("输入命令控制：\n    默认全系统广播\n    show : 查看用户列表\n    local : 测试本系统广播 ")
                 break
             except Exception as e:
                 print("Connected error！" + str(e)) 
@@ -123,7 +118,7 @@ class ServerSocket:
         # byte4 = struct.pack('<i', length)   # 转换 int 4byte 低位前置
         # bytejson = bytes(jsonstr)
         # struct.unpack('<i', p)      # 逆转 4byte int 
-        print("send>>>>>>>>>>>>>>>")
+        print("###send>>>>   ")
         print(jsonstr)
      
         header = [length]
@@ -134,32 +129,39 @@ class ServerSocket:
 
     # 当收到一条消息
     def onReceive(self, jsonstr):
-        print("recv<<<<<<<<<<<<<<<<")
-        print(jsonstr) 
         fromMsg = Msg()
         fromMsg.init(jsonstr)
         # print(fromMsg)
+        # print("recv<< " + fromMsg.id + " from=" + fromMsg.fromKey + "," + fromMsg.fromSysKey + " type=" + str(fromMsg.msgType) + " info=" + fromMsg.info + " data=" + fromMsg.data)
 
         msgType = int(fromMsg.msgType)
+        if(msgType == 1):
+            return
+        print("@@@recv====         ")
+        print(jsonstr) 
+
         if(msgType == 0):
             if(fromMsg.ok == "1"):
-                print("认证服务器成功！")
                 print("SysKey: " + fromMsg.fromSysKey + "  key: " + fromMsg.fromKey)
             else:
                 print("重新认证")
                 self.loginOn()
+        elif(msgType == -1000):
+            print(fromMsg.data["res"])
         elif(msgType == -2):
             print("广播消息")
+            # print(fromMsg.toString())
         elif(msgType == 1):
-            print("发送结果=" + fromMsg.ok)
+            print("发送" + fromMsg.id + "结果=" + fromMsg.ok)
         elif(msgType == 10):    # 文本消息 脱离中转站 属于客户端和服务端的通信消息
             # print(fromMsg)
-            msg = ServiceServer().do(fromMsg)
-            # msg = fromMsg
-            self.sendImpl(msg.toString())
+            msgs = ServiceServer().do(fromMsg)
+            for msg in msgs:
+                if(msg is not None and msg != ""):
+                    self.sendImpl(msg.toString())
         else:
             print("非文本中转 非登录")
-            print(fromMsg)
+            # print(fromMsg.toString())
 
 
     def loginOn(self):
