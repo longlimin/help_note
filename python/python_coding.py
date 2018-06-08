@@ -110,6 +110,10 @@ dict.pop(key) 移除
 5:dict.items() ：以列表的形式返回遍历的键值对元组数组
 #数组 长度
 #遍历字典 编码utf unicode
+s='林' #当程序执行时，无需加u，'林'也会被以unicode形式保存新的内存空间中,
+#s可以直接encode成任意编码格式
+s1=s.encode('utf-8')
+s2=s.encode('gbk')
 for i in range(len(arr)):
   arr[i]
 for key in data:

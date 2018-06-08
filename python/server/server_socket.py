@@ -25,7 +25,11 @@ class ServerSocket:
             while (self._socket_thread_read):
                 jsonstr = self.readImpl()
                 if(jsonstr):
-                    self.onReceive(jsonstr)
+                    try:
+                        self.onReceive(jsonstr)
+                    except Exception as e:
+                        print(jsonstr)
+                        print(e)
                 time.sleep(self.threadReadDeta)
             print("threadReadRun stop")
             time.sleep(self.threadReturnDeta)
@@ -138,7 +142,7 @@ class ServerSocket:
         if(msgType == 1):
             return
         print("@@@recv====         ")
-        print(jsonstr) 
+        # print(jsonstr) 
 
         if(msgType == 0):
             if(fromMsg.ok == "1"):

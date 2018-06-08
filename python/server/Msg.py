@@ -32,6 +32,14 @@ class Msg:
             setattr(self, names[i], fromMsg.get(snames[i], ""))
         if(self.data is None or self.data == ""):
             self.data = {}
+        else:
+            for key in self.data:
+                if(key == "cmd"):
+                    print("----", key, type(self.data[key]), self.data[key], tool.getClassName(MSGTYPE, self.data[key]))
+                    self.data[key] = tool.encode(self.data[key])
+                else:
+                    print("----", key, type(self.data[key]), self.data[key])
+
         return
     def toString(self):
         res = {}

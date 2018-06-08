@@ -56,8 +56,8 @@ class ServiceDb:
     
     
     def getGroupUsersEx(self, selfId,  groupid) :
-        return  self.db.executeQuery("select   ifnull(uu.nickname,find.username) name,ifnull( uu.friendid , 'false') ifadd, find.* from "
-                + " ( select  'user' type, u.id, ifnull(ug.nickname, u.username) groupnickname,u.username, u.sex, u.profilepath, u.profilepathwall,u.sign, u.email from tb_user u,tb_user_group ug   "
+        return  self.db.executeQuery("select   username name,ifnull( uu.friendid , 'false') ifadd, find.* from "
+                + " ( select  'user' type, u.id, u.username groupnickname,u.username, u.sex, u.profilepath, u.profilepathwall,u.sign, u.email from tb_user u,tb_user_group ug   "
                 + " where ug.groupid=? and ug.userid=u.id  ) find  "
                 + " left join tb_user_user  uu on  uu.friendid=find.id and uu.userid=? ", groupid, selfId)
     
@@ -85,14 +85,14 @@ class ServiceDb:
 
     #查询id的好友集合，关联tb_user_user,查询信息组装nickname,并判断在线与否
     def getMyFriendsById(self, id) :
-        return self.db.executeQuery( "select 'true' ifadd, 'user' type,u.id,ifnull(uu.nickname,u.username) name,u.username,u.email,u.sex,u.profilepath,u.sign,u.profilepathwall,ifnull(uu.nickname,' ') nickname  from tb_user_user uu,tb_user u where uu.userid=? and u.id=uu.friendid", id)
+        return self.db.executeQuery( "select 'true' ifadd, 'user' type,u.id,ifnull(u.username,u.username) name,u.username,u.email,u.sex,u.profilepath,u.sign,u.profilepathwall,ifnull(u.username,' ') nickname  from tb_user_user uu,tb_user u where uu.userid=? and u.id=uu.friendid", id)
     
     def getMyGroupsById(self, id) :
         return self.db.executeQuery( "select 'true' ifadd, 'group' type,g.id,g.username name,g.username, g.profilepathwall  profilepath,g.sign,g.profilepathwall,g.num,g.creatorid,g.checked,(select count(*) from tb_user_group ug where ug.groupid=g.id ) nownum from tb_user_group ug,tb_group g where ug.userid=? and ug.groupid=g.id " , id)
     
     #查询个人会话列表  级联相关信息,用做前端显示列表,#好友会话列表
     def getUserSessionsById(self, id) :
-        return self.db.executeQuery( " select us.type,us.toid id,u.username,u.profilepath,uu.nickname,ifnull(uu.nickname,u.username) name from tb_user_session us, tb_user u,tb_user_user uu  where us.id=? and us.toid=u.id and us.id=uu.userid and us.toid = uu.friendid and (us.type='user' )" , id)
+        return self.db.executeQuery( " select us.type,us.toid id,u.username,u.profilepath,u.username,u.username name from tb_user_session us, tb_user u,tb_user_user uu  where us.id=? and us.toid=u.id and us.id=uu.userid and us.toid = uu.friendid and (us.type='user' )" , id)
     
     #查询个人会话列表  级联相关信息,用做前端显示列表,#好友会话列表
     def getGroupSessionsById(self, id) :
@@ -105,43 +105,58 @@ class ServiceDb:
      
     #查询对某人聊天记录
     def getUserMsgs(self, id,  toid,  starttime,  size) :
-        count = executeCount(" select  count(*) from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? ) or ( fromid=? and toid=? )) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid and um.time < ?  " , id, toid, toid, id, starttime)
+        count = self.db.getCount(" select * from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? ) or ( fromid=? and toid=? )) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid and um.time < ?  " , id, toid, toid, id, starttime)
+        start = count-size
+        if(start < 0):
+            start = 0
         #并更新这些数据的status为已读
-        execSQL(" update  tb_user_msg set status='1' where fromid=? and toid=? ", toid, id)
+        self.db.execSQL(" update  tb_user_msg set status='1' where fromid=? and toid=? ", toid, id)
         #根据时间顺序，查询starttime最近的size10条数据        
-        return self.db.executeQuery( "  select * from ( select t.*,rownum rowno from   ( "
-                + " select  ifnull(uu.nickname,u.username) username,u.profilepath,um.fromid,um.toid,um.type,um.time,msg from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? ) or ( fromid=? and toid=? )) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid"
+        # return self.db.executeQuery( "  select * from ( select t.*,rownum rowno from   ( "
+        #         + " select  ifnull(u.username,u.username) username,u.profilepath,um.fromid,um.toid,um.type,um.time,msg from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? ) or ( fromid=? and toid=? )) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid"
+        #         + " and um.time < ?  order by um.time  "
+        #         + "  ) t  )  where rowno>? and rowno<=? " , id, toid, toid, id, starttime,count-size, count )
+        return self.db.executeQueryOffset(  
+                " select  ifnull(u.username,u.username) username,u.profilepath,um.fromid,um.toid,um.type,um.time,msg from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? ) or ( fromid=? and toid=? )) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid"
                 + " and um.time < ?  order by um.time  "
-                + "  ) t  )  where rowno>? and rowno<=? " , id, toid, toid, id, starttime,count-size, count )
+               ,start, size, id, toid, toid, id, starttime)
+
     
     #查询对某人聊天记录
     def getUserMsgBy(self, id,  toid,  type,  time,  msg) :
-        return self.db.executeQuery( " select  'user' sessiontype, ifnull(uu.nickname,u.username) username,u.profilepath,um.fromid,um.toid,um.type,um.time,msg from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? )  ) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid and type=? and msg=? and um.time=?  " , id, toid, type,msg,time)
+        return self.db.executeQuery( " select  'user' sessiontype, ifnull(u.username,u.username) username,u.profilepath,um.fromid,um.toid,um.type,um.time,msg from tb_user_msg um,tb_user u,tb_user_user uu where (( fromid=? and toid=? )  ) and u.id=um.fromid and uu.userid=um.toid and uu.friendid=um.fromid and type=? and msg=? and um.time=?  " , id, toid, type,msg,time)
     
     #查询对某人聊天记录
-    def getGroupMsgs(self, groupid,  starttime,  size) :
-        count = executeCount(" select count(*) from tb_group_msg where  groupid=? and time<?  ", groupid, starttime )
+    def getGroupMsgs(self, toid,  starttime,  size) :
+        count = self.db.getCount(" select * from tb_group_msg where  groupid=? and time<?  ", toid, starttime )
+        start = count-size
+        if(start < 0):
+            start = 0
         #根据时间顺序，查询starttime最近的size10条数据        
-        return self.db.executeQuery( "  select * from ( select t.*,rownum rowno from   ( "
-                + " select  ifnull(ug.nickname,u.username) username,u.profilepath,gm.fromid,gm.groupid,gm.type,gm.time,gm.reltime,msg from tb_group_msg gm,tb_user u,tb_user_group ug where (( gm.groupid=? )) and u.id=gm.fromid and gm.fromid=ug.userid(+) and gm.groupid=ug.groupid(+) "
+        # return self.db.executeQuery( "  select * from ( select t.*,rownum rowno from   ( "
+        #         + " select  ifnull(ug.nickname,u.username) username,u.profilepath,gm.fromid,gm.groupid,gm.type,gm.time,gm.reltime,msg from tb_group_msg gm,tb_user u,tb_user_group ug where (( gm.groupid=? )) and u.id=gm.fromid and gm.fromid=ug.userid(+) and gm.groupid=ug.groupid(+) "
+        #         + " and gm.time < ?  order by gm.time  "
+        #         + "  ) t  )  where rowno>? and rowno<=? " , groupid, starttime,count-size, count )
+        return self.db.executeQueryOffset(  
+                " select  ifnull(ug.nickname,u.username) username,u.profilepath,gm.fromid,gm.groupid,gm.type,gm.time,msg from tb_group_msg gm,tb_user u,tb_user_group ug where gm.groupid=? and u.id=gm.fromid and gm.fromid=ug.userid and gm.groupid=ug.groupid "
                 + " and gm.time < ?  order by gm.time  "
-                + "  ) t  )  where rowno>? and rowno<=? " , groupid, starttime,count-size, count )
+               ,start, size, toid, starttime)
     
     #查询对某群聊天记录 
     def getGroupMsgBy(self, id,  toid,  type,  time,  msg) :
-        return self.db.executeQuery( " select  'group' sessiontype, ifnull(ug.nickname,u.username) username,u.profilepath,gm.groupid toid,gm.fromid,gm.type,to_char(gm.time,'yyyy-mm-dd hh24:mi:ss') time, gm.msg msg from tb_group_msg gm,tb_group g,tb_user_group ug,tb_user u where u.id=gm.fromid and (( gm.fromid=? and gm.groupid=? )  ) and g.id=gm.groupid and ug.groupid=gm.groupid and ug.userid=gm.fromid and gm.type=? and gm.msg=? and gm.time=to_date(?,'yyyy-mm-dd hh24:mi:ss')  " , id, toid, type,msg,time)
+        return self.db.executeQuery( " select  'group' sessiontype, u.username,u.profilepath,gm.groupid toid,gm.fromid,gm.type,gm.time, gm.msg msg from tb_group_msg gm,tb_group g,tb_user_group ug,tb_user u where u.id=gm.fromid and (( gm.fromid=? and gm.groupid=? )  ) and g.id=gm.groupid and ug.groupid=gm.groupid and ug.userid=gm.fromid and gm.type=? and gm.msg=? and gm.time=?  " , id, toid, type,msg,time)
     
     def getRobotGroupMsgBy(self, id,  toid,  type,  time,  msg) :
-        return self.db.executeQuery( " select  'group' sessiontype,   u.username,u.profilepath,gm.groupid toid,gm.fromid,gm.type,to_char(gm.time,'yyyy-mm-dd hh24:mi:ss') time, gm.msg msg from tb_group_msg gm,tb_group g,tb_user u where u.id=gm.fromid and (( gm.fromid=? and gm.groupid=? )  ) and g.id=gm.groupid and gm.type=? and gm.msg=? and gm.time=to_date(?,'yyyy-mm-dd hh24:mi:ss')  " , id, toid, type,msg,time)
+        return self.db.executeQuery( " select  'group' sessiontype,   u.username,u.profilepath,gm.groupid toid,gm.fromid,gm.type,gm.time time, gm.msg msg from tb_group_msg gm,tb_group g,tb_user u where u.id=gm.fromid and (( gm.fromid=? and gm.groupid=? )  ) and g.id=gm.groupid and gm.type=? and gm.msg=? and gm.time=?  " , id, toid, type,msg,time)
     
     #查询对某人聊天记录 最新一条
     def getUserMsg(self, id,  toid) :
-        return self.db.executeQueryOne( "  select  type msgtype, msg,to_char(time,'yyyy-mm-dd hh24:mi:ss') time "
+        return self.db.executeQueryOne( "  select  type msgtype, msg, time "
                 + "from   (  select * from  tb_user_msg where ( fromid=? and toid=? ) or ( fromid=? and toid=?  )  order by time desc )   " , id, toid, toid, id)
     
     #获取对某人聊天记录未读条数
     def  getGroupMsgCount(self, toid,  time) :
-        return executeCount("select count(*) from tb_group_msg where  groupid=? and time>=?  ", toid, time )
+        return self.db.getCount("select * from tb_group_msg where  groupid=? and time>=?  ", toid, time )
     
     #查询某群聊天记录 最新一条
     def getGroupMsg(self, id ) :
@@ -157,7 +172,7 @@ class ServiceDb:
     
     #获取对某人聊天记录未读条数
     def  getUserMsgCount(self, id ,  fromid) : #fromid发给我id的未读的条数
-        return executeCount("select count(*) from tb_user_msg where fromid=? and toid=? and status='0' ", fromid, id)
+        return self.db.getCount("select * from tb_user_msg where fromid=? and toid=? and status='0' ", fromid, id)
     
     
     def getUserByGroup(self, groupid):

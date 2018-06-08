@@ -2,6 +2,9 @@
 #-*- coding:utf-8 -*-   
 import sqlite3
 import os 
+import sys
+sys.path.append("../")
+import tool
 
 #
 # 连接数据库帮助类
@@ -82,11 +85,18 @@ class Database :
 
         offset = (int(num) * (int(page) - 1) )
         pageSql = "select * from ( " + sql + " ) limit " + str(num) + " offset " + str(offset) + " "
-        self.out(pageSql, args) 
-        conn = self.getConn()
-        cursor = conn.cursor()
-        listRes = cursor.execute(sql, args).fetchall()
-        return (count, listRes)   
+        listRes = self.executeQuery(pageSql, args)
+        return (count, listRes)  
+
+    def executeQueryOffset(self, sql, offset, num, *args):
+        args = self.turnArray(args)
+        # count = self.getCount(sql, args)
+
+        pageSql = "select * from ( " + sql + " ) limit " + str(num) + " offset " + str(offset) + " "
+        listRes = self.executeQuery(pageSql, args)
+        return listRes
+
+
     #查询列表array[map] eg: [{'id': u'id02', 'birth': u'birth01', 'name': u'name02'}, {'id': u'id03', 'birth': u'birth01', 'name': u'name03'}]
     def executeQuery(self, sql, *args):
         args = self.turnArray(args)
@@ -95,6 +105,12 @@ class Database :
         conn = self.getConn()
         cursor = conn.cursor()
         res = cursor.execute(sql, args).fetchall()
+
+        if(res is not None):
+            for item in res:
+                for key in item:
+                    item[key] = tool.encode(item[key])
+
         return res   
     def executeQueryOne(self, sql, *args):
         args = self.turnArray(args)

@@ -5,6 +5,8 @@ import json
 import os
 import sys
 import time
+import uuid
+import random
 ########################################
 # from cv_makecolor import MakeColor
 # 不需要上下文的工具类
@@ -13,6 +15,37 @@ import time
 # import tool
 # tool.exe
 
+
+def getRandom(start=0, stop=10):
+    return int(random.uniform(start, stop))
+
+def getUuid():
+    return (str(uuid.uuid1())).split("-")[0]
+# 编码问题
+def encode(string):
+    t = type(string)
+    res = string
+    if(t == unicode):
+        # res = res.encode('unicode-escape').decode('string_escape') 
+        res = res.encode('utf-8')
+        # print(t, string, "->", res)
+    elif(t == int):
+        pass
+    else:
+        pass
+    return res
+
+# 获取某个模块或者 class 值为value的变量名
+def getClassName(cla, value):
+    keys = dir(cla)
+    for key in keys:
+        ret = hasattr(cla, key) 
+        if(ret == True) :
+            method = getattr(cla, key)#获取的是个对象
+            if(value == method):
+                return key
+
+    return "None key"
 
 
 #exe the shell cmd, return the string encode by utf-8

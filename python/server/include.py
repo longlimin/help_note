@@ -33,6 +33,7 @@ from python_singleton import singleton
 import tool
 import C
 from cvhelp import CvHelp
+import MSGTYPE
 
 
 
