@@ -18,7 +18,8 @@ WALKER
 1q
 
 
-//fq
+
+//
 插件 switchyOmega.crx 网盘
 软件 shadowsock.exe   网盘/github
     ubuntu_server
@@ -32,10 +33,18 @@ WALKER
 
 代理配置 Omega.*.bak 网盘
 
-//web
+
+//
 39.107.26.100  
 root 
 RUAho1234
+
+
+我叫540
+5201314chenpeng
+5201314chen
+
+
 
 
 /usr/local/nginx
