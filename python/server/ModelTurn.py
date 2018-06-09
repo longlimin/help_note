@@ -13,11 +13,12 @@ from include import *
 # 转动角度    周期内持续时间
 # 
 #  
-t_time_default = 4000
+t_time_default = 2000
 t_default = 90
 t_turn_default = 15 #默认左右转动15d
 
 ######################################
+@singleton
 class ModelTurn:
     test = ''
 # default位置角度 
@@ -81,6 +82,10 @@ class ModelTurn:
         if(ifMove):
             sleepTime = self.calcSpeed(speed)
             # port, hz, dcFrom, dcTo, dcDeta, sleepTime
+            # System().openPortPwm(self.t_port, self.t_hz, dcMoveTo)
+            # time.sleep(0.5)
+            # System().closePortPwm(self.t_port)
+            # costTime = 999
             costTime = System().controlPwmAsync(self.t_port, self.t_hz, dcMoveFrom, dcMoveTo, self.t_dc_deta, sleepTime)
             self.t_dc_now = dcMoveTo  #更新当前dc为新dc
             print('耗时: ' + str(costTime))

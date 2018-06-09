@@ -17,9 +17,9 @@ from include import *
 class ModelDht11:
     def __init__(self):
                     #data
-        self.m_port = 20
+        self.m_port = 12
         self.m_status = 0
-        System.closePort(self.m_port)
+        System().closePort(self.m_port)
 
     def get(self, callback):
         self.callback = callback
@@ -29,13 +29,14 @@ class ModelDht11:
         tm = timeMark()
 
         data = self.readData()
-        res = self.parseData()
+        res = self.parseData(data)
 
         timeOut(tm, '温度读取')
 
         self.callback(res)
         return
-    def readData(self,  port = self.m_port):
+    def readData(self):
+        port = self.m_port
         data = []
         system = System()
         system.turnOut(port)

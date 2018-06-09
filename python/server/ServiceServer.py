@@ -39,6 +39,124 @@ class ServiceServer:
                 msgs = [msg]
         return msgs
 
+
+
+
+# 输入控制
+    def doInput(self, cmd):
+        msgs = []
+        msg = Msg()
+        msg.data = {"info":cmd}
+        msg.info = "输入控制"
+        if(cmd == "show"):
+            msg.msgType = -1000
+            msg.data["info"] = "显示用户列表"
+            print("本地存储登录用户列表：" + str(len(self.users)))
+            print(self.users)
+        elif(cmd == "local"):
+            msg.data["info"] = "本地广播"
+            msg.msgType = -1
+            pass
+        else:
+            pass
+        msgs.append(msg)
+        return msg
+# 系统方法控制
+    def doMethod(self, msg, method, params):
+        # params = params.encode('utf-8')
+        # method = method.encode('utf-8')
+
+        # tool.doMethod(self, method, params)
+        print("class:  " + self.__class__.__name__)    #className
+        print("method: ", method)    #list
+        print("params: ", params)    #:arg1: 'a1', arg2: 'a2' 
+        #检查成员
+        ret = hasattr(self, method) #因为有func方法所以返回True 
+        if(ret == True) :
+            #获取成员
+            method = getattr(self, method)#获取的是个对象
+            return method(msg, params) 
+        else :
+            print("Error ! 该方法不存在")
+            msg.data["res"] = "false"
+            msg.data["info"] = "该方法不存在"
+            return [msg]
+
+# left right head back space stop
+    def move(self, msg, param):
+        print("move", param)
+        params = param.split("-")[0]
+        if(params == 'left'):
+            ModelMove().turnLeft()
+        elif(params == 'right'):
+            ModelMove().turnRight()
+        elif(params == 'head'):
+            ModelMove().moveHead()
+        elif(params == 'back'):
+            ModelMove().moveBack()
+        elif(params == 'space'):
+            ModelMove().space()
+        elif(params == 'stop'):
+            ModelMove().stop()
+        elif(params == 'faster'):
+            ModelMove().moveFaster(1)
+        elif(params == 'slower'):
+            ModelMove().moveFaster(-1)
+        elif(params == 'movefasterto'):
+            dc = param.split("-")[1]
+            dc = int(dc)
+            ModelMove().moveFasterTo(dc)
+        elif(params == 'turnrevert'):
+            ModelMove().turnRevert()
+        elif(params == 'moveleft'):
+            ModelMove().moveLeft()
+        elif(params == 'moveright'):
+            ModelMove().moveRight()
+
+        msg.data["info"] = "move"
+        return [msg]
+
+# 0 1 
+    def cameraTurn(self, msg, params):
+        # obj = json.loads(params)
+        ff = int(params)
+        if(params == "0"):
+            deta = 20
+            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+        elif(params == "1"):
+            deta = -20
+            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
+        elif(ff == -1):
+            deta = 0
+            (ifMove, info, costTime) = ModelTurn().turnTo()
+        else:
+            (ifMove, info, costTime) = ModelTurn().turnTo(ff)
+
+        msg.data["res"] = 1
+        msg.data["info"] = info + " " + str(costTime)
+        msg.data["cmd"] = 2
+        return [msg]
+
+
+
+
+# 文件下载
+    def file(self, msg, params):
+        print(params)
+
+        pass
+
+
+    def login(self, msg, params):
+        msg.data["info"] = params["id"] + "-" + params["pwd"]
+        msg.data["res"] = 1
+        msg.data["cmd"] = 2
+        return [msg]
+
+
+
+
+
 # cmd类型控制 
     def doCmd(self, cmd, params, msg):
         dc = self.db
@@ -383,124 +501,6 @@ class ServiceServer:
         
      
         return msg
-
-
-# 输入控制
-    def doInput(self, cmd):
-        msgs = []
-        msg = Msg()
-        msg.data = {"info":cmd}
-        msg.info = "输入控制"
-        if(cmd == "show"):
-            msg.msgType = -1000
-            msg.data["info"] = "显示用户列表"
-            print("本地存储登录用户列表：" + str(len(self.users)))
-            print(self.users)
-        elif(cmd == "local"):
-            msg.data["info"] = "本地广播"
-            msg.msgType = -1
-            pass
-        else:
-            pass
-        msgs.append(msg)
-        return msg
-# 系统方法控制
-    def doMethod(self, msg, method, params):
-        # params = params.encode('utf-8')
-        # method = method.encode('utf-8')
-
-        # tool.doMethod(self, method, params)
-        print("class:  " + self.__class__.__name__)    #className
-        print("method: ", method)    #list
-        print("params: ", params)    #:arg1: 'a1', arg2: 'a2' 
-        #检查成员
-        ret = hasattr(self, method) #因为有func方法所以返回True 
-        if(ret == True) :
-            #获取成员
-            method = getattr(self, method)#获取的是个对象
-            return method(msg, params) 
-        else :
-            print("Error ! 该方法不存在")
-            msg.data["res"] = "false"
-            msg.data["info"] = "该方法不存在"
-            return [msg]
-
-# left right head back space stop
-    def move(self, msg, param):
-        print("move", param)
-        params = param.split("-")[0]
-        if(params == 'left'):
-            ModelMove().turnLeft()
-        elif(params == 'right'):
-            ModelMove().turnRight()
-        elif(params == 'head'):
-            ModelMove().moveHead()
-        elif(params == 'back'):
-            ModelMove().moveBack()
-        elif(params == 'space'):
-            ModelMove().space()
-        elif(params == 'stop'):
-            ModelMove().stop()
-        elif(params == 'faster'):
-            ModelMove().moveFaster(1)
-        elif(params == 'slower'):
-            ModelMove().moveFaster(-1)
-        elif(params == 'movefasterto'):
-            dc = param.split("-")[1]
-            dc = int(dc)
-            ModelMove().moveFasterTo(dc)
-        elif(params == 'turnrevert'):
-            ModelMove().turnRevert()
-        elif(params == 'moveleft'):
-            ModelMove().moveLeft()
-        elif(params == 'moveright'):
-            ModelMove().moveRight()
-
-        msg.data["info"] = "move"
-        return [msg]
-
-# 0 1 
-    def cameraTurn(self, msg, params):
-        # obj = json.loads(params)
-        ff = int(params)
-        if(params == "0"):
-            deta = 20
-            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
-        elif(params == "1"):
-            deta = -20
-            (ifMove, info, costTime) = ModelTurn().turnDeta(deta)
-        elif(ff == -1):
-            deta = 0
-            (ifMove, info, costTime) = ModelTurn().turnTo()
-        else:
-            (ifMove, info, costTime) = ModelTurn().turnTo(ff)
-
-        msg.data["res"] = 1
-        msg.data["info"] = info + " " + str(costTime)
-        msg.data["cmd"] = 2
-        return [msg]
-
-
-
-
-# 文件下载
-    def file(self, msg, params):
-        print(params)
-
-        pass
-
-
-    def login(self, msg, params):
-        msg.data["info"] = params["id"] + "-" + params["pwd"]
-        msg.data["res"] = 1
-        msg.data["cmd"] = 2
-        return [msg]
-
-
-
-
-
-
 
 
 

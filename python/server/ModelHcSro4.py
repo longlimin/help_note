@@ -24,7 +24,7 @@ class ModelHcSro4:
         self.m_ports =      [31,       33]
         self.m_status =     [0, 0]
 
-        System.closePorts(self.m_ports)
+        System().closePorts(self.m_ports)
 
     def get(self, callback):
         self.callback = callback

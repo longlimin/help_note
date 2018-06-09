@@ -144,7 +144,7 @@ class System:
 # 读取端口
     def getPort(self, port):
         res = GPIO.input(port)
-        self.gin[port] = res
+        self.s_gin[port] = res
         return res
 # 设置输出端口值
     def setPort(self, port, value=0):

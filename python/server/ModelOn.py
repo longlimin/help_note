@@ -16,7 +16,7 @@ from include import *
 @singleton
 class ModelOn:
     def __init__(self):
-        self.m_ports = (20, 21, 22, 32)
+        self.m_ports = (16, 18, 22, 32)
         self.m_status = {}
     def get(self, callback):
         self.callback = callback
@@ -28,9 +28,9 @@ class ModelOn:
         res = []
         i = 0
         for port in self.m_ports:
-            # res[i] = System().getPort(port)
-            res.append(int(random.uniform(1, 10)))
-            self.m_status[port] = res[i]
+            va = System().getPort(port)
+            res.append(va)  # int(random.uniform(1, 10))
+            self.m_status[port] = va
             i += 1
 
         timeOut(tm, '通用开关量监控')

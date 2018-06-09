@@ -110,12 +110,12 @@ from template import Template
 from cv_makecolor import MakeColor
 
 # 导入模块Class
-# from system import System
-# from ModelTurn import ModelTurn
-# from ModelMove import ModelMove
+from system import System
+from ModelTurn import ModelTurn
+from ModelMove import ModelMove
 from ModelOn import ModelOn
-# from ModelHcSro4 import ModelHcSro4
-# from ModelDht11 import ModelDht11
+from ModelHcSro4 import ModelHcSro4
+from ModelDht11 import ModelDht11
 
 # 导入服务
 from Msg import Msg

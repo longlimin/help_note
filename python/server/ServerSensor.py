@@ -25,19 +25,19 @@ class ServerSensor:
 
             if(nowt % (100 * de / 5) == 0):             # 0.2s
                 pass
-                ModelOn().get(self.callbackOn)      #通用状态
-            elif(nowt % (1 * de) == 0):             # 1S
+            if(nowt % (1 * de) == 0):             # 1S
                 pass
-            elif(nowt % (2 * de) == 0):           # 2S
+            if(nowt % (2 * de) == 0):           # 2S
                 # ModelHcSro4().get(self.callbackHcSro4)  # 超声波
+                ModelOn().get(self.callbackOn)      #通用状态
                 pass
-            elif(nowt % (5 * de) == 0):           # 5S
+            if(nowt % (5 * de) == 0):           # 5S
                 pass
-            elif(nowt % (10 * de) == 0):           # 10S
+            if(nowt % (10 * de) == 0):           # 10S
                 pass
-            elif(nowt % (150 * de) == 0):           # 120S
+            if(nowt % (150 * de) == 0):           # 120S
                 pass
-                # ModelDht11().get(self.callbackDht11)    # 温湿度
+                ModelDht11().get(self.callbackDht11)    # 温湿度
 
 
             nowt += 1
@@ -48,10 +48,12 @@ class ServerSensor:
 
     def callbackOn(self, res=   [0, 1, 0, 0]):
         pass
-        
+        print(res)
     def callbackDht11(self, res=(0, 0)):
+        print(res)
         pass
     def callbackHcSro4(self, res=0):
+        pint(res)
         pass
 
 
