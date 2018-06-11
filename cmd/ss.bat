@@ -8,8 +8,8 @@ tasklist|find /i "bash" || start bash
 tasklist|find /i "sublime_text" || start "sublime" "D:\Program Files\Sublime Text 3\sublime_text.exe" 
 
 
-tasklist|find /i "360chrome" || start "360chrome" "D:\360\360Chrome\Chrome\Application\360chrome" 
-tasklist|find /i "chrome" || start "google chrome" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" 
+tasklist|find /i "chrome.exe" || start "google chrome" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" 
+tasklist|find /i "360chrome.exe" || start "360chrome" "D:\360\360Chrome\Chrome\Application\360chrome" 
 
 ::tasklist|find /i "TIM.exe" || start "TIM" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\TIM"
 tasklist|find /i "QQ.exe" || start "QQ" "C:\Program Files (x86)\Tencent\QQ\Bin\QQ"

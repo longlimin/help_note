@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*- 
 
-try:
-    import RPi.GPIO as GPIO    
-except RuntimeError:
-    print("Error importint RPI.GPIO!") 
+import RPi.GPIO as GPIO    
+
 
 
 from include import *

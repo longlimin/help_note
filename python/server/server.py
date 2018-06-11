@@ -19,8 +19,8 @@ sleep(1)
 # serverHttp.start()
 
 # 线程 Opencv监控摄像头 识别图像 调用socket推送消息
-# serverCamera = ServerCamera(serverSocket)
-# serverCamera.start()
+serverCamera = ServerCamera(serverSocket)
+serverCamera.start()
 
 # 线程 各种传感器监控 轮循监控
 # serverSensor = ServerSensor(serverSocket)

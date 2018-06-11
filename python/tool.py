@@ -15,13 +15,22 @@ import random
 # import tool
 # tool.exe
 
+# img二维数组 压缩 value=0-255 100/height
+# 1字节Byte = 8bit = 256编码  16进制2位 2f
+def makeByte(img):
+    res = ''
+    size = img.size
+    for row in img:
+        for col in row:
+            res += hex(col)[2:4]
+    return res
 
 def getRandom(start=0, stop=10):
     return int(random.uniform(start, stop))
 
 def getUuid():
     return (str(uuid.uuid1())).split("-")[0]
-# 编码问题
+# 编码问题  
 def encode(string):
     t = type(string)
     res = string

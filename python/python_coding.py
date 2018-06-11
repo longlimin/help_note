@@ -52,6 +52,13 @@ tr.replace(old, new[, max])
 str.replace("is", "was", 3);
 #多行注释"""   '''
 
+'a'->65
+ord('a')
+chr(65)
+整数形式的字符串进行转
+str()
+int()
+
 #数组  list ####################################
 days = ['Monday', 'Tuesday', 'Wednesday',
         'Thursday', 'Friday'] ;

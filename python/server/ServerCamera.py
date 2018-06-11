@@ -44,7 +44,8 @@ class ServerCamera:
         fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/self
         fps = int(fps)
         print 'size:'+ sizeStr + ' fps:' + str(fps)  
-
+        newSize = (20, 20 * size[1] / size[0])
+        print ('toSize:',newSize)
         # 视频文件保存
         # fourcc = cv2.VideoWriter_fourcc(*'XVID')
         # out = cv2.VideoWriter(filePath+'res_mv.avi',fourcc, fps, size)
@@ -88,25 +89,36 @@ class ServerCamera:
             # 记录数据库  
             # 推送提醒socket 
             if(detectCount > 0):
-                msg = Msg()
                 tt = time.strftime("%Y%m%d%H%M%S", time.localtime())
                 id = 'res_' + tt + '_' + str(count) + '.png'
-                msg.data['res'] = id
+                msg = Msg()
+                msg.data['id'] = id
+                msg.data['title'] = '有人出现'
+                msg.data['text'] = '图片：'+id
                 msg.data['type'] = 'push'
-                msg.data['cmd'] = 300
+                msg.data['cmd'] = MSGTYPE.SYS_DECT_ON
                 path = filePath + id
                 mycv.save(path, frame)
                 db.insertFile(id, tt, path)
                 if(self.serverSocket):
                     self.serverSocket.sendImpl(msg.toString())
                     pass
-
                 pass
             ############################图片输出
-            # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
-            # out.write(frame)    # 存入视频文件
             self.rtmpPush(frame) # 存入管道
-            sleep(0.5)
+            # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
+            frame = mycv.getGray(frame) #0-255
+            frame = cv2.resize(frame, newSize)
+            byts = tool.makeByte(frame)
+            msg = Msg()
+            msg.data['res'] = byts
+            msg.data['w'] = newSize[0]
+            msg.data['h'] = newSize[1]
+            msg.data['cmd'] = MSGTYPE.SYS_PHOTO #图片数据
+            self.serverSocket.sendImpl(msg.toString())
+
+            # out.write(frame)    # 存入视频文件
+            sleep(2.5)
             pass
         camera.release()
         # Release everything if job is finished
@@ -134,6 +146,10 @@ class ServerCamera:
         self.pipe = sp.Popen(command, stdin=sp.PIPE) #,shell=False
         pass
     def rtmpPush(self, frame):
+
+
+
+
         if(self.pipe):
             self.pipe.stdin.write(frame.tostring()) 
         pass

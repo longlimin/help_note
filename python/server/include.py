@@ -100,6 +100,8 @@ def _byteify(data, ignore_dicts = False):
 
 
 
+
+
 from python_sqlite import Database
 
 # 数据库工具
@@ -110,12 +112,16 @@ from template import Template
 from cv_makecolor import MakeColor
 
 # 导入模块Class
-from system import System
-from ModelTurn import ModelTurn
-from ModelMove import ModelMove
-from ModelOn import ModelOn
-from ModelHcSro4 import ModelHcSro4
-from ModelDht11 import ModelDht11
+try:
+    from system import System
+    from ModelTurn import ModelTurn
+    from ModelMove import ModelMove
+    from ModelOn import ModelOn
+    from ModelHcSro4 import ModelHcSro4
+    from ModelDht11 import ModelDht11
+except Exception as e:
+    print("Error import !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  ")
+    print(e) 
 
 # 导入服务
 from Msg import Msg
@@ -128,8 +134,6 @@ from server_socket import ServerSocket
 
 from ServerCamera import ServerCamera
 from ServerSensor import ServerSensor
-
-
 
 
 

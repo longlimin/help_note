@@ -17,10 +17,10 @@ class ServiceDb:
     def __init__(self):
         self.db = Database()
     def insertFile(self, id, time, path):
-        self.db.execute('insert o file values(?, ?, ?) ', id, time, path)
+        self.db.execute('insert into file values(?, ?, ?) ', id, time, path)
 
     def insertSocket(self, id, time, msg):
-        self.db.execute('insert o socket values(?, ?, ?) ', id, time, msg)
+        self.db.execute('insert into socket values(?, ?, ?) ', id, time, msg)
 
 
 
