@@ -27,13 +27,19 @@ function make(){
 
     time_from='2018-4-10'
     time_to='2099-11-06'
-
+    dotype='default'
     if [ "$#" = "2" ]   #2018-4-10 2018-11-1
     then
         time_from=$1
         time_to=$2
+    elif [ "$#" = "3" ]
+    then
+        time_from=$1
+        time_to=$2
+        dotype=$3
     else
-        echo 'eg: ./help_git_branch.sh 374df577eff9dd587ff349e40a477fd0a8c39669 55835fbc61a79bd78382c2d026d788aaed1902b3'
+        echo 'eg: ./help_git_branch.sh 339669 558353 <test/show测试并复制补丁到e/,>'
+        exit
     fi
     echo 'diff '$time_from' -> '$time_to
 
@@ -46,7 +52,7 @@ function make(){
         line
         echo '同步开始 '$dir_diff' -> '$dir_to 
         line
-        log $dir_from $dir_diff $dir_to $time_from $time_to &   #异步同步等待 
+        log $dir_from $dir_diff $dir_to $time_from $time_to $dotype &   #异步同步等待 
         wait
 
         echo '同步完成 '$dir_diff' -> '$dir_to
@@ -63,17 +69,25 @@ function log(){
     local todir=$3
     local timefrom=$4
     local timeto=$5
+    local dotype=$6
     cd $nowdir  #进入源目录
      
-    diff $timefrom $timeto $nowdir $diffdir $todir   #比对分支差异文件并复制移动
+    diff $timefrom $timeto $nowdir $diffdir $todir $dotype   #比对分支差异文件并复制移动
 
 }
 function diff(){
-    if [ "$#" = "5" ] 
+    if [ "$#" = "6" ] 
     then
         local nowdir=$3
         local diffdir=$4
         local todir=$5
+        local dotype=$6
+        if [ "$dotype" = 'test' ]
+        then
+            todir='/mnt/e/make'
+            echo '测试差异，处理文件到目录'$todir'，生成补丁文件夹'
+            mkdir $todir -p
+        fi   
 
         local diffdirLen=${#diffdir}+1  #/斜杠占位
         line
@@ -94,6 +108,7 @@ function diff(){
             local fileFromPath=$nowdir'/'$itemdiff         #/mnt/e/workspace/echat_desktop                 /app    /modules/chat/services/chatService.js 源文件真实路径
             local newItemDiff=${fileFromPath:$diffdirLen}  #                                                       /modules/chat/services/chatService.js 目标相对路径
             local fileToPath=$todir'/'$newItemDiff         #/mnt/e/workspace/obcpweb/pro/desktop                   /modules/chat/services/chatService.js 目标真实路径
+            
             # echo $i' '$fileFromPath' -> '$fileToPath
             mkFileDir $fileToPath   #确保文件所在目录存在 否则cp失败
             if [ -f $fileFromPath ] # 源文件存在 
