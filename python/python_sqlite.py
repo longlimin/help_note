@@ -100,7 +100,7 @@ class Database :
     #查询列表array[map] eg: [{'id': u'id02', 'birth': u'birth01', 'name': u'name02'}, {'id': u'id03', 'birth': u'birth01', 'name': u'name03'}]
     def executeQuery(self, sql, *args):
         args = self.turnArray(args)
-        self.out(sql, args) 
+        # self.out(sql, args) 
 
         conn = self.getConn()
         cursor = conn.cursor()
@@ -125,7 +125,7 @@ class Database :
     #执行sql或者查询列表 并提交
     def execute(self, sql, *args):
         args = self.turnArray(args)
-        self.out(sql, args) 
+        # self.out(sql, args) 
 
         conn = self.getConn()
         cursor = conn.cursor()
@@ -137,7 +137,7 @@ class Database :
     #查询列名列表array[str]  eg: ['id', 'name', 'birth']
     def getColumnNames(self, sql, *args):
         args = self.turnArray(args)
-        self.out(sql, args) 
+        # self.out(sql, args) 
 
         conn = self.getConn()
         if(not conn is None):

@@ -193,23 +193,9 @@ class ServiceDb:
         db = self.db
 
 # 文件模块
-        db.execute(
-            ''' 
-            create table if not exists file(
-                id      text primary key,
-                time    text not null,
-                path    text 
-            )
-            ''' 
-        )
+        db.execute( ''' create table if not exists file( id text primary key,time    text not null, path    text  ) '''  )
 # socket日志
-        db.execute( ''' 
-            create table if not exists socket(
-                id      text primary key,
-                time    text not null,
-                msg     text 
-            )
-            ''' )
+        db.execute( '''  create table if not exists socket( id      text primary key, time    text not null, msg     text ) ''' )
 
 
 # 聊天模块

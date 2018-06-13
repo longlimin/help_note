@@ -5,16 +5,16 @@ from include import *
 # @singleton
 class Msg:
     """Socket send server msg struct""" 
-    msgType = 0
-    toSysKey = ""
-    toKey = ""
-    fromSysKey = ""
-    fromKey = ""
-    info = ""
-    ok = ""
-    data = {}
-
     def __init__(self):
+        self.msgType = 0
+        self.toSysKey = ""
+        self.toKey = ""
+        self.fromSysKey = ""
+        self.fromKey = ""
+        self.info = ""
+        self.ok = ""
+        self.data = {}
+        
         self.names = ("msgType", "toSysKey", "toKey", "fromSysKey", "fromKey", "id", "info", "ok", "data")
         self.snames = ("mt", "tsk", "tk", "fsk", "fk", "id", "in", "ok", "data")
         
@@ -22,6 +22,7 @@ class Msg:
         # self.info = "from terminal"
         self.msgType = -2                #默认广播本系统
         self.toSysKey = "raspberrypi"    #默认发给本系统 
+        
         # msg.toKey = "1000"
     def init(self, jsonstr):
         fromMsg = yaml.safe_load(jsonstr)

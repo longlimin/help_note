@@ -23,6 +23,10 @@ def makeByte(img):
     for row in img:
         for col in row:
             res += hex(col)[2:4]
+
+
+
+            
     return res
 
 def getRandom(start=0, stop=10):

@@ -44,7 +44,8 @@ class ServerCamera:
         fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/self
         fps = int(fps)
         print 'size:'+ sizeStr + ' fps:' + str(fps)  
-        newSize = (20, 20 * size[1] / size[0])
+        ss = 300
+        newSize = (ss, ss * size[1] / size[0])
         print ('toSize:',newSize)
         # 视频文件保存
         # fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -98,27 +99,24 @@ class ServerCamera:
                 msg.data['type'] = 'push'
                 msg.data['cmd'] = MSGTYPE.SYS_DECT_ON
                 path = filePath + id
+                frame = cv2.resize(frame, newSize)
                 mycv.save(path, frame)
                 db.insertFile(id, tt, path)
                 if(self.serverSocket):
                     self.serverSocket.sendImpl(msg.toString())
+                    # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
+                    self.sendImg(newSize, path)
                     pass
                 pass
             ############################图片输出
             self.rtmpPush(frame) # 存入管道
-            # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
-            frame = mycv.getGray(frame) #0-255
-            frame = cv2.resize(frame, newSize)
-            byts = tool.makeByte(frame)
-            msg = Msg()
-            msg.data['res'] = byts
-            msg.data['w'] = newSize[0]
-            msg.data['h'] = newSize[1]
-            msg.data['cmd'] = MSGTYPE.SYS_PHOTO #图片数据
-            self.serverSocket.sendImpl(msg.toString())
+            # path1 = "_temp.png" 
+            # mycv.save(path1, frame)
+            # self.sendImg(newSize, path1)
+
 
             # out.write(frame)    # 存入视频文件
-            sleep(2.5)
+            # sleep(1)
             pass
         camera.release()
         # Release everything if job is finished
@@ -153,6 +151,30 @@ class ServerCamera:
         if(self.pipe):
             self.pipe.stdin.write(frame.tostring()) 
         pass
+    def sendImg(self, newSize, path):
+        # frame = mycv.getGray(frame) #0-255
+        # frame = cv2.resize(frame, newSize)
+        # # print(frame.size)
+        # print(frame)
+        # byts = tool.makeByte(frame)
+        # msg = Msg()
+        # msg.data['res'] = byts
+        # msg.data['w'] = newSize[0]
+        # msg.data['h'] = newSize[1]
+        # msg.data['cmd'] = MSGTYPE.SYS_PHOTO #图片数据
+        # self.serverSocket.sendImpl(msg.toString())
+        with open(path, 'rb') as f:
+            byts = base64.b64encode(f.read())
+            msg = Msg()
+            msg.data['res'] = byts
+            msg.data['w'] = newSize[0]
+            msg.data['h'] = newSize[1]
+            msg.data['cmd'] = MSGTYPE.SYS_PHOTO # 图片数据
+            self.serverSocket.sendImpl(msg.toString())
+
+
+
+
 
 # 关闭监控识别
     def stop(self):
