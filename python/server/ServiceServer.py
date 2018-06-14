@@ -136,14 +136,32 @@ class ServiceServer:
         msg.data["info"] = info + " " + str(costTime)
         msg.data["cmd"] = 2
         return [msg]
+    def takePhoto(self, msg, params):
+
+        photoPath = ""
+        with open(path, 'rb') as f:
+            byts = base64.b64encode(f.read())
+            msg.data['id'] = id
+            msg.data['res'] = byts
+            msg.data['cmd'] = MSGTYPE.SYS_PHOTO_DETAIL # 图片数据
+            self.serverSocket.sendImpl(msg.toString())
 
 
 
 
 # 文件下载
     def file(self, msg, params):
-        print(params)
-
+        # print(params)
+        id = params.get("id", "")
+        filePath = C.filePath
+        path = filePath + id
+        if(id != ""):
+            with open(path, 'rb') as f:
+                byts = base64.b64encode(f.read())
+                msg.data['id'] = id
+                msg.data['res'] = byts
+                msg.data['cmd'] = MSGTYPE.SYS_PHOTO_DETAIL # 图片数据
+                self.serverSocket.sendImpl(msg.toString())
         pass
 
 

@@ -70,6 +70,6 @@ DOLL_IN_OR_OUT_BY_NAME_TYPE = 206#某房间进入退出房间信息
     #图片传输监控模块
 SYS_DECT_ON = 300#检测提醒
 SYS_PHOTO = 301#图片数据
-
+SYS_PHOTO_DETAIL = 302#图片大数据
 
 

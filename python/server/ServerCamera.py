@@ -24,7 +24,7 @@ class ServerCamera:
         mycv = CvHelp()
         sleep(3)
         # 视频来源
-        filePath='/mnt/e/nginx-rtmp/'
+        filePath=C.filePath
         # filePath=''
         camera = cv2.VideoCapture(filePath+"test2.mp4") # 从文件读取视频
 
@@ -44,7 +44,7 @@ class ServerCamera:
         fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/self
         fps = int(fps)
         print 'size:'+ sizeStr + ' fps:' + str(fps)  
-        ss = 300
+        ss = 64
         newSize = (ss, ss * size[1] / size[0])
         print ('toSize:',newSize)
         # 视频文件保存
@@ -52,7 +52,7 @@ class ServerCamera:
         # out = cv2.VideoWriter(filePath+'res_mv.avi',fourcc, fps, size)
         self.rtmpInit()
 
-        lineWidth = 1 + int((size[1]-400) / 400)# 400 1 800 2 1080 3
+        lineWidth = 2 + int((size[1]-400) / 400)# 400 1 800 2 1080 3
         textSize = size[1] / 1000.0# 400 0.45 
         heightDeta = size[1] / 20 + 10# 400 20
         count = 0
@@ -94,18 +94,20 @@ class ServerCamera:
                 id = 'res_' + tt + '_' + str(count) + '.png'
                 msg = Msg()
                 msg.data['id'] = id
+                msg.data['time']=tt
                 msg.data['title'] = '有人出现'
                 msg.data['text'] = '图片：'+id
                 msg.data['type'] = 'push'
-                msg.data['cmd'] = MSGTYPE.SYS_DECT_ON
                 path = filePath + id
-                frame = cv2.resize(frame, newSize)
                 mycv.save(path, frame)
                 db.insertFile(id, tt, path)
                 if(self.serverSocket):
-                    self.serverSocket.sendImpl(msg.toString())
+                    # self.serverSocket.sendImpl(msg.toString())
                     # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
-                    self.sendImg(newSize, path)
+                    frame = cv2.resize(frame, newSize)
+                    path = filePath + "_temp.png"
+                    mycv.save(path, frame)
+                    self.sendImg(msg, path)
                     pass
                 pass
             ############################图片输出
@@ -116,7 +118,7 @@ class ServerCamera:
 
 
             # out.write(frame)    # 存入视频文件
-            # sleep(1)
+            sleep(1)
             pass
         camera.release()
         # Release everything if job is finished
@@ -151,7 +153,7 @@ class ServerCamera:
         if(self.pipe):
             self.pipe.stdin.write(frame.tostring()) 
         pass
-    def sendImg(self, newSize, path):
+    def sendImg(self, msg, path):
         # frame = mycv.getGray(frame) #0-255
         # frame = cv2.resize(frame, newSize)
         # # print(frame.size)
@@ -165,10 +167,9 @@ class ServerCamera:
         # self.serverSocket.sendImpl(msg.toString())
         with open(path, 'rb') as f:
             byts = base64.b64encode(f.read())
-            msg = Msg()
             msg.data['res'] = byts
-            msg.data['w'] = newSize[0]
-            msg.data['h'] = newSize[1]
+            # msg.data['w'] = newSize[0]
+            # msg.data['h'] = newSize[1]
             msg.data['cmd'] = MSGTYPE.SYS_PHOTO # 图片数据
             self.serverSocket.sendImpl(msg.toString())
 
