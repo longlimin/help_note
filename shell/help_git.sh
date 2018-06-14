@@ -21,28 +21,103 @@ dir_open=''
 # //使用diff导出差异文件列表
 # git diff aa6492c71ea38371d95f26fc705ebc9be1edfd19 e4514488d2772ea2acb8e62442eaea6e3331dbec --stat --name-only
 
-# ./help_git.sh time_from time_to
+# ./help_git.sh time_from <time_to>     <test>
+# ./help_git.sh branch_from branch_to <test>
 function make(){
-    dir_open=`pwd`  #记录使用脚本的路径
+    sta=0
+    dotype='do'
+    time_from='from'
+    time_to='to'
 
-    time_from='2018-4-10'
-    time_to='2099-11-06'
-
-    if [ "$#" = "2" ]   #2018-4-10 2018-11-1
+    if (( $# >= 1 ))
     then
-        time_from=$1
-        time_to=$2
-    else
-        if [ "$#" = "1" ] #2018-4-10
-        then
+        str1=$1
+        if [[ "$1" =~ [0-9]{4}-[0-9]{1,2}-[0-9]{1,2}.* ]]
+        then  # 第一个参数为时间
+            sta=1
             time_from=$1
-            time_to=`date "+%Y-%m-%d" `
-        else
+            if (( $# >= 2 ))    #时间 <时间> / <类型>
+            then
+                if [[ "$2" =~ [0-9]{4}-[0-9]{1,2}-[0-9]{1,2}.* ]]
+                then
+                    time_to=$2
+                    if (( $# >= 3 ))    # 时间 时间 <类型>
+                    then
+                        if [[ "$3" =~ test|show ]]
+                        then
+                            dotype=$3
+                        else
+                            sta=999
+                        fi
+                    fi
+                elif [[ "$2" =~ test|show ]]    #时间 <类型>
+                then
+                    time_to=`date "+%Y-%m-%d" `
+                    dotype=$2
+                else
+                    sta=999
+                fi
+            else # 时间
+                time_to=`date "+%Y-%m-%d" `
+            fi
+        elif (( ${#str1}  < 6 ))
+        then
+            sta=1
             time_from=`date "+%Y-%m-%d" -d yesterday`
             time_to=`date "+%Y-%m-%d" `
+            dotype=$1
+        else  # 分支 分支
+            if (( $# >= 2 ))
+            then
+                sta=2
+                if (( $# >= 3 ))
+                then
+                    if [[ "$3" =~ test|show ]]
+                    then
+                        time_from=$1
+                        time_to=$2
+                        dotype=$3
+                    else
+                        sta=999
+                    fi
+                else
+                    time_from=$1
+                    time_to=$2
+                fi
+            else
+                sta=999
+            fi
         fi
+    else    # 无参数 默认时间昨天-now
+        sta=1
+        time_from=`date "+%Y-%m-%d" -d yesterday`
+        time_to=`date "+%Y-%m-%d" `
     fi
-    echo '时间 '$time_from' -> '$time_to
+
+    echo 'from:'$time_from' to:'$time_to' dotype:'$dotype' sta:'$sta
+
+    if (( $sta == 1 ))
+    then
+        makeTime $time_from $time_to $dotype
+    elif (( $sta == 2 ))
+    then
+        makeBranch $time_from $time_to $dotype
+    else
+        show
+    fi
+
+}
+function show(){
+    echo '
+# Eg:    
+# ./help_git.sh 2018-06-01 <2018-09-02> <test>
+# ./help_git.sh adjdadlakfjdkafj dajflajsdflasdjfasdklf <test>
+    '
+}
+function makeTime(){
+    dir_open=`pwd`  #记录使用脚本的路径
+
+    echo '时间 '$1' -> '$2
 
     # echo ${#dirs_from[@]}
     for ((i=0; i<${#dirs_from[@]}; i++))
@@ -53,7 +128,7 @@ function make(){
         line
         echo '同步开始 '$dir_diff' -> '$dir_to 
         line
-        log $dir_from $dir_diff $dir_to $time_from $time_to &   #异步同步等待 
+        logTime $dir_from $dir_diff $dir_to $1 $2 $3 &   #异步同步等待 
         wait
 
         echo '同步完成 '$dir_diff' -> '$dir_to
@@ -62,21 +137,47 @@ function make(){
     done
     cd $dir_open    #回到当初位置
 }
+function makeBranch(){
+    dir_open=`pwd`  #记录使用脚本的路径
 
-function log(){
+     
+    echo '版本 '$1' -> '$2
+
+    # echo ${#dirs_from[@]}
+    for ((i=0; i<${#dirs_from[@]}; i++))
+    do
+        local dir_from=${dirs_from[$i]}
+        local dir_diff=${dirs_diff[$i]}
+        local dir_to=${dirs_to[$i]}   
+        line
+        echo '同步开始 '$dir_diff' -> '$dir_to 
+        line
+        cd $dir_from
+        diff $1 $2 $dir_from $dir_diff $dir_to $3 &   #比对分支差异文件并复制移动
+
+        wait
+
+        echo '同步完成 '$dir_diff' -> '$dir_to
+        line
+        echo
+    done
+    cd $dir_open    #回到当初位置
+}
+function logTime(){
     # echo $@
     local nowdir=$1
     local diffdir=$2
     local todir=$3
     local timefrom=$4
     local timeto=$5
+    local dotype=$6
     cd $nowdir  #进入源目录
     local cmd="git log --pretty=format:%H --after=$time_from --before=$time_to"
     echo $cmd
     line
     local branchs=`$cmd`    #期间分支集合
     # echo $branchs
-    git log --pretty=format:"%h %an %cr %s " --after=$time_from --before=$time_to
+    # git log --pretty=format:"%h %an %cr %s " --after=$time_from --before=$time_to
 
     local arr=(` echo $branchs | tr ' ' "\n" `)
     if (( ${#arr[@]} < 2 ))
@@ -86,18 +187,23 @@ function log(){
     else
         local branch_from=${arr[-1]}
         local branch_to=${arr[0]}
-        diff $branch_from $branch_to $nowdir $diffdir $todir   #比对分支差异文件并复制移动
+        diff $branch_from $branch_to $nowdir $diffdir $todir $dotype   #比对分支差异文件并复制移动
     fi    
-    
-
-
-}
+} 
 function diff(){
-    if [ "$#" = "5" ] 
+    echo $@
+    if [ "$#" = "6" ] 
     then
         local nowdir=$3
         local diffdir=$4
         local todir=$5
+        local dotype=$6
+        if [[ "$dotype" =~ test|show ]]
+        then
+            todir='/mnt/e/make'
+            echo '测试差异，处理文件到目录'$todir'，生成补丁文件夹'
+            mkdir $todir -p
+        fi   
 
         local diffdirLen=${#diffdir}+1  #/斜杠占位
         line
@@ -118,6 +224,7 @@ function diff(){
             local fileFromPath=$nowdir'/'$itemdiff         #/mnt/e/workspace/echat_desktop                 /app    /modules/chat/services/chatService.js 源文件真实路径
             local newItemDiff=${fileFromPath:$diffdirLen}  #                                                       /modules/chat/services/chatService.js 目标相对路径
             local fileToPath=$todir'/'$newItemDiff         #/mnt/e/workspace/obcpweb/pro/desktop                   /modules/chat/services/chatService.js 目标真实路径
+            
             # echo $i' '$fileFromPath' -> '$fileToPath
             mkFileDir $fileToPath   #确保文件所在目录存在 否则cp失败
             if [ -f $fileFromPath ] # 源文件存在 
