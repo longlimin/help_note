@@ -14,6 +14,9 @@ select * from dba_users; --查看数据库里面所有用户，前提是你是有dba权限的帐号，如
 select * from all_users; --查看你能管理的所有用户！
 select * from user_users; --查看当前用户信息 ！
 
+---查看表列名
+SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = upper('student') ORDER BY COLUMN_ID
+
 ---
 --oracle sql 操作模板
 ---
