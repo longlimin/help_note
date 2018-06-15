@@ -26,17 +26,17 @@ class ServerCamera:
         # 视频来源
         filePath=C.filePath
         # filePath=''
-        camera = cv2.VideoCapture(filePath+"test2.mp4") # 从文件读取视频
+        # camera = cv2.VideoCapture(filePath+"test2.mp4") # 从文件读取视频
 
-        # camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
-        # if (camera.isOpened()):# 判断视频是否打开 
-        #     print 'Open camera'
-        # else:
-        #     print 'Fail to open camera!'
-        #     return
-        # camera.set(cv2.CAP_PROP_FRAME_WIDTH, 600)  # 2560x1920 2217x2217 2952×1944 1920x1080
-        # camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 450)
-        # camera.set(cv2.CAP_PROP_FPS, 5)
+        camera = cv2.VideoCapture(0) # 参数0表示第一个摄像头 摄像头读取视频
+        if (camera.isOpened()):# 判断视频是否打开 
+            print 'Open camera'
+        else:
+            print 'Fail to open camera!'
+            return
+        camera.set(cv2.CAP_PROP_FRAME_WIDTH, 600)  # 2560x1920 2217x2217 2952×1944 1920x1080
+        camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 450)
+        camera.set(cv2.CAP_PROP_FPS, 5)
 
         # 视频属性
         size = (int(camera.get(cv2.CAP_PROP_FRAME_WIDTH)), int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))

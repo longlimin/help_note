@@ -33,6 +33,7 @@ TB_ADD_APPLY= "tb_add_apply";
 
 
 filePath = '/mnt/e/nginx-rtmp/'
+# filePath = '/home/pi/resource'
 
 
 
