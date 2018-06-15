@@ -105,15 +105,15 @@ class ServerCamera:
                     # self.serverSocket.sendImpl(msg.toString())
                     # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
                     frame = cv2.resize(frame, newSize)
-                    path = filePath + "_temp.png"
+                    path = filePath + "_temp_send_small.png"
                     mycv.save(path, frame)
                     self.sendImg(msg, path)
                     pass
                 pass
             ############################图片输出
             self.rtmpPush(frame) # 存入管道
-            # path1 = "_temp.png" 
-            # mycv.save(path1, frame)
+            path1 = "_temp_now.png" 
+            mycv.save(path1, frame)
             # self.sendImg(newSize, path1)
 
 

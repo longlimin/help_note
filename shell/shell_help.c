@@ -51,17 +51,7 @@ touch test.txt //创建文件
     ldconfig 通常在系统启动时运行，加载新的动态链接库时，就需要手工运行这个命令。 
     ln -s source     dist     #建立软连接 快捷方式
     ln     source     dist     #建立硬连接 硬链接不能连接两个不同文件系统上的文件 类似拷贝副本
-    kill -9 25718 25719 25811 25812 一次排在后边
-    killall nginx #删除所有依据名字
-    ps -elf | grep <-v反转> 'aaa'
-    ps - ef”是Red Hat 里查看所有进程的命令。这时检索出的进程将作为下一条命令“grep LOCAL=NO”的输入。
-　  grep LOCAL=NO”的输出结果是，所有含有关键字“LOCAL=NO”的进程，这是Oracle数据库中远程连接进程的共同特点。
-　　grep -v grep”是在列出的进程中去除含有关键字“grep”的进程。
-　　cut -c 9-15”是截取输入行的第9个字符到第15个字符，而这正好是进程号PID。
-　　xargs kill -9”中的xargs命令是用来把前面命令的输出结果（PID）作为“kill -9”命令的参数，并执行该令。    
-    #杀死指定规则进程
-    ps -ef | grep /usr/local/apache-tomcat-document/ | grep -v grep | cut -c 9-15 | xargs kill -9
-    ps -ef | grep 'mccp.conf' | grep -v grep | cut -c 9-15 | xargs kill -9
+    
     chown -R wasup:wasgrp com 修改用户及组权限
 
     #去掉控制台颜色代码##########
@@ -81,6 +71,36 @@ touch test.txt //创建文件
     server ntp.nict.jp iburst
     server time.nist.gov iburst
     sudo /etc/init.d/ntp restart    //重启
+////////////////////////////////////////////////////////eval xargs
+st="ls | more"
+`$st`   //将 | 和 more 看成了参数，而不是将文件按页显示
+eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php shell
+
+xargs 
+#杀死指定规则进程
+ps -ef | grep /usr/local/apache-tomcat-document/ | grep -v grep | cut -c 9-15 | xargs kill -9
+ps -ef | grep 'mccp.conf' | grep -v grep | cut -c 9-15 | xargs kill -9
+kill -9 25718 25719 25811 25812 一次排在后边
+killall nginx #删除所有依据名字
+ps -elf | grep <-v反转> 'aaa'
+ps - ef”是Red Hat 里查看所有进程的命令。这时检索出的进程将作为下一条命令“grep LOCAL=NO”的输入。
+　  grep LOCAL=NO”的输出结果是，所有含有关键字“LOCAL=NO”的进程，这是Oracle数据库中远程连接进程的共同特点。
+　　grep -v grep”是在列出的进程中去除含有关键字“grep”的进程。
+　　cut -c 9-15”是截取输入行的第9个字符到第15个字符，而这正好是进程号PID。
+　　xargs kill -9”中的xargs命令是用来把前面命令的输出结果（PID）作为“kill -9”命令的参数，并执行该令。    
+
+xargs的默认命令是echo，空格是默认定界符
+cat test.txt | xargs -n3 //多行
+cat test.txt | xargs -d'S' //设定分隔符
+arg.txt : 
+    file1.txt
+    file2.txt
+cat arg.txt | xargs -I {} cat -p {} -l  //{}占位符 替换
+->
+cat -p file1.txt -l
+cat -p file2.txt -l
+
+
 
 日期date格式化
 1.date "+%Y-%m-%d"  

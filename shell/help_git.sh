@@ -6,12 +6,12 @@
 ##-------------------------------- 
  
 #app 下面复制到desktop下面 而git路径在echat_desktop下面所以需要路径转换映射
-dirs_from=('/mnt/e/workspace/echat_desktop'     '/mnt/e/workspace/OBCP-Server'            )   #git目录
-dirs_diff=('/mnt/e/workspace/echat_desktop/app' '/mnt/e/workspace/OBCP-Server'        )   #源路径截取 把源文件app下面的东西按照原有路径层次同步到目标路径
-dirs_to=('/mnt/e/workspace/obcpweb/pro/desktop' '/mnt/e/workspace/obcpweb'            )   #覆盖同步路径
+dirs_from=('/mnt/e/workspace/echat_desktop'     '/mnt/e/workspace/OBCP-Server'         )   #git目录
+dirs_diff=('/mnt/e/workspace/echat_desktop/app' '/mnt/e/workspace/OBCP-Server/db/ddl;/mnt/e/workspace/OBCP-Server/db/dml;/mnt/e/workspace/OBCP-Server'    )   #源路径截取 把源文件app下面的东西按照原有路径层次同步到目标路径
+dirs_to=('/mnt/e/workspace/obcpweb/pro/desktop' '/mnt/e/workspace/obcpdb/TABLE;/mnt/e/workspace/obcpdb/DATA;/mnt/e/workspace/obcpweb'    )   #覆盖同步路径
 dir_open=''
 
-
+_make_path='/mnt/e/make'    # 补丁包路径
 # //git 日志格式化
 # git log --pretty=format:"%H %an %cd %cr"
 # git log --pretty=format:"%H %an %cd %cr" --after="2018-4-09 17:37:42" --before="2022-11-06 17:45:42"
@@ -98,9 +98,11 @@ function make(){
 
     if (( $sta == 1 ))
     then
+        rm $_make_path -R
         makeTime $time_from $time_to $dotype
     elif (( $sta == 2 ))
     then
+        rm $_make_path -R
         makeBranch $time_from $time_to $dotype
     else
         show
@@ -126,9 +128,9 @@ function makeTime(){
         local dir_diff=${dirs_diff[$i]}
         local dir_to=${dirs_to[$i]}   
         line
-        echo '同步开始 '$dir_diff' -> '$dir_to 
+        echo '同步开始 "'$dir_diff'" -> "'$dir_to'"'
         line
-        logTime $dir_from $dir_diff $dir_to $1 $2 $3 &   #异步同步等待 
+        logTime "$dir_from" "$dir_diff" "$dir_to" $1 $2 $3 &   #异步同步等待 
         wait
 
         echo '同步完成 '$dir_diff' -> '$dir_to
@@ -177,7 +179,7 @@ function logTime(){
     line
     local branchs=`$cmd`    #期间分支集合
     # echo $branchs
-    # git log --pretty=format:"%h %an %cr %s " --after=$time_from --before=$time_to
+    git log --pretty=fromat:"%h %an %cr %s " --after=$time_from --before=$time_to
 
     local arr=(` echo $branchs | tr ' ' "\n" `)
     if (( ${#arr[@]} < 2 ))
@@ -191,21 +193,13 @@ function logTime(){
     fi    
 } 
 function diff(){
-    echo $@
+    # echo $@
     if [ "$#" = "6" ] 
     then
         local nowdir=$3
-        local diffdir=$4
-        local todir=$5
+        local diffdir="$4" # 'dir/obcp-server/db/dml dir/obcp-server/db/ddl dir/obcp-server'
+        local todir="$5"   # 'dir/db/dml             dir/db/ddl             dir/obcpweb'
         local dotype=$6
-        if [[ "$dotype" =~ test|show ]]
-        then
-            todir='/mnt/e/make'
-            echo '测试差异，处理文件到目录'$todir'，生成补丁文件夹'
-            mkdir $todir -p
-        fi   
-
-        local diffdirLen=${#diffdir}+1  #/斜杠占位
         line
         local cmd="git diff $1 $2 --stat --name-only"
         echo $cmd
@@ -213,39 +207,70 @@ function diff(){
         line
         echo '共计差异文件 '${#files[@]}' 个. '
         line
-        #echo ${files[@]}
-        echo '路径 '$diffdir' -> '$todir' '
+        local nowdirLen=${#nowdir}+1  #/斜杠占位
+
+        local todirs=(`echo $todir|tr ";" "\n"`)
+        local diffdirs=(`echo $diffdir|tr ";" "\n"`)
+
+        echo '源路径:'$nowdir
+        for ((cc=0; cc< ${#todirs[@]}; cc++))   #有3种移动规则
+        do
+            echo '移动规则 ['$cc'] '${diffdirs[$cc]}' -> '${todirs[$cc]}
+        done
+        line
+        # echo $todir' '$diffdir
         local delFileCount=0    # 差异删除文件数
         local cpFileCount=0     # 差异覆盖/添加文件数
         local delFileCountRel=0 # 实际删除文件数
-        for ((i=0; i<${#files[@]}; i++))
+        for ((i=0; i<${#files[@]}; i++))    #每一个文件需要决定去处
         do
             local itemdiff=${files[$i]}                    #app/modules/chat/services/chatService.js
-            local fileFromPath=$nowdir'/'$itemdiff         #/mnt/e/workspace/echat_desktop                 /app    /modules/chat/services/chatService.js 源文件真实路径
-            local newItemDiff=${fileFromPath:$diffdirLen}  #                                                       /modules/chat/services/chatService.js 目标相对路径
-            local fileToPath=$todir'/'$newItemDiff         #/mnt/e/workspace/obcpweb/pro/desktop                   /modules/chat/services/chatService.js 目标真实路径
-            
-            # echo $i' '$fileFromPath' -> '$fileToPath
-            mkFileDir $fileToPath   #确保文件所在目录存在 否则cp失败
-            if [ -f $fileFromPath ] # 源文件存在 
-            then
-                echo "$i cp $newItemDiff"
-                cpFileCount=$[cpFileCount+1]
-                # echo "cp $fileFromPath $fileToPath "
-                cp $fileFromPath $fileToPath #-v    修改/添加文件 则覆盖文件
-            else
-                echo "$i rm $newItemDiff"
-                delFileCount=$[delFileCount+1]
-                # echo "rm $fileToPath"
-                if [ -f $fileToPath ] # 目标文件存在 
+            local fileFromPath=$nowdir'/'$itemdiff         #/mnt/e/workspace/echat_desktop/app /modules/chat/services/chatService.js 源文件真实路径
+
+            for ((cc=0; cc< ${#todirs[@]}; cc++))   #有3种移动规则
+            do
+                local todirnow=${todirs[$cc]}
+                local diffdirnow=${diffdirs[$cc]}
+                # echo 'fileFrom:'$fileFromPath' diff:'$diffdirnow
+                if [[ "$fileFromPath" =~ .*"$diffdirnow".* ]]
                 then
-                    delFileCountRel=$[delFileCountRel+1]
-                    rm $fileToPath  # 删除文件 源不存在了 目标存在的情况 就删除目标文件
-                fi
-            fi    
+                    if [[ "$dotype" =~ test|show ]]
+                    then
+                        todirnow=$_make_path
+                        # echo '测试差异，处理文件到目录'$todirnow'，生成补丁文件夹'
+                        mkdir $todirnow -p
+                    fi   
+
+                    local diffdirLen=${#diffdirnow}+1  #/斜杠占位
+                    local newItemDiff=${fileFromPath:$diffdirLen}  #                                   /modules/chat/services/chatService.js 目标相对路径
+                    local fileToPath=$todirnow'/'$newItemDiff #/mnt/e/workspace/obcpweb/pro/desktop    /modules/chat/services/chatService.js 目标真实路径
+                    
+                    # echo $i' '$fileFromPath' -> '$fileToPath
+                    mkFileDir $fileToPath   #确保文件所在目录存在 否则cp失败
+                    if [ -f $fileFromPath ] # 源文件存在 
+                    then
+                        echo "$i [$cc] cp ${fileFromPath:$nowdirLen}"
+                        cpFileCount=$[cpFileCount+1]
+                        # echo "cp $fileFromPath $fileToPath "
+                        cp $fileFromPath $fileToPath #-v    修改/添加文件 则覆盖文件
+                    else
+                        echo "$i [$cc] rm ${fileFromPath:$nowdirLen}"
+                        delFileCount=$[delFileCount+1]
+                        # echo "rm $fileToPath"
+                        if [ -f $fileToPath ] # 目标文件存在 
+                        then
+                            delFileCountRel=$[delFileCountRel+1]
+                            rm $fileToPath  # 删除文件 源不存在了 目标存在的情况 就删除目标文件
+                        fi
+                    fi 
+                    break
+                fi   
+            done
         done
+
+
         line
-        echo "差异添加/修改: $cpFileCount  差异删除: $delFileCount  实际删除: $delFileCountRel"
+        echo "差异添加/修改: $cpFileCount  差异删除: $delFileCount  实际删除文件数除: $delFileCountRel"
     else
         echo '比对分支并移动需要 版本号from to 和 源路径 目标路径 args:'$@
     fi
