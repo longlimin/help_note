@@ -34,9 +34,9 @@ class ServerCamera:
         else:
             print 'Fail to open camera!'
             return
-        camera.set(cv2.CAP_PROP_FRAME_WIDTH, 600)  # 2560x1920 2217x2217 2952×1944 1920x1080
-        camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 450)
-        camera.set(cv2.CAP_PROP_FPS, 5)
+        camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)  # 2560x1920 2217x2217 2952×1944 1920x1080
+        camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 608)
+        camera.set(cv2.CAP_PROP_FPS, 1)
 
         # 视频属性
         size = (int(camera.get(cv2.CAP_PROP_FRAME_WIDTH)), int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
@@ -44,7 +44,7 @@ class ServerCamera:
         fps = camera.get(cv2.CAP_PROP_FPS)  # 30p/self
         fps = int(fps)
         print 'size:'+ sizeStr + ' fps:' + str(fps)  
-        ss = 64
+        ss = 300
         newSize = (ss, ss * size[1] / size[0])
         print ('toSize:',newSize)
         # 视频文件保存
@@ -85,6 +85,14 @@ class ServerCamera:
             mycv.drawText(frame, (0, heightDeta * 2), nframe, textSize=textSize, lineWidth=lineWidth )
             mycv.drawText(frame, (0, heightDeta * 3), ntime, textSize=textSize, lineWidth=lineWidth )
 
+            ############################图片输出
+            self.rtmpPush(frame) # 存入管道
+            path1 = filePath + "_temp_now.png" 
+            mycv.save(path1, frame)
+            # self.sendImg(newSize, path1)
+
+
+            # out.write(frame)    # 存入视频文件
             # 当发现人脸 进行 操作 
             # 保存图片文件 
             # 记录数据库  
@@ -105,19 +113,12 @@ class ServerCamera:
                     # self.serverSocket.sendImpl(msg.toString())
                     # 结果帧处理 存入文件 / 推流 / ffmpeg 再处理
                     frame = cv2.resize(frame, newSize)
-                    path = filePath + "_temp_send_small.png"
+                    path = filePath + "_temp_now_small.png"
                     mycv.save(path, frame)
                     self.sendImg(msg, path)
                     pass
                 pass
-            ############################图片输出
-            self.rtmpPush(frame) # 存入管道
-            path1 = "_temp_now.png" 
-            mycv.save(path1, frame)
-            # self.sendImg(newSize, path1)
-
-
-            # out.write(frame)    # 存入视频文件
+            
             sleep(1)
             pass
         camera.release()

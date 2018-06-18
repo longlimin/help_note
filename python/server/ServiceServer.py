@@ -161,8 +161,8 @@ class ServiceServer:
                 msg.data['id'] = id
                 msg.data['res'] = byts
                 msg.data['cmd'] = MSGTYPE.SYS_PHOTO_DETAIL # 图片数据
-                self.serverSocket.sendImpl(msg.toString())
-        pass
+                return [msg]
+        return []
 
 
     def login(self, msg, params):

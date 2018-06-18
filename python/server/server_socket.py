@@ -118,19 +118,20 @@ class ServerSocket:
         return res
     # 发送一条消息       
     def sendImpl(self, jsonstr):
+        st = timeMark()
         length = len(jsonstr)
         # byte4 = struct.pack('<i', length)   # 转换 int 4byte 低位前置
         # bytejson = bytes(jsonstr)
         # struct.unpack('<i', p)      # 逆转 4byte int 
-        print("###send>>>>   ")
-        print(jsonstr)
+        print("###send>>>>   len." + str(length))
+        # print(jsonstr)
      
         header = [length]
         # struct中:!代表Network order，3I代表3个unsigned int数据
         headPack = struct.pack("!1I", *header)
         data = headPack+jsonstr.encode('utf-8')
         self.client.send(data)
-
+        timeOut(st)
     # 当收到一条消息
     def onReceive(self, jsonstr):
         fromMsg = Msg()

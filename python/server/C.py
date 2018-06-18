@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-  
 
-
+import os
 
 
 robotId = "1424234500"
@@ -30,10 +30,10 @@ TB_USER_USER = "tb_user_user";
 #><group0添加群 类似>   ,fromid,toid,nickname,yanzhen,time
 TB_ADD_APPLY= "tb_add_apply";
 
-
-
 filePath = '/mnt/e/nginx-rtmp/'
-# filePath = '/home/pi/resource'
+if(not os.path.exists(filePath)):
+    filePath = '/home/pi/resource/'
+    
 
 
 
