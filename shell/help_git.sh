@@ -249,7 +249,7 @@ function diff(){
                     mkFileDir $fileToPath   #确保文件所在目录存在 否则cp失败
                     if [ -f $fileFromPath ] # 源文件存在 
                     then
-                        echo "$i [$cc] cp ${fileFromPath:$nowdirLen}"
+                        printf "% 3d [$cc] cp ${fileFromPath:$nowdirLen} \n" "$i"
                         cpFileCount=$[cpFileCount+1]
                         # echo "cp $fileFromPath $fileToPath "
                         cp $fileFromPath $fileToPath #-v    修改/添加文件 则覆盖文件

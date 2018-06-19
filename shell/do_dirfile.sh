@@ -45,13 +45,15 @@ function dirfile_init(){
         echo '参数1为目录'
         return 1
     fi 
-    realPath=`pwd`'/'$path
+    # realPath=`pwd`'/'$path
+    realPath=$path
     echo 'rootPath: '$realPath 
     dirfile_showdir $realPath '1'
+    echo '总文件数量: '$fileCount
     
 }
 function dirfile_showdir(){
-    #realPath=$1
+    realPath=$1
     nowLevel=$2
     
     if [[ $nowLevel > $dirfile_level && $dirfile_level > 0 ]]  
@@ -63,18 +65,19 @@ function dirfile_showdir(){
     then
         return 0 
     fi
-    
     toolsMakestr '-' ${#1} #$nowLevel
     res=`cat $_toolsres`
-    echo $1 #'    level:'$nowLevel'      dir_level:'$dirfile_level
+    # echo $1 #'    level:'$nowLevel'      dir_level:'$dirfile_level
     
     if [[ $dirfile_ifcop > 0 ]]
     then
         arr=(`ls $1`)
         len=${#arr[@]}
-        echo ' file number: '$len
+        printf 'files:% 3d  '$1"\n" "$len"
     else
         #echo $res'====file>>'
+        echo '>>>'$1
+        local i=0
         for obj in `ls $1`
         do
             path=$1'/'$obj
@@ -82,7 +85,9 @@ function dirfile_showdir(){
             then 
                 if [[ $obj =~ $dirfile_reg ]] 
                 then
-                    echo $res''$obj
+                    i=$[i+1]
+                    printf "% 3d"$res''$obj"\n" "$i"
+                    doFile $1 $obj
                 fi  
             fi 
         done
@@ -100,25 +105,14 @@ function dirfile_showdir(){
     done 
 }
  
-
-function dirfile_show(){
-    path=$1
-    _rootDir=`pwd`
-    realPath=$_rootDir'/'$path 
-    echo "now path: "$realPath
-    for obj in `ls  $realPath`
-    do
-        obj=$realPath'/'$obj
-        if [ -f "$obj" ]
-        then
-            echo $obj" file"
-        elif [ -d "$obj" ]
-        then
-            echo $obj" directory"
-        else
-            echo $obj" not file or directory"
-        fi 
-    done
+fileCount=0
+function doFile(){
+    local path=$1
+    local fileName=$2
+    local _rootDir=`pwd`
+    local filePath=$path'/'$fileName 
+    # count=$[count+1]
+    fileCount=`expr $fileCount + 1`
 }
  
 

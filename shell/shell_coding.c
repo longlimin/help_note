@@ -1,5 +1,7 @@
 //shell 编程
 
+echo 
+printf "% 3d"$res''$obj"\n" "$i"
 
 //赋值
 var=$(命令) 
