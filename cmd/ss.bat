@@ -29,6 +29,7 @@ tasklist|find /i "plsqldev.exe" || start "plsqldev" "C:\Users\ThinkPad\AppData\R
 ::echat_desktop proj
 E:
 cd /workspace/echat_desktop
+tasklist | find /i "node.exe" && taskkill /f /t /im node.exe
 tasklist|find /i "node.exe" || start "node" node proxy.js 
  
 ::github tool

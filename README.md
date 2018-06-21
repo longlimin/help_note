@@ -10,10 +10,12 @@ python后台通信服务提供以及树莓派专用的GPIO控制
     * HandlerSystem.py  tornado的树莓派系统业务处理
     * HandlerStudent.py tornado的简易表业务处理
 
-    * server_socket.py  基于python-socket模块提供的socket后台服务
+    * server.py 树莓派后台服务器整合启动 连接各个GPIO各个后台服务集成长连接通信
+
     * ServiceServer.py  socket的树莓派系统业务处理
     * ServiceCamera.py  树莓派视频采集识别推送rtmp模块
 
+    * server_socket.py 基于socket模块提供的长连接通信服务
     * server_socketio.py 基于Flask socketio模块提供的websocket后台服务
 
     * system.py    树莓派GPIO控制基本工具
@@ -44,7 +46,7 @@ opencv-python的使用学习
 * do
     * 各种do_*.sh文件的启动入口，其实因为老是./*还要写个sh后缀，比较懒，所以没后缀
 * do_git.sh
-    * 个人的各git仓库路径配置，实现./do update/push/init 来达到初始化 更新 推送所有配置的项目
+    * 个人的各git仓库路径配置，实现./do update/push/init 来达到初始化 更新 推送所有配置    的项目
 * help_git.sh
     * 工作所需要的 仓库a提交后需要差异同步到仓库b
 * shell_help.c
