@@ -21,6 +21,10 @@ class Template:
         res = ""
         res = self.id + " - " + self.name
 
-        return res
+        return res  
+
+
+if __name__ == '__main__':
+    Template()
 
         
