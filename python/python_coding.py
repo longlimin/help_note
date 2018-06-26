@@ -62,7 +62,8 @@ int()
 #数组  list ####################################
 days = ['Monday', 'Tuesday', 'Wednesday',
         'Thursday', 'Friday'] ;
-
+字符串截取 数组
+str[0:3]
 #len(days) 获取长度
 #days[0] 获取第0个元素 -1尾元素
 #days.append('surday') 添加元素

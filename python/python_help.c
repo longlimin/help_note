@@ -28,7 +28,7 @@ keras//深度学习库 高层神经网络 CNN-卷积神经网络 RNN-循环神�
     tensorflowKeras//keras并不处理如张量乘法、卷积等底层操作。这些操作依赖于某种特定的、优化良好的张量操作库。Keras依赖于处理张量的库就称为“后端引擎”。Keras提供了三种后端引擎Theano/Tensorflow/CNTK，并将其函数统一封装，使得用户可以以同一个接口调用不同后端引擎的函数
     h5py
 opencv//源码安装 cv2 knn 图形视觉库 图形处理
-
+BeautifulSoup   //格式化html soup工具
 //没有pip
 wget "https://pypi.python.org/packages/source/p/pip/pip-1.5.4.tar.gz#md5=834b2904f92d46aaa333267fb1c922bb" --no-check-certificate
 unzip 
