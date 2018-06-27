@@ -58,16 +58,15 @@ class Http:
         return
     # 访问地址后 set-cookie自动被设置
     def doGet(self, url):
-        response = ""
+        response = "error" 
         try:
             response = self.opener.open(url)
             # self.show(response)
         except Exception as e:
-            response = "访问异常：" 
             print(e)
         return response
     def doPost(self, url, postData):
-        response = ""
+        response = "error" 
         try:
             if(postData):
                 postData = urllib.urlencode(postData)
@@ -77,7 +76,6 @@ class Http:
                 response  = self.opener.open(url)
             # self.show(response)
         except Exception as e:
-            response = "访问异常：" 
             print(e)
 
         return response

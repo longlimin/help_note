@@ -24,7 +24,7 @@ tasklist|find /i "Foxmail" || start "foxmail" "D:\Program Files\Foxmail 7.2\Foxm
 ::editor
 tasklist|find /i "WebStorm.exe" || start "WebStorm" "D:\Program Files (x86)\JetBrains\WebStorm 11.0.3\bin\WebStorm.exe" 
 
-tasklist|find /i "plsqldev.exe" || start "plsqldev" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\plsqldev"
+::tasklist|find /i "plsqldev.exe" || start "plsqldev" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\plsqldev"
  
 ::echat_desktop proj
 E:

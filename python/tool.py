@@ -115,18 +115,25 @@ def sleep(mills):
 def getNowTime():
     return int(time.time()*1000)
 def line():
-    print("\n--------------------------------\n")
+    print("--------------------------------\n")
 def toString(dictObj):
     res = "[ "
     for key in dictObj.keys():
         res = res + '' + key + ':' + dictObj[key] + ","
     res = res[0:len(res)-1] + " ]"
     return res
-
+# 补齐长度
+def fill(argStr, char=' ', toLen = 10):
+    length = len(argStr)
+    charLen = len(char)
+    for i in range((toLen - length) / charLen):
+        argStr = argStr + str(char)
+    return argStr
 def wait(waitTime=0):
     if(waitTime == 0):
         while(True):
             pass
+            sleep(999)
     else:
         sleep(1.0 * waitTime / 1000)
     return waitTime
