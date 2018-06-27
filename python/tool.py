@@ -6,6 +6,7 @@ import os
 import sys
 import time
 import uuid
+import threading
 import random
 ########################################
 # from cv_makecolor import MakeColor
@@ -29,6 +30,7 @@ def makeByte(img):
             
     return res
 
+
 def getRandom(start=0, stop=10):
     return int(random.uniform(start, stop))
 
@@ -47,6 +49,26 @@ def encode(string):
     else:
         pass
     return res
+
+# 递归转换对象词典 为 utf encode 避免Unicode!!!!!!!!!!!!
+def makeObj(data):
+    # if this is a list of values, return list of byteified values
+    if isinstance(data, list):
+        return [ makeObj(item) for item in data ]
+    # if this is a dictionary, return dictionary of byteified keys and values
+    # but only if we haven't already byteified it
+    if isinstance(data, dict):
+        res = {}
+        for key, value in data.iteritems():
+            res[encode(key)] = makeObj(value)
+        return res
+    # if it's anything else, return it in its original form
+    return encode(data)
+# 通过字符串 解析为json 并编码 Unicode
+def toJson(jsonStr):
+    return makeObj(json.loads(jsonStr))
+
+
 
 # 获取某个模块或者 class 值为value的变量名
 def getClassName(cla, value):
@@ -92,6 +114,29 @@ def sleep(mills):
 
 def getNowTime():
     return int(time.time()*1000)
+def line():
+    print("--------------------------------\n")
+def toString(dictObj):
+    res = "[ "
+    for key in dictObj.keys():
+        res = res + '' + key + ':' + dictObj[key] + ","
+    res = res[0:len(res)-1] + " ]"
+    return res
+# 补齐长度
+def fill(argStr, char=' ', toLen = 10):
+    length = len(argStr)
+    charLen = len(char)
+    for i in range((toLen - length) / charLen):
+        argStr = argStr + str(char)
+    return argStr
+def wait(waitTime=0):
+    if(waitTime == 0):
+        while(True):
+            pass
+            sleep(999)
+    else:
+        sleep(1.0 * waitTime / 1000)
+    return waitTime
 
 
 
@@ -100,7 +145,15 @@ def getNowTime():
 
 
 
+# 线程操作类
+class ThreadRun (threading.Thread):
+    def __init__(self, name, runCallback, daemon=True):
+        threading.Thread.__init__(self)
+        self.name = name
+        self.runCallback = runCallback
+        self.setDaemon(daemon)  # 子线程随主线程退出
 
-
-
-        
+    def run(self):
+        print "============Thread Start " + self.name
+        self.runCallback()
+        print "==Thread Stop  " + self.name

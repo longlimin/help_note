@@ -29,6 +29,8 @@ print(ret)
 if(ret == True) :
 #获取类方法l成员
 	ret = getattr(obj, 'func')#获取的是个对象
+callable(ret) #是否可调用 函数#########################
+
 	r = ret()
 	print(r)
 #反向类构建
@@ -62,7 +64,16 @@ int()
 #数组  list ####################################
 days = ['Monday', 'Tuesday', 'Wednesday',
         'Thursday', 'Friday'] ;
-
+字符串截取 数组
+str[0:3]
+字符串匹配
+re.search(pattern, string, [,flags])
+字符串分割
+>>> str="hello boy<[www.doiido.com]>byebye"
+>>> str.split("[")[1].split("]")[0]
+'www.doiido.com'
+>>> str.split("[")[1].split("]")[0].split(".")
+['www', 'doiido', 'com']
 #len(days) 获取长度
 #days[0] 获取第0个元素 -1尾元素
 #days.append('surday') 添加元素
