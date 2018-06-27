@@ -132,8 +132,7 @@ def fill(argStr, char=' ', toLen = 10):
 def wait(waitTime=0):
     if(waitTime == 0):
         while(True):
-            pass
-            sleep(999)
+            time.sleep(888)
     else:
         sleep(1.0 * waitTime / 1000)
     return waitTime

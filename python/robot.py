@@ -30,12 +30,32 @@ class Robot:
 
         return res  
 
-    def do(self, msg):
+# 音乐选择
+    def getMusic(self, count=-1):
+        url = ""
+        name = ""
+        with open('music.txt', 'r') as f:  
+            data = f.readlines()  #txt中所有字符串读入data  
+            
+            if(count == -1):
+                count = tool.getRandom(0, len(data))
+            else:
+                while(True):
+                    temp = tool.getRandom(0, len(data))
+                    if(temp != count):
+                        count = temp
+                        break
+            name = data[count]
+            url = "http://39.107.26.100:8088/file/" + name
+
+        return (url, name, count)
+# 智能应答 
+    def do(self, msg, userId="CC"):
         res = "" 
-        print("robot send:" + str(msg))
         response = self.http.doPost('http://www.tuling123.com/openapi/api', {
                 "key":self.apiKey,
                 "info":msg,
+                "userid":userId,
                 # "userInfo":{
                 #     "apiKey":self.apiKey,
                 #     "userId":self.userId,
@@ -53,9 +73,11 @@ class Robot:
         if(jsonStr != ""):
             res = tool.makeObj(json.loads(jsonStr))
             code = res.get("code", "")
-            if(code == 100000):
-                 print("robot访问成功 " + jsonStr)
+            print("Robot. " + str(msg) + " -> " + jsonStr)
+        else:
+            print("Robot. " + str(msg) + " -> error !!!!!!!!! ")
         return res
+
     def test(self):
         while(True):
             cmd=raw_input("")
@@ -73,4 +95,6 @@ class Robot:
 if __name__ == '__main__':
     r = Robot()
     r.test()
+    # print(r.getMusic())
+    # print(r.getMusic(1))
         
