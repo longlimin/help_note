@@ -64,7 +64,9 @@ def makeObj(data):
         return res
     # if it's anything else, return it in its original form
     return encode(data)
-
+# 通过字符串 解析为json 并编码 Unicode
+def toJson(jsonStr):
+    return makeObj(json.loads(jsonStr))
 
 
 
@@ -121,7 +123,13 @@ def toString(dictObj):
     res = res[0:len(res)-1] + " ]"
     return res
 
-
+def wait(waitTime=0):
+    if(waitTime == 0):
+        while(True):
+            pass
+    else:
+        sleep(1.0 * waitTime / 1000)
+    return waitTime
 
 
 
