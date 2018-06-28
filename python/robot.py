@@ -4,7 +4,10 @@ import tool
 from http import Http
 import time
 import json
+from python_sqlite import Database
+from auto163 import Auto163
 
+# @singlton
 class Robot:
     """机器人智能语义应答""" 
 
@@ -15,40 +18,93 @@ class Robot:
         self.id = "test id"
         self.name = "test name"
         self.http = Http()
+        self.auto163 = Auto163("Music")
         self.apiKey = "bfbf6432b655493b9e861b470bca9921"
         self.userId = "WalkerDust"
+        
+        self.db = Database()
+        self.db.execute(
+        ''' 
+        create table if not exists music(
+            url         text primary key,
+            name        text,
+            fromName    text,
+            count       text
+        )
+        ''' )
+        self.initMusic()
+        self.palyHistoryMusic = []
+        return 
 
-    def set(self, id, name):
-        self.id = id
-        self.name = name
+# 音乐模块
+    def initMusic(self):
+        li = ""
 
-        return self
+        count = self.db.getCount("select * from music ")
+        if(count <= 0): #毫无数据 则 加入默认数据
+            li = []
+            with open('music.txt', 'r') as f:  
+                data = f.readlines()  
+                for item in data:
+                    name = item.strip()
+                    url = "http://39.107.26.100:8088/file/" + name
+                    fromName = ""
+                    self.db.execute('insert into music values(?,?,?,?)', url, name, fromName,"5")                        
+        return    
 
-    def toString(self):
-        res = ""
-        res = self.id + " - " + self.name
+    # 内部点播 若有名字则按照名字本地搜索和云搜索 否则 按照type切歌
+    def getMusic(self, musicName="", fromName="", playType=0):
+        music = {}
 
-        return res  
-
-# 音乐选择
-    def getMusic(self, count=-1):
-        url = ""
-        name = ""
-        with open('music.txt', 'r') as f:  
-            data = f.readlines()  #txt中所有字符串读入data  
-            
-            if(count == -1):
-                count = tool.getRandom(0, len(data))
+        if(musicName != ""):
+            res=self.auto163.getMusic(musicName, fromName) # [music,music]
+            for item in res:
+                self.addMusic(item)
+            if(len(res) > 0):
+                music = res[0]
+        else:
+            if(playType == -1): #上一曲
+                if(len(self.palyHistoryMusic) > 1):
+                    music = self.palyHistoryMusic.pop()
+                    music = self.palyHistoryMusic.pop()
+            # elif(playType == 1):
             else:
-                while(True):
-                    temp = tool.getRandom(0, len(data))
-                    if(temp != count):
-                        count = temp
-                        break
-            name = data[count]
-            url = "http://39.107.26.100:8088/file/" + name
+                count = tool.getRandom(0, size)
 
-        return (url, name, count)
+        if(music.get("url", "") != ""):
+            self.palyHistoryMusic.append(music)
+            if(len(self.palyHistoryMusic) > 10):
+                self.palyHistoryMusic.pop(0)
+
+        return music
+    # 外部点播音乐记录
+    def addMusic(self, music):
+        self.palyHistoryMusic.append(music)
+        if(len(self.palyHistoryMusic) > 10):
+            self.palyHistoryMusic.pop(0)
+        url = music.get("url", "")
+        name = music.get("name", "")
+        fromName = music.get("fromName", "")
+        oldMusic = self.db.executeQueryOne("select * from music where url = ? " , url) 
+        if(oldMusic == None):
+            print("添加音乐：")
+            print(music)
+            self.db.execute('insert into music values(?,?,?,?)', url, name, fromName, "1")                        
+        else: #更新该音乐数据
+            print("更新音乐：")
+            count = int(oldMusic.get("count", 0))
+            count = str(count + 1)
+            music["count"] = count
+            print(music)
+            self.db.execute('update music set name=?, fromName=?, count=? where url=?', name, fromName, count, url)                        
+        return 
+    def removeMusic(self, url=""):
+        index = 0
+        print("移除音乐：" + url)
+        self.db.execute('update music set count=? where url = ? ', "0", url)     
+        return 
+
+
 # 智能应答 
     def do(self, msg, userId="CC"):
         res = "" 
@@ -95,6 +151,3 @@ class Robot:
 if __name__ == '__main__':
     r = Robot()
     r.test()
-    # print(r.getMusic())
-    # print(r.getMusic(1))
-        

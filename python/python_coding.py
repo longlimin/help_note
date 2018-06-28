@@ -64,11 +64,21 @@ int()
 #数组  list ####################################
 days = ['Monday', 'Tuesday', 'Wednesday',
         'Thursday', 'Friday'] ;
-字符串截取 数组
+#字符串
+name = name.strip() 去除行尾 特殊符号
+
+截取 数组
 str[0:3]
 字符串匹配
-re.search(pattern, string, [,flags])
-字符串分割
+str1 = "amsdflaskf1000slafj"
+str1.find('1000')#可以查找出索引值  12
+info=re.search(r'\d+',str1)#'\d'代表任意一个数字，'+'可以匹配数字一次或者无限次，只能匹配最前面的
+'1000'  
+info=re.findall(r'\d+',str1)#找到所有匹配的字符串，并把它们放到一个列表中
+['1000','1200']
+3、sub(pattern, repl, string , count=0, flags=0)    将字符串中匹配正则表达式的部分替换为其他值
+re.split(r':| ',str6)#split用来分割字符串，':|'的意思是只要看见冒号和空格就会分割成一部分  
+['imooc', 'java', 'c++', 'python', 'c#'] 
 >>> str="hello boy<[www.doiido.com]>byebye"
 >>> str.split("[")[1].split("]")[0]
 'www.doiido.com'
@@ -409,7 +419,7 @@ print( "访问模式 : ", fo.mode )
 print( "末尾是否强制加空格 : ", fo.softspace )
 
 str = fo.read(10);
-print( "读取的字符串是 : ", str )
+print( "读取的是 : ", str )
 
 # 查找当前位置
 position = fo.tell();
@@ -427,7 +437,20 @@ fo.close();
 #访问模式 :  wb
 #末尾是否强制加空格 :  0
 """
-
+行读取文件 
+with open('music.txt', 'r') as f:  
+    data = f.readlines()  #txt中所有读入data  
+    
+    if(count == -1):
+        count = tool.getRandom(0, len(data))
+    else:
+        while(True):
+            temp = tool.getRandom(0, len(data))
+            if(temp != count):
+                count = temp
+                break
+    name = data[count]
+    name = name.strip()
 """
 import os
 # 重命名文件test1.txt到test2.txt。

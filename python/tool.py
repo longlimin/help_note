@@ -8,6 +8,7 @@ import time
 import uuid
 import threading
 import random
+
 ########################################
 # from cv_makecolor import MakeColor
 # 不需要上下文的工具类
@@ -25,9 +26,6 @@ def makeByte(img):
         for col in row:
             res += hex(col)[2:4]
 
-
-
-            
     return res
 
 
@@ -66,6 +64,10 @@ def makeObj(data):
     return encode(data)
 # 通过字符串 解析为json 并编码 Unicode
 def toJson(jsonStr):
+    if(jsonStr == None or jsonStr == ""):
+        jsonStr = "{}"
+    if(jsonStr.strip()[0:1] != "{"):
+        jsonStr = "{'error':'" + jsonStr + "'}"
     return makeObj(json.loads(jsonStr))
 
 

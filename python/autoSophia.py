@@ -18,14 +18,17 @@ class AutoSophia:
 
         self.robot = Robot()
         self.http = Http()
-        self.name = "CC"
+        self.name = "CD"
         self.count = int(name[6:999])
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
         self.lastEchoTime = tool.getNowTime()   #上次说话时间
         self.maxDetaTime = 1000 * 60 * 3   # 最大沉默时间
         self.lastMusicTime = tool.getNowTime() 
-        self.maxMusicTime = 1000 * 60 * 4
-        self.count = -1
+        self.maxMusicTime = 1000 * 60 * 5
+        self.musicNow = {}
+        self.musicPlayType = -1
+        self.ifOnMusic = False
+        self.tail = " の... "
     def out(self, obj):
         print(self.name + "." + obj)
     def login(self):
@@ -110,12 +113,12 @@ class AutoSophia:
         self.showRoom(roomId)
         responce=self.http.doGet("http://drrr.com/room/?id=" + roomId)
         self.roomId = roomId
-        self.send("/me 大家好 我是" + self.name)
+        self.send("/me 大家好 我是暖手宝" + self.name + " 可以@我 点歌name(*^_^*) 通常只是沉默潜水 不会打扰大家啦 @必回哟(大概) Ps.不@也可能会回O(∩_∩)O")
         return
     def outRoom(self):
         self.out("离开房间:" + self.roomId)
-        self.send("/me CC好无聊啊 要出去溜达一会儿 ")
-        self.send("/me 我一定会回来的! ")
+        self.send("/me " + self.name + "好无聊啊 "+self.name +"要出去溜达一会儿" + self.tail)
+        self.send("/me "+self.name+"一定会回来的" + self.tail)
         self.showRoom(self.roomId)
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "leave":"leave", 
@@ -124,15 +127,15 @@ class AutoSophia:
         return 
     def getRooms(self, detail=False):
         tool.line()
-        self.out("房间列表")
+        # self.out("房间列表")
         responce=self.http.doGet("http://drrr.com/lounge?api=json")
         jsonObj = tool.makeObj(json.loads(responce.read()))
         rooms = jsonObj["rooms"]
         for i in range(len(rooms)):
             room = rooms[i]
             self.roomIndex[room["id"]] = room
-            self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
-        self.out("解析完毕")
+            # self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
+        # self.out("解析完毕")
     # 定时发送消息
     def sayHello(self):
         while(True):
@@ -143,14 +146,12 @@ class AutoSophia:
                     # message = "Now Time is "+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     detaTime = tool.getNowTime() - self.lastEchoTime # ms
                     if(detaTime > self.maxDetaTime):
-                        message = "/me 不知道该说什么(⊙﹏⊙)"
+                        message = "/me ^ ^"
                         self.send(message)
                         self.out(str(i) + "\t" + message)
                     detaTime = tool.getNowTime() - self.lastMusicTime # ms
-                    if(detaTime > self.maxMusicTime):
-                        (url, name, count) = self.robot.getMusic(self.count)
-                        self.count = count
-                        self.music(url, name)
+                    if(self.ifOnMusic and detaTime > self.maxMusicTime):
+                        self.playMusic()
 
                     time.sleep(10)
                 except Exception as e:
@@ -192,25 +193,61 @@ class AutoSophia:
             return
         self.out("Send." + message)
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
-                        "message":message, # [0:self.count * 4],
+                        "message":message, # [0:self.musicPlayType * 4],
                         "url":"",
                 })
         # self.out("发送[" + message + "]" + re[0:66])
         self.lastEchoTime = tool.getNowTime()
         return
     # 分享音乐
-    def music(self, url, name="Unknow"):
+    def playMusic(self, url="", name="", fromName=""):
+        if(url[0:4] != "http"):
+            music = self.robot.getMusic(name, fromName, self.musicPlayType)
+            # self.musicPlayType = count
+            url = music.get("url", "")
+            name = music.get("name", "")
+            fromName = music.get("fromName", "")
+            if(fromName != ""):
+                self.send("/me 一首" + name + "送给" + fromName + "" + self.tail)
         if(url == ""):
             return
-        self.out("Music." + url + " " + name )
+        self.out("url=" + url + " name=" + name + " fromName=" + fromName )
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
+                        "music":"music",
                         "name":name,
                         "url":url,
                 })
+        self.musicNow = {"url":url, "name":name, "fromName":fromName}
         self.lastMusicTime = tool.getNowTime()
         return
+    def listMusic(self):
+        print(self.robot.listMusic)
+    # 切歌控制 on/off/turn/prev/next/remove
+    def music(self, cmd="on"):
+        self.out("music:" + cmd)
+        if(cmd == "on"):
+            self.ifOnMusic = True
+            self.send("/me 已经打开音乐点播" + self.tail)
+        elif(cmd == "off"):
+            self.ifOnMusic = False
+            self.send("/me 已经关闭音乐点播" + self.tail)
+        elif(cmd == "turn"):
+            self.ifOnMusic = True
+            self.musicPlayType = 0
+            self.playMusic()
+        elif(cmd == "prev"):
+            self.ifOnMusic = True
+            self.musicPlayType = -1
+            self.playMusic()
+        elif(cmd == "next"):
+            self.ifOnMusic = True
+            self.musicPlayType = 1
+            self.playMusic()
+        elif(cmd == "remove"):
+            self.robot.removeMusic(self.musicNow.get("url", ""))
+            self.send("/me 降低音乐" + self.musicNow.get("name") + "播放频率 " + self.tail)
 
-
+        return 
     # 手动控制
     def inputHello(self):
         self.out("开启输入监控！")
@@ -219,19 +256,7 @@ class AutoSophia:
             try:
                 cmd=raw_input("")
                 if(cmd != ""):
-                    cc = cmd.split(' ')
-                    method = cc[0]
-                    ret = hasattr(self, method) #因为有func方法所以返回True 
-                    if(ret == True) :
-                        method = getattr(self, method)#获取的是个对象
-                        if(callable(method)):
-                            if(len(cc) >= 2):
-                                method(cc[1]) 
-                            else:
-                                method()
-                        else:
-                            print(method)
-                    else:
+                    if(not self.doMethod(cmd.split(" "))):
                         self.out("手动发送:" + cmd)
                         self.send(cmd)
                         time.sleep(1)
@@ -254,12 +279,6 @@ class AutoSophia:
                     self.roomIndex[self.roomId]['users'] = users
                 else:
                     self.roomIndex[self.roomId] = obj
-            # tool.line()
-            # print("talks:")
-            # print(talks)
-            # print("users:")
-            # print(users)
-            # tool.line()
             if(talks != ""):
                 for item in talks:
                     # print(item)
@@ -269,64 +288,159 @@ class AutoSophia:
                     msgFromName = item.get('from', {}).get('name', "")
                     if(msgFromName == ""):
                         msgFromName = item.get('user', {}).get('name', "")
+
+                    if( self.roomMsg.get(msgId, "") != "" or msgFromName == self.name or msgFromName == "" ): #已经处理过 或者是自己发送的 或者取出发送者失败
+                        break
+
+
+
                     if(msgType == 'me'):
                         msgData = item.get('content', "")
                     elif(msgType == 'message'):
                         msgData = item.get('message', "")
                     elif(msgType == 'join'):
                         # msgFromName = item.get('user', {}).get('name', "")
-                        msgData = '欢迎' + msgFromName + ' の !'
+                        msgData = '欢迎' + msgFromName + self.tail
                     elif(msgType == 'leave'):
-                        msgData = ' ' + msgFromName + ' 默默的离开了 の... '
+                        msgData = ' ' + msgFromName + ' 默默的离开了 ' + self.tail
                     elif(msgType == 'music'):
-                        msgData = item.get('name', "")
+                        music = item.get('music', {})
+                        name = music.get('name', '')
+                        url = music.get('url', '')
+                        music = { "name":name, "url":url, "fromName":msgFromName }
+                        self.robot.addMusic(music) #添加用户分享记录
+                        self.musicNow = music
+                        self.lastMusicTime = tool.getNowTime()
+                        msgData = self.name + '悄悄的的把' + msgFromName + '喜欢的歌' + name + '给记在小本子上 '  + self.tail
 
-                    # print(msgId, msgType, msgData, msgFromName)
-                    if( self.roomMsg.get(msgId, "") != "" or msgFromName == self.name or msgFromName == "" ): #已经处理过 或者是自己发送的 或者取出发送者失败
-                        pass
-                    else:  #未处理过 
-                        detaTime = tool.getNowTime() - self.lastEchoTime # ms 60s
-                        ran = tool.getRandom(0,self.maxDetaTime) / 1000 - 5    #0-180
-                        weight = (self.maxDetaTime - detaTime) / 1000
-                        self.out("发言权" + tool.fill(str(weight) + "" , ' ', 8) + " 随机数" + tool.fill(str(ran),' ', 8) + " fromName:" + tool.fill(msgFromName,' ',12) + " msgType:"+tool.fill(msgType,' ',10) + " " + msgData)
+                    self.roomMsg[msgId] = item #标记未已经处理 历史消息
 
-                        flag = 0 #不回复
-                        if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
-                            if( re.search('@' + self.name + " ", msgData) != None ):    #有@自己
+                    detaTime = tool.getNowTime() - self.lastEchoTime # ms 60s
+                    ran = tool.getRandom(0,self.maxDetaTime) / 1000 - 5    #0-180
+                    weight = (self.maxDetaTime - detaTime) / 1000
+                    self.out("发言权" + tool.fill(str(weight) + "" , ' ', 6) + " 随机数" + tool.fill(str(ran),' ', 6) + " fromName:" + tool.fill(msgFromName,' ',12) + " msgType:"+tool.fill(msgType,' ',10) + " " + msgData)
+
+                    flag = 0 #不回复
+                    if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
+                        if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
+                            ran = tool.getRandom(0,100)
+                            if(ran > 6):
                                 msgData = msgData[len(self.name) + 2: 9999]
                                 flag = 1
-                            elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高
-                                flag = 1
-                        else: #事件 
-                            flag = 2
+                            else:
+                                self.out("@权重=" + str(ran) + "太小！！！！！！！！！！！！！！")
+                                flag = 2
+                                msgData = "突然不想说话"+self.tail
+                        elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高
+                            flag = 1
+                    else: #事件 
+                        flag = 2
 
-                        res = ""
-                        if(flag == 1):  
+                    res = ""
+                    if(flag == 1):
+                        if(self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
                             robotRes = self.robot.do(msgData, self.name)
                             code = str(robotRes.get("code", ""))
                             if(code[0:1] != '4'):
                                 res = '@' + str(msgFromName) +" " + robotRes.get("text", "")
                             else:
                                 self.out("robot接口调用失败 code=" + code)
-                        elif(flag == 2):
-                            res = msgData
+                    elif(flag == 2):
+                        res = msgData
 
-                        if(res != "" and flag != 0):
-                            res = '/me ' + res
-                            self.send(res)
+                    if(res != "" and flag != 0):
+                        res = '/me ' + res
+                        self.send(res)
                         
-                    self.roomMsg[msgId] = item #标记未已经处理 历史消息
         except Exception as e:
             print("Exception:" + str(e))
         # tool.line()
         return res
-    
-    
+    # /do help   指令控制行为 
+    def filterCmd(self, msgData="", fromName=""):
+        res = True
+        msgData = msgData.strip()
+
+        # name 点歌
+        # 点歌 name
+        # 点 name 这首歌
+        flag = False
+        ppp = ['点歌','music','歌曲','点播','下面播放', '想听']
+        ooo = [
+            ('一首','献给大家'),
+            ('一首','送给大家'),
+            ('点','这首歌'),
+        ]
+        size = len(msgData)
+        print(flag, msgData)
+        for item in ppp:
+            itemLen = len(item)
+            index = msgData.find(item)
+            if(index == 0): #头命中
+                msgData = msgData[itemLen:9999].strip()
+                flag = True
+                break
+            elif(index == size - itemLen):# 尾命中
+                msgData = msgData[0:size-itemLen].strip()
+                flag = True
+                break
+        if(not flag):
+            for before,after in ooo:
+                index = msgData.find(before)
+                if(index == 0):
+                    index1 = msgData.find(after)
+                    if(index1+len(after) == size):
+                        flag = True
+                        # print(len(before), index1)
+                        msgData = msgData[len(before):index1].strip()
+                        break
+        # print(flag, msgData)
+        if(flag):#抽离点歌 名字
+            res = False
+            # fromName, msgData
+            self.playMusic(url="", name=msgData, fromName=fromName)
+        elif( re.search('/do ', msgData) != None ): 
+            res = False
+            cmd = msgData[4:9999]
+            cmd = cmd.strip()
+            cmds = cmd.split(' ')
+            # self.out("操控：" )
+            # print(cmd, cmds)
+            if(len(cmds) > 0 and cmds[0] == ""):
+                cmds.pop(0)
+
+            if(not self.doMethod(cmds)):
+                self.send("/me ########## @" + self.name + " /do music <on/off/turn/prev/next> ########")
+
+        return res
+    # [methodName arg1 arg2]
+    def doMethod(self, listArgs):
+        size = len(listArgs)
+        res = False
+        if(size > 0):
+            if(hasattr(self, listArgs[0])):
+                method = getattr(self, listArgs[0])#获取的是个对象
+                if(callable(method)):
+                    if(size == 2):
+                        method(listArgs[1]) 
+                    elif(size == 3):
+                        method(listArgs[1], listArgs[2])  
+                    elif(size == 4):
+                        method(listArgs[1], listArgs[2], listArgs[3]) 
+                    elif(size == 5):
+                        method(listArgs[1], listArgs[2], listArgs[3], listArgs[4]) 
+                    else:
+                        method()
+                    res = True
+                else:
+                    print(method)
+        return res
+ 
 
     def test(self):
         self.login()
         self.getRooms()
-        self.goRoom("c74BSkQUra") 
+        # self.goRoom("c74BSkQUra") 
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
         ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
@@ -342,4 +456,4 @@ if __name__ == '__main__':
     for i in range(size):
         ThreadRun( "Robot." + str(i), objs[i].test ).start()
         time.sleep(10)
-    tool.wait()
+    time.sleep(99999)

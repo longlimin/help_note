@@ -65,7 +65,7 @@ class Http:
         except Exception as e:
             print(e)
         return response
-    def doPost(self, url, postData):
+    def doPost(self, url=None, postData=None):
         response = "error" 
         try:
             if(postData):
@@ -79,5 +79,8 @@ class Http:
             print(e)
 
         return response
-
+    def do(self, url=None, postData=None):
+        if(url != None):
+            return self.doPost(url, postData)
+        return "error"
  

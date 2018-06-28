@@ -43,6 +43,7 @@ class Database :
             else:
                 conn.row_factory = self.dict_factory #字典解决方案
                 self.conn = conn
+                conn.text_factory = str     # sqlite3.ProgrammingError: You must not use 8-bit bytestrings unless
             # self.out("db init conn ok ! ")
         else:
             conn = self.conn
