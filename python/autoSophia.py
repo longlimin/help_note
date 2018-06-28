@@ -372,7 +372,7 @@ class AutoSophia:
             ('点','这首歌'),
         ]
         size = len(msgData)
-        print(flag, msgData)
+        # print(flag, msgData)
         for item in ppp:
             itemLen = len(item)
             index = msgData.find(item)
