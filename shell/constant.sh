@@ -21,9 +21,9 @@ _temp='constant.sh'   #临时变量 用于临时存储导入文件名
 
 # log files
 _nowday=$(date "+%Y-%m-%d")     #2018-3-20 避免大量长期日志堆积大文件
-git_log=$_root'/git.'$_nowday'.log'
-server_python_socket_log=$_root'/python.socket.'$_nowday'.log'  
-server_python_web_log=$_root'/python.web.'$_nowday'.log'
+git_log=$_root'/git.log' #$_nowday'.log'
+server_python_socket_log=$_root'/python.socket.log' #$_nowday'.log'  
+server_python_web_log=$_root'/python.web.log' #$_nowday'.log'
 log_temp=$_root"/do.log"
 
 # touch make log files

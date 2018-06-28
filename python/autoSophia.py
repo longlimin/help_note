@@ -23,6 +23,9 @@ class AutoSophia:
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
         self.lastEchoTime = tool.getNowTime()   #上次说话时间
         self.maxDetaTime = 1000 * 60 * 3   # 最大沉默时间
+        self.lastMusicTime = tool.getNowTime() 
+        self.maxMusicTime = 1000 * 60 * 4
+        self.count = -1
     def out(self, obj):
         print(self.name + "." + obj)
     def login(self):
@@ -111,6 +114,8 @@ class AutoSophia:
         return
     def outRoom(self):
         self.out("离开房间:" + self.roomId)
+        self.send("/me CC好无聊啊 要出去溜达一会儿 ")
+        self.send("/me 我一定会回来的! ")
         self.showRoom(self.roomId)
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "leave":"leave", 
@@ -139,8 +144,14 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastEchoTime # ms
                     if(detaTime > self.maxDetaTime):
                         message = "/me 不知道该说什么(⊙﹏⊙)"
-                        # self.send(message)
+                        self.send(message)
                         self.out(str(i) + "\t" + message)
+                    detaTime = tool.getNowTime() - self.lastMusicTime # ms
+                    if(detaTime > self.maxMusicTime):
+                        (url, name, count) = self.robot.getMusic(self.count)
+                        self.count = count
+                        self.music(url, name)
+
                     time.sleep(10)
                 except Exception as e:
                     print(e)
@@ -148,7 +159,7 @@ class AutoSophia:
             time.sleep(3)
     # 定时抓取消息
     def getHello(self):
-        tt = 5
+        tt = 1
         while(True):
             if(self.roomId != ""):
                 self.out("开启抓取发言，" + str(tt) + "s/次")
@@ -167,9 +178,7 @@ class AutoSophia:
     def rece(self):
         # 获取最新时间的消息1530004210 157 s秒
         res = ""
-        nowTime = self.lastMsgTime
-        # self.out("抓取发言 t=" + str(nowTime) )
-        responce=self.http.doGet("http://drrr.com/json.php?fast=1&update="+str(nowTime))
+        responce=self.http.doGet("http://drrr.com/json.php?fast=1&update="+str(self.lastMsgTime))
         if(responce != ""):
             jsonStr = responce.read()
             if(jsonStr != ""):
@@ -181,19 +190,28 @@ class AutoSophia:
     def send(self, message):
         if(message == ""):
             return
+        self.out("Send." + message)
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "message":message, # [0:self.count * 4],
                         "url":"",
                 })
-        if(type(responce) == str):
-            re = responce
-            self.out("发送[" + message + "]" + re[0:66])
-        else:
-            re = responce.read()
-            self.lastEchoTime = tool.getNowTime()
-        # self.out("发送[" + message + "]结果 " + re[0:66])
+        # self.out("发送[" + message + "]" + re[0:66])
+        self.lastEchoTime = tool.getNowTime()
         return
-    # 手动输入发送消息
+    # 分享音乐
+    def music(self, url, name="Unknow"):
+        if(url == ""):
+            return
+        self.out("Music." + url + " " + name )
+        responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
+                        "name":name,
+                        "url":url,
+                })
+        self.lastMusicTime = tool.getNowTime()
+        return
+
+
+    # 手动控制
     def inputHello(self):
         self.out("开启输入监控！")
         self.help()
@@ -225,7 +243,7 @@ class AutoSophia:
         res = ""
         try:
             # tool.line()
-            # print("抓取到消息")
+            # print("抓取到消息obj")
             # print(obj)
             self.lastMsgTime = obj.get("update", self.lastMsgTime)
             talks = obj.get('talks', "")
@@ -236,51 +254,79 @@ class AutoSophia:
                     self.roomIndex[self.roomId]['users'] = users
                 else:
                     self.roomIndex[self.roomId] = obj
-
+            # tool.line()
+            # print("talks:")
+            # print(talks)
+            # print("users:")
+            # print(users)
+            # tool.line()
             if(talks != ""):
                 for item in talks:
-                    msgId = item['id']
-                    msgType = item['type']
+                    # print(item)
+                    msgId = item.get('id', " ")
+                    msgType = item.get('type', 'message')
                     msgData = ""
-                    msgFromName = item['from']['name']
-
+                    msgFromName = item.get('from', {}).get('name', "")
+                    if(msgFromName == ""):
+                        msgFromName = item.get('user', {}).get('name', "")
                     if(msgType == 'me'):
-                        msgData = item['content']
+                        msgData = item.get('content', "")
+                    elif(msgType == 'message'):
+                        msgData = item.get('message', "")
                     elif(msgType == 'join'):
+                        # msgFromName = item.get('user', {}).get('name', "")
                         msgData = '欢迎' + msgFromName + ' の !'
                     elif(msgType == 'leave'):
                         msgData = ' ' + msgFromName + ' 默默的离开了 の... '
-                    elif(msgType == 'message'):
-                        msgData = item['message']
                     elif(msgType == 'music'):
-                        msgData = item['name']
+                        msgData = item.get('name', "")
 
-                    his = self.roomMsg.get(msgId, "")
-                    if(his != "" or msgFromName == self.name ): #已经处理过 或者是自己发送的
+                    # print(msgId, msgType, msgData, msgFromName)
+                    if( self.roomMsg.get(msgId, "") != "" or msgFromName == self.name or msgFromName == "" ): #已经处理过 或者是自己发送的 或者取出发送者失败
                         pass
-                    else:  #未处理过
+                    else:  #未处理过 
                         detaTime = tool.getNowTime() - self.lastEchoTime # ms 60s
-                        ran = tool.getRandom(0,self.maxDetaTime)    #0-180
-                        self.out("发言权 = " + str((self.maxDetaTime - detaTime) / 1000) + "s" + " 随机数 = " + str(ran / 1000) + " " + msgFromName + ":" + msgData)
-                        if(re.search('@' + self.name, msgData) != None or ran > self.maxDetaTime - detaTime):  # @自己才回复
-                            robotRes = self.robot.do(msgData)
-                            if(robotRes != ""):
-                                code = str(robotRes.get("code", ""))
-                                if(code[0:1] != '4'):
-                                    res = robotRes.get("text", "")
-                                    res = '/me @' + str(msgFromName) + ' ' + res
-                                    self.send(res)
-                                    self.roomMsg[msgId] = msgData
-                                else:
-                                    self.out("robot接口调用失败 code=" + code)
-                        pass
+                        ran = tool.getRandom(0,self.maxDetaTime) / 1000 - 5    #0-180
+                        weight = (self.maxDetaTime - detaTime) / 1000
+                        self.out("发言权" + tool.fill(str(weight) + "" , ' ', 8) + " 随机数" + tool.fill(str(ran),' ', 8) + " fromName:" + tool.fill(msgFromName,' ',12) + " msgType:"+tool.fill(msgType,' ',10) + " " + msgData)
+
+                        flag = 0 #不回复
+                        if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
+                            if( re.search('@' + self.name + " ", msgData) != None ):    #有@自己
+                                msgData = msgData[len(self.name) + 2: 9999]
+                                flag = 1
+                            elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高
+                                flag = 1
+                        else: #事件 
+                            flag = 2
+
+                        res = ""
+                        if(flag == 1):  
+                            robotRes = self.robot.do(msgData, self.name)
+                            code = str(robotRes.get("code", ""))
+                            if(code[0:1] != '4'):
+                                res = '@' + str(msgFromName) +" " + robotRes.get("text", "")
+                            else:
+                                self.out("robot接口调用失败 code=" + code)
+                        elif(flag == 2):
+                            res = msgData
+
+                        if(res != "" and flag != 0):
+                            res = '/me ' + res
+                            self.send(res)
+                        
+                    self.roomMsg[msgId] = item #标记未已经处理 历史消息
         except Exception as e:
-            print(e)
+            print("Exception:" + str(e))
+        # tool.line()
         return res
+    
+    
+
     def test(self):
         self.login()
         self.getRooms()
-        # self.goRoom("siSpBMbllV") # roomIndex.keys()[0])
+        self.goRoom("c74BSkQUra") 
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
         ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
