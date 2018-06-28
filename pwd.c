@@ -17,7 +17,9 @@ chen_peng_hui@outlook.com
 WALKER
 1q
 
-
+// 电信 非固定ip 
+101.88.12.97
+180.172.44.61
 
 //
 插件 switchyOmega.crx 网盘
