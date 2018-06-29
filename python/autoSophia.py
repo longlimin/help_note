@@ -22,7 +22,7 @@ class AutoSophia:
 
         self.robot = Robot()
         self.http = Http()
-        self.name = "CD"
+        self.name = "CC"
         self.count = int(name[6:999])   #编号
         self.getMsgDetaTime = 1     #抓取消息间隔
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
@@ -554,7 +554,7 @@ class AutoSophia:
     def test(self):
         self.login()
         self.getRooms()
-        # self.goRoom("c74BSkQUra")
+        self.goRoom("c74BSkQUra")
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
         ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
