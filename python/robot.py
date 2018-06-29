@@ -36,9 +36,18 @@ class Robot:
             ''' 
             create table if not exists user(
                 name        text primary key,
-                id        text,
-                icon    text,
-                flag    text
+                id          text,
+                icon        text,
+                flag        text
+            )
+            ''' )
+        self.db.execute(
+            ''' 
+            create table if not exists msg(
+                id            text primary key, 
+                userName      text,
+                data          text,
+                time          text
             )
             ''' )
         self.initMusic()
@@ -154,6 +163,12 @@ class Robot:
         if(res == None):
             res = {}
         return res
+
+
+# 消息监控
+    def addMsg(self, id, userName, data, msgTime):
+        self.db.execute('insert into msg values(?,?,?,?)', id, userName, data, msgTime)
+
 # 智能应答 
     def do(self, msg, userId="CC"):
         res = "" 
