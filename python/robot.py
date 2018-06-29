@@ -57,11 +57,16 @@ class Robot:
         music = {}
 
         if(musicName != ""):
-            res=self.auto163.getMusic(musicName, fromName) # [music,music]
-            for item in res:
-                self.addMusic(item)
-            if(len(res) > 0):
-                music = res[0]
+            res = self.db.executeQueryOne("select * from music where name=? ", musicName)
+            if(res != None):
+                music = res
+            else:
+                res=self.auto163.getMusic(musicName, fromName) # [music,music]
+                for item in res:
+                    self.addMusic(item)
+                if(len(res) > 0):
+                    music = res[0]
+
         else:
             if(playType == -1): #上一曲
                 if(len(self.palyHistoryMusic) > 1):
@@ -69,8 +74,22 @@ class Robot:
                     music = self.palyHistoryMusic.pop()
             # elif(playType == 1):
             else:
-                count = tool.getRandom(0, size)
+                size = self.db.getCount("select * from music ")
+                num = 5
+                page = int(1.0 * size / num)
+                page = tool.getRandom(0, page)
+                (size, listRes) = self.db.executeQueryPage("select * from music", page, num)
+                getSize = len(listRes)
+                count = tool.getRandom(0, getSize)
+                music = listRes[count]
 
+                tool.line()
+                print("size:" + str(size) + "  page:" + str(page) + " num:" + str(num) + " listResSize:" + str(getSize) )
+                for item in listRes:
+                    print(item.get("url"), item.get("fromName"))
+                print("选中了" + str(count))
+                print(music)
+                tool.line()
         if(music.get("url", "") != ""):
             self.palyHistoryMusic.append(music)
             if(len(self.palyHistoryMusic) > 10):
@@ -87,11 +106,11 @@ class Robot:
         fromName = music.get("fromName", "")
         oldMusic = self.db.executeQueryOne("select * from music where url = ? " , url) 
         if(oldMusic == None):
-            print("添加音乐：")
+            print("添加音乐")
             print(music)
             self.db.execute('insert into music values(?,?,?,?)', url, name, fromName, "1")                        
         else: #更新该音乐数据
-            print("更新音乐：")
+            print("更新音乐")
             count = int(oldMusic.get("count", 0))
             count = str(count + 1)
             music["count"] = count
@@ -100,7 +119,7 @@ class Robot:
         return 
     def removeMusic(self, url=""):
         index = 0
-        print("移除音乐：" + url)
+        print("移除音乐" + url)
         self.db.execute('update music set count=? where url = ? ', "0", url)     
         return 
 

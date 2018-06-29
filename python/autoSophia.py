@@ -11,23 +11,24 @@ from robot import Robot
 import re
 
 class AutoSophia:
-    def __init__(self, name="00000"):
+    def __init__(self, name="0000000"):
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
 
         self.robot = Robot()
         self.http = Http()
-        self.name = "CD"
-        self.count = int(name[6:999])
+        self.name = "CC"
+        self.count = int(name[6:999])   #编号
+        self.getMsgDetaTime = 1     #抓取消息间隔
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
         self.lastEchoTime = tool.getNowTime()   #上次说话时间
         self.maxDetaTime = 1000 * 60 * 3   # 最大沉默时间
         self.lastMusicTime = tool.getNowTime() 
-        self.maxMusicTime = 1000 * 60 * 5
+        self.maxMusicTime = 1000 * 60 * 4 #音乐间隔 暂不解析音乐文件时长控制
         self.musicNow = {}
         self.musicPlayType = -1
-        self.ifOnMusic = False
+        self.ifOnMusic = True
         self.tail = " の... "
     def out(self, obj):
         print(self.name + "." + obj)
@@ -113,7 +114,7 @@ class AutoSophia:
         self.showRoom(roomId)
         responce=self.http.doGet("http://drrr.com/room/?id=" + roomId)
         self.roomId = roomId
-        self.send("/me 大家好 我是暖手宝" + self.name + " 可以@我 点歌name(*^_^*) 通常只是沉默潜水 不会打扰大家啦 @必回哟(大概) Ps.不@也可能会回O(∩_∩)O")
+        self.send("/me 大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
         return
     def outRoom(self):
         self.out("离开房间:" + self.roomId)
@@ -126,8 +127,8 @@ class AutoSophia:
         self.roomId = ""
         return 
     def getRooms(self, detail=False):
-        tool.line()
-        # self.out("房间列表")
+        # tool.line()
+        self.out("获取房间列表")
         responce=self.http.doGet("http://drrr.com/lounge?api=json")
         jsonObj = tool.makeObj(json.loads(responce.read()))
         rooms = jsonObj["rooms"]
@@ -141,6 +142,7 @@ class AutoSophia:
         while(True):
             if(self.roomId != ""):
                 self.out("开启定时发言，最大发言间隔" + str(self.maxDetaTime / 1000) + "s")
+            dt = 0
             while(self.roomId != ""):
                 try:
                     # message = "Now Time is "+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -153,14 +155,18 @@ class AutoSophia:
                     if(self.ifOnMusic and detaTime > self.maxMusicTime):
                         self.playMusic()
 
+                    if(dt % 60 == 0):
+                        self.getRooms() #定时获取房间最新信息
                     time.sleep(10)
+                    dt = dt + 10
+                    dt = dt % 3600
                 except Exception as e:
                     print(e)
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
             time.sleep(3)
     # 定时抓取消息
     def getHello(self):
-        tt = 1
+        tt = self.getMsgDetaTime
         while(True):
             if(self.roomId != ""):
                 self.out("开启抓取发言，" + str(tt) + "s/次")
@@ -180,12 +186,14 @@ class AutoSophia:
         # 获取最新时间的消息1530004210 157 s秒
         res = ""
         responce=self.http.doGet("http://drrr.com/json.php?fast=1&update="+str(self.lastMsgTime))
-        if(responce != ""):
+        if(responce != "" and type(responce) != str ):
             jsonStr = responce.read()
             if(jsonStr != ""):
                 res = tool.makeObj(json.loads(jsonStr))
             else:
                 res = ""
+        else:
+            self.out("请求异常:" + str(responce) ) 
         return res
     # 发送消息
     def send(self, message):
@@ -203,7 +211,7 @@ class AutoSophia:
     def playMusic(self, url="", name="", fromName=""):
         if(url[0:4] != "http"):
             music = self.robot.getMusic(name, fromName, self.musicPlayType)
-            # self.musicPlayType = count
+            self.musicPlayType = 0 #重置为随机播放
             url = music.get("url", "")
             name = music.get("name", "")
             fromName = music.get("fromName", "")
@@ -289,9 +297,7 @@ class AutoSophia:
                     if(msgFromName == ""):
                         msgFromName = item.get('user', {}).get('name', "")
 
-                    if( self.roomMsg.get(msgId, "") != "" or msgFromName == self.name or msgFromName == "" ): #已经处理过 或者是自己发送的 或者取出发送者失败
-                        break
-
+                    
 
 
                     if(msgType == 'me'):
@@ -307,11 +313,19 @@ class AutoSophia:
                         music = item.get('music', {})
                         name = music.get('name', '')
                         url = music.get('url', '')
+                        msgData = '悄悄的的把[' + msgFromName + '' + name + ']给记在小本子上 '  + self.tail
+########################################################
+                    if( self.roomMsg.get(msgId, "") != "" or msgFromName == self.name or msgFromName == "" ): #已经处理过 或者是自己发送的 或者取出发送者失败
+                        # self.out("Done:" + (str(msgId))[0:4] + " user:" + msgFromName + " msg:" + msgData[0:10])
+                        break
+                    # self.out("Doin:" + (str(msgId))[0:4] + " user:" + msgFromName + " msg:" + msgData)
+#############################################################
+
+                    if(msgType == 'music'):
                         music = { "name":name, "url":url, "fromName":msgFromName }
                         self.robot.addMusic(music) #添加用户分享记录
                         self.musicNow = music
                         self.lastMusicTime = tool.getNowTime()
-                        msgData = self.name + '悄悄的的把' + msgFromName + '喜欢的歌' + name + '给记在小本子上 '  + self.tail
 
                     self.roomMsg[msgId] = item #标记未已经处理 历史消息
 
@@ -325,7 +339,7 @@ class AutoSophia:
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
                             ran = tool.getRandom(0,100)
                             if(ran > 6):
-                                msgData = msgData[len(self.name) + 2: 9999]
+                                msgData = msgData[len('@' + self.name + " "): 9999] #去掉@ 获取消息体
                                 flag = 1
                             else:
                                 self.out("@权重=" + str(ran) + "太小！！！！！！！！！！！！！！")
@@ -360,12 +374,15 @@ class AutoSophia:
     def filterCmd(self, msgData="", fromName=""):
         res = True
         msgData = msgData.strip()
-
+        tool.line()
+        # print("fc---", msgData, fromName)
         # name 点歌
         # 点歌 name
         # 点 name 这首歌
         flag = False
-        ppp = ['点歌','music','歌曲','点播','下面播放', '想听']
+        pr = ['prev', '上一曲', '上一首', '换回去']
+        nnn = ['下一曲','下一首', '切歌', '换','换歌', '不好听', '难听','难听死了', '换换换','换一首', 'next', 'turn']
+        ppp = ['点歌','music','歌曲','点播','下面播放', '想听', '播放', '放', 'play', 'mp3']
         ooo = [
             ('一首','献给大家'),
             ('一首','送给大家'),
@@ -373,17 +390,31 @@ class AutoSophia:
         ]
         size = len(msgData)
         # print(flag, msgData)
-        for item in ppp:
-            itemLen = len(item)
-            index = msgData.find(item)
-            if(index == 0): #头命中
-                msgData = msgData[itemLen:9999].strip()
-                flag = True
-                break
-            elif(index == size - itemLen):# 尾命中
-                msgData = msgData[0:size-itemLen].strip()
-                flag = True
-                break
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.musicPlayType = -1
+                    flag = True
+                    break
+        if(not flag):
+            for item in nnn:
+                if(msgData == item):
+                    msgData = ""
+                    flag = True
+                    break
+        if(not flag):
+            for item in ppp:
+                itemLen = len(item)
+                index = msgData.find(item)
+                if(index == 0): #头命中
+                    msgData = msgData[itemLen:9999].strip()
+                    flag = True
+                    break
+                elif(index > 0 and index == size - itemLen):# 尾命中
+                    msgData = msgData[0:size-itemLen].strip()
+                    flag = True
+                    break
         if(not flag):
             for before,after in ooo:
                 index = msgData.find(before)
@@ -397,7 +428,6 @@ class AutoSophia:
         # print(flag, msgData)
         if(flag):#抽离点歌 名字
             res = False
-            # fromName, msgData
             self.playMusic(url="", name=msgData, fromName=fromName)
         elif( re.search('/do ', msgData) != None ): 
             res = False
@@ -440,7 +470,7 @@ class AutoSophia:
     def test(self):
         self.login()
         self.getRooms()
-        # self.goRoom("c74BSkQUra") 
+        self.goRoom("c74BSkQUra") 
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
         ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()

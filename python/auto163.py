@@ -46,7 +46,7 @@ class Auto163:
     def getMusic(self, musicName="", fromName=""):
         tool.line()
         res = []
-        print("歌曲名字：" + musicName + " from:" + fromName)
+        print("歌曲名字[" + musicName + "] from:" + fromName)
         responce = self.http.do("http://music.163.com/api/search/get/web?csrf_token=", {
            "hlpretag":"",
            "hlposttag":"",

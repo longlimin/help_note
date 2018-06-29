@@ -20,7 +20,7 @@ class Database :
     dbfile = "sqlite.db"
     memory = ":memory:"
     conn = None
-    showsql = True
+    showsql = False
 
     def __init__(self):
         self.conn = self.getConn()
@@ -39,7 +39,7 @@ class Database :
             if(conn is None):
                 conn = sqlite3.connect(self.memory, check_same_thread=False )
             if(conn is None):
-                print("dbfile : " + self.dbfile + " is not found && the memory connect error ! ")
+                self.out("dbfile : " + self.dbfile + " is not found && the memory connect error ! ")
             else:
                 conn.row_factory = self.dict_factory #字典解决方案
                 self.conn = conn
