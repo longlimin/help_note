@@ -64,7 +64,7 @@ class Auto163:
             name = item.get("name", "")
             url = "http://link.hhtjim.com/163/" + str(id) + ".mp3"
             music = {"url":url, "name":name, "fromName":fromName}
-            print(music)
+            # print(music)
             res.append(music)
 
         return res

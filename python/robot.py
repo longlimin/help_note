@@ -32,10 +32,18 @@ class Robot:
             count       text
         )
         ''' )
+        self.db.execute(
+            ''' 
+            create table if not exists user(
+                name        text primary key,
+                id        text,
+                icon    text,
+                flag    text
+            )
+            ''' )
         self.initMusic()
         self.palyHistoryMusic = []
-        return 
-
+        return
 # 音乐模块
     def initMusic(self):
         li = ""
@@ -58,7 +66,7 @@ class Robot:
 
         if(musicName != ""):
             res = self.db.executeQueryOne("select * from music where name=? ", musicName)
-            if(res != None):
+            if(res.get("url", "") != ""):
                 music = res
             else:
                 res=self.auto163.getMusic(musicName, fromName) # [music,music]
@@ -120,10 +128,32 @@ class Robot:
     def removeMusic(self, url=""):
         index = 0
         print("移除音乐" + url)
-        self.db.execute('update music set count=? where url = ? ', "0", url)     
+        self.db.execute('delete from music where url = ? ', url)
         return 
-
-
+# 人员信息管理 权限 状态
+#     name        text primary key,
+#     id        text,
+#     icon    text,
+#     flag    text
+    def addUser(self, user={}):
+        name = user.get("name", "")
+        id = user.get("id", "")
+        icon = user.get("icon", "")
+        flag = user.get("flag", "0")
+        if(self.db.getCount("select * from user where name=?", name) > 0):
+            self.db.execute("update user set id=?,icon=?,flag=? where name=?", id, icon, flag, name)
+        else:
+            self.db.execute("insert into user(name,id,icon,flag) values(?,?,?,?)",name,id,icon,flag)
+    def turnUser(self, name, flag):
+        if(self.db.getCount("select * from user where name=?", name) > 0):
+            self.db.execute("update user set flag=? where name=?", flag, name)
+        else:
+            self.db.execute("insert into user(name,flag) values(?,?)",name,flag)
+    def getUser(self, name=""):
+        res = self.db.executeQueryOne("select * from user where name=?", name)
+        if(res == None):
+            res = {}
+        return res
 # 智能应答 
     def do(self, msg, userId="CC"):
         res = "" 

@@ -111,7 +111,8 @@ class Database :
             for item in res:
                 for key in item:
                     item[key] = tool.encode(item[key])
-
+        else:
+            res = []
         return res   
     def executeQueryOne(self, sql, *args):
         args = self.turnArray(args)
@@ -119,7 +120,7 @@ class Database :
         if(listMap is not None and len(listMap) > 0):
             return listMap[0]
         else:
-            return None
+            return {}
     def execSQL(self, sql, *args):
         args = self.turnArray(args)
         return self.execute(sql, args)
