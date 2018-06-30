@@ -71,7 +71,7 @@ class Http:
     def doPost(self, url=None, postData=None):
         response = "error" 
         try:
-            if(postData):
+            if(postData != None):
                 postData = urllib.urlencode(postData)
                 response = self.opener.open(url, postData) 
                 # response = urllib2.urlopen(urllib2.Request(url, data, header))
@@ -83,7 +83,34 @@ class Http:
 
         return response
     def do(self, url=None, postData=None):
-        if(url != None):
+        if(url != None and url != ""):
             return self.doPost(url, postData)
         return "error"
- 
+    def doJson(self, url="", postData=None):
+        res = {}
+        responce = self.do(url, postData)
+        jsonStr = responce.read()
+        if(jsonStr != None and type(jsonStr) == str):
+            jsonStr = jsonStr.strip()
+            if(jsonStr[0:1] == "{"):
+                res = tool.makeObj(json.loads(jsonStr))
+            else:
+                self.out("解析json失败:" + jsonStr[0:200])
+        else:
+            self.out("responce 读取失败,url:" + str(url) + " data:" + str(postData))
+        return res
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
