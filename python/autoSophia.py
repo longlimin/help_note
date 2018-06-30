@@ -22,7 +22,7 @@ class AutoSophia:
         self.count = int(name[6:999])   #编号
 
         self.listMsgQue = []    #消息发送队列
-        self.timeDetaMsgSend = 1    #最小发送消息间隔s
+        self.timeDetaMsgSend = 1.1    #最小发送消息间隔s
 
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
@@ -48,7 +48,7 @@ class AutoSophia:
         self.ifOnMusic = False
         self.tail = " の... "
     def out(self, obj):
-        print(self.name + "." + str(obj))
+        print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
     def login(self):
         # tool.line()
@@ -140,6 +140,21 @@ class AutoSophia:
                 self.out(item)
             tool.line()
         return res
+    def goRoomName(self, roomName):
+        if(self.roomIndex is None or self.roomIndex == "" or self.roomIndex == {}):
+            self.getRooms()
+        tool.line()
+        self.out("查找房间名字加入" + roomName)
+        i = 0
+        for key in self.roomIndex:
+            room = self.roomIndex[key]
+            name = room.get("name", "")
+            if(re.search(roomName, name) != None):
+                self.goRoom(key)
+                break;
+            i = i+1
+        tool.line()
+
     def goRoom(self, roomId):
         # tool.line()
         self.out("加入房间:" + roomId)
@@ -249,7 +264,9 @@ class AutoSophia:
     def rece(self):
         # 获取最新时间的消息1530004210 157 s秒
         res = ""
-        responce=self.http.doGet("http://drrr.com/json.php?update="+str(self.lastMsgTime))
+        url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
+        # self.out(url)
+        responce=self.http.doGet(url)
         if(responce != "" and type(responce) != str ):
             jsonStr = responce.read()
             if(jsonStr != ""):
@@ -369,7 +386,10 @@ class AutoSophia:
             # tool.line()
             # self.out("抓取到消息obj")
             # self.out(obj)
-            self.lastMsgTime = obj.get("update", self.lastMsgTime)
+            newTime = obj.get("update", self.lastMsgTime)
+            newTime = int(newTime)
+            # print(newTime)
+            self.lastMsgTime = newTime
             talks = obj.get('talks', "")
             users = obj.get('users', "")
             if(users != ""):
@@ -409,7 +429,7 @@ class AutoSophia:
                         msgData = '悄悄的的把[' + name + ']给记在小本子上 '  + self.tail
 ######################################################## 不处理
                     if( self.roomMsg.get(msgId, "") != ""): #已经处理过 或者是自己发送的 或者取出发送者失败
-                        self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
+                        # self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
                         break
 
                     if(msgType == "me" or msgType == "message"): #只记录聊天消息
@@ -637,7 +657,10 @@ class AutoSophia:
     def test(self):
         self.login()
         self.getRooms()
-        self.goRoom("YfdWkQ1lEs")
+        # self.goRoom("YfdWkQ1lEs")
+
+        self.goRoomName("戴上耳机")
+
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
