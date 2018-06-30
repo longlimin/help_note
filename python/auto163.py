@@ -11,16 +11,16 @@ import re
 
 # 163网易云歌曲抓取 搜索 转链 信息采集
 class Auto163:
-    def __init__(self, name="00000"):
+    def __init__(self, name="0000000"):
         self.http = Http()
         self.name = name
 
     def out(self, obj):
-        print(self.name + "." + obj)
+        print(self.__module__ + "." + self.name + "." + obj)
     def login(self):
         pass 
     def help(self):
-        print(dir(self))
+        self.out(dir(self))
 # [methodName arg1 arg2]
     def doMethod(self, listArgs):
         size = len(listArgs)
@@ -41,12 +41,12 @@ class Auto163:
                         method()
                     res = True
                 else:
-                    print(method)
+                    self.out(method)
         return res
     def getMusic(self, musicName="", fromName=""):
         tool.line()
         res = []
-        print("歌曲名字[" + musicName + "] from:" + fromName)
+        self.out("歌曲名字[" + musicName + "] from:" + fromName)
         responce = self.http.do("http://music.163.com/api/search/get/web?csrf_token=", {
            "hlpretag":"",
            "hlposttag":"",
@@ -54,17 +54,17 @@ class Auto163:
            "type":1,
            "offset":0,
            "total":"true",
-           "limit":3,
+           "limit":5,
         })
         obj = tool.toJson(responce.read())
         songs = obj.get("result", {}).get("songs", [])
-        print("抓取到音乐：")
+        self.out("抓取到音乐：")
         for item in songs:
             id = item.get("id", "")
             name = item.get("name", "")
             url = "http://link.hhtjim.com/163/" + str(id) + ".mp3"
             music = {"url":url, "name":name, "fromName":fromName}
-            # print(music)
+            self.out("url:" + url + " name:" + name)
             res.append(music)
 
         return res
@@ -81,7 +81,7 @@ class Auto163:
                         self.getMusic(cmd)
                         time.sleep(1)
             except Exception as e:
-                print(e)
+                self.out(repr(e))
         return
     def test(self):
         self.login()

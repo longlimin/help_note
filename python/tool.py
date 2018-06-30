@@ -30,7 +30,9 @@ def makeByte(img):
 
 
 def getRandom(start=0, stop=10):
-    return int(random.uniform(start, stop))
+    msec = getNowTime() + int(random.uniform(0, 100) )
+    # 时间轴 毫秒+随机数100 投影到目标区间
+    return int(msec % (stop - start) + start)
 
 def getUuid():
     return (str(uuid.uuid1())).split("-")[0]

@@ -6,6 +6,7 @@ import time
 import json
 from python_sqlite import Database
 from auto163 import Auto163
+import traceback
 
 # @singlton
 class Robot:
@@ -53,6 +54,9 @@ class Robot:
         self.initMusic()
         self.palyHistoryMusic = []
         return
+    def out(self, obj):
+        print(self.__module__ + "." + str(obj))
+        return
 # 音乐模块
     def initMusic(self):
         li = ""
@@ -70,7 +74,30 @@ class Robot:
         return    
 
     # 内部点播 若有名字则按照名字本地搜索和云搜索 否则 按照type切歌
-    def getMusic(self, musicName="", fromName="", playType=0):
+    def turnMusic(self, playType):
+        music = {}
+        if(playType == -1): #上一曲
+            if(len(self.palyHistoryMusic) > 1):
+                music = self.palyHistoryMusic.pop()
+                music = self.palyHistoryMusic.pop()
+        else:
+            size = self.db.getCount("select * from music ")
+            num = 5
+            page = int(1.0 * size / num)
+            page = tool.getRandom(0, page)
+            (size, listRes) = self.db.executeQueryPage("select * from music", page, num)
+            getSize = len(listRes)
+            count = tool.getRandom(0, getSize)
+            music = listRes[count]
+
+            tool.line()
+            self.out("随机找到歌曲页 " + "size:" + str(size) + "  page:" + str(page) + " num:" + str(num) + " listResSize:" + str(getSize) )
+            for item in listRes:
+                self.out("url:" + item.get("url") + " name:" + item.get("fromName"))
+            self.out("选中了" + str(count))
+            tool.line()
+        return music
+    def getMusic(self, musicName="", fromName=""):
         music = {}
 
         if(musicName != ""):
@@ -82,61 +109,38 @@ class Robot:
                 for item in res:
                     self.addMusic(item)
                 if(len(res) > 0):
-                    music = res[0]
-
-        else:
-            if(playType == -1): #上一曲
-                if(len(self.palyHistoryMusic) > 1):
-                    music = self.palyHistoryMusic.pop()
-                    music = self.palyHistoryMusic.pop()
-            # elif(playType == 1):
-            else:
-                size = self.db.getCount("select * from music ")
-                num = 5
-                page = int(1.0 * size / num)
-                page = tool.getRandom(0, page)
-                (size, listRes) = self.db.executeQueryPage("select * from music", page, num)
-                getSize = len(listRes)
-                count = tool.getRandom(0, getSize)
-                music = listRes[count]
-
-                tool.line()
-                print("size:" + str(size) + "  page:" + str(page) + " num:" + str(num) + " listResSize:" + str(getSize) )
-                for item in listRes:
-                    print(item.get("url"), item.get("fromName"))
-                print("选中了" + str(count))
-                print(music)
-                tool.line()
+                    music = res[tool.getRandom(0, len(res))]
         if(music.get("url", "") != ""):
             self.palyHistoryMusic.append(music)
             if(len(self.palyHistoryMusic) > 10):
                 self.palyHistoryMusic.pop(0)
-
         return music
     # 外部点播音乐记录
     def addMusic(self, music):
+        res = 0
         self.palyHistoryMusic.append(music)
         if(len(self.palyHistoryMusic) > 10):
             self.palyHistoryMusic.pop(0)
         url = music.get("url", "")
         name = music.get("name", "")
         fromName = music.get("fromName", "")
-        oldMusic = self.db.executeQueryOne("select * from music where url = ? " , url) 
-        if(oldMusic == None):
-            print("添加音乐")
-            print(music)
-            self.db.execute('insert into music values(?,?,?,?)', url, name, fromName, "1")                        
+        oldMusic = self.db.executeQueryOne("select * from music where url = ? ", url)
+        if(oldMusic.get("url", "") == ""):
+            # self.out("添加音乐")
+            # self.out(music)
+            self.db.execute('insert into music values(?,?,?,?)', url, name, fromName, "1")
         else: #更新该音乐数据
-            print("更新音乐")
+            # self.out("更新音乐")
             count = int(oldMusic.get("count", 0))
             count = str(count + 1)
             music["count"] = count
-            print(music)
-            self.db.execute('update music set name=?, fromName=?, count=? where url=?', name, fromName, count, url)                        
-        return 
+            # self.out(music)
+            self.db.execute('update music set name=?, fromName=?, count=? where url=?', name, fromName, count, url)
+            res = 1
+        return  res
     def removeMusic(self, url=""):
         index = 0
-        print("移除音乐" + url)
+        self.out("移除音乐" + url)
         self.db.execute('delete from music where url = ? ', url)
         return 
 # 人员信息管理 权限 状态
@@ -167,11 +171,14 @@ class Robot:
 
 # 消息监控
     def addMsg(self, id, userName, data, msgTime):
-        self.db.execute('insert into msg values(?,?,?,?)', id, userName, data, msgTime)
-
+        if(self.db.getCount("select * from msg where id=?", id) <= 0):
+            self.db.execute('insert into msg values(?,?,?,?)', id, userName, data, msgTime)
+        return
 # 智能应答 
     def do(self, msg, userId="CC"):
-        res = "" 
+        res = ""
+        if(msg == ""):
+            return "消息不能为空"
         response = self.http.doPost('http://www.tuling123.com/openapi/api', {
                 "key":self.apiKey,
                 "info":msg,
@@ -193,9 +200,9 @@ class Robot:
         if(jsonStr != ""):
             res = tool.makeObj(json.loads(jsonStr))
             code = res.get("code", "")
-            print("Robot. " + str(msg) + " -> " + jsonStr)
+            self.out("Robot. " + str(msg) + " -> " + jsonStr)
         else:
-            print("Robot. " + str(msg) + " -> error !!!!!!!!! ")
+            self.out("Robot. " + str(msg) + " -> error !!!!!!!!! ")
         return res
 
     def test(self):
@@ -203,7 +210,7 @@ class Robot:
             cmd=raw_input("")
             if(cmd != ""):
                 res = self.do(cmd)
-                print(res)
+                self.out(res)
                 time.sleep(1)
 
         return

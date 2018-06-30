@@ -2,31 +2,41 @@
 #-*- coding:utf-8 -*-  
  
 import json
+import re
 import time
+import traceback
 import BeautifulSoup
+import traceback
+
 import tool
 from http import Http
-from tool import ThreadRun
 from robot import Robot
-import re
+from tool import ThreadRun
+
 
 class AutoSophia:
     def __init__(self, name="0000000"):
-        self.listMsgQue = []    #消息发送队列
-        self.timeDetaMsgSend = 1.5    #最小发送消息间隔s
-
-        self.roomIndex = {} #房间号 及其<用户>信息
-        self.roomMsg = {}   #消息 记录
-        self.roomId = ""  #当前房号
-        self.status = 90     #说话欲望值 0-100
-        self.statusOnDeta = 20
-        self.statusOffDeta = 10
-        self.statusDownDeta = 20
-
         self.robot = Robot()
         self.http = Http()
         self.name = "CC"
         self.count = int(name[6:999])   #编号
+
+        self.listMsgQue = []    #消息发送队列
+        self.timeDetaMsgSend = 1    #最小发送消息间隔s
+
+        self.roomIndex = {} #房间号 及其<用户>信息
+        self.roomMsg = {}   #消息 记录
+        self.roomId = ""  #当前房号
+
+############### 心情模块
+        self.statusMin = 0
+        self.statusMax = 95
+        self.statusDefault = 80
+        self.status = 90     #说话欲望值 0-100
+        self.statusOnDeta = 15      #开心
+        self.statusOffDeta = 15     #难过
+        self.statusDownDeta = 80    #闭嘴
+
         self.getMsgDetaTime = 1     #抓取消息间隔
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
         self.lastEchoTime = tool.getNowTime()   #上次说话时间
@@ -35,10 +45,11 @@ class AutoSophia:
         self.maxMusicTime = 1000 * 60 * 4 #音乐间隔 暂不解析音乐文件时长控制
         self.musicNow = {}
         self.musicPlayType = -1
-        self.ifOnMusic = True
+        self.ifOnMusic = False
         self.tail = " の... "
     def out(self, obj):
-        print(self.name + "." + obj)
+        print(self.name + "." + str(obj))
+        return
     def login(self):
         # tool.line()
         self.out("访问主页 获取 token session")
@@ -68,7 +79,7 @@ class AutoSophia:
             self.out("error！ 没能抓取到token")
 
     def help(self):
-        print(dir(self))
+        self.out(dir(self))
     def showUser(self, user, show=True):
         userInfo ="U " + tool.fill(user.get("device", ""), ' ', 15) +  " " + tool.fill(user.get("icon", ""), ' ', 15) + " "  + user.get("name", "")
         if(show):
@@ -126,7 +137,7 @@ class AutoSophia:
         if(len(res) >= 2):
             self.out("该用户多次出现？？？？？")
             for item in res:
-                print(item)
+                self.out(item)
             tool.line()
         return res
     def goRoom(self, roomId):
@@ -183,9 +194,9 @@ class AutoSophia:
                             self.doSend(msg)
                     time.sleep(0.4)
                 except Exception as e:
-                    self.out("消息发送异常,消息队列:")
-                    print(self.listMsgQue)
-                    print(e)
+                    self.out("消息发送异常 消息队列:")
+                    self.out(self.listMsgQue)
+                    self.out(traceback.format_exc())
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
             time.sleep(3)
 
@@ -215,7 +226,7 @@ class AutoSophia:
                     dt = dt + 10
                     dt = dt % 3600
                 except Exception as e:
-                    print(e)
+                    self.out(traceback.format_exc())
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
             time.sleep(3)
     # 定时抓取消息##########################
@@ -229,17 +240,16 @@ class AutoSophia:
                     obj = self.rece()
                     if(obj != ""):
                         self.makeHello(obj)
-                    time.sleep(tt)
                 except Exception as e:
-                    print(e)
-
+                    self.out(traceback.format_exc())
+                time.sleep(tt)
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止getHello ")
             time.sleep(3)
     # 抓取发言    json Obj
     def rece(self):
         # 获取最新时间的消息1530004210 157 s秒
         res = ""
-        responce=self.http.doGet("http://drrr.com/json.php?fast=1&update="+str(self.lastMsgTime))
+        responce=self.http.doGet("http://drrr.com/json.php?update="+str(self.lastMsgTime))
         if(responce != "" and type(responce) != str ):
             jsonStr = responce.read()
             if(jsonStr != ""):
@@ -276,8 +286,12 @@ class AutoSophia:
     def playMusic(self, url="", name="", fromName=""):
         self.musicPlayType = 0 #重置为随机播放
 
-        if(url[0:4] != "http"):
-            music = self.robot.getMusic(name, fromName, self.musicPlayType)
+        if(url[0:4] != "http"): #无地址url则是定向点播
+            if(name == ""): #无名字 则自动换
+                music = self.robot.turnMusic(self.musicPlayType)
+            else:
+                self.send("/me 正在搜索歌曲[" + name + "]" + self.tail)
+                music = self.robot.getMusic(name, fromName)
             url = music.get("url", "")
             name = music.get("name", "")
             fromName = music.get("fromName", "")
@@ -293,7 +307,7 @@ class AutoSophia:
             else:   #不在线
                 msg = "/me Then play" + fromName + " ordered [" + name + "]" + "" + self.tail
             self.send(msg)
-        self.out("url=" + url + " name=" + name + " fromName=" + fromName )
+        self.out("分享歌曲url=" + url + " name=" + name + " fromName=" + fromName )
         if(url == ""):
             self.send("/me 怼不起,没有找到类似的歌曲,瑟瑟发抖"+self.tail)
             return
@@ -306,7 +320,7 @@ class AutoSophia:
         self.lastMusicTime = tool.getNowTime()
         return
     def listMusic(self):
-        print(self.robot.listMusic)
+        self.out(self.robot.listMusic)
     # 切歌控制 on/off/turn/prev/next/remove
     def music(self, cmd="on"):
         self.out("music:" + cmd)
@@ -346,15 +360,15 @@ class AutoSophia:
                         self.send(cmd)
                         time.sleep(1)
             except Exception as e:
-                print(e)
+                self.out(traceback.format_exc())
         return
     # 抓取到消息的auto回复
     def makeHello(self, obj):
         res = ""
         try:
             # tool.line()
-            # print("抓取到消息obj")
-            # print(obj)
+            # self.out("抓取到消息obj")
+            # self.out(obj)
             self.lastMsgTime = obj.get("update", self.lastMsgTime)
             talks = obj.get('talks', "")
             users = obj.get('users', "")
@@ -367,7 +381,7 @@ class AutoSophia:
             if(talks != ""):
                 onceDocount = 0
                 for item in talks:
-                    # print(item)
+                    # self.out(item)
                     msgTime = item.get("time", tool.getNowTime())
                     msgId = item.get('id', " ")
                     msgType = item.get('type', 'message')
@@ -395,6 +409,7 @@ class AutoSophia:
                         msgData = '悄悄的的把[' + name + ']给记在小本子上 '  + self.tail
 ######################################################## 不处理
                     if( self.roomMsg.get(msgId, "") != ""): #已经处理过 或者是自己发送的 或者取出发送者失败
+                        self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
                         break
 
                     if(msgType == "me" or msgType == "message"): #只记录聊天消息
@@ -405,7 +420,9 @@ class AutoSophia:
 
                     if(msgType == 'music'):
                         music = { "name":name, "url":url, "fromName":msgFromName }
-                        self.robot.addMusic(music) #添加用户分享记录
+                        res = self.robot.addMusic(music) #添加用户分享记录
+                        if(res == 1):   #更新则不提示
+                            msgData = ""
                         self.musicNow = music
                         self.lastMusicTime = tool.getNowTime()
 
@@ -421,14 +438,14 @@ class AutoSophia:
                     weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
                     ran = int(1.0 * olRan * (1+ 1.0 * (self.status-70) / 100) )
 
-                    self.out("发言权" + tool.fill(str(weight) + "" , ' ', 6) + " 随机数" + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + " fromName:" + tool.fill(msgFromName,' ',12) + " msgType:"+tool.fill(msgType,' ',10) + " " + msgData)
+                    self.out("新消息 " + msgId + " 发言权" + tool.fill(str(weight) + "" , ' ', 6) + " 随机数" + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + " from:" + tool.fill(msgFromName,' ',12) + " type:"+tool.fill(msgType,' ',6) + " data:" + msgData)
 
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
                             ran = tool.getRandom(0,100)
                             if(ran < self.status):
-                                msgData = msgData[len('@' + self.name + " "): 9999] #去掉@ 获取消息体
+                                msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
                                 flag = 1
                             else:
                                 self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
@@ -455,13 +472,13 @@ class AutoSophia:
                         elif(flag == 2):
                             res = msgData
 
-                        if(res != "" and flag != 0 and onceDocount < 3): # 最多一次抓取发送3个
+                        if(res != "" and flag != 0 and onceDocount < 10): # 最多一次抓取发送3个
                             res = '/me ' + res
                             onceDocount = onceDocount + 1
                             self.send(res)
                         
         except Exception as e:
-            print("Exception:" + str(e))
+            self.out("Exception:" + str(e))
         # tool.line()
         return res
     # /do help   指令控制行为 
@@ -471,6 +488,22 @@ class AutoSophia:
         flag = False
         size = len(msgData)
 
+        pr = ['放音乐', '播放音乐', '放歌', '开启放歌']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.music("on")
+                    flag = True
+                    break
+        pr = ['不要放音乐', '停止放歌','停止音乐', '别放歌', '关闭放歌','关闭音乐', '别放了']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.music("off")
+                    flag = True
+                    break
         pr = ['prev', '上一曲', '上一首', '换回去']
         if(not flag):
             for item in pr:
@@ -511,11 +544,10 @@ class AutoSophia:
                     index1 = msgData.find(after)
                     if(index1+len(after) == size):
                         flag = True
-                        # print(len(before), index1)
                         msgData = msgData[len(before):index1].strip()
                         break
-        print("filterCmd", flag, msgData)
         if(flag):#抽离点歌 名字
+            self.out('filterCmd.' + str(flag) + "." + msgData)
             res = False
             self.playMusic(url="", name=msgData, fromName=fromName)
         elif( re.search('/do ', msgData) != None ): 
@@ -523,8 +555,6 @@ class AutoSophia:
             cmd = msgData[4:9999]
             cmd = cmd.strip()
             cmds = cmd.split(' ')
-            # self.out("操控：" )
-            # print(cmd, cmds)
             if(len(cmds) > 0 and cmds[0] == ""):
                 cmds.pop(0)
 
@@ -549,13 +579,18 @@ class AutoSophia:
                     flag = True
                     break
         statusOn = ['笨蛋', '傻逼', 'sb', 'SB', 'Sb','sB', '傻b', '傻']
-        statusOff = ['我错了', '求你了', '后悔', '收回','我收回','对不起', '悔恨', '不要生气']
+        statusOff = ['开心一点','开心点','我错了', '求你了', '后悔', '收回','我收回','对不起', '悔恨', '不要生气']
         if(not flag):
             for item in statusOn:
                 if(msgData == item):
                     self.robot.turnUser(fromName, "1")
                     self.status = self.status - self.statusOffDeta
-                    msg = self.name + "生气值暴涨" + str(self.statusOffDeta) + "，接下来不想再搭理" + fromName + "了" + self.tail
+                    if(self.status <= self.statusMin - self.statusOffDeta):
+                        msg = self.name + "已经气死了 没这号robot 😕"
+                    elif(self.status <= self.statusMin):
+                        msg = self.name + "已经气炸了 不想再说话了 ε=( o｀ω′)ノ "
+                    else:
+                        msg = self.name + "生气值暴涨" + str(self.statusOffDeta) + "，不想再搭理" + fromName + "了" + self.tail
                     flag = True
                     break
         if(not flag):
@@ -563,11 +598,16 @@ class AutoSophia:
                 if(msgData == item):
                     self.robot.turnUser(fromName, "0")
                     self.status = self.status + self.statusOnDeta
-                    msg = self.name + "气消了一点点，生气值-" + str(self.statusOnDeta) + self.tail
+                    if(self.status >= self.statusMax + self.statusOnDeta):
+                        msg = self.name + "现在没有生气(╯▔皿▔)╯"
+                    elif(self.status >= self.statusDefault):
+                        msg = self.name + "心情好转了 不生气了﹏"
+                    else:
+                        msg = self.name + "气消了一点点，生气值-" + str(self.statusOnDeta) + self.tail
                     flag = True
                     break
-        # print(flag, msgData)
         if(flag):#状态控制
+            self.out('filterFlag.' + str(flag) + "." + msgData)
             res = False
             self.send("/me " + msg)
         return res
@@ -590,18 +630,18 @@ class AutoSophia:
                         method()
                     res = True
                 else:
-                    print(method)
+                    self.out(method)
         return res
  
 
     def test(self):
         self.login()
         self.getRooms()
-        self.goRoom("c74BSkQUra")
+        self.goRoom("YfdWkQ1lEs")
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         tool.wait()
         return

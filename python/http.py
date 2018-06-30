@@ -19,8 +19,9 @@ import uuid
 import base64
 import httplib
 import tool
- 
-class Http:    
+import traceback
+
+class Http:
     def __init__(self):
         self.cookie = cookielib.CookieJar()
         self.cookieHander = urllib2.HTTPCookieProcessor(self.cookie)
@@ -36,6 +37,8 @@ class Http:
         self.opener.addheaders = turnHeader
         # urllib2.install_opener(opener)  
         return
+    def out(self, *obj):
+        print("http." + str(obj))
     def getCookie(self):
         res = {}
         for item in self.cookie:
@@ -44,16 +47,16 @@ class Http:
     def show(self, response):
         tool.line()
         try:
-            print("Cookie:")
+            self.out("Cookie:")
             for item in self.cookie:
-                print '##' + item.name + ':' + item.value
+                self.out( '##' + item.name + ':' + item.value)
 
-            print("Code: " + str(response.getcode()))
-            print("Res : " + str(response.msg))
-            print("Headers : ")
-            print(response.headers)
+            self.out("Code: " + str(response.getcode()))
+            self.out("Res : " + str(response.msg))
+            self.out("Headers : ")
+            self.out(response.headers)
         except Exception as e:
-            print(e)
+            self.out(traceback.format_exc())
         tool.line()
         return
     # 访问地址后 set-cookie自动被设置
@@ -63,7 +66,7 @@ class Http:
             response = self.opener.open(url)
             # self.show(response)
         except Exception as e:
-            print(e)
+            self.out(traceback.format_exc())
         return response
     def doPost(self, url=None, postData=None):
         response = "error" 
@@ -76,7 +79,7 @@ class Http:
                 response  = self.opener.open(url)
             # self.show(response)
         except Exception as e:
-            print(e)
+            self.out(traceback.format_exc())
 
         return response
     def do(self, url=None, postData=None):

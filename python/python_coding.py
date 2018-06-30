@@ -28,7 +28,7 @@ ret = hasattr(obj,'func')#因为有func方法所以返回True
 print(ret)
 if(ret == True) :
 #获取类方法l成员
-	ret = getattr(obj, 'func')#获取的是个对象
+ret = getattr(obj, 'func')#获取的是个对象
 callable(ret) #是否可调用 函数#########################
 
 	r = ret()
@@ -73,10 +73,14 @@ str[0:3]
 str1 = "amsdflaskf1000slafj"
 str1.find('1000')#可以查找出索引值  12
 info=re.search(r'\d+',str1)#'\d'代表任意一个数字，'+'可以匹配数字一次或者无限次，只能匹配最前面的
+re.search(r'', str).group() 分组战士字符串
 '1000'  
 info=re.findall(r'\d+',str1)#找到所有匹配的字符串，并把它们放到一个列表中
 ['1000','1200']
-3、sub(pattern, repl, string , count=0, flags=0)    将字符串中匹配正则表达式的部分替换为其他值
+3、sub(pattern, from, to , count=0, flags=0)    将字符串中匹配正则表达式的部分替换为其他值
+'aaaaaabbbbbcccccccc'
+ re.sub(r'b+b', 'ddddd', s)
+ 'aaaaaadddddcccccccc'
 re.split(r':| ',str6)#split用来分割字符串，':|'的意思是只要看见冒号和空格就会分割成一部分  
 ['imooc', 'java', 'c++', 'python', 'c#'] 
 >>> str="hello boy<[www.doiido.com]>byebye"
@@ -130,16 +134,19 @@ print( "keys:", )
 print(  dict2.keys() )
 print( " " + "values:", )
 print( dict2.values() )
+dict.clear() 清空
 1：dict.copy：返回一个字典的浅复制
 2:dict.get(key,default=None):返回指定键的值，如果值不在字典中返回default值）
 3:dict.has_key(key):如果键在字典dict里返回true，否则返回false
 dict.pop(key) 移除
 4：dict.keys()
 5:dict.items() ：以列表的形式返回遍历的键值对元组数组
+
 #数组 长度
 #遍历字典 编码utf unicode
 s='林' #当程序执行时，无需加u，'林'也会被以unicode形式保存新的内存空间中,
 #s可以直接encode成任意编码格式
+list.clear()
 s1=s.encode('utf-8')
 s2=s.encode('gbk')
 for i in range(len(arr)):
