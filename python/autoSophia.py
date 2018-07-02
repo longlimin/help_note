@@ -22,20 +22,20 @@ class AutoSophia:
         self.count = int(name[6:999])   #编号
 
         self.listMsgQue = []    #消息发送队列
-        self.timeDetaMsgSend = 1    #最小发送消息间隔s
+        self.timeDetaMsgSend = 1.1    #最小发送消息间隔s
 
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
 
 ############### 心情模块
-        self.statusMin = 0
+        self.statusMin = 20
         self.statusMax = 95
         self.statusDefault = 80
         self.status = 90     #说话欲望值 0-100
         self.statusOnDeta = 15      #开心
         self.statusOffDeta = 15     #难过
-        self.statusDownDeta = 80    #闭嘴
+        self.statusDownDeta = 40    #闭嘴
 
         self.getMsgDetaTime = 1     #抓取消息间隔
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
@@ -48,7 +48,7 @@ class AutoSophia:
         self.ifOnMusic = False
         self.tail = " の... "
     def out(self, obj):
-        print(self.name + "." + str(obj))
+        print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
     def login(self):
         # tool.line()
@@ -140,6 +140,21 @@ class AutoSophia:
                 self.out(item)
             tool.line()
         return res
+    def goRoomName(self, roomName):
+        if(self.roomIndex is None or self.roomIndex == "" or self.roomIndex == {}):
+            self.getRooms()
+        tool.line()
+        self.out("查找房间名字加入" + roomName)
+        i = 0
+        for key in self.roomIndex:
+            room = self.roomIndex[key]
+            name = room.get("name", "")
+            if(re.search(roomName, name) != None):
+                self.goRoom(key)
+                break;
+            i = i+1
+        tool.line()
+
     def goRoom(self, roomId):
         # tool.line()
         self.out("加入房间:" + roomId)
@@ -249,7 +264,9 @@ class AutoSophia:
     def rece(self):
         # 获取最新时间的消息1530004210 157 s秒
         res = ""
-        responce=self.http.doGet("http://drrr.com/json.php?update="+str(self.lastMsgTime))
+        url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
+        # self.out(url)
+        responce=self.http.doGet(url)
         if(responce != "" and type(responce) != str ):
             jsonStr = responce.read()
             if(jsonStr != ""):
@@ -369,7 +386,10 @@ class AutoSophia:
             # tool.line()
             # self.out("抓取到消息obj")
             # self.out(obj)
-            self.lastMsgTime = obj.get("update", self.lastMsgTime)
+            newTime = obj.get("update", self.lastMsgTime)
+            newTime = int(newTime)
+            # print(newTime)
+            self.lastMsgTime = newTime
             talks = obj.get('talks', "")
             users = obj.get('users', "")
             if(users != ""):
@@ -409,7 +429,7 @@ class AutoSophia:
                         msgData = '悄悄的的把[' + name + ']给记在小本子上 '  + self.tail
 ######################################################## 不处理
                     if( self.roomMsg.get(msgId, "") != ""): #已经处理过 或者是自己发送的 或者取出发送者失败
-                        self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
+                        # self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
                         break
 
                     if(msgType == "me" or msgType == "message"): #只记录聊天消息
@@ -428,29 +448,29 @@ class AutoSophia:
 
                     self.roomMsg[msgId] = item #标记未已经处理 历史消息
 
-                    if(self.status>90):
-                        self.status = 90
-                    elif(self.status < 5):
-                        self.status = 5
+                    if(self.status>self.statusMax):
+                        self.status = self.statusMax
+                    elif(self.status < self.statusMin):
+                        self.status = self.statusMin
 
                     detaTime = tool.getNowTime() - self.lastEchoTime # ms 60s
                     olRan = tool.getRandom(0,self.maxDetaTime) / 1000    #0-180 过于久没有发过消息了 权重高则可能自回复
                     weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
-                    ran = int(1.0 * olRan * (1+ 1.0 * (self.status-70) / 100) )
+                    ran = int(1.0 * olRan * (1+ 1.0 * (self.status-60) / 100) )
 
                     self.out("新消息 " + msgId + " 发言权" + tool.fill(str(weight) + "" , ' ', 6) + " 随机数" + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + " from:" + tool.fill(msgFromName,' ',12) + " type:"+tool.fill(msgType,' ',6) + " data:" + msgData)
 
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
+                            msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
                             ran = tool.getRandom(0,100)
                             if(ran < self.status):
-                                msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
                                 flag = 1
                             else:
                                 self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
                                 flag = 2
-                                msgData = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
+                                msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
                         elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高 主动搭话概率
                             flag = 1
                     else: #事件 
@@ -470,9 +490,9 @@ class AutoSophia:
                                     else:
                                         self.out("robot接口调用失败 code=" + code)
                         elif(flag == 2):
-                            res = msgData
+                            res = msg
 
-                        if(res != "" and flag != 0 and onceDocount < 10): # 最多一次抓取发送3个
+                        if(res != "" and flag != 0 and onceDocount < 6): # 最多一次抓取发送3个
                             res = '/me ' + res
                             onceDocount = onceDocount + 1
                             self.send(res)
@@ -571,28 +591,10 @@ class AutoSophia:
         size = len(msgData)
         msg = ""
         keys = ["别说话", "你别说话", "闭嘴", "shutup"]
-        if(not flag):
-            for item in keys:
-                if(msgData == item):
-                    self.status = self.status - self.statusDownDeta
-                    msg = "好的" + ",生气值陡升" + str(self.statusDownDeta) + ",当前" + str(100-self.status) + "% "
-                    flag = True
-                    break
         statusOn = ['笨蛋', '傻逼', 'sb', 'SB', 'Sb','sB', '傻b', '傻']
         statusOff = ['开心一点','开心点','我错了', '求你了', '后悔', '收回','我收回','对不起', '悔恨', '不要生气']
-        if(not flag):
-            for item in statusOn:
-                if(msgData == item):
-                    self.robot.turnUser(fromName, "1")
-                    self.status = self.status - self.statusOffDeta
-                    if(self.status <= self.statusMin - self.statusOffDeta):
-                        msg = self.name + "已经气死了 没这号robot 😕"
-                    elif(self.status <= self.statusMin):
-                        msg = self.name + "已经气炸了 不想再说话了 ε=( o｀ω′)ノ "
-                    else:
-                        msg = self.name + "生气值暴涨" + str(self.statusOffDeta) + "，不想再搭理" + fromName + "了" + self.tail
-                    flag = True
-                    break
+
+
         if(not flag):
             for item in statusOff:
                 if(msgData == item):
@@ -606,6 +608,32 @@ class AutoSophia:
                         msg = self.name + "气消了一点点，生气值-" + str(self.statusOnDeta) + self.tail
                     flag = True
                     break
+        if(self.robot.getUser(fromName).get("flag", "0") != "0"):   #限制黑名单只接受道歉
+            res = True
+            self.out("黑名单只接受道歉 不想搭理" + fromName)
+            return res
+
+        if(not flag):
+            for item in keys:
+                if(msgData == item):
+                    self.status = self.status - self.statusDownDeta
+                    msg = "好的" + ",生气值陡升" + str(self.statusDownDeta) + ",当前" + str(100-self.status) + "% "
+                    flag = True
+                    break
+        if(not flag):
+            for item in statusOn:
+                if(msgData == item):
+                    self.robot.turnUser(fromName, "1")
+                    self.status = self.status - self.statusOffDeta
+                    if(self.status <= self.statusMin - self.statusOffDeta):
+                        msg = self.name + "已经气死了 没这号robot 😕"
+                    elif(self.status <= self.statusMin):
+                        msg = self.name + "已经气炸了 不想再说话了 ε=( o｀ω′)ノ "
+                    else:
+                        msg = self.name + "生气值暴涨" + str(self.statusOffDeta) + "，不想再搭理" + fromName + "了" + self.tail
+                    flag = True
+                    break
+
         if(flag):#状态控制
             self.out('filterFlag.' + str(flag) + "." + msgData)
             res = False
@@ -637,7 +665,10 @@ class AutoSophia:
     def test(self):
         self.login()
         self.getRooms()
-        self.goRoom("YfdWkQ1lEs")
+        # self.goRoom("YfdWkQ1lEs")
+
+        self.goRoomName("戴上耳机")
+
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
