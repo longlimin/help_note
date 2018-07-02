@@ -101,15 +101,15 @@ class Robot:
         music = {}
 
         if(musicName != ""):
-            res = self.db.executeQueryOne("select * from music where name=? ", musicName)
-            if(res.get("url", "") != ""):
-                music = res
-            else:
-                res=self.auto163.getMusic(musicName, fromName) # [music,music]
-                for item in res:
-                    self.addMusic(item)
-                if(len(res) > 0):
-                    music = res[tool.getRandom(0, len(res))]
+            # res = self.db.executeQueryOne("select * from music where name=? ", musicName)
+            # if(res.get("url", "") != ""):
+            #     music = res
+            # else:
+            res=self.auto163.getMusic(musicName, fromName) # [music,music]
+            for item in res:
+                self.addMusic(item)
+            if(len(res) > 0):
+                music = res[tool.getRandom(0, len(res))]
         if(music.get("url", "") != ""):
             self.palyHistoryMusic.append(music)
             if(len(self.palyHistoryMusic) > 10):

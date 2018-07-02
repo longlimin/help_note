@@ -229,7 +229,7 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastEchoTime # ms
                     if(detaTime > self.maxDetaTime):
                         message = "/me ^ ^"
-                        self.send(message)
+                        # self.send(message)
                         self.out(str(i) + "\t" + message)
                     detaTime = tool.getNowTime() - self.lastMusicTime # ms
                     if(self.ifOnMusic and detaTime > self.maxMusicTime and len(self.getRoomUsers(self.roomId)) > 1 ): #音乐开启 且 太久没放歌曲 且当前房间有至少两个人(包括自己robot)
@@ -426,7 +426,7 @@ class AutoSophia:
                         music = item.get('music', {})
                         name = music.get('name', '')
                         url = music.get('url', '')
-                        msgData = '悄悄的的把[' + name + ']给记在小本子上 '  + self.tail
+                        # msgData = '悄悄的的把[' + name + ']给记在小本子上 '  + self.tail
 ######################################################## 不处理
                     if( self.roomMsg.get(msgId, "") != ""): #已经处理过 或者是自己发送的 或者取出发送者失败
                         # self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
