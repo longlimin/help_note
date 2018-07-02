@@ -20,12 +20,14 @@ WALKER
 // 电信 非固定ip 
 101.88.12.97
 180.172.44.61
+58.35.21.35
+
 
 //
 插件 switchyOmega.crx 网盘
 软件 shadowsock.exe   网盘/github
     ubuntu_server
-    140.82.3.69
+    140.82.3.69 美国
     8989
     yw020154
     127.0.0.1

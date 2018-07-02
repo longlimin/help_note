@@ -15,11 +15,11 @@ from tool import ThreadRun
 
 
 class AutoSophia:
-    def __init__(self, name="0000000"):
+    def __init__(self, name="0000000", count = 0):
         self.robot = Robot()
         self.http = Http()
         self.name = "CC"
-        self.count = int(name[6:999])   #编号
+        self.count = count   #编号
 
         self.listMsgQue = []    #消息发送队列
         self.timeDetaMsgSend = 1.1    #最小发送消息间隔s
@@ -45,7 +45,7 @@ class AutoSophia:
         self.maxMusicTime = 1000 * 60 * 4 #音乐间隔 暂不解析音乐文件时长控制
         self.musicNow = {}
         self.musicPlayType = -1
-        self.ifOnMusic = False
+        self.ifOnMusic = True
         self.tail = " の... "
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
@@ -161,13 +161,13 @@ class AutoSophia:
         self.showRoom(roomId)
         responce=self.http.doGet("http://drrr.com/room/?id=" + roomId)
         self.roomId = roomId
-        self.send("/me 大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
+        # self.send("/me 大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
         return
     def outRoom(self):
         self.out("离开房间:" + self.roomId)
         # self.send("/me " + self.name + "好无聊啊 "+self.name +"要出去溜达一会儿" + self.tail)
         # self.send("/me "+self.name+"一定会回来的" + self.tail)
-        self.send("/me 出去一下，马上回来" + self.tail)
+        # self.send("/me 出去一下，马上回来" + self.tail)
         self.showRoom(self.roomId)
         time.sleep(self.timeDetaMsgSend *  len(self.listMsgQue) + 1)  #等待一会儿消息发送
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
@@ -207,7 +207,7 @@ class AutoSophia:
                         if(len(self.listMsgQue) > 0):
                             msg = self.listMsgQue.pop(0)
                             self.doSend(msg)
-                    time.sleep(0.4)
+                    time.sleep(self.timeDetaMsgSend)
                 except Exception as e:
                     self.out("消息发送异常 消息队列:")
                     self.out(self.listMsgQue)
@@ -228,8 +228,8 @@ class AutoSophia:
                     # message = "Now Time is "+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     detaTime = tool.getNowTime() - self.lastEchoTime # ms
                     if(detaTime > self.maxDetaTime):
-                        message = "/me ^ ^"
-                        # self.send(message)
+                        message = "/me " + time.strftime("%Y%m%d %H:%M:%S")
+                        self.send(message)
                         self.out(str(i) + "\t" + message)
                     detaTime = tool.getNowTime() - self.lastMusicTime # ms
                     if(self.ifOnMusic and detaTime > self.maxMusicTime and len(self.getRoomUsers(self.roomId)) > 1 ): #音乐开启 且 太久没放歌曲 且当前房间有至少两个人(包括自己robot)
@@ -666,13 +666,18 @@ class AutoSophia:
         self.login()
         self.getRooms()
         # self.goRoom("YfdWkQ1lEs")
-
-        self.goRoomName("戴上耳机")
-
+        self.goRoomName("上帝")
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+
+        # for i in range(len(self.roomIndex.keys())):
+        #     self.goRoom( self.roomIndex.keys()[i] )
+        #     self.music("turn")
+        #     time.sleep(7)
+        #     self.outRoom()
+        #     time.sleep(3)
 
         tool.wait()
         return
@@ -680,9 +685,13 @@ if __name__ == '__main__':
     size = 1
     objs = []
     for i in range(size):
-        obj = AutoSophia("Walker" + str(i))
+        obj = AutoSophia("白学家-" + str(i), i)
         objs.append(obj)
     for i in range(size):
         ThreadRun( "Robot." + str(i), objs[i].test ).start()
-        time.sleep(10)
+        time.sleep(5)
     time.sleep(99999)
+    tool.wait()
+
+# the admin
+# akakoori
