@@ -146,54 +146,33 @@ cochat HTTP socketIo 同步模拟
 
 
 //socket 认证参数
+CurrentUser.getConfig()
+this.getServer(), this.getToken(), this.getUuid()
+    config = {};
+    config.server = results[0];
+    var url = results[0] + "/";
+    if (url.toLowerCase().indexOf('http://') < 0) {
+        url = 'http://' + url;
+    }
+    config.url = url;
+    config.uuid = results[2];
+    config.header = {"X-DEVICE-NAME": results[2]};
+    if (results[1]) {
+        config.header["X-XSRF-TOKEN"] = results[1];
+    }
+                                
 
                 USER_ORG                USER_SERVER:'http://122.20.61.8:9080/' USER_TOKEN UUID
 CurrentUser.getUserInfo(), CurrentUser.getConfig()
-                                config = {};
-                                config.server = results[0];
-                                var url = results[0] + "/";
-                                if (url.toLowerCase().indexOf('http://') < 0) {
-                                    url = 'http://' + url;
-                                }
-                                config.url = url;
-                                config.uuid = results[2];
-                                config.header = {"X-DEVICE-NAME": results[2]};
-                                if (results[1]) {
-                                    config.header["X-XSRF-TOKEN"] = results[1];
-                                }
                                 
-0:
-ADMIN_GROUP_CODES:"''"
-CMPY_ADMIN:undefined
-CMPY_NAME:"工商银行"
-DEPT_CODE:"0000100007"
-DEPT_NAME:"上海研发部上海开发三部"
-ODEPT_CODE:"0010100005"
-ODEPT_CODE_PATH:"0010100000^0010100005^"
-ROLE_CODES:"'RADMIN','OBCP001','OBCP002','RPUB','RPUB2'"
-TDEPT_CODE:"0000100007"
-TDEPT_NAME:"上海研发部上海开发三部"
-USER_BIRTHDAY:"19871205"
-USER_CODE:"0000803837"
-USER_EMAIL:"caisy/测试/icbc"
-USER_IMG_SRC:""
-USER_LOGIN_NAME:"000803837"
-USER_MOBILE:"13817365996"
-USER_NAME:"肴贼"
-USER_OFFICE_PHONE:"021-68893753"
-USER_POST:"经理（一级）"
-USER_SEX:"2"
-USER_WORK_NUM:"000803837"
-__proto__:Object
+0: 
 1:
 header:{X-DEVICE-NAME: "@3b7904bb-20ba-7820-fab3-0bb28b68c4fe", X-XSRF-TOKEN: "5855fb3a4553165e1cfcae13eecedb5b"}
 server:"http://122.20.61.8:9080/"
 url:"http://122.20.61.8:9080//"
 uuid:"@3b7904bb-20ba-7820-fab3-0bb28b68c4fe"
 __proto__:Object
-2:{ROLE_CODES: "'RADMIN','OBCP001','OBCP002','RPUB','RPUB2'", USER_CODE: "0000803837", USER_NAME: "肴贼", USER_LOGIN_NAME: "000803837", USER_WORK_NUM: "000803837", …}
-length:3
-__proto__:Array(0)
+
 
 //socket连接操作
 

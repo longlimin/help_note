@@ -8,7 +8,7 @@ import thread
 from flask import Flask, render_template
 
 ########################################
-from ServiceMsg import ServiceMsg
+# from ServiceMsg import ServiceMsg
 
 ############################
 # 已废弃使用
@@ -47,7 +47,7 @@ def msg(sid, data):
         vt = data[key].encode("utf-8")
         map[kt] = vt
 
-    msg = ServiceServer().do(fromMsg)
+    # msg = ServiceServer().do(fromMsg)
 
     print('>>>>>>>>>>>>>>>', msg)
     sio.emit('msg', msg, room=sid)
@@ -55,12 +55,6 @@ def msg(sid, data):
 @sio.on('event', namespace='/')
 def event(sid, data):
     print("event ", data)
-
-    #读取
-    f = open(r"main.py","r")
-    data = f.read()
-    print(data)
-    f.close()
 
     sio.emit('event', data, room=sid)
 

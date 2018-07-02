@@ -119,7 +119,7 @@ def sleep(mills):
 def getNowTime():
     return int(time.time()*1000)
 def line():
-    print("--------------------------------\n")
+    print("--------------------------------")
 def toString(dictObj):
     res = "[ "
     for key in dictObj.keys():

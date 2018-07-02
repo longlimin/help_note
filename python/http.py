@@ -92,10 +92,7 @@ class Http:
         jsonStr = responce.read()
         if(jsonStr != None and type(jsonStr) == str):
             jsonStr = jsonStr.strip()
-            if(jsonStr[0:1] == "{"):
-                res = tool.makeObj(json.loads(jsonStr))
-            else:
-                self.out("解析json失败:" + jsonStr[0:200])
+            res = tool.toJson(jsonStr)
         else:
             self.out("responce 读取失败,url:" + str(url) + " data:" + str(postData))
         return res
