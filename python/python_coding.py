@@ -73,7 +73,7 @@ str[0:3]
 str1 = "amsdflaskf1000slafj"
 str1.find('1000')#可以查找出索引值  12
 info=re.search(r'\d+',str1)#'\d'代表任意一个数字，'+'可以匹配数字一次或者无限次，只能匹配最前面的
-re.search(r'', str).group() 分组战士字符串
+re.search(r'', str).group() 分组展示字符串
 '1000'  
 info=re.findall(r'\d+',str1)#找到所有匹配的字符串，并把它们放到一个列表中
 ['1000','1200']
