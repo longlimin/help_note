@@ -2,7 +2,7 @@ cochat HTTP socketIo 同步模拟
 
 
 
-//登录结果
+//登录结果 userInfo
 {
 	"CONF_VARS": {
 		"@C_CC_OPEN_MAIL_OPEN_TYPES@": "doc,docx,xls,xlsx,pdf,ppt,txt,html,htm,jpg,gif,png,jpeg",
@@ -140,7 +140,111 @@ cochat HTTP socketIo 同步模拟
 }
 
 
-//websocket
+
+
+
+
+
+//socket 认证参数
+
+                USER_ORG                USER_SERVER:'http://122.20.61.8:9080/' USER_TOKEN UUID
+CurrentUser.getUserInfo(), CurrentUser.getConfig()
+                                config = {};
+                                config.server = results[0];
+                                var url = results[0] + "/";
+                                if (url.toLowerCase().indexOf('http://') < 0) {
+                                    url = 'http://' + url;
+                                }
+                                config.url = url;
+                                config.uuid = results[2];
+                                config.header = {"X-DEVICE-NAME": results[2]};
+                                if (results[1]) {
+                                    config.header["X-XSRF-TOKEN"] = results[1];
+                                }
+                                
+0:
+ADMIN_GROUP_CODES:"''"
+CMPY_ADMIN:undefined
+CMPY_NAME:"工商银行"
+DEPT_CODE:"0000100007"
+DEPT_NAME:"上海研发部上海开发三部"
+ODEPT_CODE:"0010100005"
+ODEPT_CODE_PATH:"0010100000^0010100005^"
+ROLE_CODES:"'RADMIN','OBCP001','OBCP002','RPUB','RPUB2'"
+TDEPT_CODE:"0000100007"
+TDEPT_NAME:"上海研发部上海开发三部"
+USER_BIRTHDAY:"19871205"
+USER_CODE:"0000803837"
+USER_EMAIL:"caisy/测试/icbc"
+USER_IMG_SRC:""
+USER_LOGIN_NAME:"000803837"
+USER_MOBILE:"13817365996"
+USER_NAME:"肴贼"
+USER_OFFICE_PHONE:"021-68893753"
+USER_POST:"经理（一级）"
+USER_SEX:"2"
+USER_WORK_NUM:"000803837"
+__proto__:Object
+1:
+header:{X-DEVICE-NAME: "@3b7904bb-20ba-7820-fab3-0bb28b68c4fe", X-XSRF-TOKEN: "5855fb3a4553165e1cfcae13eecedb5b"}
+server:"http://122.20.61.8:9080/"
+url:"http://122.20.61.8:9080//"
+uuid:"@3b7904bb-20ba-7820-fab3-0bb28b68c4fe"
+__proto__:Object
+2:{ROLE_CODES: "'RADMIN','OBCP001','OBCP002','RPUB','RPUB2'", USER_CODE: "0000803837", USER_NAME: "肴贼", USER_LOGIN_NAME: "000803837", USER_WORK_NUM: "000803837", …}
+length:3
+__proto__:Array(0)
+
+//socket连接操作
+
+var config = {
+    transports:['websocket', 'polling'], // websocket优先
+    timeout:30 * 1000, // 超时时间
+    forceNew: true,
+    reconnection : false
+};
+
+
+server = USER_PARAM[@C_SY_COMM_SOCKET_SERV_V1.0@] :http://cochat.cn:9091   ！USER_PARAM
+socket = io(server, config);        //#######################
+socket.on('connect', function () { // 登录成功返回socket
+var token = params[1].header["X-XSRF-TOKEN"];    
+   
+socket.emit('loginv17', {
+    userName: params[0].USER_CODE,
+    displayName: params[0].USER_NAME,
+    odept: params[0].ODEPT_CODE,
+    token: token,
+    uuid: params[1].uuid,
+    version: LocalStore.get(params[2]['USER_CODE'] + '_LAST_MSG')
+}, function (offlineDatas) {
+    if (offlineDatas) { // 登录成功后执行
+        console.info("登录回调.loginv17.callback:!!!!");
+        console.info(offlineDatas)
+        var allDatas = offlineDatas['data'];
+        logined = true;
+        Connection.setOnline();
+
+        // 广播成功消息
+        $rootScope.$broadcast("socket:login");
+}}
+                            
+socket.on('disconnect', function () )
+socket.on('error', function () )
+socket.on('connect_error', function () )
+socket.on('connect_timeout', function () )
+socket.on('connecting', function () )
+socket.on('reconnecting', function () )
+socket.on('ping', function () )
+socket.on('pong', function () )
+socket.on('event', function () )
+socket.on('message', function () )
+
+
+                            
+
+                            
+//websocket 浏览器访问参数
 ws://cochat.cn:9091/socket.io/?EIO=3&transport=websocket
 
 Accept-Encoding:gzip, deflate
