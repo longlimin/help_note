@@ -30,8 +30,12 @@ class Socket:
     def connect(self):
         self.out("Connect url:" + self.url + " port:" + str(self.port))
         self.socket = SocketIO(self.url,port=self.port) # , params=self.config)
+        self.socket.on('message', on_message)
+
         self.out("Connect over ")
         return
+    def emit(self, type, data, callback=None):
+        return self.send(type, data, callback)
     def send(self, type, data, callback=None):
         if(self.socket == None):
             self.connect()
@@ -47,11 +51,12 @@ class Socket:
                 self.out("开启线程等待读取")
             while(self.socket != None):
                 try:
-                    self.socket.wait()
+                    self.out("wait")
+                    self.socket.wait(1)
                 except Exception as e:
                     self.out(traceback.format_exc())
-                time.sleep(1)
-            time.sleep(3)
+                # time.sleep(1)
+            time.sleep(1)
 
         return
 
@@ -74,18 +79,42 @@ class Socket:
 
 
 
+def t():
+    hosts = 'cochat.cn'
+    port = 9091
+    socket = Socket(hosts, port)
+    socket.on('message', on_message)
+    socket.on('error', on_error)
+    data = {
+        "v1": "aaaaaaaaaaa",
+        "v2": "bbbbbbbbb"}
+    socket.emit('message', data, messageCall)
+    socket.emit('event', data, eventCall)
 
+    time.sleep(1)
+    tool.wait()
 
-
-
-
+def messageCall(args):
+    print("messageCall---------")
+    print(args)
+    print("-------------")
+def eventCall(args):
+    print("eventCall---------")
+    print(args)
+    print("-------------")
+def on_error(args):
+    print("on_error---------")
+    print(args)
+    print("-------------")
+# 收到message消息处理过程
+def on_message(args):
+    print("on_message---------")
+    print(args)
+    print("-------------")
 def test():
     hosts = 'cochat.cn'
     port = 9091
 
-    # 收到message消息处理过程
-    def on_message(*args):
-        print ("recv:", args)
 
     sk = SocketIO(hosts,port=port)
     # sk = SocketIO(hosts,port=port,params={'token': 'ksdjfkjdf'})  #create connection with params
@@ -96,11 +125,15 @@ def test():
     data = {
         "v1": "aaaaaaaaaaa",
         "v2": "bbbbbbbbb"}
-    # send data to message
-    sk.emit('message', data, on_message)
-    # sk.sendf(data, on_message) # default send data to message
-    #send data to login
-    sk.emit('event', data, on_message)
-
+    sk.emit('message', data, messageCall)
+    # sk.emit('event', data, eventCall)
     print("over")
-    sk.wait_for_callbacks(seconds=1)
+    # sk.wait_for_callbacks(seconds=1)
+    sk.wait()
+    tool.wait()
+
+
+
+
+if __name__ == '__main__':
+    t()

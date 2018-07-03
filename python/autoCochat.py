@@ -107,18 +107,11 @@ class AutoCochat:
             "password":"1234qwer"
         })
         self.loginUser = obj
-        self.out("登录结果:")
-        # self.out(obj)
-        # "USER_TOKEN": "caf2ea9cec1f283c8588340a3583d756",
-
         token = obj.get("USER_TOKEN", "")
+        self.out("登录结果 token:" + token)
         urlWithPort = obj.get("CONF_VARS", {}).get("@C_SY_COMM_SOCKET_SERV_V1.0@", "http://cochat.cn:9091")
-        if(urlWithPort.find("http://") < 0):
-            urlWithPort = "http://" + urlWithPort
-        # http://cochat.cn:9091
         uus = urlWithPort.split(':')
         port = int(uus[2])
-        # url = "ws:" + uus[1] + ":" + uus[2]
         url = uus[1][2:999] #cochat.cn 不需要ws http 只需要ip 域名
         # ws://127.0.0.1:9002"
         # 182.92.224.228
@@ -164,7 +157,7 @@ class AutoCochat:
             "version":obj.get("USER_CODE", "") + "_LAST_MSG"
         }
         self.out(self.data)
-        self.socket.emit('loginv17', self.data, self.onSocketLogin)
+        # self.socket.emit('loginv17', self.data, self.onSocketLogin)
         self.out("已发送认证信息")
         return
     def connect(self, *args):
