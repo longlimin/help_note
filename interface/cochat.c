@@ -223,6 +223,54 @@ socket.on('message', function () )
                             
 
                             
+
+
+//单聊自己发的消息
+({
+	u'body': u'222222',
+	u'category': u'',
+	u'from': {
+		u'nickName': u'\u9648\u9e4f\u8f89',
+		u'type': u'USER',
+		u'id': u'0M4fxUb1d10H5HBbpSKoCZ',
+		u'fullId': u'u__0M4fxUb1d10H5HBbpSKoCZ'
+	},
+	u'version': u'0',
+	u'notification': None,
+	u'clientId': u'2ZNjD9Yud7XG3N2j7KfYLM',
+	u'to': {
+		u'nickName': u'\u8bb8\u6b22',
+		u'type': u'USER',
+		u'id': u'21JnEtnsdaY8e3mVOJ3mgdlA',
+		u'fullId': u'u__21JnEtnsdaY8e3mVOJ3mgdlA'
+	},
+	u'responseTimeMillis': 1530698049248,
+	u'contact': {
+		u'nickName': u'\u8bb8\u6b22',
+		u'type': u'USER',
+		u'id': u'21JnEtnsdaY8e3mVOJ3mgdlA',
+		u'fullId': u'u__21JnEtnsdaY8e3mVOJ3mgdlA'
+	},
+	u'at': u'',
+	u'time': u'2018-07-0417: 54: 09: 248',
+	u'bodyType': u'text',
+	u'timeMillis': 1530698049248,
+	u'id': u'm_5b3c99410cf2f54802256721',
+	u'datas': {
+		u'unreadCount': u'1'
+	}
+},
+<function<lambda>at0x7fc33cb7c578>)
+
+
+
+
+
+
+
+
+
+
 //websocket 浏览器访问参数
 ws://cochat.cn:9091/socket.io/?EIO=3&transport=websocket
 

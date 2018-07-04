@@ -13,6 +13,7 @@ from socketIO_client import SocketIO
 from socketIo import Socket
 
 from http import Http
+from robot import Robot
 from tool import ThreadRun
 from python_sqlite import Database
 
@@ -22,7 +23,7 @@ from python_sqlite import Database
 class AutoCochat:
     def __init__(self, name="Test"):
         self.name = name
-
+        self.robot = Robot()
         self.http = Http()
         self.db = Database()
         self.db.execute(
@@ -82,7 +83,8 @@ class AutoCochat:
     # 测试用
     def test(self):
         self.login()
-        ThreadRun( "InputHello." + str(self.name),  self.inputHello ).start()
+        # ThreadRun( "InputHello." + str(self.name),  self.inputHello ).start()
+        self.socket.waitRead()
         tool.wait()
         return
     # 监控执行
@@ -92,12 +94,10 @@ class AutoCochat:
 
     # 认证登录
     def login(self):
+        self.socket = None
         self.out("尝试登录:")
         # {CONF_V   ARS: "*", ORG_VARS: true, logintype: "mobile", id: "18408249138", password: "1234qwer"}
 # Request URL:http://picc.cochat.cn/SY_ORG_LOGIN.login.do?DESKTOP_OS=Win10&USER_LAST_BROWSER=Win32&USER_LAST_CLIENT=2.5.1&USER_LAST_OS=DESKTOP&USER_LAST_PCNAME=%7B%7D
-#
-# Set-Cookie:user_token=278d168a95af8661d6eddbdfe6dba59e; path=/
-# Set-Cookie:login_name=18408249138; path=/
 # request Cookie:JSESSIONID=abcb0skaQYCGs6lvy9orw
         obj = self.http.doJson("http://picc.cochat.cn/SY_ORG_LOGIN.login.do?DESKTOP_OS=Win10&USER_LAST_BROWSER=Win32&USER_LAST_CLIENT=2.5.1&USER_LAST_OS=DESKTOP&USER_LAST_PCNAME=%7B%7D",{
             "CONF_VARS":"*",
@@ -113,16 +113,11 @@ class AutoCochat:
         uus = urlWithPort.split(':')
         port = int(uus[2])
         url = uus[1][2:999] #cochat.cn 不需要ws http 只需要ip 域名
-        # ws://127.0.0.1:9002"
-        # 182.92.224.228
-        # hosts = 'ws:\/\/cochat.cn'
 
         self.socketServerUrl = urlWithPort
         self.socketUrl = url
         self.socketPort = port
         self.showUser()
-
-
 
         self.config = {
             "transports":['websocket', 'polling'],  # websocket优先
@@ -132,19 +127,20 @@ class AutoCochat:
         };
         self.out("socket开始")
         # self.socket = SocketIO(url,port=port) # , params=self.config)
-        self.socket = Socket(url, port)
+        self.socket = Socket(url,port=port) # , params=self.config)
         self.out("socket连接完成，开始初始化事件")
 
-        socketMsgTypes = ("connect", "disconnect","error","connect_error","connect_timeout","connecting","reconnecting","message", "event")
-        # for item in socketMsgTypes:
-        #     if(hasattr(self, item)):
-        #         method = getattr(self, item)
-        #         if(callable(method)):
-        #             self.socket.on(item, method)
-        #         else:
-        #             self.out("变量而非方法" + item + "回调?")
-        #     else:
-        #         self.out("属性" + item + "不存在，是否写错了名字?")
+        # socketMsgTypes = ("connect", "disconnect","error","connect_error","connect_timeout","connecting","reconnecting","message", "event")
+        socketMsgTypes = ("connect", "disconnect","message", "event")
+        for item in socketMsgTypes:
+            if(hasattr(self, item)):
+                method = getattr(self, item)
+                if(callable(method)):
+                    self.socket.on(item, method)
+                else:
+                    self.out("变量而非方法" + item + "回调?")
+            else:
+                self.out("属性" + item + "不存在，是否写错了名字?")
         self.socket.on("message", self.message)
 
         self.out("socket初始化事件完成，开始发送认证")
@@ -153,43 +149,125 @@ class AutoCochat:
             "displayName": "ccc",# tool.encode(obj.get("ORG_VARS", {}).get("@USER_NAME@", "") ),
             "odept":obj.get("ORG_VARS", {}).get("@ODEPT_CODE@", ""),
             "token":obj.get("USER_TOKEN", ""),
-            "uuid":str(uuid.uuid1()),
+            "uuid":"" + str(uuid.uuid1()),
             "version":obj.get("USER_CODE", "") + "_LAST_MSG"
         }
         self.out(self.data)
-        # self.socket.emit('loginv17', self.data, self.onSocketLogin)
+        self.socket.emit('loginv17', self.data, self.onSocketLogin)
         self.out("已发送认证信息")
         return
     def connect(self, *args):
-        print("connect", args)
+        print("connect")
+        print(args)
         self.socket.emit('loginv17', self.data, self.onSocketLogin)
         return
     def disconnect(self, *args):
-        print("disconnect", args)
+        print("disconnect")
         return
     def error(self, *args):
-        print("error", args)
+        print("error")
         return
     def connect_error(self, *args):
-        print("connect_error", args)
+        print("connect_error")
         return
     def connect_timeout(self, *args):
-        print("connect_timeout", args)
+        print("connect_timeout")
         return
     def connecting(self, *args):
-        print("connecting", args)
+        print("connecting")
         return
     def reconnect(self, *args):
-        print("reconnect", args)
+        print("reconnect")
         return
     def reconnecting(self, *args):
-        print("reconnecting", args)
+        print("reconnecting")
         return
-    def message(self, *args):
-        print("message", args)
+
+    def turnArray(self, args):
+        #args (1, 2, 3) 直接调用型 exe("select x x", 1, 2, 3)
+        #return [1, 2, 3] <- list(args)
+        #args ([1, 2, 3], ) list传入型 exe("select x x",[ 1, 2, 3]) len(args)=1 && type(args[0])=list
+        #return [1, 2, 3]
+        if(args and len(args) == 1 and (type(args[0]) is list) ):
+            res = args[0]
+        else:
+            res = list(args)
+        return res
+    def message(self, *args): # 普通消息
+        try:
+
+            # tool.line()
+            args = self.turnArray(args)
+            # print("收到message")
+            # print(args)
+            # 两种形式
+            # '26["message",{"to":{"
+            # {u'body': u'222222',
+            if(len(args) == 2):
+                data = args[0]
+                data = tool.toJson(data)
+                fro = data.get("from", {})
+                to = data.get("to", {})
+                contact = data.get("contact", {})
+                msg = data.get("body")
+                fullId = contact.get("fullId")
+                sessionName = contact.get("nickName", "")
+
+                uid = self.data.get("uuid")
+                tTag = data.get("timeMillis", tool.getNowTime())
+                self.out("Msg:" + fro.get("nickName","from") + ">>" + msg + ">>" + to.get("nickName","to") + " time:" + data.get("time"))
+
+
+                # self.socket.emit("updateConversationStatus", {
+                #     'contactFullId': fullId,
+                #     'clientId': uid,
+                #     'timeTag': tTag
+                # })
+                self.socket.emit("updateMsgStatus", {
+                    "messages":data.get("id","")
+                })
+
+                if(sessionName.find("陈鹏辉") >= 0):
+                    return
+                print("自动回复")
+
+                obj = {}
+                # if(contact.get("type") == "GROUP"):
+                msg = self.robot.do(msg, fro.get("nickName"))
+                obj["body"] = msg #"666" + str(tool.getNowTime())
+                obj["bodyType"] = "text"
+                obj["clientId"] = str(uuid.uuid1())
+                obj["retry"] = 1
+                obj["from"] = {}
+                obj["from"]["fullId"] = "u__" + self.data.get("userName")
+                obj["from"]["id"] = self.data.get("userName")
+                obj["from"]["nickName"] = "fromnickname"
+                obj["to"] = {}
+
+                if(contact.get("type") == "GROUP"):
+                    obj["to"]["fullId"] = contact.get("fullId")
+                else:
+                    obj["to"]["fullId"] = fro.get("fullId")
+                obj["to"]["nickName"] = "tonickname"
+
+                obj["from"]["nickName"] = "from-nickName"
+                obj["to"]["nickName"] = "to-nickName"
+
+                print(obj)
+                self.socket.send("message", obj)
+            else:
+                self.out("args len 不合理数据:" + str(args)[0:40])
+                # print(args)
+                # tool.line()
+        except Exception as e:
+            self.out(traceback.format_exc())
+
         return
-    def event(self, *args):
-        print("event", args)
+    def event(self, *args): # 事件消息 群创建？
+        tool.line()
+        print("event")
+        print(str(args)[0:40])
+        tool.line()
         return
     def onSocketLogin(self, *data):
         self.out("socket登录回调:")
@@ -219,3 +297,21 @@ class AutoCochat:
 if __name__ == '__main__':
     obj = AutoCochat("Test")
     obj.test()
+
+    # obj.login()
+    #
+    # socket = SocketIO(obj.socketUrl,port=obj.socketPort) # , params=self.config)
+    # socket.on('message', obj.message)
+    # socket.on('event', obj.event)
+    #
+    # socket.emit('loginv17', obj.data, obj.onSocketLogin)
+    #
+    # data = {
+    #     "v1": "aaaaaaaaaaa",
+    #     "v2": "bbbbbbbbb"}
+    # socket.emit('message', data)
+    # socket.emit('event', data)
+    # print("over")
+    # # sk.wait_for_callbacks(seconds=1)
+    # socket.wait()
+    # tool.wait()

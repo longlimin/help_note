@@ -66,6 +66,8 @@ def makeObj(data):
     return encode(data)
 # 通过字符串 解析为json 并编码 Unicode
 def toJson(jsonStr):
+    if isinstance(jsonStr, dict):
+        return makeObj(jsonStr)
     if(jsonStr == None or jsonStr == ""):
         jsonStr = "{}"
     if(jsonStr.strip()[0:1] != "{"):
