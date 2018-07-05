@@ -52,6 +52,12 @@ sudo pip install twisted //socket frame of python
 sudo pip install json2yaml==1.0.1 
 // python推流rtmp 
 sudo pip install python-librtmp
+
+//pip重装 
+sudo python -m pip uninstall pip
+sudo apt-get remove python-pip
+sudo apt-get install python-pip
+
 //pip安装失败解决方案
 修改源方法：
 linux: 修改 ~/.pip/pip.conf (没有就创建一个)， 内容如下：
@@ -62,7 +68,6 @@ index-url = http://pypi.mirrors.ustc.edu.cn/simple/
 中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
 豆瓣(douban) https://pypi.douban.com/simple/
 清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/
-中国科学技术  http://pypi.mirrors.ustc.edu.cn/simple/
 
 pip升级
 python -m pip install -U pip
