@@ -30,6 +30,10 @@ def makeByte(img):
 
 
 def getRandom(start=0, stop=10):
+    if(start < 0):
+        start = 0
+    if(stop <= start):
+        stop = start + 1
     msec = getNowTime() + int(random.uniform(0, 100) )
     # 时间轴 毫秒+随机数100 投影到目标区间
     return int(msec % (stop - start) + start)

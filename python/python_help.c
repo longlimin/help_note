@@ -40,6 +40,8 @@ sudo ./xxxegg
 https://github.com/miguelgrinberg/python-socketio/
 
 sudo pip install python-socketio
+sudo pip install socketIO-client 
+//https://pypi.org/project/socketIO-client/
 sudo pip install eventlet
 sudo pip install flask
 sudo pip install twisted //socket frame of python

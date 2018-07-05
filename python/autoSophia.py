@@ -15,15 +15,16 @@ from tool import ThreadRun
 
 
 class AutoSophia:
-    def __init__(self, name="0000000", count = 0):
+    def __init__(self, name="0000000", count = 0, makeRooms=[]):
         self.robot = Robot()
         self.http = Http()
-        self.name = "CC"
+        self.name = name
         self.count = count   #编号
 
         self.listMsgQue = []    #消息发送队列
         self.timeDetaMsgSend = 1.1    #最小发送消息间隔s
 
+        self.makeRooms = makeRooms
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
@@ -93,8 +94,8 @@ class AutoSophia:
         info = ""
         if(room != ""):
             info = ("##" + tool.fill(str(i), '#', 40) + "\n--G " + tool.fill(room["id"], ' ', 15) + " " + tool.fill(str(room["total"]) + "/" + str(room["limit"]), ' ', 15) + " " + room["name"]) + "\n" 
-            # info = info + "开启音乐: " + str(room.get("music", "")) + " 静态房间: " + str(room.get("staticRoom", "")) + ""  
-            # info = info + " 隐藏房间: " + str(room.get("staticRoom", "")) + " 游戏房间: " + str(room.get("gameRoom", "")) + " 成人房间: " + str(room.get("adultRoom", "")) + "\n" 
+            info = info + "music: " + str(room.get("music", False)) + " language:" + room.get("language","") +"\n"  # " 静态房间: " + str(room.get("staticRoom", "")) + ""
+            # info = info + " hiddenRoom: " + str(room.get("staticRoom", "")) + " 游戏房间: " + str(room.get("gameRoom", "")) + " 成人房间: " + str(room.get("adultRoom", "")) + "\n"
             info = info + "Host:" + room.get("host", {}).get("name", "") + "\n"
             info = info + "Users: " + "\n"
             for item in room.get("users", []):
@@ -158,7 +159,7 @@ class AutoSophia:
     def goRoom(self, roomId):
         # tool.line()
         self.out("加入房间:" + roomId)
-        self.showRoom(roomId)
+        # self.showRoom(roomId)
         responce=self.http.doGet("http://drrr.com/room/?id=" + roomId)
         self.roomId = roomId
         # self.send("/me 大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
@@ -168,13 +169,15 @@ class AutoSophia:
         # self.send("/me " + self.name + "好无聊啊 "+self.name +"要出去溜达一会儿" + self.tail)
         # self.send("/me "+self.name+"一定会回来的" + self.tail)
         # self.send("/me 出去一下，马上回来" + self.tail)
-        self.showRoom(self.roomId)
+        # self.showRoom(self.roomId)
         time.sleep(self.timeDetaMsgSend *  len(self.listMsgQue) + 1)  #等待一会儿消息发送
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "leave":"leave", 
                 })
         self.roomId = ""
-        return 
+        if(responce == "error"):
+            return False
+        return True
     def getRooms(self, detail=False):
         # tool.line()
         self.out("获取房间列表")
@@ -193,7 +196,7 @@ class AutoSophia:
             # self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
         self.out("共计房间" + tool.fill(str(count), ' ', 5) + " 用户" + tool.fill(str(userCount), ' ', 5) )
         # self.out("解析完毕")
-
+        return rooms
     # 定时消息发送队列
     def doHello(self):
         while(True):
@@ -660,7 +663,6 @@ class AutoSophia:
                 else:
                     self.out(method)
         return res
- 
 
     def test(self):
         self.login()
@@ -681,17 +683,78 @@ class AutoSophia:
 
         tool.wait()
         return
-if __name__ == '__main__':
-    size = 1
+
+# def cmproom(x, y):
+#     return cmp(x.get("name",""), y.get("name",""))
+
+    def runStart(self):
+        ThreadRun("Robot." + str(self.count),  self.runRobot).start()
+    def runRobot(self):
+        self.out("开始执行侵入:" + str(self.runIds))
+
+        for i in self.runIds:
+            room = self.makeRooms[i]
+            roomId = room.get("id", "")
+            self.out("侵入" + str(i) + " " + roomId )
+            self.goRoom(roomId)
+            self.playMusic()
+            time.sleep(6)
+            exitCount = 6
+            while(exitCount >= 0):
+                exitCount = exitCount - 1
+                if(self.outRoom()):
+                    break
+                time.sleep(2)
+            time.sleep(10)
+
+        self.out("侵入完成:" + str(self.runIds))
+
+def testMake():
+    root = AutoSophia("白学家", -1)
+    root.login()
+    rooms = root.getRooms()
+    #根据房间 筛选侵入目标
+    ThreadRun( "InputHello." + str(root.count),  root.inputHello).start() #监控母体
+    # roomsSorted = sorted(rooms, cmp=lambda x,y: cmp(x.get("name",""), y.get("name",""))   )
+    # print(roomsSorted)
+    i = 0
+    makeRooms = []
+    for room in rooms:
+        id = room.get("id","")
+        if(room.get("language","") == "zh-CN"):
+            # root.showRoom(id, show=True, i=i)
+            makeRooms.append(room)
+        i = i + 1
+    toSize = len(makeRooms) #侵入房间数量 37
+
+    size = 10 #10个robot并行
+    det = toSize / size
+    if(size * det < toSize):
+        det = det + 1   # 4
+    print("共计房间" + str(toSize) + " 开启机器" + str(size) + " 每个执行任务" + str(det))
     objs = []
+    st = 0
     for i in range(size):
-        obj = AutoSophia("白学家-" + str(i), i)
+        obj = AutoSophia("白学家0-" + str(i), i, makeRooms) # 白学家
+        obj.login()
+        obj.runIds = range(st, st + det)
+        st = st + det
         objs.append(obj)
+        time.sleep(0.5)
+    print("Enter 下一步进入房间")
+    # cmd=raw_input("")
     for i in range(size):
-        ThreadRun( "Robot." + str(i), objs[i].test ).start()
-        time.sleep(5)
-    time.sleep(99999)
+        objs[i].runStart()
+
+
+
     tool.wait()
+
+
+
+
+if __name__ == '__main__':
+    testMake()
 
 # the admin
 # akakoori

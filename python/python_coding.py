@@ -64,6 +64,21 @@ int()
 #数组  list ####################################
 days = ['Monday', 'Tuesday', 'Wednesday',
         'Thursday', 'Friday'] ;
+>>> sorted([5, 2, 3, 1, 4])
+[1, 2, 3, 4, 5]
+>>> student_objects = [
+        Student('john', 'A', 15),
+        Student('jane', 'B', 12),
+        Student('dave', 'B', 10),
+]
+>>> sorted(student_objects, key=lambda student: student.age, reverse=True)
+[('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+>>> def numeric_compare(x, y):
+        return x - y
+        return cmp(x , y)
+lambda x,y:x+y
+cmp=lambda (x,y): cmp(x.get("name",""), y.get("name",""))
+>>> sorted([5, 2, 4, 1, 3], cmp=numeric_compare)
 #字符串
 name = name.strip() 去除行尾 特殊符号
 
