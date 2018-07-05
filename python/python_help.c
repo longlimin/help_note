@@ -41,6 +41,9 @@ https://github.com/miguelgrinberg/python-socketio/
 
 sudo pip install python-socketio
 sudo pip install socketIO-client 
+sudo pip install -U socketIO-client
+手动安装
+https://files.pythonhosted.org/packages/12/d4/abeb2596c2f16276c66910362b27d04b8d2cf12a746dcccf1d00de3f691b/socketIO-client-0.7.2.tar.gz
 //https://pypi.org/project/socketIO-client/
 sudo pip install eventlet
 sudo pip install flask
@@ -59,7 +62,7 @@ index-url = http://pypi.mirrors.ustc.edu.cn/simple/
 中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
 豆瓣(douban) https://pypi.douban.com/simple/
 清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/
-中国科学技术大学 http://pypi.mirrors.ustc.edu.cn/simple/
+中国科学技术  http://pypi.mirrors.ustc.edu.cn/simple/
 
 pip升级
 python -m pip install -U pip
