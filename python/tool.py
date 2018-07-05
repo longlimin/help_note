@@ -69,9 +69,9 @@ def toJson(jsonStr):
     if isinstance(jsonStr, dict):
         return makeObj(jsonStr)
     if(jsonStr == None or jsonStr == ""):
-        jsonStr = "{}"
+        return {}
     if(jsonStr.strip()[0:1] != "{"):
-        jsonStr = "{'error':'" + jsonStr + "'}"
+        return {"error":jsonStr}
     return makeObj(json.loads(jsonStr))
 
 

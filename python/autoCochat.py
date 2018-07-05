@@ -21,11 +21,16 @@ from python_sqlite import Database
 
 # cochat 自动化
 class AutoCochat:
-    def __init__(self, name="Test"):
+    def __init__(self, name="Test", id="18408249138", pwd="1234qwer"):
+        self.id = id
+        self.pwd = pwd
         self.name = name
         self.robot = Robot()
         self.http = Http()
         self.db = Database()
+        self.socket = Socket()
+        self.onConnect = False
+        self.ifOk = False
         self.db.execute(
             ''' 
             create table if not exists music(
@@ -84,28 +89,47 @@ class AutoCochat:
     def test(self):
         self.login()
         # ThreadRun( "InputHello." + str(self.name),  self.inputHello ).start()
-        self.socket.waitRead()
+        self.socket.waitRead(self.onException)    #异常回调
         tool.wait()
         return
     # 监控执行
     def doCmd(self, cmd):
         self.send({"data":cmd})
         return
+    def login(self):
+        i = 0
+        while(self.ifOk == False or i <= 0):
+            try:
+                self.whileLogin()
+                i = i + 1
+            except Exception as e:
+                self.out(traceback.format_exc())
+            self.out("登录异常,5s后重试 try:" + str(i))
+            time.sleep(5)
+        return
 
     # 认证登录
-    def login(self):
-        self.socket = None
+    def whileLogin(self):
+        self.ifOk = False
+        if(self.onConnect):
+            self.out("已经在尝试登录")
+            return
+        self.socket.close()
+        self.onConnect = True
         self.out("尝试登录:")
-        # {CONF_V   ARS: "*", ORG_VARS: true, logintype: "mobile", id: "18408249138", password: "1234qwer"}
+# {CONF_V   ARS: "*", ORG_VARS: true, logintype: "mobile", id: "18408249138", password: "1234qwer"}
 # Request URL:http://picc.cochat.cn/SY_ORG_LOGIN.login.do?DESKTOP_OS=Win10&USER_LAST_BROWSER=Win32&USER_LAST_CLIENT=2.5.1&USER_LAST_OS=DESKTOP&USER_LAST_PCNAME=%7B%7D
 # request Cookie:JSESSIONID=abcb0skaQYCGs6lvy9orw
         obj = self.http.doJson("http://picc.cochat.cn/SY_ORG_LOGIN.login.do?DESKTOP_OS=Win10&USER_LAST_BROWSER=Win32&USER_LAST_CLIENT=2.5.1&USER_LAST_OS=DESKTOP&USER_LAST_PCNAME=%7B%7D",{
             "CONF_VARS":"*",
             "ORG_VARS":"true",
             "logintype":"mobile",
-            "id":"18408249138",
-            "password":"1234qwer"
+            "id":self.id,
+            "password":self.pwd
         })
+        if(obj.get("error","") != ""):
+            self.onConnect = False
+            return
         self.loginUser = obj
         token = obj.get("USER_TOKEN", "")
         self.out("登录结果 token:" + token)
@@ -126,12 +150,11 @@ class AutoCochat:
             "reconnection" : False
         };
         self.out("socket开始")
-        # self.socket = SocketIO(url,port=port) # , params=self.config)
-        self.socket = Socket(url,port=port) # , params=self.config)
+        self.socket.connect(url,port) # , params=self.config)
         self.out("socket连接完成，开始初始化事件")
 
-        # socketMsgTypes = ("connect", "disconnect","error","connect_error","connect_timeout","connecting","reconnecting","message", "event")
-        socketMsgTypes = ("connect", "disconnect","message", "event")
+        socketMsgTypes = ("connect", "disconnect","error","connect_error","connect_timeout","connecting","reconnecting","message", "event")
+        # socketMsgTypes = ("connect", "disconnect","message", "event")
         for item in socketMsgTypes:
             if(hasattr(self, item)):
                 method = getattr(self, item)
@@ -141,7 +164,7 @@ class AutoCochat:
                     self.out("变量而非方法" + item + "回调?")
             else:
                 self.out("属性" + item + "不存在，是否写错了名字?")
-        self.socket.on("message", self.message)
+        # self.socket.on("message", self.message)
 
         self.out("socket初始化事件完成，开始发送认证")
         self.data = {
@@ -155,34 +178,48 @@ class AutoCochat:
         self.out(self.data)
         self.socket.emit('loginv17', self.data, self.onSocketLogin)
         self.out("已发送认证信息")
+        self.ifOk = True
+        self.onConnect = False
         return
     def connect(self, *args):
         print("connect")
         print(args)
-        self.socket.emit('loginv17', self.data, self.onSocketLogin)
+        # self.login()
         return
     def disconnect(self, *args):
         print("disconnect")
+        print(args)
+        self.login()
         return
     def error(self, *args):
         print("error")
+        print(args)
+        self.login()
         return
     def connect_error(self, *args):
         print("connect_error")
+        print(args)
         return
     def connect_timeout(self, *args):
         print("connect_timeout")
+        print(args)
         return
     def connecting(self, *args):
         print("connecting")
+        print(args)
         return
     def reconnect(self, *args):
         print("reconnect")
+        print(args)
         return
     def reconnecting(self, *args):
         print("reconnecting")
+        print(args)
         return
-
+    def onException(self, *args):
+        tool.line()
+        self.out("onexception")
+        print(args)
     def turnArray(self, args):
         #args (1, 2, 3) 直接调用型 exe("select x x", 1, 2, 3)
         #return [1, 2, 3] <- list(args)
@@ -226,35 +263,35 @@ class AutoCochat:
                 self.socket.emit("updateMsgStatus", {
                     "messages":data.get("id","")
                 })
-
-                if(sessionName.find("陈鹏辉") >= 0):
-                    return
-                print("自动回复")
-
-                obj = {}
+                # ff = sessionName.find("陈鹏辉")
+                # if(ff < 0):
+                #     return
+                # print("自动回复:" + str(ff))
+                #
+                # obj = {}
+                # # if(contact.get("type") == "GROUP"):
+                # msg = self.robot.do(msg, fro.get("nickName"))
+                # obj["body"] = msg #"666" + str(tool.getNowTime())
+                # obj["bodyType"] = "text"
+                # obj["clientId"] = str(uuid.uuid1())
+                # obj["retry"] = 1
+                # obj["from"] = {}
+                # obj["from"]["fullId"] = "u__" + self.data.get("userName")
+                # obj["from"]["id"] = self.data.get("userName")
+                # obj["from"]["nickName"] = "fromnickname"
+                # obj["to"] = {}
+                #
                 # if(contact.get("type") == "GROUP"):
-                msg = self.robot.do(msg, fro.get("nickName"))
-                obj["body"] = msg #"666" + str(tool.getNowTime())
-                obj["bodyType"] = "text"
-                obj["clientId"] = str(uuid.uuid1())
-                obj["retry"] = 1
-                obj["from"] = {}
-                obj["from"]["fullId"] = "u__" + self.data.get("userName")
-                obj["from"]["id"] = self.data.get("userName")
-                obj["from"]["nickName"] = "fromnickname"
-                obj["to"] = {}
-
-                if(contact.get("type") == "GROUP"):
-                    obj["to"]["fullId"] = contact.get("fullId")
-                else:
-                    obj["to"]["fullId"] = fro.get("fullId")
-                obj["to"]["nickName"] = "tonickname"
-
-                obj["from"]["nickName"] = "from-nickName"
-                obj["to"]["nickName"] = "to-nickName"
-
-                print(obj)
-                self.socket.send("message", obj)
+                #     obj["to"]["fullId"] = contact.get("fullId")
+                # else:
+                #     obj["to"]["fullId"] = fro.get("fullId")
+                # obj["to"]["nickName"] = "tonickname"
+                #
+                # obj["from"]["nickName"] = "from-nickName"
+                # obj["to"]["nickName"] = "to-nickName"
+                #
+                # print(obj)
+                # self.socket.send("message", obj)
             else:
                 self.out("args len 不合理数据:" + str(args)[0:40])
                 # print(args)
@@ -295,7 +332,8 @@ class AutoCochat:
         tool.line()
         return
 if __name__ == '__main__':
-    obj = AutoCochat("Test")
+    obj = AutoCochat("Test", "18262600672", "654321")
+    # obj = AutoCochat("Test")
     obj.test()
 
     # obj.login()

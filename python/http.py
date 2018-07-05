@@ -85,11 +85,14 @@ class Http:
     def do(self, url=None, postData=None):
         if(url != None and url != ""):
             return self.doPost(url, postData)
-        return "error"
+        return "error, url=null?"
     def doJson(self, url="", postData=None):
         res = {}
         responce = self.do(url, postData)
-        jsonStr = responce.read()
+        if(type(responce) == str):
+            jsonStr = responce
+        else:
+            jsonStr = responce.read()
         if(jsonStr != None and type(jsonStr) == str):
             jsonStr = jsonStr.strip()
             res = tool.toJson(jsonStr)

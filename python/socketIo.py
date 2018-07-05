@@ -16,19 +16,19 @@ import traceback
 
 
 class Socket:
-    def __init__(self, url, port):
+    def __init__(self):
         self.socket = None
 
-        self.url = url
-        self.port = port
         self.ifOn = False
 
-        self.connect()
+        # self.connect()
         # self.startThreadRead()
         # self.socket.wait_for_callbacks(seconds=1)
         return
-    def connect(self):
-        self.socket = None
+    def connect(self, url, port):
+        self.close()
+        self.url = url
+        self.port = port
         self.out("Connect url:" + self.url + " port:" + str(self.port))
         self.socket = SocketIO(self.url,port=self.port) # , params=self.config)
         # self.socket.on('message', on_message)
@@ -48,31 +48,28 @@ class Socket:
         self.socket.emit(type, data, callback)
         tool.line()
         return
-    def waitRead(self):
-        self.out("等待获取消息---------")
-        while(self.ifOn):
-            self.socket.wait(1)
-            time.sleep(0.5)
-        return
     def close(self):
         self.ifOn = False
-        if(self.socket):
-            self.socket.disconnect()
-        time.sleep(2)
+        if(self.socket != None):
+            self.out("Close connect!")
+            # self.socket.disconnect()
+            self.socket = None
+            time.sleep(1)
         return
-    def startThreadRead(self):
+    def waitRead(self, onException):
         while(True):
-            if(self.socket != None):
-                self.out("开启线程等待读取")
-            while(self.socket != None):
+            if(self.ifOn):
+                self.out("开启等待读取!")
+            while(self.socket):
                 try:
-                    self.out("wait")
+                    # self.out("wait")
                     self.socket.wait(1)
                 except Exception as e:
                     self.out(traceback.format_exc())
-                # time.sleep(1)
-            time.sleep(1)
-
+                    onException(e)
+                time.sleep(1)
+            time.sleep(5)
+            # onException("while socket is None")
         return
 
     def on(self, item, method):
