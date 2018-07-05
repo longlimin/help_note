@@ -69,7 +69,7 @@ function dirfile_showdir(){
     res=`cat $_toolsres`
     # echo $1 #'    level:'$nowLevel'      dir_level:'$dirfile_level
     
-    if [[ $dirfile_ifcop > 0 ]]
+    if [[ $dirfile_ifcop > 0 ]] # 只显示目录级别
     then
         arr=(`ls $1`)
         len=${#arr[@]}
