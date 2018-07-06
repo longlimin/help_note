@@ -3,21 +3,6 @@
 import urllib
 import urllib2
 import cookielib
-import sys
-import os
-import json
-import re
-import codecs
-import time
-import threading
-import thread
-import subprocess
-import struct
-import yaml
-import random   # int(random.uniform(1, 10))
-import uuid
-import base64
-import httplib
 import tool
 import traceback
 
@@ -74,13 +59,11 @@ class Http:
             if(postData != None):
                 postData = urllib.urlencode(postData)
                 response = self.opener.open(url, postData) 
-                # response = urllib2.urlopen(urllib2.Request(url, data, header))
             else:
                 response  = self.opener.open(url)
             # self.show(response)
         except Exception as e:
             self.out(traceback.format_exc())
-
         return response
     def do(self, url=None, postData=None):
         if(url != None and url != ""):

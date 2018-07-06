@@ -1,16 +1,6 @@
 ﻿from socketIO_client import SocketIO
 
-import sys
-import os
-import json
-import re
-import codecs
 import time
-import threading
-import thread
-import yaml
-import uuid
-import base64
 import tool
 import traceback
 

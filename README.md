@@ -25,23 +25,23 @@ python后台通信服务提供以及树莓派专用的GPIO控制
 opencv-python的使用学习
     * cvhelp.py  opencv常用图形学处理及其工具类(初学老是记不住官方opencv api倒是会很容易的想起自己封装的工具函数别名) 简单图形处理 人脸检测测试 数独的简易knn文字训练和识别案例
     * Sudo.py    数独的解答算法
-
-* do_git.sh
-    * 个人的各git仓库路径配置，实现./do update/push/init 来达到初始化 更新 推送所有配置的项目
-* help_git.sh
-    * 工作所需要的 仓库a提交后需要差异同步到仓库b
-* shell_help.c
-    * shell学习中整理的和遇到的一些常识性问题介绍
-* shell_coding.c
-    * shell编程学习中整理的常用的语法规则 if for function 数组 字符串等操作
-* ...
+* http.py   python http访问工具类 包含了json->dict解析 get post cookie session集成
+* socketIo.py   python socketIo-client 客户端工具 实现长连接
+* auto163.py    通过http调用网易云搜索音乐分享实际地址
+* robot.py  融合sqlite、http实现图灵123机器人智能应答接口并记录数据库日志
+* python_sqlite.py  sqlite3工具类dao
+* python_singleton.py   装饰器实现的单例注解工具
+* show_dir.py   文件夹递归遍历文件处理
+* tool.py   常用python工具类 比如递归编码dict 随机数 时间格式化等
+* python_coding.py  python编程的常用语法 dict list string 相关数据操作api
 ## cmd
-把该路径添入到windows环境变量path中，便可以根据该路径下的脚本名快捷调用bat
+把该路径添入到windows环境变量path中，便可以根据该路径下的脚本名快捷调用bat eg: win+R cc/enter即可打开取色器
 * ss.bat
     * windows开机后，使用该脚本快速一口气启动常用的全部软件，就不用再到处点点点了（虽然也可设置软件开机启动的说，但是个人比较排斥启动项）
 * ls.bat
     * 实际上是调用的dir，因为习惯了ls ll，cmd环境下没有很难受
-* ...
+* cc.exe 颜色取色器
+* no.bat 实现命令重启node
 ## shell
 * do
     * 各种do_*.sh文件的启动入口，其实因为老是./*还要写个sh后缀，比较懒，所以没后缀
@@ -53,6 +53,6 @@ opencv-python的使用学习
     * shell学习中整理的和遇到的一些常识性问题介绍
 * shell_coding.c
     * shell编程学习中整理的常用的语法规则 if for function 数组 字符串等操作
-* ...
+* help_server.sh    shell程序管理工具 只编写其中的执行命令和日志文件后 即可方便的实现该程序的 日志 重启
 
 
