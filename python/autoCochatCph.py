@@ -1,4 +1,4 @@
-#!/usr/bin/python
+    #!/usr/bin/python
 #-*- coding:utf-8 -*-
 
 import re
@@ -85,10 +85,22 @@ class AutoCochat:
             except Exception as e:
                 self.out(repr(e))
         return
+    # 定时任务
+    def timeHello(self):
+        self.out("开启定时任务！")
+        self.help()
+        while(True):
+            time.sleep(3600 * 3)
+            try:
+                self.out("定时重新连接")
+                self.login()
+            except Exception as e:
+                self.out(repr(e))
+        return
     # 测试用
     def test(self):
         self.login()
-        # ThreadRun( "InputHello." + str(self.name),  self.inputHello ).start()
+        ThreadRun( "TimeHello." + str(self.name),  self.timeHello ).start()
         self.socket.waitRead(self.onException)    #异常回调
         tool.wait()
         return
@@ -105,7 +117,7 @@ class AutoCochat:
             except Exception as e:
                 self.out(traceback.format_exc())
             self.out("登录异常,5s后重试 try:" + str(i))
-            time.sleep(5)
+            time.sleep(15)
         return
 
     # 认证登录
