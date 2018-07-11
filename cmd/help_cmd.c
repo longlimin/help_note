@@ -59,6 +59,10 @@ route delete 122.0.0.0
 route -p add 0.0.0.0 mask 0.0.0.0 192.168.104.254  metric 400
 
 
+//热点
+netsh wlan set hostednetwork mode=allow ssid=dust7.11 key=9012345678
+netsh wlan start hostednetwork 
+
 //跟踪路由跳转
 tracert ip
 C:\WINDOWS\system32>tracert -d 122.20.61.29

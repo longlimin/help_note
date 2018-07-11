@@ -267,11 +267,11 @@ class AutoCochat:
                 self.out("Msg:" + fro.get("nickName","from") + ">>" + msg + ">>" + to.get("nickName","to") + " time:" + data.get("time"))
 
 
-                # self.socket.emit("updateConversationStatus", {
-                #     'contactFullId': fullId,
-                #     'clientId': uid,
-                #     'timeTag': tTag
-                # })
+                self.socket.emit("updateConversationStatus", {
+                    'contactFullId': fullId,
+                    'clientId': uid,
+                    'timeTag': tTag
+                })
                 self.socket.emit("updateMsgStatus", {
                     "messages":data.get("id","")
                 })
