@@ -25,7 +25,7 @@ _make_path='/mnt/e/make'    # 补丁包路径
 # ./help_git.sh branch_from branch_to <test>
 function make(){
     sta=0
-    dotype='do'
+    dotype='test'
     time_from='from'
     time_to='to'
 

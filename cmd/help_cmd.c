@@ -1,6 +1,7 @@
 ﻿#
 #	bat 编程
 #
+cmd路径 \ 反斜杠 linux
 start b.bat 新开cmd窗口
 call b.bat 不显示 路径执行  命令/bat
 
@@ -10,8 +11,8 @@ tasklist | find /i "node.exe" && taskkill /f /t /im node.exe
 
 tasklist | find /i "node.exe" || start "node" node proxy.js 
 
-
-
+copy  复制文件
+xcopy 复制文件夹
 
 
 
