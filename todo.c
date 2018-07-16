@@ -42,7 +42,7 @@ Android 设备控制器 - 设备socket - socketServer<net> - 终端socket
 
 
 //Linux-------------------------------------
-Shell多进程队列同步工具
+Shell多进程队列同步工具 管道 生产者 消费者 进程通信
 内核驱动编写test
 
 
@@ -53,6 +53,9 @@ netyy spring 源码解析
 I/O IO/NIO
 JVM的性能
 
+3、Java 基础扎实，熟悉 NIO、多线程、集合等； 
+4、熟悉基于 Mysql、Redis、Netty 的设计和开发； 
+5、具有设计和开发对外API接口的经验和能力； 
 
 #ThreadLocal Context上下文 全局变量 
 #线程池 - 单/多线程池队列 -> 高并发 - 定时任务调度《队列 生产者 消费者模型》

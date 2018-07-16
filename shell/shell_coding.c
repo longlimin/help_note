@@ -133,12 +133,17 @@ eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php
     do
         echo ''
     done
+    while [[ "1" == "1" ]]
+    do
+
+    done
 }
 //函数
 {
 
 ./do show pp
-#$0<./do>-n取参数,$#<2>参数个数,$@<数组".do" "show" "pp">,$*<串"./do show pp">,$?<int0/1>函数返回值 $$PID<59>
+#$0<./do>-n取参数,$#<2>参数个数,$@<数组".do" "show" "pp">,$*<串"./do show pp">,$?<int0/1>函数返回值 
+$$PID<59>
 
 #不能为空函数!!!!!!!!!!!!!!!!!!!!!!!    
 root=`cat toolsTemp.txt` 变量可以接受输出echo cat返回值 
