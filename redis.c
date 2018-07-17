@@ -7,7 +7,8 @@ https://github.com/MSOpenTech/redis/releases
 执行 redis-server.exe <redis.windows.conf>
 
 运行客户端
-执行 redis-cli.exe -h 127.0.0.1 -p 6379
+执行 
+redis-cli.exe -h 127.0.0.1 -p 6379
 redis-cli -h host -p port -a password
 
 flushall 清空
