@@ -6,7 +6,7 @@
 ::grunt
 
 E:
-cd workspace\echat_desktop
+cd \workspace\echat_desktop
 ::覆盖配置文件为压缩需要的文件
 copy coverage\config-tar.js app\config.js /Y
 ::压缩

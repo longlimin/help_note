@@ -23,6 +23,8 @@ tasklist|find /i "eclipse.exe" || start "eclipse proj" "C:\Users\ThinkPad\AppDat
 tasklist|find /i "sublime_text" || start "sublime" "D:\Program Files\Sublime Text 3\sublime_text.exe" 
 tasklist|find /i "WebStorm.exe" || start "WebStorm" "D:\Program Files (x86)\JetBrains\WebStorm 11.0.3\bin\WebStorm.exe" 
 
+::github tool
+tasklist|find /i "SourceTree" || start "SourceTree" "D:\Program Files (x86)\Atlassian\SourceTree\SourceTree.exe" 
 
 ::tasklist|find /i "plsqldev.exe" || start "plsqldev" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\plsqldev"
 
@@ -32,24 +34,17 @@ tasklist|find /i "redis-server" || start "redis-server" "D:\redis\redis-server.e
 
 ::因为依赖文件在该目录下必须定位
 ::nginx
-D:
-cd /nginx
-tasklist|find /i "nginx.exe" || start "nginx" "D:\nginx\nginx.exe" 
-::tasklist|find /i "nginx.exe" || start "nginx" "D:\nginx-1.12.2\nginx.exe -c D:\nginx-1.12.2\conf\nginx-win-rtmp.conf " 
+rem D:
+rem cd /nginx
+rem tasklist|find /i "nginx.exe" || start "nginx" "D:\nginx\nginx.exe" 
+ng
 
 ::Tomcat
-D:
-cd /apache-tomcat-7.0.76/bin
-startup.bat
+rem D:
+rem cd /apache-tomcat-7.0.76/bin
+rem startup.bat
 
-::echat_desktop proj
-E:
-cd /workspace/echat_desktop
-tasklist|find /i "node.exe" || start "node" node proxy.js 
  
-::github tool
-tasklist|find /i "SourceTree" || start "SourceTree" "D:\Program Files (x86)\Atlassian\SourceTree\SourceTree.exe" 
-
 
 
 
