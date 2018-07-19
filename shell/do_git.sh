@@ -27,10 +27,10 @@ function push(){
     # clean python 
     clean_clean 
     toolsLineLong
-    git_exefun 'git_add_commit_push' $1    
+    do_project_exefun 'git_add_commit_push' $1    
 }
 function update(){ 
-    git_exefun 'git_add_commit_pull' $1 
+    do_project_exefun 'git_add_commit_pull' $1 
 }
 function git_exefun(){ 
     #echo $#

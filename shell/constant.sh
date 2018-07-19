@@ -77,11 +77,18 @@ function do_project_exefun(){
             $fun $git_cc
         fi
     else
-        $fun $git_help_note
-        $fun $git_base
-        $fun $git_BaseSSM
-        $fun $git_cc
-        $fun $git_GraphicsTools
+        for ((i=0; i<${#git_local_dirs[@]}; i++))
+        do
+            local remoteDir=${git_remote_urls[$i]}
+            local localDir=${git_local_dirs[$i]}
+            $fun $localDir
+
+        done
+        # $fun $git_help_note
+        # $fun $git_base
+        # $fun $git_BaseSSM
+        # $fun $git_cc
+        # $fun $git_GraphicsTools
     fi 
 }
 
