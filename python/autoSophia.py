@@ -33,10 +33,10 @@ class AutoSophia:
         self.tail = " の... "
     def init(self):
         ############### 心情模块
-        self.statusMin = 20
+        self.statusMin = 5
         self.statusMax = 95
         self.statusDefault = 80
-        self.status = 20     #说话欲望值 0-100
+        self.status = 10     #说话欲望值 0-100
         self.statusOnDeta = 15      #开心
         self.statusOffDeta = 15     #难过
         self.statusDownDeta = 40    #闭嘴
@@ -387,9 +387,11 @@ class AutoSophia:
                 if(room.get("id","") == self.roomId): #在当前房间
                     msg = "/me 一首[" + name + "]送给" + fromName + "" + self.tail
                 else:
-                    msg = "/me Share " + room.get("name")[0:4] + "/" + fromName + "'s[" + name + "]" + "" + self.tail
+                    pass
+                    # msg = "/me Share " + room.get("name")[0:4] + "/" + fromName + "'s[" + name + "]" + "" + self.tail
             else:   #不在线
-                msg = "/me Then play" + fromName + " ordered [" + name + "]" + "" + self.tail
+                pass
+                # msg = "/me Then play" + fromName + " ordered [" + name + "]" + "" + self.tail
             self.send(msg)
         self.out("分享歌曲url=" + url + " name=" + name + " fromName=" + fromName )
         if(url == ""):
@@ -488,7 +490,8 @@ class AutoSophia:
                         # msgFromName = item.get('user', {}).get('name', "")
                         msgData = '欢迎' + msgFromName + self.tail
                     elif(msgType == 'leave'):
-                        msgData = ' ' + msgFromName + ' 默默的离开了 ' + self.tail
+                        msgData = '' + msgFromName + '' + self.tail
+                        msgData = ''
                     elif(msgType == 'music'):
                         music = item.get('music', {})
                         name = music.get('name', '')
@@ -524,19 +527,15 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastEchoTimeQuene # ms 60s
                     olRan = tool.getRandom(0,self.maxDetaTime) / 1000    #0-180 过于久没有发过消息了 权重高则可能自回复
                     weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
-                    ran = int(1.0 * olRan * (1+ 1.0 * (self.status-60) / 100) )
+                    ran = int(1.0 * olRan * (1+ 1.0 * (self.status-80) / 100) )
 
-                    self.out("新消息 " + msgId + " 发言权" + tool.fill(str(weight) + "" , ' ', 6) + " 随机数" + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + " from:" + tool.fill(msgFromName,' ',12) + " type:"+tool.fill(msgType,' ',6) + " data:" + msgData)
+                    self.out("新消息 " + msgId[0:4] + " 发言权" + tool.fill(str(weight) + "" , ' ', 6) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + " from:" + tool.fill(msgFromName,' ',12) + " type:"+tool.fill(msgType,' ',5) + " data:" + msgData)
 
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
                             msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
-                            ran = tool.getRandom(0,100)
-                            if(ran < 10): # 20% @不回
-                                flag = 0
-                            else:
-                                flag = 1
+                            flag = 1
                             # else:
                             #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
                             #     flag = 2
@@ -553,12 +552,17 @@ class AutoSophia:
                                 self.out("不想搭理" + msgFromName)
                             else:
                                 if(self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
-                                    robotRes = self.robot.do(msgData, self.name)
-                                    code = str(robotRes.get("code", ""))
-                                    if(code[0:1] != '4'):
-                                        res = '@' + str(msgFromName) +" " + robotRes.get("text", "")
+                                    ran = tool.getRandom(0,100)
+                                    if(ran < 10): # 20% @ 自动应答不回
+                                        self.out("小概率不接入机器回复")
+                                        msgData = ""
                                     else:
-                                        self.out("robot接口调用失败 code=" + code)
+                                        robotRes = self.robot.do(msgData, self.name)
+                                        code = str(robotRes.get("code", ""))
+                                        if(code[0:1] != '4'):
+                                            res = '@' + str(msgFromName) +" " + robotRes.get("text", "")
+                                        else:
+                                            self.out("robot接口调用失败 code=" + code)
                         elif(flag == 2):
                             res = msgData
 
@@ -779,7 +783,7 @@ class AutoSophia:
 
         self.out("侵入完成:" + str(self.runIds))
 def testCC():
-    root = AutoSophia("CC", 0)
+    root = AutoSophia("cc", 0)
     root.test()
     tool.wait()
 
