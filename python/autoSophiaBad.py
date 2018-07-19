@@ -29,14 +29,11 @@ class AutoSophia:
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
 
-        self.init()
-        self.tail = " の... "
-    def init(self):
-        ############### 心情模块
+############### 心情模块
         self.statusMin = 20
         self.statusMax = 95
         self.statusDefault = 80
-        self.status = 20     #说话欲望值 0-100
+        self.status = 90     #说话欲望值 0-100
         self.statusOnDeta = 15      #开心
         self.statusOffDeta = 15     #难过
         self.statusDownDeta = 40    #闭嘴
@@ -44,16 +41,13 @@ class AutoSophia:
         self.getMsgDetaTime = 1     #抓取消息间隔
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
         self.lastEchoTime = tool.getNowTime()   #上次说话时间
-        self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
-        self.lastEchoTimeQuene = tool.getNowTime()
-
-        self.maxDetaOtherSay = 1000 * 60 * 10 #最大没人说话时间 换房
         self.maxDetaTime = 1000 * 60 * 3   # 最大沉默时间
-        self.lastMusicTime = tool.getNowTime() #上次放歌时间
+        self.lastMusicTime = tool.getNowTime() 
         self.maxMusicTime = 1000 * 60 * 4 #音乐间隔 暂不解析音乐文件时长控制
         self.musicNow = {}
         self.musicPlayType = -1
-        self.ifOnMusic = False
+        self.ifOnMusic = True
+        self.tail = " の... "
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
@@ -168,8 +162,6 @@ class AutoSophia:
         # self.showRoom(roomId)
         responce=self.http.doGet("http://drrr.com/room/?id=" + roomId)
         self.roomId = roomId
-        self.lastOtherSay = tool.getNowTime() #重置处理时间
-        self.init()
         # self.send("/me 大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
         return
     def outRoom(self):
@@ -177,7 +169,7 @@ class AutoSophia:
         # self.send("/me " + self.name + "好无聊啊 "+self.name +"要出去溜达一会儿" + self.tail)
         # self.send("/me "+self.name+"一定会回来的" + self.tail)
         # self.send("/me 出去一下，马上回来" + self.tail)
-        self.showRoom(self.roomId)
+        # self.showRoom(self.roomId)
         time.sleep(self.timeDetaMsgSend *  len(self.listMsgQue) + 1)  #等待一会儿消息发送
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "leave":"leave", 
@@ -187,68 +179,24 @@ class AutoSophia:
             return False
         return True
     def getRooms(self, detail=False):
-        tool.line()
+        # tool.line()
         self.out("获取房间列表")
         responce=self.http.doGet("http://drrr.com/lounge?api=json")
         jsonObj = tool.makeObj(json.loads(responce.read()))
         rooms = jsonObj["rooms"]
-        makeRooms = []
-
         if(len(rooms) > 0):
             self.roomIndex.clear()
-            i = 0
-            count = 0
-            userCount = 0
-            for room in rooms:
-                id = room.get("id","")
-                if(room.get("language","") == "zh-CN"):
-                    # root.showRoom(id, show=True, i=i)
-                    makeRooms.append(room)
-                    self.roomIndex[room["id"]] = room
-                    count = count + 1
-                    userCount = userCount + int(room.get("total", 0))
-                    self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
-                i = i + 1
-            self.out("共计房间" + tool.fill(str(count), ' ', 5) + " 用户" + tool.fill(str(userCount), ' ', 5) )
-        self.out("解析完毕")
-        return makeRooms
-
-    # 太久没人发言 时 退出 并 进入一个新的 活跃的房间
-    def goARoom(self):
-        # self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
-        nowRoom = self.roomIndex.get(self.roomId, {})
-        if(nowRoom.get("total", 0) > 1): #当前房间人数 还有其他人
-            self.send("/me 好无聊 去其他房间溜达去了 " + self.tail)
-        if(self.roomId != ""):
-            self.outRoom()
-
-        while(self.roomId == ""):
-            self.getRooms()
-            self.out("选择最活跃房间")
-            i = 0
-            maxNum = 0
-            maxKey = ""
-            for key in self.roomIndex:
-                room = self.roomIndex[key]
-                total = room.get("total", 0)
-                limit = room.get("limit", 0)
-                music = room.get("music", False)
-                if(limit > total and music): #有空位 且允许放歌
-                    if(maxNum < total):
-                        maxNum = total
-                        maxKey = key
-                i = i+1
-            if(maxKey != ""):
-                self.out("选中房间:")
-                self.showRoom(maxKey)
-                tool.line()
-                self.goRoom(maxKey)
-            else:
-                tool.line()
-                self.out("异常！！！！！！！！！ 居然无可用房间？")
-                time.sleep(2)
-        return
-
+        count = 0
+        userCount = 0
+        for i in range(len(rooms)):
+            room = rooms[i]
+            self.roomIndex[room["id"]] = room
+            count = count + 1
+            userCount = userCount + int(room.get("total", 0))
+            # self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
+        self.out("共计房间" + tool.fill(str(count), ' ', 5) + " 用户" + tool.fill(str(userCount), ' ', 5) )
+        # self.out("解析完毕")
+        return rooms
     # 定时消息发送队列
     def doHello(self):
         while(True):
@@ -269,33 +217,29 @@ class AutoSophia:
                     self.out(traceback.format_exc())
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
             time.sleep(3)
-    # 定时操作
+
+
+
+    # 定时发送消息
     def sayHello(self):
         while(True):
             if(self.roomId != ""):
                 self.out("开启定时发言，最大发言间隔" + str(self.maxDetaTime / 1000) + "s")
             dt = 0
-            theI = 0
-            self.lastEchoTimeQuene = tool.getNowTime()
             while(self.roomId != ""):
                 try:
                     # message = "Now Time is "+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                    detaTime = tool.getNowTime() - self.lastEchoTimeQuene # ms
+                    detaTime = tool.getNowTime() - self.lastEchoTime # ms
                     if(detaTime > self.maxDetaTime):
-                        message = "/me 存活确认." + str(theI) + "." + time.strftime("%Y%m%d %H:%M:%S")
+                        message = "/me " + time.strftime("%Y%m%d %H:%M:%S")
                         self.send(message)
-                        self.out(str(theI) + "\t" + message)
-                        theI = theI + 1
+                        self.out(str(i) + "\t" + message)
                     detaTime = tool.getNowTime() - self.lastMusicTime # ms
                     if(self.ifOnMusic and detaTime > self.maxMusicTime and len(self.getRoomUsers(self.roomId)) > 1 ): #音乐开启 且 太久没放歌曲 且当前房间有至少两个人(包括自己robot)
                         self.playMusic()
-                    detaTime = tool.getNowTime() - self.lastOtherSay # ms
-                    if(detaTime > self.maxDetaOtherSay):
-                        self.goARoom() #10分钟没处理过消息 互动 则换房间
 
-                    if(dt % 600 == 0):
-                        self.getRooms() #定时5分钟获取房间最新信息
-
+                    if(dt % 300 == 0):
+                        self.getRooms() #定时获取房间最新信息
                     time.sleep(10)
                     dt = dt + 10
                     dt = dt % 3600
@@ -340,7 +284,6 @@ class AutoSophia:
     def send(self, message):
         if(message != None and message != ""):
             self.listMsgQue.append(message)
-            self.lastEchoTimeQuene = tool.getNowTime()
         return
     # 发送消息
     def doSend(self, message):
@@ -361,10 +304,6 @@ class AutoSophia:
         return res
     # 分享音乐
     def playMusic(self, url="", name="", fromName=""):
-        if(self.roomIndex.get(self.roomId, {}).get("music", False) == False):
-            self.send("/me 当前房间禁止音乐播放" + self.tail)
-            return
-
         self.musicPlayType = 0 #重置为随机播放
 
         if(url[0:4] != "http"): #无地址url则是定向点播
@@ -382,15 +321,18 @@ class AutoSophia:
             if(len(rooms) > 0):
                 room = rooms[0]
                 if(room.get("id","") == self.roomId): #在当前房间
-                    msg = "/me 一首[" + name + "]送给" + fromName + "" + self.tail
+                    pass
+                    # msg = "/me 一首[" + name + "]送给" + fromName + "" + self.tail
                 else:
-                    msg = "/me Share " + room.get("name")[0:4] + "/" + fromName + "'s[" + name + "]" + "" + self.tail
+                    pass
+                    # msg = "/me Share " + room.get("name")[0:4] + "/" + fromName + "'s[" + name + "]" + "" + self.tail
             else:   #不在线
-                msg = "/me Then play" + fromName + " ordered [" + name + "]" + "" + self.tail
+                pass
+                # msg = "/me Then play" + fromName + " ordered [" + name + "]" + "" + self.tail
             self.send(msg)
         self.out("分享歌曲url=" + url + " name=" + name + " fromName=" + fromName )
         if(url == ""):
-            self.send("/me 怼不起,没有找到类似的歌曲,瑟瑟发抖"+self.tail)
+            # self.send("/me 怼不起,没有找到类似的歌曲,瑟瑟发抖"+self.tail)
             return
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "music":"music",
@@ -436,7 +378,7 @@ class AutoSophia:
             try:
                 cmd=raw_input("")
                 if(cmd != ""):
-                    if(not self.doMethod(cmd)):
+                    if(not self.doMethod(cmd.split(" "))):
                         self.out("手动发送:" + cmd)
                         self.send(cmd)
                         time.sleep(1)
@@ -501,7 +443,6 @@ class AutoSophia:
                     if( msgFromName == self.name or msgFromName == ""):
                         break
 #############################################################
-                    self.lastOtherSay = tool.getNowTime()   #重置处理时间
 
                     if(msgType == 'music'):
                         music = { "name":name, "url":url, "fromName":msgFromName }
@@ -518,7 +459,7 @@ class AutoSophia:
                     elif(self.status < self.statusMin):
                         self.status = self.statusMin
 
-                    detaTime = tool.getNowTime() - self.lastEchoTimeQuene # ms 60s
+                    detaTime = tool.getNowTime() - self.lastEchoTime # ms 60s
                     olRan = tool.getRandom(0,self.maxDetaTime) / 1000    #0-180 过于久没有发过消息了 权重高则可能自回复
                     weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
                     ran = int(1.0 * olRan * (1+ 1.0 * (self.status-60) / 100) )
@@ -530,12 +471,12 @@ class AutoSophia:
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
                             msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
                             ran = tool.getRandom(0,100)
-                            if(ran < 10): # 20% @不回
+                            if(ran < self.status):
                                 flag = 1
-                            # else:
-                            #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
-                            #     flag = 2
-                            #     msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
+                            else:
+                                self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
+                                flag = 2
+                                msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
                         elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高 主动搭话概率
                             flag = 1
                     else: #事件 
@@ -555,7 +496,7 @@ class AutoSophia:
                                     else:
                                         self.out("robot接口调用失败 code=" + code)
                         elif(flag == 2):
-                            res = msgData
+                            res = msg
 
                         if(res != "" and flag != 0 and onceDocount < 6): # 最多一次抓取发送3个
                             res = '/me ' + res
@@ -566,13 +507,12 @@ class AutoSophia:
             self.out("Exception:" + str(e))
         # tool.line()
         return res
-    # /do help   指令控制行为  /do send /me 你们好
+    # /do help   指令控制行为 
     def filterCmd(self, msgData="", fromName=""):
         res = True
         msgData = msgData.strip()
         flag = False
         size = len(msgData)
-        self.out("filterCmd." + msgData + "." + fromName)
 
         pr = ['放音乐', '播放音乐', '放歌', '开启放歌']
         if(not flag):
@@ -636,12 +576,16 @@ class AutoSophia:
             self.out('filterCmd.' + str(flag) + "." + msgData)
             res = False
             self.playMusic(url="", name=msgData, fromName=fromName)
-        if( re.search('/do', msgData) != None ):
+        elif( re.search('/do ', msgData) != None ): 
             res = False
-            cmd = msgData[3:9999]
-            self.out(" do method." + str(cmd))
-            if(not self.doMethod(cmd)):
-                self.send("/me ########## @" + self.name + " /domusic <on/off/turn/prev/next> ########")
+            cmd = msgData[4:9999]
+            cmd = cmd.strip()
+            cmds = cmd.split(' ')
+            if(len(cmds) > 0 and cmds[0] == ""):
+                cmds.pop(0)
+
+            if(not self.doMethod(cmds)):
+                self.send("/me ########## @" + self.name + " /do music <on/off/turn/prev/next> ########")
 
         return res
 
@@ -701,14 +645,7 @@ class AutoSophia:
             res = False
             self.send("/me " + msg)
         return res
-    # methodName args eg: 'send aaaaa' 第一个空格分开函数名
-    def doMethod(self, cmd):
-        #music <on/off/turn/prev/next>
-        cmd = cmd.strip()
-        cmds = cmd.split(' ')
-        if(len(cmds) > 0 and cmds[0] == ""):
-            cmds.pop(0)
-        listArgs = cmds
+    def doMethod(self, listArgs):
         size = len(listArgs)
         res = False
         if(size > 0):
@@ -732,10 +669,9 @@ class AutoSophia:
 
     def test(self):
         self.login()
-        # self.getRooms()
+        self.getRooms()
         # self.goRoom("YfdWkQ1lEs")
-        # self.goRoomName("上帝")
-        self.goARoom()
+        self.goRoomName("上帝")
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
@@ -751,6 +687,9 @@ class AutoSophia:
         tool.wait()
         return
 
+# def cmproom(x, y):
+#     return cmp(x.get("name",""), y.get("name",""))
+
     def runStart(self):
         ThreadRun("Robot." + str(self.count),  self.runRobot).start()
     def runRobot(self):
@@ -761,8 +700,9 @@ class AutoSophia:
             roomId = room.get("id", "")
             self.out("侵入" + str(i) + " " + roomId )
             self.goRoom(roomId)
-            self.playMusic()
-            time.sleep(6)
+            self.playMusic("http://sc1.111ttt.cn/2015/1/07/28/100282103048.mp3")
+            self.send("罪罪罪罪罪罪罪罪罪罪罪罪罪罪")
+            time.sleep(10)
             exitCount = 6
             while(exitCount >= 0):
                 exitCount = exitCount - 1
@@ -772,14 +712,9 @@ class AutoSophia:
             time.sleep(10)
 
         self.out("侵入完成:" + str(self.runIds))
-def testCC():
-    root = AutoSophia("CC", 0)
-    root.test()
-    tool.wait()
 
-    return
 def testMake():
-    root = AutoSophia("白学家", -1)
+    root = AutoSophia("zaika", -1)
     root.login()
     rooms = root.getRooms()
     #根据房间 筛选侵入目标
@@ -804,7 +739,7 @@ def testMake():
     objs = []
     st = 0
     for i in range(size):
-        obj = AutoSophia("白学家0-" + str(i), i, makeRooms) # 白学家
+        obj = AutoSophia("zaika-" + str(i), i, makeRooms) # 白学家
         obj.login()
         obj.runIds = range(st, st + det)
         st = st + det
@@ -823,7 +758,7 @@ def testMake():
 
 
 if __name__ == '__main__':
-    # testMake()
-    testCC()
+    testMake()
+
 # the admin
 # akakoori

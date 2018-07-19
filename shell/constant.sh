@@ -39,8 +39,9 @@ git_BaseSSM=$_root'/workspace_my/BaseSSM'
 git_cc_old=$_root'/workspace_my/cc_old'
 git_cc=$_root'/workspace_android/cc'
 git_GraphicsTools=$_root'/workspace_my/GraphicsTools'
+git_AngularApp=$_root'/workspace_my/AngularApp'
 
-git_local_dirs=($git_help_note $git_base $git_BaseSSM $git_cc_old $git_cc $git_GraphicsTools)
+git_local_dirs=($git_help_note $git_base $git_BaseSSM $git_cc_old $git_cc $git_GraphicsTools $git_AngularApp)
 
 # remote urls
 git_remote_help_note='https://github.com/1424234500/help_note.git'     #-> E:/ help_note   
@@ -49,8 +50,9 @@ git_remote_BaseSSM='https://github.com/1424234500/BaseSSM.git'
 git_remote_cc_old='https://github.com/1424234500/cc_old.git'
 git_remote_cc='https://github.com/1424234500/cc.git'
 git_remote_GraphicsTools='https://github.com/1424234500/GraphicsTools.git'
+git_remote_AngularApp='https://github.com/1424234500/AngularApp.git'
 
-git_remote_urls=($git_remote_help_note $git_remote_base $git_remote_BaseSSM $git_remote_cc_old $git_remote_cc $git_remote_GraphicsTools)
+git_remote_urls=($git_remote_help_note $git_remote_base $git_remote_BaseSSM $git_remote_cc_old $git_remote_cc $git_remote_GraphicsTools $git_remote_AngularApp)
 
 
 #echo $_root
