@@ -92,7 +92,9 @@ class AutoSophia:
         if(show):
             self.out(userInfo)
         return userInfo
-    def showRoom(self, roomId, show=True, i=0):
+    def showRoom(self, roomId="", show=True, i=0):
+        if(roomId == ""):
+            roomId = self.roomId
         room = self.roomIndex.get(roomId, "")
         if(room == ""):
             self.getRooms()
@@ -125,6 +127,7 @@ class AutoSophia:
         room = self.roomIndex.get(roomId, {})
         users = room.get("users", [])
         return users
+
     # 获取用户所在房间
     def getUserRoom(self, userName="小氷", userId="8f1b61e25098b0427f01d724716b70cb"):
         i=0
@@ -531,6 +534,8 @@ class AutoSophia:
                             msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
                             ran = tool.getRandom(0,100)
                             if(ran < 10): # 20% @不回
+                                flag = 0
+                            else:
                                 flag = 1
                             # else:
                             #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
@@ -727,13 +732,14 @@ class AutoSophia:
                         method()
                     res = True
                 else:
+                    res = True
                     self.out(method)
         return res
 
     def test(self):
         self.login()
         # self.getRooms()
-        # self.goRoom("YfdWkQ1lEs")
+        # self.goRoom("QGSNLntBvK")
         # self.goRoomName("上帝")
         self.goARoom()
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
