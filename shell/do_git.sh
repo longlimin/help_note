@@ -27,10 +27,10 @@ function push(){
     # clean python 
     clean_clean 
     toolsLineLong
-    do_project_exefun 'git_add_commit_push' $1    
+    git_exefun 'git_add_commit_push' $1    
 }
 function update(){ 
-    do_project_exefun 'git_add_commit_pull' $1 
+    git_exefun 'git_add_commit_pull' $1 
 }
 function git_exefun(){ 
     #echo $#
@@ -55,6 +55,7 @@ function git_exefun(){
         $fun $git_BaseSSM
         $fun $git_cc
         $fun $git_GraphicsTools
+        $fun $git_AngularApp
     fi 
 }
 function git_add_commit_pull(){
