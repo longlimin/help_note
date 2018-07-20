@@ -210,8 +210,10 @@ class AutoSophia:
                     self.roomIndex[room["id"]] = room
                     count = count + 1
                     userCount = userCount + int(room.get("total", 0))
-                    self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
+                    self.out("#" + tool.fill(str(i),' ',4) + "" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
                 i = i + 1
+
+
             self.out("共计房间" + tool.fill(str(count), ' ', 5) + " 用户" + tool.fill(str(userCount), ' ', 5) )
         self.out("解析完毕")
         return makeRooms
@@ -417,15 +419,15 @@ class AutoSophia:
             self.ifOnMusic = False
             self.send("/me 已经关闭音乐点播" + self.tail)
         elif(cmd == "turn"):
-            self.ifOnMusic = True
+            # self.ifOnMusic = True
             self.musicPlayType = 0
             self.playMusic()
         elif(cmd == "prev"):
-            self.ifOnMusic = True
+            # self.ifOnMusic = True
             self.musicPlayType = -1
             self.playMusic()
         elif(cmd == "next"):
-            self.ifOnMusic = True
+            # self.ifOnMusic = True
             self.musicPlayType = 1
             self.playMusic()
         elif(cmd == "remove"):
@@ -553,14 +555,15 @@ class AutoSophia:
                             else:
                                 if(self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
                                     ran = tool.getRandom(0,100)
-                                    if(ran < 10): # 20% @ 自动应答不回
+                                    if(ran < 8): # 20% @ 自动应答不回
                                         self.out("小概率不接入机器回复")
                                         msgData = ""
                                     else:
                                         robotRes = self.robot.do(msgData, self.name)
                                         code = str(robotRes.get("code", ""))
                                         if(code[0:1] != '4'):
-                                            res = '@' + str(msgFromName) +" " + robotRes.get("text", "")
+                                            text = self.robot.doParse(robotRes)
+                                            res = '@' + str(msgFromName) +" " + text
                                         else:
                                             self.out("robot接口调用失败 code=" + code)
                         elif(flag == 2):

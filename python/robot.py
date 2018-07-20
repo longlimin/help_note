@@ -109,7 +109,8 @@ class Robot:
             for item in res:
                 self.addMusic(item)
             if(len(res) > 0):
-                music = res[tool.getRandom(0, len(res))]
+                #按照 前面权重依次递减 1 2 3 4 5 -> 16 8 4 2 1
+                music = res[tool.getRandomWeight(0, len(res))]
         if(music.get("url", "") != ""):
             self.palyHistoryMusic.append(music)
             if(len(self.palyHistoryMusic) > 10):
@@ -203,6 +204,37 @@ class Robot:
             self.out("Robot. " + str(msg) + " -> " + jsonStr)
         else:
             self.out("Robot. " + str(msg) + " -> error !!!!!!!!! ")
+        return res
+    def doParse(self, obj):
+        res = ""
+        text = obj.get("text", "")
+        res = res + text
+        url = obj.get("url", "")
+        list = obj.get("list", "")
+        if(url != ""):
+            res = res + " \n" + url
+        i = 0
+        if(list != "" and len(list) > 0):
+            for item in list:
+                # res = res + " \n"
+                # for key,value in item.items():
+                #     res = res + " \n" + str(value)
+                ttt = item.get("url", "")
+                if(ttt != ""):
+                    res = res + " \n" + str(ttt)
+
+                ttt = item.get("detailurl", "")
+                if(ttt != ""):
+                    res = res + " \n" + str(ttt)
+
+                if(len(res) > 200):
+                    break
+            # {
+            #     "name": "鱼香肉丝",
+            #     "icon": "",
+            #     "info": "瘦肉、黑木耳、胡萝卜、靑椒、豆瓣酱，葱姜蒜、白糖，香醋，料酒",
+            #     "detailurl": "http://m.xiachufang.com/recipe/100352761/?ref=tuling"
+            # }
         return res
 
     def test(self):

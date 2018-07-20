@@ -27,8 +27,20 @@ def makeByte(img):
             res += hex(col)[2:4]
 
     return res
+# 按权重分配随机数选择器 1024 512 ... 1
+def getRandomWeight(start=0, stop=5):
+    res = 0
+    size = stop - start # 5    2^5=32-1=31=16 8 4 2 1 ->
+    area = []
+    cc = 1
+    for i in range(size): #   0, 1, 2, 3, 4
+        for j in range(cc): # 1, 2, 4, 8, 16
+            area.append(i)  # 0, 1,1, 2,2,2,2, 3,3,3,3,3,3,3,3,
+        cc = cc * 2
+    ran = getRandom(0, len(area)) # 0,1,2
+    res = size - 1 - area[ran]    # 0,1 -> 1,0
 
-
+    return res
 def getRandom(start=0, stop=10):
     if(start < 0):
         start = 0
@@ -166,3 +178,18 @@ class ThreadRun (threading.Thread):
         print "============Thread Start " + self.name
         self.runCallback()
         print "==Thread Stop  " + self.name
+
+
+
+
+if __name__ == '__main__':
+    res = {}
+    cc = 31000
+    ss = 5
+    for i in range(cc):
+        geti = getRandomWeight(0, ss)
+        res[str(geti)] = res.get(str(geti), 0) + 1
+
+    reslist = sorted(res.items(), cmp=lambda x,y: cmp(x, y)   )
+    print(reslist)
+

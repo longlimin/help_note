@@ -79,6 +79,11 @@ days = ['Monday', 'Tuesday', 'Wednesday',
 lambda x,y:x+y
 cmp=lambda (x,y): cmp(x.get("name",""), y.get("name",""))
 >>> sorted([5, 2, 4, 1, 3], cmp=numeric_compare)
+
+# 词典排序
+reslist = sorted(res.items(), cmp=lambda x,y: cmp(x, y)   )
+
+
 #字符串
 name = name.strip() 去除行尾 特殊符号
 
