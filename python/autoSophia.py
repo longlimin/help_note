@@ -598,15 +598,6 @@ class AutoSophia:
         self.out("filterCmd." + msgData + "." + fromName)
 
 
-        pr = ['help', 'info', '帮助', '介绍']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.showHelp()
-                    flag = True
-                    break
-
         pr = ['打开点歌', '播放音乐', '放歌', '开启放歌']
         if(not flag):
             for item in pr:
@@ -675,6 +666,15 @@ class AutoSophia:
             self.out(" do method." + str(cmd))
             if(not self.doMethod(cmd)):
                 self.help()
+
+        pr = ['help', 'info', '帮助', '介绍']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.showHelp()
+                    res = False
+                    break
         return res
 
     # [methodName arg1 arg2]
