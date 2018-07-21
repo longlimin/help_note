@@ -85,6 +85,13 @@ class AutoSophia:
         else:
             self.out("error！ 没能抓取到token")
 
+    def showHelp(self):
+
+        self.send("/me @" + self.name + " help 1.点歌 歌名-专辑-主唱    2.打开点播/关闭点播  ")
+
+        self.help()
+    def nobody(self):
+        self.showHelp()
     def help(self):
         self.out(dir(self))
     def showUser(self, user, show=True):
@@ -590,7 +597,17 @@ class AutoSophia:
         size = len(msgData)
         self.out("filterCmd." + msgData + "." + fromName)
 
-        pr = ['放音乐', '播放音乐', '放歌', '开启放歌']
+
+        pr = ['help', 'info', '帮助', '介绍']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.showHelp()
+                    flag = True
+                    break
+
+        pr = ['打开点歌', '播放音乐', '放歌', '开启放歌']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -598,7 +615,7 @@ class AutoSophia:
                     self.music("on")
                     flag = True
                     break
-        pr = ['不要放音乐', '停止放歌','停止音乐', '别放歌', '关闭放歌','关闭音乐', '别放了']
+        pr = ['关闭点歌', '停止放歌','停止音乐', '别放歌', '关闭放歌','关闭音乐', '别放了']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -657,8 +674,7 @@ class AutoSophia:
             cmd = msgData[3:9999]
             self.out(" do method." + str(cmd))
             if(not self.doMethod(cmd)):
-                self.send("/me ########## @" + self.name + " /domusic <on/off/turn/prev/next> ########")
-
+                self.help()
         return res
 
     # [methodName arg1 arg2]
