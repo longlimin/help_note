@@ -63,25 +63,19 @@ cat .gitconfig
 [credential]
         helper = store
 
-;/…or create a new repository on the command line 代码上传到某仓库
-echo "# help_note" >> README.md
+;/仓库zip下载 链接 更新 ##########################
+unzip xxx.zip
 git init
-git add README.md
-git commit -m "first commit"
+git add .
 git remote add origin https://github.com/1424234500/help_note.git
+git remote update
+
 git push -u origin master
 
 ;/…or push an existing repository from the command line 
-
 git remote add origin https://github.com/1424234500/help_note.git
 git push -u origin master
 
-
-
-;/git init 初始化github控制目录
-#Clone proj to local
-;/git clone https://github.com/1424234500/BaseSSM.git
- 
 ;/同步 分享 与 更新项目 push fetch remote 
 git remote <-v url> 列出远端别名
 #如果没有任何参数，Git 会列出它存储的远端仓库别名了事。
