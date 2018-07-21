@@ -110,7 +110,9 @@ class Robot:
                 self.addMusic(item)
             if(len(res) > 0):
                 #按照 前面权重依次递减 1 2 3 4 5 -> 16 8 4 2 1
-                music = res[tool.getRandomWeight(0, len(res))]
+                ii = tool.getRandomWeight(0, len(res))
+                self.out("0, " + str(len(res)) + " -> " + str(ii) )
+                music = res[ii]
         if(music.get("url", "") != ""):
             self.palyHistoryMusic.append(music)
             if(len(self.palyHistoryMusic) > 10):

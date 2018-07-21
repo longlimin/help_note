@@ -364,6 +364,10 @@ class AutoSophia:
     def getUserAuth(selfself, name=""):
         res = ""
         return res
+    def play(self, name=""):
+        self.playMusic("aaa", name)
+    def playurl(self, url=""):
+        self.playMusic(url)
     # 分享音乐
     def playMusic(self, url="", name="", fromName=""):
         if(self.roomIndex.get(self.roomId, {}).get("music", False) == False):
@@ -743,6 +747,13 @@ class AutoSophia:
                     self.out(method)
         return res
 
+    def shutdown(self):
+        self.outRoom()
+
+    def restart(self):
+        self.shutdown()
+        self.login()
+
     def test(self):
         self.login()
         # self.getRooms()
@@ -761,7 +772,6 @@ class AutoSophia:
         #     self.outRoom()
         #     time.sleep(3)
 
-        tool.wait()
         return
 
     def runStart(self):
@@ -788,6 +798,7 @@ class AutoSophia:
 def testCC():
     root = AutoSophia("cc", 0)
     root.test()
+
     tool.wait()
 
     return

@@ -13,6 +13,9 @@ SELECT * FROM loginuser for update;
 SELECT * FROM fileinfo for update;
 SELECT  (select count(*) from file_down_up where fileid=f.id) count,f.* FROM fileinfo f;
 
+DELETE FROM fileinfo;
+DELETE FROM file_down_up;
+
 SELECT * FROM file_down_up;
 SELECT fi.name,fi.id,fi.filesize,fdu.type,fdu.costtime,fdu.time FROM file_down_up fdu,fileinfo fi where fi.id=fdu.fileid;
 select id,name,(select count(*) from file_down_up where fileid=id and type='down') count from fileinfo ;
@@ -25,7 +28,7 @@ insert into student values(lpad(SEQ_STUDENT.nextval,4, '0'),'aaaaa', to_date('20
 --统计url操作次数
 SELECT url,sum(count) sumcount FROM log_time where 1=1 group by url order by sum(count)
 --url分时操作次数
- 
+  SELECT url,sum(count) sumcount FROM log_time where 1=1 group by url order by url 
 SELECT lev, nvl(count, '0') count FROM 
 (
 SELECT hour, sum(count) count FROM ( 

@@ -28,16 +28,16 @@ def makeByte(img):
 
     return res
 # 按权重分配随机数选择器 1024 512 ... 1
-def getRandomWeight(start=0, stop=5):
+def getRandomWeight(start=0, stop=5, step=3):
     res = 0
     size = stop - start # 5    2^5=32-1=31=16 8 4 2 1 ->
     area = []
     cc = 1
     for i in range(size): #   0, 1, 2, 3, 4
-        for j in range(cc): # 1, 2, 4, 8, 16
+        for j in range(cc): # 1, 2, 4, 8, 16   1 3 9 27
             area.append(i)  # 0, 1,1, 2,2,2,2, 3,3,3,3,3,3,3,3,
-        cc = cc * 2
-    ran = getRandom(0, len(area)) # 0,1,2
+        cc = cc * step
+    ran = int(random.uniform(0, len(area)) ) # getRandom(0, len(area)) # 0,1,2
     res = size - 1 - area[ran]    # 0,1 -> 1,0
 
     return res
