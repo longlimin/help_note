@@ -51,6 +51,8 @@ class Http:
             response = self.opener.open(url)
             # self.show(response)
         except Exception as e:
+            tool.line()
+            self.out(str(url))
             self.out(traceback.format_exc())
         return response
     def doPost(self, url=None, postData=None):
@@ -63,6 +65,9 @@ class Http:
                 response  = self.opener.open(url)
             # self.show(response)
         except Exception as e:
+            tool.line()
+            self.out(str(url))
+            self.out(str(postData))
             self.out(traceback.format_exc())
         return response
     def do(self, url=None, postData=None):

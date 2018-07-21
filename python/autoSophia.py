@@ -567,7 +567,7 @@ class AutoSophia:
                                         code = str(robotRes.get("code", ""))
                                         if(code[0:1] != '4'):
                                             text = self.robot.doParse(robotRes)
-                                            res = '@' + str(msgFromName) +" " + text
+                                            res = "..." + text # '@' + str(msgFromName) +" " +
                                         else:
                                             self.out("robot接口调用失败 code=" + code)
                         elif(flag == 2):
