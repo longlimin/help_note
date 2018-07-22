@@ -48,7 +48,7 @@ class AutoSophia:
         self.lastEchoTimeQuene = tool.getNowTime()
 
         self.maxDetaOtherSay = 1000 * 60 * 10 #最大没人说话时间 换房
-        self.maxDetaTime = 1000 * 60 * 3   # 最大沉默时间
+        self.maxDetaTime = 1000 * 60 * 4   # 最大沉默时间
         self.lastMusicTime = tool.getNowTime() #上次放歌时间
         self.maxMusicTime = 1000 * 60 * 4 #音乐间隔 暂不解析音乐文件时长控制
         self.musicNow = {}
@@ -228,6 +228,7 @@ class AutoSophia:
     # 太久没人发言 时 退出 并 进入一个新的 活跃的房间
     def goARoom(self):
         # self.out("#" + str(i) + "\t" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
+        lastRoomId = self.roomId
         nowRoom = self.roomIndex.get(self.roomId, {})
         if(nowRoom.get("total", 0) > 1): #当前房间人数 还有其他人
             self.send("/me 好无聊 去其他房间溜达去了 " + self.tail)
@@ -241,11 +242,20 @@ class AutoSophia:
             maxNum = 0
             maxKey = ""
             for key in self.roomIndex:
+                exist = True
                 room = self.roomIndex[key]
                 total = room.get("total", 0)
                 limit = room.get("limit", 0)
                 music = room.get("music", False)
-                if(limit > total and music): #有空位 且允许放歌
+                for item in room.get("users", []):
+                    if(item.get("name", "") == self.name):
+                        tool.line()
+                        self.out("异常! 该房间存在同名用户 无法加入 ")
+                        self.showRoom(room.get("id", ""))
+                        exist = False
+                        break
+
+                if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
                     if(maxNum < total):
                         maxNum = total
                         maxKey = key
@@ -540,9 +550,9 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastEchoTimeQuene # ms 60s
                     olRan = tool.getRandom(0,self.maxDetaTime) / 1000    #0-180 过于久没有发过消息了 权重高则可能自回复
                     weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
-                    ran = int(1.0 * olRan * (1+ 1.0 * (self.status-80) / 100) )
+                    ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
 
-                    self.out("新消息 " + msgId[0:4] + " 发言权" + tool.fill(str(weight) + "" , ' ', 6) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + " from:" + tool.fill(msgFromName,' ',12) + " type:"+tool.fill(msgType,' ',5) + " data:" + msgData)
+                    self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData)
 
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
@@ -772,14 +782,14 @@ class AutoSophia:
 
     def test(self):
         self.login()
-        # self.getRooms()
+        self.getRooms()
         # self.goRoom("QGSNLntBvK")
-        # self.goRoomName("上帝")
-        self.goARoom()
+        self.goRoomName("深海")
+        # self.goARoom()
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )

@@ -184,7 +184,7 @@ class ThreadRun (threading.Thread):
 
 if __name__ == '__main__':
     res = {}
-    cc = 31000
+    cc = 1000
     ss = 5
     for i in range(cc):
         geti = getRandomWeight(0, ss)
