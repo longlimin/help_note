@@ -54,7 +54,7 @@ class AutoSophia:
         self.musicNow = {}
         self.musicPlayType = -1
         self.ifOnMusic = False
-        self.notWait = False
+        self.notWait = True
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
