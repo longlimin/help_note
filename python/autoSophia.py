@@ -54,6 +54,7 @@ class AutoSophia:
         self.musicNow = {}
         self.musicPlayType = -1
         self.ifOnMusic = False
+        self.notWait = False
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
@@ -312,7 +313,7 @@ class AutoSophia:
                     if(self.ifOnMusic and detaTime > self.maxMusicTime and len(self.getRoomUsers(self.roomId)) > 1 ): #音乐开启 且 太久没放歌曲 且当前房间有至少两个人(包括自己robot)
                         self.playMusic()
                     detaTime = tool.getNowTime() - self.lastOtherSay # ms
-                    if(detaTime > self.maxDetaOtherSay):
+                    if(detaTime > self.maxDetaOtherSay and self.notWait): #不不停留True
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
 
                     if(dt % 600 == 0):
@@ -685,6 +686,26 @@ class AutoSophia:
                     self.showHelp()
                     res = False
                     break
+        pr = ['wait', 'master', 'stay']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.notWait = False
+                    self.send("/me " + self.name + " 决定在这里住下来" + self.tail)
+                    res = False
+                    break
+        pr = ['go', 'out', 'leave']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.notWait = True
+                    self.send("/me " + self.name + " 这就离开" + self.tail)
+                    self.outRoom()
+                    res = False
+                    break
+
         return res
 
     # [methodName arg1 arg2]
@@ -772,6 +793,16 @@ class AutoSophia:
                     res = True
                     self.out(method)
         return res
+    def let(self, attrName="", value=""):
+        self.out("变量赋值." + str(attrName) + "." + str(value))
+        if(hasattr(self, attrName)):
+            method = getattr(self, attrName)#获取的是个对象
+            if(callable(method)):
+                self.out("该属性为方法")
+            else:
+                method = value
+        else:
+            self.out("该属性不存在")
 
     def shutdown(self):
         self.outRoom()
