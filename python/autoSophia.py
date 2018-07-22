@@ -325,6 +325,8 @@ class AutoSophia:
                 except Exception as e:
                     self.out(traceback.format_exc())
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
+            if(self.roomId == ""): #无房间则自动加入
+                self.goARoom()
             time.sleep(3)
     # 定时抓取消息##########################
     def getHello(self):
