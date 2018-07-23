@@ -655,6 +655,7 @@ class AutoSophia:
                 if(msgData == item):
                     msgData = ""
                     flag = True
+                    self.robot.removeMusic(self.musicNow.get("url", ""))
                     break
         ppp = ['点歌','music','歌曲','点播','下面播放', '想听', '播放', '放', 'play', 'mp3']
         if(not flag):
