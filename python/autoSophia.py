@@ -2,11 +2,13 @@
 #-*- coding:utf-8 -*-  
  
 import json
-import re,sys,os
+import os
+import re
+import sys
 import time
 import traceback
+
 import BeautifulSoup
-import traceback
 
 import tool
 from http import Http
@@ -25,6 +27,8 @@ class AutoSophia:
         self.timeDetaMsgSend = 1.1    #最小发送消息间隔s
 
         self.makeRooms = makeRooms
+        self.userIndex = {} # 用户name -> 用户id
+        self.userIndexRe = {} #id -> name
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
@@ -55,6 +59,9 @@ class AutoSophia:
         self.musicPlayType = -1
         self.ifOnMusic = False
         self.notWait = True
+        self.admins = {}
+        self.adminRes = 0
+
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
@@ -88,15 +95,89 @@ class AutoSophia:
 
     def showHelp(self):
 
-        self.send("/me @" + self.name + " 0.help 1.点歌 歌名-专辑-主唱    2.打开音乐/关闭音乐  ")
+        self.send("/me @" + self.name + " 0.help 1.点歌 歌名-专辑-主唱  2.打开音乐/关闭音乐  3.踢出xxx  4.房主 <5.admin> ")
 
         self.help()
     def nobody(self):
         self.showHelp()
+    def showAdmin(self):
+        res = "Admins: "
+        for key,value in self.admins.items():
+            res = res + str(self.userIndexRe.get(key)) + "." + str(value) + " "
+        self.send("/me " + res)
+    def getAdmin(self):
+        ran = tool.getRandom(1000, 9999) # 2843 = 287 = 35 = 8
+        ans = ran
+        while(ans >= 10):
+            ans = ans % 10 + ans / 10
+        self.adminRes = ans
+        self.send("/me admin认证: " + str(ran) + " = ? "  )
+    #管理员权限认证 10次
+    def ifAdmin(self, id):
+        if(self.admins.get(id, 0) > 0):
+            self.admins[id] = self.admins[id] - 1
+            return True
+        return False
+    def host(self, name=""):
+        # new_host:5a1da324d5e68e6712725a50046f4b75
+        name = str(name)
+        if(name == ""):
+            return
+
+        self.getRooms() # 刷新最新房间信息
+        roomId = self.roomId
+        room = self.roomIndex.get(roomId, "")
+        if(room.get("host", {}).get("name", "") == self.name):
+            # 8db6b405927b77bbf95acbcc0de2ed55
+            pass
+        else:
+            self.send("/me 不是房主,没有权限")
+            return
+
+        userId = self.userIndex.get(name, "")
+        if(self.ifAdmin(userId) ):
+            if(self.getRoomUser(name).get("name","") != ""):
+                self.send("/me 转移房主权限给[" + name + "] ")
+                responce=self.http.doPost('http://drrr.com/room/?ajax=1', {
+                    "new_host":userId
+                })
+            else:
+                self.send("/me 用户[" + name + "]不在当前房间")
+        else:
+            self.send("/me 用户[" + name + "]未认证admin权限")
+            self.getAdmin()
+
+    def rm(self, name="", pwd=""):
+        name = str(name)
+        if(name == ""):
+            return
+
+        self.getRooms() # 刷新最新房间信息
+
+        roomId = self.roomId
+        room = self.roomIndex.get(roomId, "")
+        if(room.get("host", {}).get("name", "") == self.name):
+            # 8db6b405927b77bbf95acbcc0de2ed55
+            pass
+        else:
+            self.send("/me 不是房主,没有权限")
+            return
+        userId = self.userIndex.get(name,"")
+        if(self.ifAdmin(userId) ):
+            self.send("/me 禁止踢出admin")
+        else:
+            if(self.getRoomUser(name).get("name","") != ""):
+                self.send("/me 踢出[" + name + "]" ) # id:" + str(self.userIndex.get(name, "")) + " tripcode:" + str(item.get("tripcode", "")) + " device:" + str(item.get("device", ""))
+                responce=self.http.doPost('http://drrr.com/room/?ajax=1', {
+                    "kick":userId
+                })
+            else:
+                self.send("/me 用户[" + name + "]不在当前房间")
+        return
     def help(self):
         self.out(dir(self))
     def showUser(self, user, show=True):
-        userInfo ="U " + tool.fill(user.get("device", ""), ' ', 15) +  " " + tool.fill(user.get("icon", ""), ' ', 15) + " "  + user.get("name", "")
+        userInfo ="U " + tool.fill(user.get("device", ""), ' ', 15) +  " " + tool.fill(user.get("icon", ""), ' ', 15) + " "  + user.get("name", "") + " id." + user.get("id", "")
         if(show):
             self.out(userInfo)
         return userInfo
@@ -132,10 +213,18 @@ class AutoSophia:
         tool.line()
     # 获取当前房间人员列表
     def getRoomUsers(self, roomId=""):
+        if(roomId == ""):
+            roomId = self.roomId
         room = self.roomIndex.get(roomId, {})
         users = room.get("users", [])
         return users
-
+    # 按照名字获取当前房间用户
+    def getRoomUser(self, name=""):
+        users = self.getRoomUsers()
+        for user in users:
+            if(user.get("name", "") == name):
+                return user
+        return {}
     # 获取用户所在房间
     def getUserRoom(self, userName="小氷", userId="8f1b61e25098b0427f01d724716b70cb"):
         i=0
@@ -209,7 +298,6 @@ class AutoSophia:
         jsonObj = tool.makeObj(json.loads(responce.read()))
         rooms = jsonObj["rooms"]
         makeRooms = []
-
         if(len(rooms) > 0):
             self.roomIndex.clear()
             i = 0
@@ -224,7 +312,13 @@ class AutoSophia:
                     count = count + 1
                     userCount = userCount + int(room.get("total", 0))
                     self.out("#" + tool.fill(str(i),' ',4) + "" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
-                i = i + 1
+
+                    for item in room.get("users", []):
+                        if(item.get("id", "") != ""):
+                            self.userIndex[item.get("name", "")] = item.get("id")
+                            self.userIndexRe[item.get("id")] = item.get("name", "")
+
+            i = i + 1
 
 
             self.out("共计房间" + tool.fill(str(count), ' ', 5) + " 用户" + tool.fill(str(userCount), ' ', 5) )
@@ -262,7 +356,7 @@ class AutoSophia:
                         break
                     if(item.get("name", "") == "zk" or item.get("name", "") == "Walker"): #跟随
                         self.out("跟随触发 增大权重选中")
-                        maxNum = 10 + tool.getRandom(0, 5)
+                        maxNum = 20 + tool.getRandom(0, 5)
                         maxKey = key
                 if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
                     if(maxNum < total):
@@ -389,7 +483,8 @@ class AutoSophia:
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "message":message, # [0:self.musicPlayType * 4],
                         "url":"",
-                })
+                        # to:5a1da324d5e68e6712725a50046f4b75 私聊
+        })
         # self.out("发送[" + message + "]" + re[0:66])
         self.lastEchoTime = tool.getNowTime()
         return
@@ -516,12 +611,15 @@ class AutoSophia:
                     msgType = item.get('type', 'message')
                     msgData = ""
                     msgFromName = item.get('from', {}).get('name', "")
+                    fromId = item.get('from', {}).get('id', "")
                     if(msgFromName == ""):
                         msgFromName = item.get('user', {}).get('name', "")
+                        fromId = item.get('user', {}).get('id', "")
 
-                    
 
-
+                    if(msgFromName != "" and fromId != ""):
+                        self.userIndex[msgFromName] = fromId
+                        self.userIndexRe[fromId] = msgFromName
                     if(msgType == 'me'):
                         msgData = item.get('content', "")
                     elif(msgType == 'message'):
@@ -569,20 +667,31 @@ class AutoSophia:
                     weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
                     ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
 
-                    self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData)
+                    self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
 
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
                             msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
                             flag = 1
+
                             # else:
                             #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
                             #     flag = 2
                             #     msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
                         elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高 主动搭话概率
                             flag = 1
-                    else: #事件 
+
+                        #admin权限认证
+                        if(self.adminRes > 0 and msgData == str(self.adminRes)):
+                            self.out("触发权限admin认证." + str(self.adminRes) + "=" + str(msgData) + "." + msgFromName + "." + fromId)
+                            self.send("/me 认证成功[" + str(msgFromName) + "]")
+                            self.admins[fromId] = 4
+                            self.adminRes = 0
+                            self.showAdmin()
+                            flag = 0
+                            msgData = ""
+                    else: #事件
                         flag = 2
 
                     res = ""
@@ -649,7 +758,14 @@ class AutoSophia:
                     self.musicPlayType = -1
                     flag = True
                     break
-        nnn = ['下一曲','下一首', '切歌', '换','换歌', '不好听', '难听','难听死了', '换换换','换一首', 'next', 'turn']
+        nnn = ['下一曲','下一首', '切歌', 'next', 'turn']
+        if(not flag):
+            for item in nnn:
+                if(msgData == item):
+                    msgData = ""
+                    flag = True
+                    break
+        nnn = ['换','换歌', '不好听', '难听','难听死了', '换换换','换一首', 'del']
         if(not flag):
             for item in nnn:
                 if(msgData == item):
@@ -701,6 +817,33 @@ class AutoSophia:
                 if(msgData == item):
                     msgData = ""
                     self.showHelp()
+                    res = False
+                    break
+        pr = ['管理员', '认证管理员', 'admin', 'Admin']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.getAdmin()
+                    res = False
+                    break
+        pr = ['踢出', 'kick', 'del', '删除']
+        if(not flag):
+            for item in pr:
+                itemLen = len(item)
+                index = msgData.find(item)
+                if(index == 0): #头命中
+                    msgData = msgData[itemLen:9999].strip()
+                    self.rm(msgData)
+                    msgData = ""
+                    res = False
+                    break
+        pr = ['更换房主', 'host', '房主']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.host(fromName)
                     res = False
                     break
         pr = ['wait', 'master', 'stay']
@@ -849,7 +992,7 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
