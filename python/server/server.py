@@ -27,6 +27,7 @@ serverCamera.start()
 # serverSensor.start()
 
 while 1:
+    sleep(5)
     pass
 
 

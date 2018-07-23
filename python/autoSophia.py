@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-  
  
 import json
-import re
+import re,sys,os
 import time
 import traceback
 import BeautifulSoup
@@ -88,7 +88,7 @@ class AutoSophia:
 
     def showHelp(self):
 
-        self.send("/me @" + self.name + " help 1.点歌 歌名-专辑-主唱    2.打开点播/关闭点播  ")
+        self.send("/me @" + self.name + " 0.help 1.点歌 歌名-专辑-主唱    2.打开音乐/关闭音乐  ")
 
         self.help()
     def nobody(self):
@@ -174,14 +174,18 @@ class AutoSophia:
         tool.line()
 
     def goRoom(self, roomId):
+        if(self.roomId == roomId):
+            self.out("已经处于当前房间")
+            return
         # tool.line()
         self.out("加入房间:" + roomId)
         # self.showRoom(roomId)
         responce=self.http.doGet("http://drrr.com/room/?id=" + roomId)
-        self.roomId = roomId
-        self.lastOtherSay = tool.getNowTime() #重置处理时间
-        self.init()
-        # self.send("/me 大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
+        if(responce != "error"):
+            self.roomId = roomId
+            self.lastOtherSay = tool.getNowTime() #重置处理时间
+            self.init()
+            # self.send("/me 大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
         return
     def outRoom(self):
         self.out("离开房间:" + self.roomId)
@@ -193,9 +197,10 @@ class AutoSophia:
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
                         "leave":"leave", 
                 })
-        self.roomId = ""
         if(responce == "error"):
             return False
+
+        self.roomId = ""
         return True
     def getRooms(self, detail=False):
         tool.line()
@@ -255,7 +260,10 @@ class AutoSophia:
                         self.showRoom(room.get("id", ""))
                         exist = False
                         break
-
+                    if(item.get("name", "") == "zk" or item.get("name", "") == "Walker"): #跟随
+                        self.out("跟随触发 增大权重选中")
+                        maxNum = 10 + tool.getRandom(0, 5)
+                        maxKey = key
                 if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
                     if(maxNum < total):
                         maxNum = total
@@ -318,6 +326,12 @@ class AutoSophia:
 
                     if(dt % 600 == 0):
                         self.getRooms() #定时5分钟获取房间最新信息
+                    if(dt % 120 == 0):
+                        roomsAdmin = self.getUserRoom("zk");
+                        roomsAdmin.extend(self.getUserRoom("Walker"))
+                        if(len(roomsAdmin) > 0):
+                            self.out("跟随 触发")
+                            self.goRoom(roomsAdmin[tool.getRandom(0, len(roomsAdmin))].get("id", ""))
 
                     time.sleep(10)
                     dt = dt + 10
@@ -325,9 +339,9 @@ class AutoSophia:
                 except Exception as e:
                     self.out(traceback.format_exc())
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
+            time.sleep(10)
             if(self.roomId == ""): #无房间则自动加入
                 self.goARoom()
-            time.sleep(3)
     # 定时抓取消息##########################
     def getHello(self):
         tt = self.getMsgDetaTime
@@ -611,7 +625,7 @@ class AutoSophia:
         self.out("filterCmd." + msgData + "." + fromName)
 
 
-        pr = ['打开点歌', '播放音乐', '放歌', '开启放歌']
+        pr = ['打开音乐', '播放音乐', '放歌', '开启放歌']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -808,21 +822,33 @@ class AutoSophia:
 
     def shutdown(self):
         self.outRoom()
-
+        self.out("3秒后关闭程序")
+        # time.sleep(2)
+        tool.line()
+        # sys.exit()
+        # os.kill()
+        os._exit(0)
     def restart(self):
-        self.shutdown()
-        self.login()
+        # self.shutdown()
+        # self.login()
+        self.outRoom()
+        tool.line()
+        self.out("3秒后重启程序")
+        # time.sleep(3)
+        #重启程序
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
 
     def test(self):
         self.login()
         self.getRooms()
         # self.goRoom("QGSNLntBvK")
-        self.goRoomName("深海")
-        # self.goARoom()
+        # self.goRoomName("深海")
+        self.goARoom()
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
