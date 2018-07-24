@@ -51,8 +51,8 @@ class AutoSophia:
         self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
         self.lastEchoTimeQuene = tool.getNowTime()
 
-        self.maxDetaOtherSay = 1000 * 60 * 10 #最大没人说话时间 换房
-        self.maxDetaTime = 1000 * 60 * 4   # 最大沉默时间
+        self.maxDetaOtherSay = 1000 * 60 * 15 #最大没人说话时间 换房
+        self.maxDetaTime = 1000 * 60 * 5   # 最大沉默时间
         self.lastMusicTime = tool.getNowTime() #上次放歌时间
         self.maxMusicTime = 1000 * 60 * 4 #音乐间隔 暂不解析音乐文件时长控制
         self.musicNow = {}
@@ -356,7 +356,7 @@ class AutoSophia:
                         break
                     if(item.get("name", "") == "zk" or item.get("name", "") == "Walker"): #跟随
                         self.out("跟随触发 增大权重选中")
-                        maxNum = 20 + tool.getRandom(0, 5)
+                        maxNum = 20 + tool.getRandom(0, 15)
                         maxKey = key
                 if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
                     if(maxNum < total):
@@ -672,9 +672,9 @@ class AutoSophia:
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
-                            msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
+                            msgData = re.sub('@' + self.name + "", "", msgData) #摘除@自己
                             flag = 1
-
+                            msgData = msgData.strip()
                             # else:
                             #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
                             #     flag = 2
