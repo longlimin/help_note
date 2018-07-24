@@ -668,13 +668,13 @@ class AutoSophia:
                     ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
 
                     self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
-
+                    msgData = msgData.strip()
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
                         if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
                             msgData = re.sub('@' + self.name + " ", "", msgData) #摘除@自己
                             flag = 1
-
+                            msgData = msgData.strip()
                             # else:
                             #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
                             #     flag = 2
@@ -686,7 +686,7 @@ class AutoSophia:
                         if(self.adminRes > 0 and msgData == str(self.adminRes)):
                             self.out("触发权限admin认证." + str(self.adminRes) + "=" + str(msgData) + "." + msgFromName + "." + fromId)
                             self.send("/me 认证成功[" + str(msgFromName) + "]")
-                            self.admins[fromId] = 4
+                            self.admins[fromId] = self.admins.get(fromId,0) + 4
                             self.adminRes = 0
                             self.showAdmin()
                             flag = 0
@@ -992,7 +992,7 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
