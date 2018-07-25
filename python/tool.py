@@ -13,7 +13,7 @@ import random
 # from cv_makecolor import MakeColor
 # 不需要上下文的工具类
 ############################
-# 使用方式
+# 使用方式 
 # import tool
 # tool.exe
 
