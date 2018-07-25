@@ -266,6 +266,8 @@ class AutoSophia:
         if(self.roomId == roomId):
             self.out("已经处于当前房间")
             return
+        if(self.roomId != ""):
+            outRoom()
         # tool.line()
         self.out("加入房间:" + roomId)
         # self.showRoom(roomId)
