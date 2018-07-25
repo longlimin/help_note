@@ -25,13 +25,14 @@ class AutoSophia:
 
         self.listMsgQue = []    #消息发送队列
         self.timeDetaMsgSend = 1.1    #最小发送消息间隔s
-
         self.makeRooms = makeRooms
         self.userIndex = {} # 用户name -> 用户id
         self.userIndexRe = {} #id -> name
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
+
+        self.admins = {}
 
         self.init()
         self.tail = " の... "
@@ -59,8 +60,10 @@ class AutoSophia:
         self.musicPlayType = -1
         self.ifOnMusic = False
         self.notWait = True
-        self.admins = {}
-        self.adminRes = 0
+
+        self.adminRes = ""
+        self.adminDeta = 2
+        self.adminDetaDefault = 2
 
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
@@ -101,21 +104,52 @@ class AutoSophia:
     def nobody(self):
         self.showHelp()
     def showAdmin(self):
-        res = "Admins: "
-        for key,value in self.admins.items():
-            res = res + str(self.userIndexRe.get(key)) + "." + str(value) + " "
+        res = "#admins "
+        items = sorted(self.admins.items(), cmp=lambda x,y: cmp(x[1], y[1])   )
+        for key,value in items:
+            res = res + str(self.userIndexRe.get(key)) + ":" + str(value) + "  "
         self.send("/me " + res)
-    def getAdmin(self):
-        ran = tool.getRandom(1000, 9999) # 2843 = 287 = 35 = 8
-        ans = ran
-        while(ans >= 10):
-            ans = ans % 10 + ans / 10
-        self.adminRes = ans
-        self.send("/me admin认证: " + str(ran) + " = ? "  )
+    def addAdmin(self, fromId):
+        self.admins[fromId] = self.admins.get(fromId,0) + self.adminDeta #认证加权
+        self.adminRes = ""
+        self.adminDeta = self.adminDetaDefault
+        self.showAdmin()
+
+    def getAdmin(self, name=""):
+        level = self.admins.get(self.userIndex.get(name, ""), 0)
+        # self.adminRes = 0
+        # self.adminDeta = 2
+        # self.adminDetaDefault = 2
+        # <2   <4    <8  <16  <32
+        #i:1    2    3    4   5
+        # +2   +4    +8  +16  +32
+        i = 1
+        weight = 1
+        while(True):
+            weight = weight * self.adminDetaDefault # *= 2
+            if(level < weight):
+                break
+            i = i + 1
+        # level=0-2 -> i=1 weight=2
+        res = ""
+        ranres = ""
+        for j in range(i):
+            ran = tool.getRandom(1000, 9999) # 2843 = 287 = 35 = 8
+            ans = ran
+            while(ans >= 10):
+                ans = ans % 10 + ans / 10
+            res = res + str(ans)
+            ranres = ranres + str(ran) + " "
+        self.adminRes = res
+        self.adminDeta = weight
+        self.showAdmin()
+        self.send("/me admin认证 lv." + str(i) + ": " + str(ranres) + " = ? "  )
     #管理员权限认证 10次
     def ifAdmin(self, id):
         if(self.admins.get(id, 0) > 0):
             self.admins[id] = self.admins[id] - 1
+            if(self.admins[id] <= 0):
+                self.admins.pop(id)
             return True
         return False
     def host(self, name=""):
@@ -145,7 +179,7 @@ class AutoSophia:
                 self.send("/me 用户[" + name + "]不在当前房间")
         else:
             self.send("/me 用户[" + name + "]未认证admin权限")
-            self.getAdmin()
+            self.getAdmin(name)
 
     def rm(self, name="", pwd=""):
         name = str(name)
@@ -685,12 +719,10 @@ class AutoSophia:
                             flag = 1
 
                         #admin权限认证
-                        if(self.adminRes > 0 and msgData == str(self.adminRes)):
+                        if(self.adminRes != "" and str(msgData) == str(self.adminRes)):
                             self.out("触发权限admin认证." + str(self.adminRes) + "=" + str(msgData) + "." + msgFromName + "." + fromId)
                             self.send("/me 认证成功[" + str(msgFromName) + "]")
-                            self.admins[fromId] = self.admins.get(fromId,0) + 4
-                            self.adminRes = 0
-                            self.showAdmin()
+                            self.addAdmin(fromId)
                             flag = 0
                             msgData = ""
                     else: #事件
@@ -826,7 +858,15 @@ class AutoSophia:
             for item in pr:
                 if(msgData == item):
                     msgData = ""
-                    self.getAdmin()
+                    self.getAdmin(fromName)
+                    res = False
+                    break
+        pr = ['管理员列表', 'admins', 'score', 'Admins']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.showAdmin()
                     res = False
                     break
         pr = ['踢出', 'kick', 'del', '删除']

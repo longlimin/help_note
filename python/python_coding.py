@@ -80,8 +80,12 @@ lambda x,y:x+y
 cmp=lambda (x,y): cmp(x.get("name",""), y.get("name",""))
 >>> sorted([5, 2, 4, 1, 3], cmp=numeric_compare)
 
-# 词典排序
+# 词典排序 
 reslist = sorted(res.items(), cmp=lambda x,y: cmp(x, y)   )
+
+# 键值对排序
+# [('dd', 2), ('zk', 1)]  <- obj.items()
+reslist = sorted(res, cmp=lambda x,y: cmp(x[0], y[0])   )
 
 
 #字符串
