@@ -101,7 +101,7 @@ class AutoSophia:
 
     def showHelp(self):
 
-        self.send("@" + self.name + " 0.help 1.点歌 歌名-专辑-主唱  2.打开音乐/关闭音乐  3.踢出xxx  4.房主 <5.admin> ")
+        self.send("@" + self.name + " 0.help 1.play/next name 2.play music/stop music  3.del/rm xxx  4.host <5.admin> ")
 
         self.help()
     def nobody(self):
@@ -113,7 +113,11 @@ class AutoSophia:
             res = res + str(self.userIndexRe.get(key)) + ":" + str(value) + "  "
         self.send("" + res)
     def addAdmin(self, fromId):
-        self.admins[fromId] = self.admins.get(fromId,0) + self.adminDeta #认证加权
+        if(self.admins.get(fromId, 0) > 2**31):
+            self.send(self.name + "被玩坏了orz" + self.tail)
+            self.admins = {}
+            return
+        self.admins[fromId] = int(self.admins.get(fromId,0)) + int(self.adminDeta) #认证加权
         self.adminRes = ""
         self.adminDeta = self.adminDetaDefault
         self.showAdmin()
@@ -440,6 +444,7 @@ class AutoSophia:
         while(True):
             if(self.roomId != ""):
                 self.out("开启定时发言，最大发言间隔" + str(self.maxDetaTime / 1000) + "s")
+            sleepTime = 1
             dt = 0
             theI = 0
             self.lastEchoTimeQuene = tool.getNowTime()
@@ -468,8 +473,8 @@ class AutoSophia:
                             self.out("跟随 触发")
                             self.goRoom(roomsAdmin[tool.getRandom(0, len(roomsAdmin))].get("id", ""))
 
-                    time.sleep(10)
-                    dt = dt + 10
+                    time.sleep(sleepTime)
+                    dt = dt + sleepTime
                     dt = dt % 3600
                 except Exception as e:
                     self.out(traceback.format_exc())
@@ -570,7 +575,9 @@ class AutoSophia:
             url = music.get("url", "")
             name = music.get("name", "")
             fromName = music.get("fromName", "")
-            duration = int(music.get("duration", self.maxMusicTimeDefault))
+            duration = int(music.get("duration", 0))
+            if(duration < 100):
+                duration = self.maxMusicTimeDefault
             self.musicPlayType = 0 #重置为随机播放
 
         if(fromName != ""):
@@ -597,7 +604,7 @@ class AutoSophia:
                         "url":url,
                 })
         self.musicNow = {"url":url, "name":name, "fromName":fromName, "duration":duration}
-        self.maxMusicTime = duration - 3000
+        self.maxMusicTime = duration - 6000
         self.lastMusicTime = tool.getNowTime()
         return
     def listMusic(self):
@@ -681,8 +688,10 @@ class AutoSophia:
                         # 处理同名 异id问题 名字对应id不一样了 该房间里的cc不是原来记录的了 则删除原来的admin 顶替 n:id--1:名字
                         if(self.userIndex.get(msgFromName, fromId) != fromId):
                             self.userIndex.pop(msgFromName)
-                            self.userIndexRe.pop(fromId)
-                            self.admins.pop(fromId)
+                            if(self.userIndexRe.get(fromId, "") != ""):
+                                self.userIndexRe.pop(fromId)
+                            if(self.admins.get(fromId,"") != ""):
+                                self.admins.pop(fromId)
                         self.userIndex[msgFromName] = fromId
                         self.userIndexRe[fromId] = msgFromName
                     if(msgType == 'me'):
@@ -746,6 +755,8 @@ class AutoSophia:
                             #     msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
                         elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高 主动搭话概率
                             flag = 1
+                        else:
+                            flag = 10
 
                         #admin权限认证
                         if(self.adminRes != "" and str(msgData) == str(self.adminRes)):
@@ -759,11 +770,11 @@ class AutoSophia:
 
                     res = ""
                     if(self.filterFlag(msgData, msgFromName)):    #最高级 权限是否黑名单过滤
-                        if(flag == 1):
-                            if(self.robot.getUser(msgFromName).get("flag", "0") != "0"):
+                        if(flag == 1 or flag == 10):
+                            if(flag == 1 and self.robot.getUser(msgFromName).get("flag", "0") != "0"):
                                 self.out("不想搭理" + msgFromName)
                             else:
-                                if(self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
+                                if(flag == 1 and self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
                                     ran = tool.getRandom(0,100)
                                     if(ran < 8): # 20% @ 自动应答不回
                                         self.out("小概率不接入机器回复")
@@ -773,9 +784,12 @@ class AutoSophia:
                                         code = str(robotRes.get("code", ""))
                                         if(code[0:1] != '4'):
                                             text = self.robot.doParse(robotRes)
-                                            res = "..." + text # '@' + str(msgFromName) +" " +
+                                            res = ".." + text # '@' + str(msgFromName) +" " +
                                         else:
                                             self.out("robot接口调用失败 code=" + code)
+                                elif(flag == 10): #让普通消息也接入 cmd 不过没有后续处理
+                                    self.filterCmd(msgData, msgFromName)
+                                    res = ""
                         elif(flag == 2):
                             res = msgData
 
@@ -797,7 +811,7 @@ class AutoSophia:
         self.out("filterCmd." + msgData + "." + fromName)
 
 
-        pr = ['打开音乐', '播放音乐', '放歌', '开启放歌']
+        pr = ['打开音乐', 'play music']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -805,7 +819,7 @@ class AutoSophia:
                     self.music("on")
                     flag = True
                     break
-        pr = ['关闭点歌', '停止放歌','停止音乐', '别放歌', '关闭放歌','关闭音乐', '别放了']
+        pr = ['关闭音乐', 'stop music']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -813,7 +827,7 @@ class AutoSophia:
                     self.music("off")
                     flag = True
                     break
-        pr = ['prev', '上一曲', '上一首', '换回去']
+        pr = ['prev', '上一曲', '上一首']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -821,14 +835,14 @@ class AutoSophia:
                     self.musicPlayType = -1
                     flag = True
                     break
-        nnn = ['下一曲','下一首', '切歌', 'next', 'turn']
+        nnn = ['下一曲','下一首', '切歌', 'turn']
         if(not flag):
             for item in nnn:
                 if(msgData == item):
                     msgData = ""
                     flag = True
                     break
-        nnn = ['换','换歌', '不好听', '难听','难听死了', '换换换','换一首', 'del']
+        nnn = ['不好听', '难听','难听死了', '换换换','换一首', 'del']
         if(not flag):
             for item in nnn:
                 if(msgData == item):
@@ -836,7 +850,7 @@ class AutoSophia:
                     flag = True
                     self.robot.removeMusic(self.musicNow.get("url", ""))
                     break
-        ppp = ['点歌','点播', '想听', '播放', '放', 'play']
+        ppp = ['点播', '想听', '播放', 'play']
         if(not flag):
             for item in ppp:
                 itemLen = len(item)
@@ -852,7 +866,6 @@ class AutoSophia:
         ooo = [
             ('一首','献给大家'),
             ('一首','送给大家'),
-            ('点','这首歌'),
         ]
         if(not flag):
             for before,after in ooo:
@@ -888,7 +901,7 @@ class AutoSophia:
                     msgData = ""
                     res = False
                     break
-        pr = ['help', 'info', '帮助', '介绍']
+        pr = ['help', '帮助']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -896,7 +909,7 @@ class AutoSophia:
                     self.showHelp()
                     res = False
                     break
-        pr = ['管理员', '认证管理员', 'admin', 'Admin']
+        pr = ['管理员', 'admin', 'Admin']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -904,7 +917,7 @@ class AutoSophia:
                     self.getAdmin(fromName)
                     res = False
                     break
-        pr = ['管理员列表', 'admins', 'score', 'Admins']
+        pr = ['admins', 'score', 'Admins']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -924,7 +937,7 @@ class AutoSophia:
                     msgData = ""
                     res = False
                     break
-        pr = ['更换房主', 'host', '房主']
+        pr = ['host', '房主']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -932,7 +945,7 @@ class AutoSophia:
                     self.host(fromName)
                     res = False
                     break
-        pr = ['wait', 'master', 'stay']
+        pr = ['wait', 'stay']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -941,7 +954,7 @@ class AutoSophia:
                     self.send("" + self.name + " 决定在这里住下来" + self.tail)
                     res = False
                     break
-        pr = ['go', 'out', 'leave']
+        pr = ['out', 'leave']
         if(not flag):
             for item in pr:
                 if(msgData == item):
@@ -1046,7 +1059,7 @@ class AutoSophia:
             if(callable(method)):
                 self.out("该属性为方法")
             else:
-                method = value
+                setattr(self, attrName, value)
         else:
             self.out("该属性不存在")
 

@@ -84,6 +84,8 @@ class Robot:
             cc = 0
             while(music.get("url","") == ""):
                 size = self.db.getCount("select * from music ")
+                if(size <= 0):
+                    break
                 num = 5
                 page = int(1.0 * size / num)
                 page = tool.getRandom(0, page)

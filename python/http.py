@@ -84,14 +84,26 @@ class Http:
             self.out(traceback.format_exc())
         return res
     def existAudio(self, url, mimeType="audio"):
-        head = self.getHeader(url)
-        ttype = head.get("Content-Type", "")
-        size = int(head.get("Content-Length", 0))
-        if(re.search(mimeType, ttype) != None and size > 0):
-            return True
-        self.out(ttype)
-        self.out(str(size))
-        self.out(str(head))
+
+        try:
+            response = self.opener.open(url)
+            code = str(response.getcode())
+            head = response.headers
+            ttype = head.get("Content-Type", "")
+            size = int(head.get("Content-Length", 0))
+
+            if(code[0:1] == "2" or re.search(mimeType, ttype) != None or size > 0):
+                return True
+            tool.line()
+            self.out(ttype)
+            self.out(str(size))
+            self.out(str(head))
+            # self.show(response)
+        except Exception as e:
+            tool.line()
+            self.out(str(url))
+            self.out(traceback.format_exc())
+
         return False
     # 访问地址后 set-cookie自动被设置
     def doGet(self, url):
