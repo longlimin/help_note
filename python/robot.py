@@ -29,6 +29,7 @@ class Robot:
         create table if not exists music(
             url         text primary key,
             name        text,
+            duration    text,
             fromName    text,
             count       text
         )
@@ -60,7 +61,6 @@ class Robot:
 # 音乐模块
     def initMusic(self):
         li = ""
-
         count = self.db.getCount("select * from music ")
         if(count <= 0): #毫无数据 则 加入默认数据
             li = []
@@ -70,32 +70,44 @@ class Robot:
                     name = item.strip()
                     url = "http://39.107.26.100:8088/file/" + name
                     fromName = ""
-                    self.db.execute('insert into music values(?,?,?,?)', url, name, fromName,"5")                        
+                    self.db.execute('insert into music values(?,?,?,?,?)', url, name,"0", fromName,"5")
         return    
-
+    def nextMusic(self, name = ""):
+        self.nextNames.append(name)
     # 内部点播 若有名字则按照名字本地搜索和云搜索 否则 按照type切歌
     def turnMusic(self, playType):
         music = {}
-        if(playType == -1): #上一曲
-            if(len(self.palyHistoryMusic) > 1):
-                music = self.palyHistoryMusic.pop()
-                music = self.palyHistoryMusic.pop()
+        if(playType == -1 and len(self.palyHistoryMusic) > 1): #上一曲
+            music = self.palyHistoryMusic.pop() #弹出顶 取末
+            music = self.palyHistoryMusic[-1]
         else:
-            size = self.db.getCount("select * from music ")
-            num = 5
-            page = int(1.0 * size / num)
-            page = tool.getRandom(0, page)
-            (size, listRes) = self.db.executeQueryPage("select * from music", page, num)
-            getSize = len(listRes)
-            count = tool.getRandom(0, getSize)
-            music = listRes[count]
+            cc = 0
+            while(music.get("url","") == ""):
+                size = self.db.getCount("select * from music ")
+                num = 5
+                page = int(1.0 * size / num)
+                page = tool.getRandom(0, page)
+                (size, listRes) = self.db.executeQueryPage("select * from music", page, num)
 
-            tool.line()
-            self.out("随机找到歌曲页 " + "size:" + str(size) + "  page:" + str(page) + " num:" + str(num) + " listResSize:" + str(getSize) )
-            for item in listRes:
-                self.out("url:" + item.get("url") + " name:" + item.get("fromName"))
-            self.out("选中了" + str(count))
-            tool.line()
+                getSize = len(listRes)
+                count = tool.getRandom(0, getSize)
+                music = listRes[count]
+                tool.line()
+                self.out("随机找到歌曲页 " + "size:" + str(size) + "  page:" + str(page) + " num:" + str(num) + " listResSize:" + str(getSize) )
+                for item in listRes:
+                    self.out("url:" + item.get("url") + " name:" + item.get("name") +" fromName:" + item.get("fromName") + " time:" + str(tool.calcTime(item.get("duration", 0))))
+                self.out("选中了" + str(count))
+                tool.line()
+                url = music.get("url", "")
+                if(self.http.existAudio(url)):
+                    break
+                else:
+                    self.out("访问音乐文件失败" + url)
+                    self.removeMusic(url)
+                    music = {}
+                if(cc > 20):
+                    break
+                cc = cc + 1
         return music
     def getMusic(self, musicName="", fromName=""):
         music = {}
@@ -106,41 +118,48 @@ class Robot:
             #     music = res
             # else:
             res=self.auto163.getMusic(musicName, fromName) # [music,music]
+            rres = []
             for item in res:
-                self.addMusic(item)
+                if(self.addMusic(item)): #有效歌曲才参与接下来的选择
+                    rres.append(item)
+            res = rres
             if(len(res) > 0):
                 #按照 前面权重依次递减 1 2 3 4 5 -> 16 8 4 2 1
                 ii = tool.getRandomWeight(0, len(res))
                 self.out("0, " + str(len(res)) + " -> " + str(ii) )
                 music = res[ii]
         if(music.get("url", "") != ""):
-            self.palyHistoryMusic.append(music)
-            if(len(self.palyHistoryMusic) > 10):
-                self.palyHistoryMusic.pop(0)
+            self.addHistory(music)
+
         return music
+    def addHistory(self, music):
+        self.palyHistoryMusic.append(music)
+        if(len(self.palyHistoryMusic) > 20):
+            self.palyHistoryMusic.pop(0)
     # 外部点播音乐记录
     def addMusic(self, music):
-        res = 0
-        self.palyHistoryMusic.append(music)
-        if(len(self.palyHistoryMusic) > 10):
-            self.palyHistoryMusic.pop(0)
         url = music.get("url", "")
         name = music.get("name", "")
         fromName = music.get("fromName", "")
+        duration = music.get("duration", 0)
         oldMusic = self.db.executeQueryOne("select * from music where url = ? ", url)
         if(oldMusic.get("url", "") == ""):
             # self.out("添加音乐")
             # self.out(music)
-            self.db.execute('insert into music values(?,?,?,?)', url, name, fromName, "1")
+            self.db.execute('insert into music values(?,?,?,?,?)', url, name, duration, fromName, "1")
         else: #更新该音乐数据
             # self.out("更新音乐")
             count = int(oldMusic.get("count", 0))
             count = str(count + 1)
             music["count"] = count
             # self.out(music)
-            self.db.execute('update music set name=?, fromName=?, count=? where url=?', name, fromName, count, url)
-            res = 1
-        return  res
+            self.db.execute('update music set name=?, fromName=?, count=?,duration=? where url=?', name, fromName, count, duration, url)
+        if(not self.http.existAudio(url)):
+            self.out("访问音乐文件失败" + url)
+            self.removeMusic(url)
+            return False
+
+        return True
     def removeMusic(self, url=""):
         index = 0
         self.out("移除音乐" + url)

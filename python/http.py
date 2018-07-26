@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #-*- coding:utf-8 -*-  
 import urllib
+import re
 import urllib2
 import cookielib
 import tool
@@ -39,11 +40,59 @@ class Http:
             self.out("Code: " + str(response.getcode()))
             self.out("Res : " + str(response.msg))
             self.out("Headers : ")
-            self.out(response.headers)
+            self.out(str(response.headers))
         except Exception as e:
             self.out(traceback.format_exc())
         tool.line()
         return
+    # 网络文件信息头获取
+    def getHeader(self, url):
+    # meta = req.info()
+    # file_size = int(meta.getheaders("Content-Length")[0])
+    # content_type = meta.getheaders('Content-Type')[0].split(';')[0]
+    # print file_size, content_type
+# Date: Tue, 15 May 2018 13:23:07 GMT
+# Server: openresty/1.11.2.5
+# Content-Type: audio/mpeg
+# Content-Length: 2949164
+# x-nos-request-id: 1698868f-ee9b-4b01-bbae-f127b961dcea
+# x-nos-owner-productid: 177408e1ca784c08b4cb35ef81d304ee
+# ETag: 2c10ad1f64bdfc097785b0ca1b32fdbd
+# Content-Disposition: inline; filename="97c4%2Fac9d%2Fd676%2F2c10ad1f64bdfc097785b0ca1b32fdbd.mp3"
+# Last-Modified: Thu, 02 Nov 2017 12:16:57 Asia/Shanghai
+# Age: 6187682
+# X-Via: 1.1 ingdianxin173:9 (Cdn Cache Server V2.0)[22 200 0], 1.1 PSfjfzdx2go80:2 (Cdn Cache Server V2.0)[0 200 0], 1.1 PSshqzdx4dp241:3 (Cdn Cache Server V2.0)[0 200 0]
+# X-Ws-Request-Id: 5b5949dd_PSshqzdx4ny239_22865-38924
+# Connection: close
+# cdn-user-ip: 101.225.89.253
+# cdn-ip: 101.227.97.241
+# cdn-source: chinanetcenter
+# Access-Control-Allow-Credentials: true
+# Access-Control-Allow-Headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+# Access-Control-Allow-Methods: GET,POST,OPTIONS
+# Access-Control-Allow-Origin: *
+
+        res = {}
+        try:
+            response = self.opener.open(url)
+            header = response.headers
+            res = header
+            # self.show(response)
+        except Exception as e:
+            tool.line()
+            self.out(str(url))
+            self.out(traceback.format_exc())
+        return res
+    def existAudio(self, url, mimeType="audio"):
+        head = self.getHeader(url)
+        ttype = head.get("Content-Type", "")
+        size = int(head.get("Content-Length", 0))
+        if(re.search(mimeType, ttype) != None and size > 0):
+            return True
+        self.out(ttype)
+        self.out(str(size))
+        self.out(str(head))
+        return False
     # 访问地址后 set-cookie自动被设置
     def doGet(self, url):
         response = "error" 

@@ -158,10 +158,20 @@ def wait(waitTime=0):
     else:
         sleep(1.0 * waitTime / 1000)
     return waitTime
-
-
-
-
+def calcTime(mills=60000):
+    mills = int(mills)
+    levh = 60 * 60 * 1000
+    levm = 60 * 1000
+    levs = 1000
+    if(mills / levh > 0):
+        res = str(mills / levh ) + "h" + str(mills % levh / levm) + "m"
+    elif(mills / levm > 0):
+        res = str(mills / levm) + "m" + str(mills % levm / levs) + "s"
+    elif(mills / levs > 0):
+        res = str(mills / levs) + "s" + str(mills % levs / 1) + "ms"
+    else:
+        res = str(mills) + "ms"
+    return res
 
 
 
