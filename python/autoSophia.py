@@ -106,7 +106,7 @@ class AutoSophia:
     def showAdmin(self):
         res = "#admins "
         items = sorted(self.admins.items(), cmp=lambda x,y: cmp(x[1], y[1])   )
-        for key,value in items:
+        for key,value in items: # id value
             res = res + str(self.userIndexRe.get(key)) + ":" + str(value) + "  "
         self.send("/me " + res)
     def addAdmin(self, fromId):
@@ -142,12 +142,12 @@ class AutoSophia:
             ranres = ranres + str(ran) + " "
         self.adminRes = res
         self.adminDeta = weight
-        self.showAdmin()
+        # self.showAdmin()
         self.send("/me admin认证 lv." + str(i) + ": " + str(ranres) + " = ? "  )
     #管理员权限认证 10次
     def ifAdmin(self, id):
         if(self.admins.get(id, 0) > 0):
-            self.admins[id] = self.admins[id] - 1
+            self.admins[id] = self.admins[id] * 2    / 3 # 每次认证消减1/3生命值
             if(self.admins[id] <= 0):
                 self.admins.pop(id)
             return True
@@ -292,7 +292,7 @@ class AutoSophia:
             name = room.get("name", "")
             if(re.search(roomName, name) != None):
                 self.goRoom(key)
-                break;
+                break
             i = i+1
         tool.line()
 
@@ -301,7 +301,7 @@ class AutoSophia:
             self.out("已经处于当前房间")
             return
         if(self.roomId != ""):
-            outRoom()
+            self.outRoom()
         # tool.line()
         self.out("加入房间:" + roomId)
         # self.showRoom(roomId)
@@ -517,7 +517,7 @@ class AutoSophia:
             return
         self.out("Send." + message)
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
-                        "message":message, # [0:self.musicPlayType * 4],
+                        "message":message, # [0:4],
                         "url":"",
                         # to:5a1da324d5e68e6712725a50046f4b75 私聊
         })
@@ -539,8 +539,6 @@ class AutoSophia:
             self.send("/me 当前房间禁止音乐播放" + self.tail)
             return
 
-        self.musicPlayType = 0 #重置为随机播放
-
         if(url[0:4] != "http"): #无地址url则是定向点播
             if(name == ""): #无名字 则自动换
                 music = self.robot.turnMusic(self.musicPlayType)
@@ -550,6 +548,8 @@ class AutoSophia:
             url = music.get("url", "")
             name = music.get("name", "")
             fromName = music.get("fromName", "")
+            self.musicPlayType = 0 #重置为随机播放
+
         if(fromName != ""):
             msg = ""
             rooms = self.getUserRoom(fromName)
@@ -654,6 +654,11 @@ class AutoSophia:
 
 
                     if(msgFromName != "" and fromId != ""):
+                        # 处理同名 异id问题 名字对应id不一样了 该房间里的cc不是原来记录的了 则删除原来的admin 顶替 n:id--1:名字
+                        if(self.userIndex.get(msgFromName, fromId) != fromId):
+                            self.userIndex.pop(msgFromName)
+                            self.userIndexRe.pop(fromId)
+                            self.admins.pop(fromId)
                         self.userIndex[msgFromName] = fromId
                         self.userIndexRe[fromId] = msgFromName
                     if(msgType == 'me'):
@@ -1034,7 +1039,7 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
