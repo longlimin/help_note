@@ -508,7 +508,13 @@ class AutoSophia:
     # 发送消息-添加队列
     def send(self, message):
         if(message != None and message != ""):
-            self.listMsgQue.append(message)
+            msg = message
+            maxl = 110
+            while(len(msg) > maxl):
+                sm = msg[0:maxl]
+                msg = msg[maxl:99999]
+                self.listMsgQue.append(sm + "...")
+            self.listMsgQue.append(msg)
             self.lastEchoTimeQuene = tool.getNowTime()
         return
     # 发送消息
