@@ -687,11 +687,11 @@ class AutoSophia:
                     if(msgFromName != "" and fromId != ""):
                         # 处理同名 异id问题 名字对应id不一样了 该房间里的cc不是原来记录的了 则删除原来的admin 顶替 n:id--1:名字
                         if(self.userIndex.get(msgFromName, fromId) != fromId):
-                            self.userIndex.pop(msgFromName)
-                            if(self.userIndexRe.get(fromId, "") != ""):
-                                self.userIndexRe.pop(fromId)
-                            if(self.admins.get(fromId,"") != ""):
-                                self.admins.pop(fromId)
+                            oldId = self.userIndex.pop(msgFromName)
+                            if(self.userIndexRe.get(oldId, "") != ""):
+                                self.userIndexRe.pop(oldId)
+                            if(self.admins.get(oldId,"") != ""):
+                                self.admins.pop(oldId)
                         self.userIndex[msgFromName] = fromId
                         self.userIndexRe[fromId] = msgFromName
                     if(msgType == 'me'):
