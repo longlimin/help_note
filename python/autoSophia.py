@@ -36,6 +36,8 @@ class AutoSophia:
         self.ifTime = False #是否存货确认
         self.admins = {}
 
+        self.linkStart = 0 #链接状态
+
         self.init()
         self.tail = " の... "
     def init(self):
@@ -505,7 +507,11 @@ class AutoSophia:
     def rece(self):
         # 获取最新时间的消息1530004210 157 s秒
         res = ""
-        url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
+        url = ""
+        if(self.linkStart == 0):     #正常
+            url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
+        else:
+            url = "http://drrr.com/json.php?fast=1&update="+str(self.lastMsgTime)
         # self.out(url)
         responce=self.http.doGet(url)
         if(responce != "" and type(responce) != str ):
@@ -514,8 +520,10 @@ class AutoSophia:
                 res = tool.makeObj(json.loads(jsonStr))
             else:
                 res = ""
+            self.linkStart = 0
         else:
             self.out("请求异常:" + str(responce) ) 
+            self.linkStart = 1
         return res
 
     # 发送消息-添加队列
@@ -754,7 +762,8 @@ class AutoSophia:
                     weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
                     ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
 
-                    self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
+                    # self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
+                    self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 4) + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData #+ " ." + str(fromId))
                     msgData = msgData.strip()
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
@@ -823,7 +832,7 @@ class AutoSophia:
         msgData = msgData.strip()
         flag = False
         size = len(msgData)
-        self.out("filterCmd." + msgData + "." + fromName)
+        # self.out("filterCmd." + msgData + "." + fromName)
 
 
         pr = ['打开音乐', 'play music']
