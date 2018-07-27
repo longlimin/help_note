@@ -794,7 +794,7 @@ class AutoSophia:
                                     if(ran < 8): # 20% @ 自动应答不回
                                         self.out("小概率不接入机器回复")
                                         msgData = ""
-                                    else if(self.ifWelcom): #迎客状态才做自动回复
+                                    elif(self.ifWelcom): #迎客状态才做自动回复
                                         robotRes = self.robot.do(msgData, self.name)
                                         code = str(robotRes.get("code", ""))
                                         if(code[0:1] != '4'):
