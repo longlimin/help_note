@@ -333,8 +333,8 @@ class AutoSophia:
                 })
         if(responce == "error"):
             return False
-
         self.roomId = ""
+        time.sleep(10)
         return True
     def getRooms(self, detail=False):
         tool.line()
@@ -444,7 +444,7 @@ class AutoSophia:
         while(True):
             if(self.roomId != ""):
                 self.out("开启定时发言，最大发言间隔" + str(self.maxDetaTime / 1000) + "s")
-            sleepTime = 1
+            sleepTime = 3
             dt = 0
             theI = 0
             self.lastEchoTimeQuene = tool.getNowTime()
