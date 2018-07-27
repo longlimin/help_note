@@ -829,7 +829,7 @@ class AutoSophia:
                 if(msgData == item):
                     msgData = ""
                     self.music("on")
-                    flag = True
+                    flag = False
                     break
         pr = ['关闭音乐', 'stop music']
         if(not flag):
@@ -837,7 +837,7 @@ class AutoSophia:
                 if(msgData == item):
                     msgData = ""
                     self.music("off")
-                    flag = True
+                    flag = False
                     break
         pr = ['prev', '上一曲', '上一首']
         if(not flag):
