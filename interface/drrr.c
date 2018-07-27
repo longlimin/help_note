@@ -2,7 +2,43 @@
 # drrr 接口解析 
 #
 
-
+# 私聊信息
+{
+	"name": "\u65b0\u624b\u6751",
+	"description": "cc \u7684\u8d77\u70b9",
+	"since": 1532693110,
+	"update": 1532695291.5319,
+	"limit": 5,
+	"language": "zh-CN",
+	"roomId": "svoZ3AdoR8",
+	"music": true,
+	"staticRoom": false,
+	"hiddenRoom": false,
+	"gameRoom": false,
+	"adultRoom": false,
+	"host": "cd5679e202eb27073039d8334d367e4d",
+	"total": 0,
+	"v": 2,
+	"djMode": false,
+	"talks": [{
+		"id": "813e1227ef1d223e528722c51847998d",
+		"time": 1532695291.5317,
+		"type": "message",
+		"secret": true,
+		"to": {
+			"name": "zk",
+			"id": "cd5679e202eb27073039d8334d367e4d",
+			"icon": "rotchi-2x",
+			"tripcode": ""
+		},
+		"from": {
+			"name": "dd",
+			"id": "ded54f085f4afa931a96eeac3c927cb1",
+			"icon": "bakyura-2x"
+		},
+		"message": "111111111"
+	}]
+}
 
 # 普通消息
 {

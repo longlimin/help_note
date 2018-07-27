@@ -25,7 +25,7 @@ class AutoSophia:
         self.count = count   #编号
 
         self.listMsgQue = []    #消息发送队列
-        self.timeDetaMsgSend = 1.1    #最小发送消息间隔s
+        self.timeDetaMsgSend = 1.5    #最小发送消息间隔s
         self.makeRooms = makeRooms
         self.userIndex = {} # 用户name -> 用户id
         self.userIndexRe = {} #id -> name
@@ -71,6 +71,11 @@ class AutoSophia:
         self.adminDeta = 2
         self.adminDetaDefault = 2
 
+        self.toIdNow = "" #当前处理消息
+        self.toNameNow = "" #当前处理消息
+        self.fromIdNow = "" #当前处理消息
+        self.fromNameNow = "" #当前处理消息
+
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
@@ -104,16 +109,17 @@ class AutoSophia:
 
     def showHelp(self):
 
-        self.send("@" + self.name + " 0.help 0.play/next name 0.play music/stop music  1.del/rm xxx  2.host <0.admin> ")
+        self.send("@" + self.name + " \n  0.help \n  0.play/next name \n  0.play music/stop music \n  1.del/rm xxx  \n  2.host \n  <0.admin> ")
 
         self.help()
     def nobody(self):
         self.showHelp()
     def showAdmin(self):
-        res = "#admins "
-        items = sorted(self.admins.items(), cmp=lambda x,y: cmp(x[1], y[1])   )
+        res = "#Admins list:"
+        items = sorted(self.admins.items(), cmp=lambda x,y: cmp(y[1], x[1])   )
+        i = 0
         for key,value in items: # id value
-            res = res + str(self.userIndexRe.get(key)) + ":" + str(value) + "  "
+            res = res + "\nT" + str(i) + " " + str(self.userIndexRe.get(key)) + " " + str(value)
         self.send("" + res)
     def addAdmin(self, fromId):
         if(self.admins.get(fromId, 0) > 2**31):
@@ -153,13 +159,14 @@ class AutoSophia:
         self.adminRes = res
         self.adminDeta = weight
         # self.showAdmin()
-        self.send("admin认证 lv." + str(i) + ": " + str(ranres) + " = ? "  )
+        self.send("#Admin认证 lv." + str(i) + "\nF(" + str(ranres) + ") = ? "  )
     #管理员权限认证 10次
-    def ifAdminName(self, name="", lev=0):
-        return self.ifAdmin(self.userIndex.get(name, ""), lev)
-    def ifAdmin(self, id="", lev=0):
+    def ifAdminName(self, name="", lev=0, ifRedu=True):
+        return self.ifAdmin(self.userIndex.get(name, ""), lev, ifRedu)
+    def ifAdmin(self, id="", lev=0, ifRedu=True):
         if(self.admins.get(id, 0) > 2**lev-1):
-            self.admins[id] = self.admins[id] * 2    / 3 # 每次认证消减1/3生命值
+            if(ifRedu):
+                self.admins[id] = self.admins[id] * 2 / 3 # 每次认证消减1/3生命值
             if(self.admins[id] <= 0):
                 self.admins.pop(id)
             return True
@@ -213,7 +220,7 @@ class AutoSophia:
     def help(self):
         self.out(dir(self))
     def showUser(self, user, show=True):
-        userInfo ="U " + tool.fill(user.get("device", ""), ' ', 15) +  " " + tool.fill(user.get("icon", ""), ' ', 15) + " "  + user.get("name", "") + " id." + user.get("id", "")
+        userInfo ="U " + user.get("device", "")[0:3] +  " " + user.get("icon", "")[0:3] + " "  + user.get("name", "")[0:6] + "  " + user.get("id", "")[0:4]
         if(show):
             self.out(userInfo)
         return userInfo
@@ -226,8 +233,8 @@ class AutoSophia:
         room = self.roomIndex.get(roomId, "")
         info = ""
         if(room != ""):
-            info = ("##" + tool.fill(str(i), '#', 40) + "\n--G " + tool.fill(room["id"], ' ', 15) + " " + tool.fill(str(room["total"]) + "/" + str(room["limit"]), ' ', 15) + " " + room["name"]) + "\n" 
-            info = info + "music: " + str(room.get("music", False)) + " language:" + room.get("language","") +"\n"  # " 静态房间: " + str(room.get("staticRoom", "")) + ""
+            info = ("##" + tool.fill(str(i), '#', 10) + "\n--G " + tool.fill(room["id"], ' ', 10) + " " + tool.fill(str(room["total"]) + "/" + str(room["limit"]), ' ', 7) + " " + room["name"][0:10]) + "\n"
+            info = info + "music: " + str(room.get("music", False)) + " language:" + room.get("language","")+" game:"+ str(room.get("gameRoom", "")) +" adult:"+ str(room.get("adultRoom", ""))+"\n"  # " 静态房间: " + str(room.get("staticRoom", "")) + ""
             # info = info + " hiddenRoom: " + str(room.get("staticRoom", "")) + " 游戏房间: " + str(room.get("gameRoom", "")) + " 成人房间: " + str(room.get("adultRoom", "")) + "\n"
             info = info + "Host:" + room.get("host", {}).get("name", "") + "\n"
             info = info + "Users: " + "\n"
@@ -236,6 +243,29 @@ class AutoSophia:
         if(show):
             self.out(info)
         return info
+    def showRoomList(self, roomId=""):
+        if(roomId == ""):
+            rooms = self.roomIndex.values()
+            rooms = sorted(rooms, cmp=lambda y,x: cmp(x.get("total",0), y.get("total", 0)))
+            i = 0
+            res = "#Rooms list:"
+            for room in rooms:
+                i = i + 1 #+ "" + room["id"]
+                res = res + " " + str(i) + "." + str(room["total"]) + "/" + str(room["limit"]) # + " " + room["name"][0:8]
+        else:
+            room = self.roomIndex.get(roomId, "")
+            if(room != ""):
+                res = "" #Rooms info:
+                res = res + "G." + tool.fill(str(room["total"]) + "/" + str(room["limit"]), ' ', 4) + " " + room["name"][0:4] # tool.fill(room["id"], ' ', 10) + " " +
+                # res = res + "\n  music: " + str(room.get("Music", False)) + " " + room.get("language","") # +" game:"+ str(room.get("gameRoom", "")) +" adult:"+ str(room.get("adultRoom", ""))  # " 静态房间: " + str(room.get("staticRoom", "")) + ""
+                # info = info + " hiddenRoom: " + str(room.get("staticRoom", "")) + " 游戏房间: " + str(room.get("gameRoom", "")) + " 成人房间: " + str(room.get("adultRoom", "")) + "\n"
+                res = res + " Host:" + room.get("host", {}).get("name", "")
+                # res = res + "\n  Users: " + "\n"
+                i = 0
+                for item in room.get("users", []):
+                    res = res + " -" + item.get("name", "")[0:6]#self.showUser(item, False)
+                    i = i + 1
+        self.send(res)
     def showAllRoom(self):
         if(self.roomIndex is None or self.roomIndex == "" or self.roomIndex == {}):
             self.getRooms()
@@ -304,6 +334,7 @@ class AutoSophia:
             return
         if(self.roomId != ""):
             self.outRoom()
+            time.sleep(10)
         # tool.line()
         self.out("加入房间:" + roomId)
         # self.showRoom(roomId)
@@ -327,7 +358,7 @@ class AutoSophia:
         if(responce == "error"):
             return False
         self.roomId = ""
-        time.sleep(10)
+        time.sleep(1)
         return True
     def getRooms(self, detail=False):
         tool.line()
@@ -431,7 +462,10 @@ class AutoSophia:
                     if(detaTime > self.timeDetaMsgSend): # 发送时差大于最小发送间隔
                         if(len(self.listMsgQue) > 0):
                             msg = self.listMsgQue.pop(0)
-                            self.doSend(msg)
+                            if(type(msg) == tuple):
+                                self.doSendId(msg[0], msg[1])
+                            else:
+                                self.doSend(msg)
                     time.sleep(self.timeDetaMsgSend)
                 except Exception as e:
                     self.out("消息发送异常 消息队列:")
@@ -463,8 +497,12 @@ class AutoSophia:
                             self.lastEchoTimeQuene = tool.getNowTime()
 
                     detaTime = tool.getNowTime() - self.lastMusicTime # ms
-                    if(self.ifOnMusic and detaTime > self.maxMusicTime and len(self.getRoomUsers(self.roomId)) > 1 ): #音乐开启 且 太久没放歌曲 且当前房间有至少两个人(包括自己robot)
+                    if(len(self.nextNames) > 0  and detaTime > self.maxMusicTime ):
                         self.playMusic()
+                    else:
+                        if(self.ifOnMusic and detaTime > self.maxMusicTime and len(self.getRoomUsers(self.roomId)) > 1 ):
+                            #音乐开启 且 太久没放歌曲 且当前房间有至少两个人(包括自己robot) 或者 next列表不为空
+                            self.playMusic()
                     detaTime = tool.getNowTime() - self.lastOtherSay # ms
                     if(detaTime > self.maxDetaOtherSay and self.notWait): #不不停留True
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
@@ -527,22 +565,24 @@ class AutoSophia:
         return res
 
     # 发送消息-添加队列
-    def send(self, message):
+    def send(self, message, id=""):
         if(message != None and message != ""):
+            if(id == "" and self.toIdNow != ""): #若是别人发给自己
+                id = self.fromIdNow
             msg = message
-            maxl = 110
+            maxl = 128
             while(len(msg) > maxl):
                 sm = msg[0:maxl]
                 msg = msg[maxl:99999]
-                self.listMsgQue.append(sm + "...")
-            self.listMsgQue.append(msg)
+                self.listMsgQue.append( (sm + "...", id) )
+            self.listMsgQue.append( (msg,id))
             self.lastEchoTimeQuene = tool.getNowTime()
         return
     # 发送消息
-    def doSend(self, message):
+    def doSend(self, message=""):
         if(message == ""):
             return
-        if(message[0:3] != "/me "):
+        if(message[0:len("/me ")] != "/me " or message[0:len("/me")] != "/me"):
             message = "/me " + str(message)
         self.out("Send." + message)
         responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
@@ -553,16 +593,32 @@ class AutoSophia:
         # self.out("发送[" + message + "]" + re[0:66])
         self.lastEchoTime = tool.getNowTime()
         return
-
+    def doSendId(self, message="", id=""):
+        if(message == ""):
+            return
+        if(id == ""):
+            self.doSend(message)
+            return
+        self.out("SendTo." + self.userIndexRe.get(id,"") + "."+ message)
+        responce=self.http.doPost("http://drrr.com/room/?ajax=1", {
+                        "message":message, # [0:4],
+                        "url":"",
+                        "to":id
+        })
+        # self.out("发送[" + message + "]" + re[0:66])
+        self.lastEchoTime = tool.getNowTime()
+        return
     def addNextMusic(self, name="", fromName=""):
+        if(fromName == ""):
+            fromName = self.fromNameNow
         self.nextNames.append( (name,fromName) )
     def showNexts(self):
         res = ""
         if(len(self.nextNames) > 0):
-            res = "接下来播放: "
+            res = "#Play list: "
             i = 1
             for name,fromName in self.nextNames:
-                res = res + " " + str(i) + "." + str(name) + " by " + str(fromName)
+                res = res + "  \nNo." + str(i) + " " + str(name) + " by " + str(fromName)
                 i = i+1
         else:
             res = "接下来随机播放"
@@ -697,6 +753,9 @@ class AutoSophia:
                     # self.out(item)
                     msgTime = item.get("time", tool.getNowTime())
                     msgId = item.get('id', " ")
+                    secret = item.get('secret', False)
+                    toId = item.get('to', {}).get('id', '')
+                    toName = item.get('to', {}).get('name', '')
                     msgType = item.get('type', 'message')
                     msgData = ""
                     msgFromName = item.get('from', {}).get('name', "")
@@ -716,6 +775,14 @@ class AutoSophia:
                                 self.admins.pop(oldId)
                         self.userIndex[msgFromName] = fromId
                         self.userIndexRe[fromId] = msgFromName
+
+                    #当前消息信息
+                    self.fromNameNow = msgFromName
+                    self.fromIdNow = fromId
+                    self.fromNameNow = msgFromName
+                    self.toIdNow = toId
+                    self.toNameNow = toName
+
                     if(msgType == 'me'):
                         msgData = item.get('content', "")
                     elif(msgType == 'message'):
@@ -763,7 +830,7 @@ class AutoSophia:
                     ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
 
                     # self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
-                    self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 4) + tool.fill(str(olRan) + "->" + str(ran),' ', 6) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData #+ " ." + str(fromId))
+                    self.out("Msg." + msgId[0:4] + " " + msgFromName[0:4] + "->" + toName[0:4]+ " "+msgType[0:4] + " " + msgData )
                     msgData = msgData.strip()
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
@@ -776,6 +843,8 @@ class AutoSophia:
                             #     flag = 2
                             #     msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
                         elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高 主动搭话概率
+                            flag = 1
+                        elif(toId != ""): #私聊
                             flag = 1
                         else:
                             flag = 10
@@ -800,10 +869,10 @@ class AutoSophia:
                             else:
                                 if(flag == 1 and self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
                                     ran = tool.getRandom(0,100)
-                                    if(ran < 8): # 20% @ 自动应答不回
+                                    if(ran < 8 and toId == ""): # 20% @ 自动应答 非私聊 不回
                                         self.out("小概率不接入机器回复")
                                         msgData = ""
-                                    elif(self.ifWelcom): #迎客状态才做自动回复
+                                    elif(self.ifWelcom or toId != "" ): #迎客状态或者私聊 做自动回复
                                         robotRes = self.robot.do(msgData, self.name)
                                         code = str(robotRes.get("code", ""))
                                         if(code[0:1] != '4'):
@@ -887,19 +956,6 @@ class AutoSophia:
                     msgData = msgData[0:size-itemLen].strip()
                     flag = True
                     break
-        ooo = [
-            ('一首','献给大家'),
-            ('一首','送给大家'),
-        ]
-        if(not flag):
-            for before,after in ooo:
-                index = msgData.find(before)
-                if(index == 0):
-                    index1 = msgData.find(after)
-                    if(index1+len(after) == size):
-                        flag = True
-                        msgData = msgData[len(before):index1].strip()
-                        break
         if(flag):#抽离点歌 名字
             self.out('filterCmd.' + str(flag) + "." + msgData)
             res = False
@@ -907,134 +963,79 @@ class AutoSophia:
 
 
 #################################################################
-        if( re.search('/do', msgData) != None and self.ifAdminName(fromName, 3) ): # /do指令3阶
-            res = False
-            cmd = msgData[3:9999]
-            self.out(" do method." + str(cmd))
-            if(not self.doMethod(cmd)):
-                self.help()
-        pr = ['next', '接下来播放', '下一首播放']
-        if(not flag):
-            for item in pr:
-                itemLen = len(item)
-                index = msgData.find(item)
-                if(index == 0): #头命中
-                    msgData = msgData[itemLen:9999].strip()
-                    if(msgData != ""):
-                        self.addNextMusic(msgData, fromName)
-                    msgData = ""
-                    res = False
-                    break
-        pr = ['help', '帮助']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.showHelp()
-                    res = False
-                    break
-        pr = ['nexts', '歌单', '歌单列表']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.showNexts()
-                    res = False
-                    break
-        pr = ['管理员', 'admin', 'Admin']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.getAdmin(fromName)
-                    res = False
-                    break
-        pr = ['admins', 'score', 'Admins']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.showAdmin()
-                    res = False
-                    break
-        pr = ['踢出', 'kick', 'del', '删除','rm']
-        if(not flag and self.ifAdminName(fromName, 1)): #踢人一阶
-            for item in pr:
-                itemLen = len(item)
-                index = msgData.find(item)
-                if(index == 0): #头命中
-                    msgData = msgData[itemLen:9999].strip()
-                    if(msgData != ""):
-                        self.rm(msgData)
-                    msgData = ""
-                    res = False
-                    break
-        pr = ['host', '房主']
-        if(not flag and self.ifAdminName(fromName, 2)): #房主转移二阶
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.host(fromName)
-                    res = False
-                    break
-        pr = ['wait', 'stay']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.notWait = False
-                    self.send("" + self.name + " 决定在这里住下来" + self.tail)
-                    res = False
-                    break
-        pr = ['out', 'leave']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.notWait = True
-                    self.send("" + self.name + " 这就离开" + self.tail)
-                    self.outRoom()
-                    res = False
-                    break
-        pr = ['开始迎客', 'start hello']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.ifWelcom = True
-                    self.send("" + self.name + "开始迎客" + self.tail)
-                    res = False
-                    break
-        pr = ['停止迎客', 'stop hello']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.ifWelcom = False
-                    self.send("" + self.name + "停止迎客" + self.tail)
-                    res = False
-                    break
-        pr = ['开始存活确认', 'start live']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.ifTime = True
-                    self.send("" + self.name + "开始存活确认" + self.tail)
-                    res = False
-                    break
-        pr = ['停止存活确认', 'stop live']
-        if(not flag):
-            for item in pr:
-                if(msgData == item):
-                    msgData = ""
-                    self.ifTime = False
-                    self.send("" + self.name + "停止存活确认" + self.tail)
-                    res = False
-                    break
+        if( re.search('/do', msgData) != None and self.toIdNow != "" ): # /do指令1阶 且只接受私聊控制
+            if( self.ifAdminName(fromName, 1) ):
+                res = False
+                cmd = msgData[3:9999]
+                self.out(" do method." + str(cmd))
+                if(not self.doMethod(cmd)):
+                    self.help()
+
+        res = self.doControl(res, msgData, ['管理员', 'admin', 'Admin'], self.getAdmin, fromName, False, 0)
+        res = self.doControl(res, msgData, ['help', '帮助'], self.showHelp, fromName, False, 0)
+        res = self.doControl(res, msgData, ['nexts', '歌单', '歌单列表'], self.showNexts, fromName, False, 0)
+        res = self.doControl(res, msgData, ['next', '接下来播放', '下一首播放'], self.addNextMusic, fromName, True, 0)
+
+        res = self.doControl(res, msgData, ['rooms', '房间列表'], self.showRoomList, fromName, True, 1)
+
+        res = self.doControl(res, msgData, ['管理员', 'admin', 'Admin'], self.getAdmin, fromName, False, 0)
+        res = self.doControl(res, msgData, ['admins', 'score', 'Admins'], self.showAdmin, fromName, False, 0)
+        res = self.doControl(res, msgData, ['踢出', 'kick', 'del', '删除','rm'], self.rm, fromName, True,1)
+        res = self.doControl(res, msgData, ['host', '房主'], self.host, fromName, True, 2)
+        res = self.doControl(res, msgData, ['out', 'leave'], self.outRoom, fromName, False, 0)
+
+        # 295796671
+        res = self.doSetControl(res, msgData, ['wait', 'stay'], "notWait", False, echoStr="决定在这里住下来")
+        res = self.doSetControl(res, msgData, ['开始迎客', 'start hello'], "ifWelcom", True, echoStr="开始迎客")
+        res = self.doSetControl(res, msgData, ['停止迎客', 'stop hello'], "ifWelcom", False, echoStr="保持沉默")
+        res = self.doSetControl(res, msgData, ['开始存活确认', 'start live'], "ifTime", True, echoStr="开始存活确认")
+        res = self.doSetControl(res, msgData, ['停止存活确认', 'stop live'], "ifTime", False, echoStr="停止存活确认")
 
 
         return res
+    #设置值类处理链
+    def doSetControl(self, ifDo, msgData, cmds, attrName, value, echoStr=""):
+        if(not ifDo): #False 则不处理 且继续返回False
+            return ifDo
+        res = True
+        for item in cmds:
+            if(msgData == item):
+                self.out("命中:" + str(item) )
+                res = False
+                self.let(attrName, value)
+                self.send("" + self.name + str(echoStr) + self.tail)
+                break
+        return res
+    # 处理链
+    def doControl(self, ifDo, msgData, cmds, callback, fromName, argType=False, adminLevel=0):
+        if(not ifDo): #False 则不处理 且继续返回False
+            return ifDo
+        res = True
+        if(argType):
+            for item in cmds:
+                itemLen = len(item)
+                index = msgData.find(item)
+                if(index == 0): #头命中
+                    msgData = msgData[itemLen:9999].strip()
+                    self.out("命中:" + str(item) + " 参数:" + str(msgData))
+
+                    if(adminLevel > 0):
+                        if(self.ifAdminName(fromName, adminLevel)):
+                            callback(msgData)
+                            res = False
+                    else:
+                        callback(msgData)
+                        res = False
+                    break
+        else:
+            for item in cmds:
+                if(msgData == item):
+                    self.out("命中:" + str(item) )
+                    callback()
+                    res = False
+                    break
+        return res
+
     def addBad(self, fromName):
         self.robot.turnUser(fromName, "1")
 
@@ -1161,7 +1162,7 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
@@ -1196,7 +1197,7 @@ class AutoSophia:
         
 
 def testCC():
-    root = AutoSophia("zk", 0)
+    root = AutoSophia("cc", 0)
     root.test()
 
     tool.wait()
