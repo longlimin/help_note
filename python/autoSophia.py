@@ -101,7 +101,7 @@ class AutoSophia:
 
     def showHelp(self):
 
-        self.send("@" + self.name + " 0.help 1.play/next name 2.play music/stop music  3.del/rm xxx  4.host <5.admin> ")
+        self.send("@" + self.name + " 0.help 0.play/next name 0.play music/stop music  1.del/rm xxx  2.host <0.admin> ")
 
         self.help()
     def nobody(self):
@@ -545,6 +545,17 @@ class AutoSophia:
 
     def addNextMusic(self, name="", fromName=""):
         self.nextNames.append( (name,fromName) )
+    def showNexts(self):
+        res = ""
+        if(len(self.nextNames) > 0):
+            res = "接下来播放: "
+            i = 1
+            for name,fromName in self.nextNames:
+                res = res + " " + str(i) + "." + str(name) + " by " + str(fromName)
+                i = i+1
+        else:
+            res = "接下来随机播放"
+        self.send(res)
     def play(self, name=""):
         self.playMusic("aaa", name)
     def playurl(self, url=""):
@@ -884,7 +895,7 @@ class AutoSophia:
 
 
 #################################################################
-        if( re.search('/do', msgData) != None and self.ifAdminName(fromName, 3) ):
+        if( re.search('/do', msgData) != None and self.ifAdminName(fromName, 3) ): # /do指令3阶
             res = False
             cmd = msgData[3:9999]
             self.out(" do method." + str(cmd))
@@ -910,6 +921,14 @@ class AutoSophia:
                     self.showHelp()
                     res = False
                     break
+        pr = ['nexts', '歌单', '歌单列表']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.showNexts()
+                    res = False
+                    break
         pr = ['管理员', 'admin', 'Admin']
         if(not flag):
             for item in pr:
@@ -927,7 +946,7 @@ class AutoSophia:
                     res = False
                     break
         pr = ['踢出', 'kick', 'del', '删除','rm']
-        if(not flag):
+        if(not flag and self.ifAdminName(fromName, 1)): #踢人一阶
             for item in pr:
                 itemLen = len(item)
                 index = msgData.find(item)
@@ -939,7 +958,7 @@ class AutoSophia:
                     res = False
                     break
         pr = ['host', '房主']
-        if(not flag):
+        if(not flag and self.ifAdminName(fromName, 2)): #房主转移二阶
             for item in pr:
                 if(msgData == item):
                     msgData = ""
