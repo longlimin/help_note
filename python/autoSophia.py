@@ -719,7 +719,6 @@ class AutoSophia:
                     if( msgFromName == self.name or msgFromName == ""):
                         break
 #############################################################
-                    self.lastOtherSay = tool.getNowTime()   #重置处理时间
 
                     if(msgType == 'music'):
                         music = { "name":name, "url":url, "fromName":msgFromName }
@@ -770,6 +769,8 @@ class AutoSophia:
 
                     res = ""
                     if(self.filterFlag(msgData, msgFromName)):    #最高级 权限是否黑名单过滤
+                        self.lastOtherSay = tool.getNowTime()   #重置处理时间 黑名单消息不计入消息
+
                         if(flag == 1 or flag == 10):
                             if(flag == 1 and self.robot.getUser(msgFromName).get("flag", "0") != "0"):
                                 self.out("不想搭理" + msgFromName)
@@ -966,7 +967,6 @@ class AutoSophia:
                     break
 
         return res
-
     # [methodName arg1 arg2]
     def filterFlag(self, msgData="", fromName=""):
         res = True
@@ -975,7 +975,7 @@ class AutoSophia:
         size = len(msgData)
         msg = ""
         keys = ["别说话", "你别说话", "闭嘴", "shutup"]
-        statusOn = ['笨蛋', '傻逼', 'sb', 'SB', 'Sb','sB', '傻b', '傻']
+        statusOn = ['笨蛋', '傻逼', 'sb', 'SB', 'Sb','sB', '傻b', '傻', 'bad']
         statusOff = ['开心一点','开心点','我错了', '求你了', '后悔', '收回','我收回','对不起', '悔恨', '不要生气']
 
 
@@ -993,9 +993,8 @@ class AutoSophia:
                     flag = True
                     break
         if(self.robot.getUser(fromName).get("flag", "0") != "0"):   #限制黑名单只接受道歉
-            res = True
             self.out("黑名单只接受道歉 不想搭理" + fromName)
-            return res
+            return False
 
         if(not flag):
             for item in keys:
