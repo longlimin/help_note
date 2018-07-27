@@ -32,7 +32,8 @@ class AutoSophia:
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
-
+        self.ifWelcom = False #是否迎客
+        self.ifTime = False #是否存货确认
         self.admins = {}
 
         self.init()
@@ -168,12 +169,7 @@ class AutoSophia:
             return
 
         self.getRooms() # 刷新最新房间信息
-        roomId = self.roomId
-        room = self.roomIndex.get(roomId, "")
-        if(room.get("host", {}).get("name", "") == self.name):
-            # 8db6b405927b77bbf95acbcc0de2ed55
-            pass
-        else:
+        if(not self.ifHost):
             self.send("不是房主,没有权限")
             return
 
@@ -196,15 +192,10 @@ class AutoSophia:
             return
 
         self.getRooms() # 刷新最新房间信息
-
-        roomId = self.roomId
-        room = self.roomIndex.get(roomId, "")
-        if(room.get("host", {}).get("name", "") == self.name):
-            # 8db6b405927b77bbf95acbcc0de2ed55
-            pass
-        else:
+        if(not self.ifHost):
             self.send("不是房主,没有权限")
             return
+
         userId = self.userIndex.get(name,"")
         if(self.ifAdmin(userId) ):
             self.send("禁止踢出admin")
@@ -368,6 +359,13 @@ class AutoSophia:
 
             self.out("共计房间" + tool.fill(str(count), ' ', 5) + " 用户" + tool.fill(str(userCount), ' ', 5) )
         self.out("解析完毕")
+        roomId = self.roomId
+        room = self.roomIndex.get(roomId, {})
+        if(room.get("host", {}).get("name", "") == self.name):
+            self.ifHost = True
+        else:
+            self.ifHost = False
+
         return makeRooms
 
     # 太久没人发言 时 退出 并 进入一个新的 活跃的房间
@@ -399,9 +397,9 @@ class AutoSophia:
                         self.showRoom(room.get("id", ""))
                         exist = False
                         break
-                    if(item.get("name", "") == "zk" or item.get("name", "") == "Walker"): #跟随
+                    if(item.get("name", "") == "zk" or item.get("name", "") == "Walker" or item.get("name", "") == "cc"): #跟随
                         self.out("跟随触发 增大权重选中")
-                        maxNum = 20 + tool.getRandom(0, 15)
+                        maxNum = 20 + int(total)
                         maxKey = key
                 if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
                     if(maxNum < total):
@@ -453,10 +451,15 @@ class AutoSophia:
                     # message = "Now Time is "+ time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     detaTime = tool.getNowTime() - self.lastEchoTimeQuene # ms
                     if(detaTime > self.maxDetaTime):
-                        message = "存活确认." + str(theI) + "." + time.strftime("%Y%m%d %H:%M:%S")
-                        self.send(message)
-                        self.out(str(theI) + "\t" + message)
-                        theI = theI + 1
+                        if(self.ifTime):
+                            message = "存活确认." + str(theI) + "." + time.strftime("%Y%m%d %H:%M:%S")
+                            self.send(message)
+                            self.out(str(theI) + "\t" + message)
+                            theI = theI + 1
+                        else:
+                            message = ""
+                            self.lastEchoTimeQuene = tool.getNowTime()
+
                     detaTime = tool.getNowTime() - self.lastMusicTime # ms
                     if(self.ifOnMusic and detaTime > self.maxMusicTime and len(self.getRoomUsers(self.roomId)) > 1 ): #音乐开启 且 太久没放歌曲 且当前房间有至少两个人(包括自己robot)
                         self.playMusic()
@@ -709,7 +712,7 @@ class AutoSophia:
                         msgData = item.get('content', "")
                     elif(msgType == 'message'):
                         msgData = item.get('message', "")
-                    elif(msgType == 'join'):
+                    elif(msgType == 'join' and self.ifWelcom):
                         # msgFromName = item.get('user', {}).get('name', "")
                         msgData = '欢迎' + msgFromName + self.tail
                     elif(msgType == 'leave'):
@@ -984,6 +987,43 @@ class AutoSophia:
                     self.outRoom()
                     res = False
                     break
+        pr = ['开始迎客', 'start hello']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.ifWelcom = True
+                    self.send("" + self.name + "开始迎客" + self.tail)
+                    res = False
+                    break
+        pr = ['停止迎客', 'stop hello']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.ifWelcom = False
+                    self.send("" + self.name + "停止迎客" + self.tail)
+                    res = False
+                    break
+        pr = ['开始存活确认', 'start live']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.ifTime = True
+                    self.send("" + self.name + "开始存活确认" + self.tail)
+                    res = False
+                    break
+        pr = ['停止存活确认', 'stop live']
+        if(not flag):
+            for item in pr:
+                if(msgData == item):
+                    msgData = ""
+                    self.ifTime = False
+                    self.send("" + self.name + "停止存活确认" + self.tail)
+                    res = False
+                    break
+
 
         return res
     def addBad(self, fromName):
@@ -1112,7 +1152,7 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
@@ -1147,7 +1187,7 @@ class AutoSophia:
         
 
 def testCC():
-    root = AutoSophia("cc", 0)
+    root = AutoSophia("zk", 0)
     root.test()
 
     tool.wait()
