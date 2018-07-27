@@ -619,7 +619,7 @@ class AutoSophia:
         self.lastMusicTime = tool.getNowTime()
         return
     def listMusic(self):
-        self.out(self.robot.listMusic)
+        self.showNexts()
     # 切歌控制 on/off/turn/prev/next/remove
     def music(self, cmd="on"):
         self.out("music:" + cmd)
@@ -986,6 +986,9 @@ class AutoSophia:
                     break
 
         return res
+    def addBad(self, fromName):
+        self.robot.turnUser(fromName, "1")
+
     # [methodName arg1 arg2]
     def filterFlag(self, msgData="", fromName=""):
         res = True
@@ -1109,7 +1112,7 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
