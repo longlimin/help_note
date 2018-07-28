@@ -70,8 +70,35 @@
 	'roomId': 'cBfKnndqSZ',
 	'description': "Walker's "
 }
-
-# 分享音乐
+# 房主
+{
+	'message': '{
+		1
+	}isanewhost.',
+	'time': 1532752006.197,
+	'type': 'new-host',
+	'user': {
+		'id': '0475b21c314f485eaa34cce643e1f2ee',
+		'name': 'cc',
+		'icon': 'zaika-2x'
+	},
+	'id': '1762eb2a61e11f7e13fb84f2c89a455f'
+}
+# 退群
+{
+	'message': '{
+		1
+	}loggedout.',
+	'time': 1532751096.7179,
+	'type': 'leave',
+	'user': {
+		'id': '507b1a4f29bf5c207b518f0e11be87e7',
+		'name': 'dd',
+		'tripcode': 'ARnVkOZOOE',
+		'icon': 'sharo-2x'
+	},
+	'id': 'fb295c8a1bb626b6e99d54bf441bc988'
+}# 分享音乐
 {
 	"name": "\u5bc2\u9759\u306e\u672c\u4e38",
 	"description": "night\/\/\u4e0d\u65ad\u91cd\u6f14\u7684\u72ec\u89d2\u620f\u3002\u5230\u6700\u540e\uff0c\u4e5f\u8fd8\u662f\u53ea\u5269\u6211\u4e00\u4e2a\u3002\u201c\u2014\u2014\u5927\u548c\u5b88\u5b89\u5b9a\u3002\u4e0d\u6613\u4e0a\u624b\uff0c\u4f46\u662f\u628a\u597d\u5200\u3002\u8bf7\u2026\u95ee\u8fd9\u91cc\u6709\u51b2\u7530\u541b\u5417\uff1f\u201d\u8ddd\u79bb\u6e05\u5149\u6781\u5316\u5012\u8ba1\u65f6\u8fd8\u6709\u4e00\u5929\u3002",

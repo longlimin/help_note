@@ -32,10 +32,10 @@ class AutoSophia:
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
-        self.ifWelcom = False #是否迎客
+        self.ifWelcom = True #是否迎客
         self.ifTime = False #是否存货确认
         self.admins = {}
-
+        self.tripcodeIndex = {} #上次房间记录 的 用户名 绑定的 tc code
         self.linkStart = 0 #链接状态
 
         self.init()
@@ -115,21 +115,26 @@ class AutoSophia:
     def nobody(self):
         self.showHelp()
     def showAdmin(self):
-        res = "#Admins list:"
+        res = "#Admins:"
         items = sorted(self.admins.items(), cmp=lambda x,y: cmp(y[1], x[1])   )
         i = 0
         for key,value in items: # id value
-            res = res + "\nT" + str(i) + " " + str(self.userIndexRe.get(key)) + " " + str(value)
+            res = res + "\na" + str(i) + " " + str(self.userIndexRe.get(key)) + " " + str(value)
+            i = i+1
         self.send("" + res)
-    def addAdmin(self, fromId):
+    def addAdmin(self, fromId, value=0):
         if(self.admins.get(fromId, 0) > 2**31):
             self.send(self.name + "被玩坏了orz" + self.tail)
             self.admins = {}
             return
+        if(value>0):
+            self.adminDeta = value
         self.admins[fromId] = int(self.admins.get(fromId,0)) + int(self.adminDeta) #认证加权
+        if(self.admins[fromId] <= 0):
+            self.admins.pop(fromId)
         self.adminRes = ""
         self.adminDeta = self.adminDetaDefault
-        self.showAdmin()
+        # self.showAdmin()
 
     def getAdmin(self, name=""):
         level = self.admins.get(self.userIndex.get(name, ""), 0)
@@ -220,7 +225,7 @@ class AutoSophia:
     def help(self):
         self.out(dir(self))
     def showUser(self, user, show=True):
-        userInfo ="U " + user.get("device", "")[0:3] +  " " + user.get("icon", "")[0:3] + " "  + user.get("name", "")[0:6] + "  " + user.get("id", "")[0:4]
+        userInfo ="U " + user.get("device", "")[0:4] +  " " + user.get("icon", "")[0:4] + " "  + user.get("name", "")[0:6] + "  " + user.get("id", "")[0:4] + " "+ user.get("tripcode", "")[0:4]
         if(show):
             self.out(userInfo)
         return userInfo
@@ -239,6 +244,7 @@ class AutoSophia:
             info = info + "Host:" + room.get("host", {}).get("name", "") + "\n"
             info = info + "Users: " + "\n"
             for item in room.get("users", []):
+                # print(item)
                 info = info + "--" + self.showUser(item, False) + "\n"
         if(show):
             self.out(info)
@@ -251,19 +257,19 @@ class AutoSophia:
             res = "#Rooms list:"
             for room in rooms:
                 i = i + 1 #+ "" + room["id"]
-                res = res + " " + str(i) + "." + str(room["total"]) + "/" + str(room["limit"]) # + " " + room["name"][0:8]
+                res = res + "\n" + tool.fill(str(i)," ",2) + "." + tool.fill(str(room["total"]) + "/" + str(room["limit"]), ' ', 4)  + " " + room["name"][0:6] + " " + room["id"]
         else:
             room = self.roomIndex.get(roomId, "")
             if(room != ""):
                 res = "" #Rooms info:
-                res = res + "G." + tool.fill(str(room["total"]) + "/" + str(room["limit"]), ' ', 4) + " " + room["name"][0:4] # tool.fill(room["id"], ' ', 10) + " " +
-                # res = res + "\n  music: " + str(room.get("Music", False)) + " " + room.get("language","") # +" game:"+ str(room.get("gameRoom", "")) +" adult:"+ str(room.get("adultRoom", ""))  # " 静态房间: " + str(room.get("staticRoom", "")) + ""
+                res = res + "-G." + tool.fill(str(room["total"]) + "/" + str(room["limit"]), ' ', 4) + " " + room["name"][0:6] + " " + room["id"]
+                res = res + "\n-Music: " + str(room.get("Music", False)) + " " + room.get("language","") # +" game:"+ str(room.get("gameRoom", "")) +" adult:"+ str(room.get("adultRoom", ""))  # " 静态房间: " + str(room.get("staticRoom", "")) + ""
                 # info = info + " hiddenRoom: " + str(room.get("staticRoom", "")) + " 游戏房间: " + str(room.get("gameRoom", "")) + " 成人房间: " + str(room.get("adultRoom", "")) + "\n"
-                res = res + " Host:" + room.get("host", {}).get("name", "")
+                res = res + "\n-Host:" + room.get("host", {}).get("name", "")
                 # res = res + "\n  Users: " + "\n"
                 i = 0
                 for item in room.get("users", []):
-                    res = res + " -" + item.get("name", "")[0:6]#self.showUser(item, False)
+                    res = res + "\n -" + self.showUser(item, False) #  item.get("name", "")[0:6]
                     i = i + 1
         self.send(res)
     def showAllRoom(self):
@@ -344,7 +350,21 @@ class AutoSophia:
             self.lastOtherSay = tool.getNowTime() #重置处理时间
             self.init()
             # self.send("大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
+            self.initRoom()
         return
+    def initRoom(self, roomId=""):
+        if(roomId == ""):
+            roomId = self.roomId
+        room = self.roomIndex.get(roomId, "")
+        if(room != ""):
+            for item in room.get("users", []):
+                # print(item)
+                id = item.get("id", "")
+                if(id != ""):
+                    self.userIndex[item.get("name", "")] = item.get("id", "")
+                    self.userIndexRe[item.get("id")] = item.get("name", "")
+                self.tripcodeIndex[item.get("name", "")] = item.get("tripcode", "")
+        # self.out(str(self.tripcodeIndex))
     def outRoom(self):
         self.out("离开房间:" + self.roomId)
         # self.send("" + self.name + "好无聊啊 "+self.name +"要出去溜达一会儿" + self.tail)
@@ -382,13 +402,12 @@ class AutoSophia:
                     userCount = userCount + int(room.get("total", 0))
                     self.out("#" + tool.fill(str(i),' ',4) + "" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
 
-                    for item in room.get("users", []):
-                        if(item.get("id", "") != ""):
-                            self.userIndex[item.get("name", "")] = item.get("id")
-                            self.userIndexRe[item.get("id")] = item.get("name", "")
+                    # for item in room.get("users", []):
+                    #     if(item.get("id", "") != ""):
+                    #         self.userIndex[item.get("name", "")] = item.get("id", "")
+                    #         self.userIndexRe[item.get("id")] = item.get("name", "")
 
             i = i + 1
-
 
             self.out("共计房间" + tool.fill(str(count), ' ', 5) + " 用户" + tool.fill(str(userCount), ' ', 5) )
         self.out("解析完毕")
@@ -399,6 +418,7 @@ class AutoSophia:
         else:
             self.ifHost = False
 
+        self.initRoom()
         return makeRooms
 
     # 太久没人发言 时 退出 并 进入一个新的 活跃的房间
@@ -506,6 +526,8 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastOtherSay # ms
                     if(detaTime > self.maxDetaOtherSay and self.notWait): #不不停留True
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
+                    if(detaTime > self.maxDetaOtherSay * 2): #若一小时没信息 则 是否掉线?
+                        self.linkStart = 1
 
                     if(dt % 600 == 0):
                         self.getRooms() #定时5分钟获取房间最新信息
@@ -570,11 +592,11 @@ class AutoSophia:
             if(id == "" and self.toIdNow != ""): #若是别人发给自己
                 id = self.fromIdNow
             msg = message
-            maxl = 128
+            maxl = 131
             while(len(msg) > maxl):
                 sm = msg[0:maxl]
                 msg = msg[maxl:99999]
-                self.listMsgQue.append( (sm + "...", id) )
+                self.listMsgQue.append( (sm + "", id) )
             self.listMsgQue.append( (msg,id))
             self.lastEchoTimeQuene = tool.getNowTime()
         return
@@ -760,28 +782,38 @@ class AutoSophia:
                     msgData = ""
                     msgFromName = item.get('from', {}).get('name', "")
                     fromId = item.get('from', {}).get('id', "")
+                    fromCode = item.get('from', {}).get('tripcode', '')
                     if(msgFromName == ""):
                         msgFromName = item.get('user', {}).get('name', "")
                         fromId = item.get('user', {}).get('id', "")
-
-
-                    if(msgFromName != "" and fromId != ""):
-                        # 处理同名 异id问题 名字对应id不一样了 该房间里的cc不是原来记录的了 则删除原来的admin 顶替 n:id--1:名字
-                        if(self.userIndex.get(msgFromName, fromId) != fromId):
+                        fromCode = item.get('user', {}).get('tripcode', '')
+                    turnFlag = 0
+                    if(msgFromName != "" and fromId != "" and self.roomMsg.get(msgId, "") == ""):
+                        # self.out(str(item))
+                        print msgFromName,fromId[0:4],msgId[0:4],fromCode,msgType
+                        self.userIndex.get(msgFromName)
+                        # 处理同名 tripcode认证继承 异id问题 名字对应id不一样了 该房间里的cc不是原来记录的了 则删除原来的admin 顶替 n:id--1:名字
+                        if(self.userIndex.get(msgFromName, fromId) != fromId): #非同id
                             oldId = self.userIndex.pop(msgFromName)
                             if(self.userIndexRe.get(oldId, "") != ""):
                                 self.userIndexRe.pop(oldId)
-                            if(self.admins.get(oldId,"") != ""):
-                                self.admins.pop(oldId)
+                            # 判定和上次记录 的 zk#aa zk# 是否匹配 绑定用户名和code
+                            lastCode = self.tripcodeIndex.get(msgFromName, "")
+                            if(lastCode == fromCode): #但是 tc code 正常 则转移
+                                if(self.admins.get(oldId,"") != ""): #若有admin则继承
+                                    oldValue = self.admins.pop(oldId)
+                                    self.addAdmin(fromId, int(oldValue))
+                                turnFlag = 1 #欢迎回来
+                            else: # 否则 没有tc 同名 覆盖 都有tc 但不同 则也覆盖
+                                if(self.admins.get(oldId,"") != ""): #若有admin则继承
+                                    oldValue = self.admins.pop(oldId)
+                                    # self.addAdmin(fromId, int(oldValue))
+                                self.tripcodeIndex[msgFromName] = fromCode
+                                self.send("[" + msgFromName + "] tc变更[" + str(lastCode) + " - " + str(fromCode) )
+
+
                         self.userIndex[msgFromName] = fromId
                         self.userIndexRe[fromId] = msgFromName
-
-                    #当前消息信息
-                    self.fromNameNow = msgFromName
-                    self.fromIdNow = fromId
-                    self.fromNameNow = msgFromName
-                    self.toIdNow = toId
-                    self.toNameNow = toName
 
                     if(msgType == 'me'):
                         msgData = item.get('content', "")
@@ -789,7 +821,10 @@ class AutoSophia:
                         msgData = item.get('message', "")
                     elif(msgType == 'join' and self.ifWelcom):
                         # msgFromName = item.get('user', {}).get('name', "")
-                        msgData = '欢迎' + msgFromName + self.tail
+                        if(turnFlag == 0):
+                            msgData = '欢迎' + msgFromName + self.tail
+                        else:
+                            msgData = '欢迎回来 ' + msgFromName + self.tail
                     elif(msgType == 'leave'):
                         msgData = '' + msgFromName + '' + self.tail
                         msgData = ''
@@ -801,13 +836,20 @@ class AutoSophia:
 ######################################################## 不处理
                     if( self.roomMsg.get(msgId, "") != ""): #已经处理过 或者是自己发送的 或者取出发送者失败
                         # self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
-                        break
-
+                        continue
+                    self.roomMsg[msgId] = item #标记未已经处理 历史消息
+                    if( msgFromName == self.name or msgFromName == ""):
+                        continue
                     if(msgType == "me" or msgType == "message"): #只记录聊天消息
                         self.robot.addMsg(msgId, msgFromName, msgData, msgTime)
-                    if( msgFromName == self.name or msgFromName == ""):
-                        break
 #############################################################
+
+                    #当前消息信息记录
+                    self.fromNameNow = msgFromName
+                    self.fromIdNow = fromId
+                    self.fromNameNow = msgFromName
+                    self.toIdNow = toId
+                    self.toNameNow = toName
 
                     if(msgType == 'music'):
                         music = { "name":name, "url":url, "fromName":msgFromName }
@@ -817,7 +859,7 @@ class AutoSophia:
                         self.musicNow = music
                         self.lastMusicTime = tool.getNowTime()
 
-                    self.roomMsg[msgId] = item #标记未已经处理 历史消息
+                    # self.roomMsg[msgId] = item #标记未已经处理 历史消息
 
                     if(self.status>self.statusMax):
                         self.status = self.statusMax
@@ -890,7 +932,14 @@ class AutoSophia:
                             res = '' + res
                             onceDocount = onceDocount + 1
                             self.send(res)
-                        
+
+
+                    #当前消息信息清空
+                    self.fromNameNow = ""
+                    self.fromIdNow = ""
+                    self.fromNameNow = ""
+                    self.toIdNow = ""
+                    self.toNameNow = ""
         except Exception as e:
             self.out("Exception:" + str(e))
         # tool.line()
@@ -964,7 +1013,7 @@ class AutoSophia:
 
 #################################################################
         if( re.search('/do', msgData) != None and self.toIdNow != "" ): # /do指令1阶 且只接受私聊控制
-            if( self.ifAdminName(fromName, 1) ):
+            if( self.ifAdminName(fromName, 0) ):
                 res = False
                 cmd = msgData[3:9999]
                 self.out(" do method." + str(cmd))
@@ -976,11 +1025,11 @@ class AutoSophia:
         res = self.doControl(res, msgData, ['nexts', '歌单', '歌单列表'], self.showNexts, fromName, False, 0)
         res = self.doControl(res, msgData, ['next', '接下来播放', '下一首播放'], self.addNextMusic, fromName, True, 0)
 
-        res = self.doControl(res, msgData, ['rooms', '房间列表'], self.showRoomList, fromName, True, 1)
+        res = self.doControl(res, msgData, ['rooms', '房间列表'], self.showRoomList, fromName, True, 0)
 
         res = self.doControl(res, msgData, ['管理员', 'admin', 'Admin'], self.getAdmin, fromName, False, 0)
         res = self.doControl(res, msgData, ['admins', 'score', 'Admins'], self.showAdmin, fromName, False, 0)
-        res = self.doControl(res, msgData, ['踢出', 'kick', 'del', '删除','rm'], self.rm, fromName, True,1)
+        res = self.doControl(res, msgData, ['踢出', 'kick', 'del', '删除','rm'], self.rm, fromName, True,0)
         res = self.doControl(res, msgData, ['host', '房主'], self.host, fromName, True, 2)
         res = self.doControl(res, msgData, ['out', 'leave'], self.outRoom, fromName, False, 0)
 
