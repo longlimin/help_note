@@ -33,7 +33,7 @@ class AutoSophia:
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
         self.ifWelcom = True #是否迎客
-        self.ifTime = False #是否存货确认
+        self.ifTime = True #是否存货确认
         self.admins = {}
         self.tripcodeIndex = {} #上次房间记录 的 用户名 绑定的 tc code
         self.linkStart = 0 #链接状态
@@ -807,8 +807,6 @@ class AutoSophia:
                         fromCode = item.get('user', {}).get('tripcode', '')
                     turnFlag = 0
                     if(msgFromName != "" and fromId != "" and self.roomMsg.get(msgId, "") == ""):
-                        # self.out(str(item))
-                        print msgFromName,fromId[0:4],msgId[0:4],fromCode,msgType
                         self.userIndex.get(msgFromName)
                         # 处理同名 tripcode认证继承 异id问题 名字对应id不一样了 该房间里的cc不是原来记录的了 则删除原来的admin 顶替 n:id--1:名字
                         if(self.userIndex.get(msgFromName, fromId) != fromId): #非同id
