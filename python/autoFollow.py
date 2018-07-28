@@ -38,7 +38,6 @@ class AutoSophia:
         self.admins = {}
         self.tripcodeIndex = {} #上次房间记录 的 用户名 绑定的 tc code
         self.linkStart = 0 #链接状态
-        self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
 
         self.init()
         self.tail = " の... "
@@ -51,6 +50,7 @@ class AutoSophia:
         self.statusOnDeta = 15      #开心
         self.statusOffDeta = 15     #难过
         self.statusDownDeta = 40    #闭嘴
+        self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
 
         self.getMsgDetaTime = 1     #抓取消息间隔
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
@@ -335,7 +335,7 @@ class AutoSophia:
             i = i+1
         tool.line()
 
-    def goRoom(self, roomId):
+    def  goRoom(self, roomId):
         if(self.roomId == roomId):
             self.out("已经处于当前房间")
             return
@@ -528,8 +528,8 @@ class AutoSophia:
                         self.out(str(theI) + "\t" + message)
                         theI = theI + 1
                         self.lastEchoTime = tool.getNowTime()
-
-                    if(detaTime > self.maxDetaOtherSay and self.notWait): #不不停留True
+                    detaTime = tool.getNowTime() - self.lastOtherSay # ms
+                    if(detaTime > self.maxDetaOtherSay): #不不停留True
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
                     if(detaTime > self.maxDetaOtherSay * 3): #若一小时没信息 则 是否掉线?
                         self.linkStart = 1
@@ -905,8 +905,9 @@ class AutoSophia:
                         flag = 2
 
                     res = ""
+                    self.lastOtherSay = tool.getNowTime()   #重置处理时间 黑名单消息不计入消息
+
                     if(self.filterFlag(msgData, msgFromName)):    #最高级 权限是否黑名单过滤
-                        self.lastOtherSay = tool.getNowTime()   #重置处理时间 黑名单消息不计入消息
 
                         if(flag == 1 or flag == 10):
                             if(flag == 1 and self.robot.getUser(msgFromName).get("flag", "0") != "0"):
