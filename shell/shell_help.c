@@ -72,6 +72,17 @@ touch test.txt //创建文件
     server ntp.nict.jp iburst
     server time.nist.gov iburst
     sudo /etc/init.d/ntp restart    //重启
+
+    #定时任务
+    sudo crontab -e #Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本；可执行的任务范围可以是每天夜里自动备份用户的home文件夹，也可以每个小时记录CPU的信息日志。
+    //crontab（cron table）命令用于编辑执行中的定期任务列表，并且操作是基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
+    */5 * * * * /usr/local/tomcat-6.0.41/tomcat_cardniu_stat/monitor.sh //每五分钟
+    0 0 * * *  /home/pi/backup.sh //每天
+    /etc/init.d/crond restart //重启服务
+    service crond restart
+
+
+
 ////////////////////////////////////////////////////////eval xargs
 st="ls | more"
 `$st`   //将 | 和 more 看成了参数，而不是将文件按页显示

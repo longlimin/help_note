@@ -543,10 +543,8 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastOtherSay # ms
                     if(detaTime > self.maxDetaOtherSay and self.notWait): #不不停留True
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
-                    if(detaTime > self.maxDetaOtherSay * 3): #若一小时没信息 则 是否掉线?
-                        self.linkStart = 1
-                        self.login()
-                        self.goARoom()
+                    if(detaTime > self.maxDetaOtherSay * 3 + 1000): #若一小时没信息 则 是否掉线?
+                        self.shutdown() #等待重启
 
                     if(dt % 600 == 0):
                         self.getRooms() #定时5分钟获取房间最新信息
@@ -891,7 +889,7 @@ class AutoSophia:
                     ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
 
                     # self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
-                    self.out("Msg." + msgId[0:4] + " " + msgFromName[0:4] + "->" + toName[0:4]+ " "+msgType[0:4] + " " + msgData )
+                    self.out("Msg." + msgId[0:4] + " " + msgFromName[0:10] + "->" + toName[0:10]+ " "+msgType[0:4] + " " + msgData )
                     msgData = msgData.strip()
                     flag = 0 #不回复
                     if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
