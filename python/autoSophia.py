@@ -380,6 +380,24 @@ class AutoSophia:
         self.roomId = ""
         time.sleep(1)
         return True
+    def createRoom(self, room=""):
+        # tool.line()
+        self.out("创建房间")
+        if(room == ""):
+            room = {}
+            room["name"] = self.name + "'s room"
+        responce=self.http.doPost("http://drrr.com/create_room/?", {
+            "name":room.get("name",""),
+            "description":room.get("description",""),
+            "limit":room.get("limit",10),
+            "music":room.get("music",True),
+            "submit":room.get("music","创建房间"),
+        })
+        if(responce == "error"):
+            return False
+        self.roomId = ""
+        time.sleep(1)
+
     def getRooms(self, detail=False):
         tool.line()
         self.out("获取房间列表")
@@ -1221,7 +1239,19 @@ class AutoSophia:
         #     time.sleep(3)
 
         return
+    def test2(self):
+        self.login()
+        self.getRooms()
+        # self.goRoom("QGSNLntBvK")
+        # self.goRoomName("深海")
+        # self.goARoom()
+        self.createRoom()
+        ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
+        ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
+        ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
+        return
     def runStart(self):
         ThreadRun("Robot." + str(self.count),  self.runRobot).start()
     def runRobot(self):
