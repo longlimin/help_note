@@ -790,6 +790,7 @@ class AutoSophia:
                     self.roomIndex[self.roomId] = obj
             if(talks != ""):
                 onceDocount = 0
+                self.out("获取到消息:" + str(len(talks)))
                 for item in talks:
                     # self.out(item)
                     msgTime = item.get("time", tool.getNowTime())
@@ -855,10 +856,12 @@ class AutoSophia:
                         # self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
                         continue
                     self.roomMsg[msgId] = item #标记未已经处理 历史消息
-                    if( msgFromName == self.name or msgFromName == ""):
+                    if( msgFromName == self.name or msgFromName == "" ):
                         continue
                     if(msgType == "me" or msgType == "message"): #只记录聊天消息
                         self.robot.addMsg(msgId, msgFromName, msgData, msgTime)
+                    if( len(self.makeRooms) > 0): #侵入模式只记录信息
+                        continue
 #############################################################
 
                     #当前消息信息记录
@@ -1249,27 +1252,30 @@ class AutoSophia:
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
         ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
-
         return
+
+    #开启破坏模式
     def runStart(self):
+        ThreadRun("Robot." + str(self.count),  self.getHello).start()
         ThreadRun("Robot." + str(self.count),  self.runRobot).start()
     def runRobot(self):
         self.out("开始执行侵入:" + str(self.runIds))
+
 
         for i in self.runIds:
             room = self.makeRooms[i]
             roomId = room.get("id", "")
             self.out("侵入" + str(i) + " " + roomId )
             self.goRoom(roomId)
-            self.playMusic()
-            time.sleep(6)
-            exitCount = 6
-            while(exitCount >= 0):
-                exitCount = exitCount - 1
-                if(self.outRoom()):
-                    break
-                time.sleep(2)
-            time.sleep(10)
+            # self.playMusic()
+            # time.sleep(6)
+            # exitCount = 6
+            # while(exitCount >= 0):
+            #     exitCount = exitCount - 1
+            #     if(self.outRoom()):
+            #         break
+            #     time.sleep(2)
+            # time.sleep(10)
 
         self.out("侵入完成:" + str(self.runIds))
         
@@ -1277,55 +1283,75 @@ class AutoSophia:
 def testCC():
     root = AutoSophia("zk", 0)
     root.test()
-
     tool.wait()
-
     return
+
+objs = []
 def testMake():
-    root = AutoSophia("白学家", -1)
+    name = "绝望"
+    root = AutoSophia("绝望root", -1)
     root.login()
     rooms = root.getRooms()
     #根据房间 筛选侵入目标
-    ThreadRun( "InputHello." + str(root.count),  root.inputHello).start() #监控母体
     # roomsSorted = sorted(rooms, cmp=lambda x,y: cmp(x.get("name",""), y.get("name",""))   )
     # print(roomsSorted)
     i = 0
     makeRooms = []
     for room in rooms:
-        id = room.get("id","")
-        if(room.get("language","") == "zh-CN"):
-            # root.showRoom(id, show=True, i=i)
+        total = room.get("total", 0)
+        limit = room.get("limit", 0)
+        music = room.get("music", False)
+        exist = True
+        for item in room.get("users", []):
+            if(item.get("name", "") == name):
+                tool.line()
+                root.out("异常! 该房间存在同名用户 无法加入 " + item.get("name"))
+                exist = False
+                break
+        if(limit > total and exist and room.get("language","") == "zh-CN"): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
             makeRooms.append(room)
         i = i + 1
     toSize = len(makeRooms) #侵入房间数量 37
 
-    size = 10 #10个robot并行
+    size = toSize #10个robot并行
     det = toSize / size
     if(size * det < toSize):
         det = det + 1   # 4
     print("共计房间" + str(toSize) + " 开启机器" + str(size) + " 每个执行任务" + str(det))
-    objs = []
     st = 0
     for i in range(size):
-        obj = AutoSophia("白学家0-" + str(i), i, makeRooms) # 白学家
+        obj = AutoSophia(name, i, makeRooms) # 白学家
         obj.login()
         obj.runIds = range(st, st + det)
         st = st + det
         objs.append(obj)
-        time.sleep(0.5)
+        time.sleep(0.1)
     print("Enter 下一步进入房间")
     # cmd=raw_input("")
     for i in range(size):
         objs[i].runStart()
 
+    ThreadRun("InputHello." + str(root.count),  inputHello).start() #监控母体
 
 
     tool.wait()
 
 
-
+# 手动控制
+def inputHello():
+    while(True):
+        try:
+            cmd=raw_input("")
+            if(cmd != ""):
+                print("全局手动发送:" + cmd)
+                for obj in objs:
+                    if(not obj.doMethod(cmd)):
+                        obj.doSend(cmd)
+        except Exception as e:
+            print(traceback.format_exc())
+    return
 
 if __name__ == '__main__':
-    # testMake()
-    testCC()
+    testMake()
+    # testCC()
     
