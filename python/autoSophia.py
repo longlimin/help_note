@@ -32,11 +32,12 @@ class AutoSophia:
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
-        self.ifWelcom = True #是否迎客
+        self.ifWelcom = False #是否迎客
         self.ifTime = False #是否存货确认
         self.admins = {}
         self.tripcodeIndex = {} #上次房间记录 的 用户名 绑定的 tc code
         self.linkStart = 0 #链接状态
+        self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
 
         self.init()
         self.tail = " の... "
@@ -53,7 +54,6 @@ class AutoSophia:
         self.getMsgDetaTime = 1     #抓取消息间隔
         self.lastMsgTime = int(time.time() * 10000 ) * 1.0 / 10000  #上一次更新房间聊天记录时间
         self.lastEchoTime = tool.getNowTime()   #上次说话时间
-        self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
         self.lastEchoTimeQuene = tool.getNowTime()
 
         self.maxDetaOtherSay = 1000 * 60 * 15 #最大没人说话时间 换房
@@ -347,7 +347,6 @@ class AutoSophia:
         responce=self.http.doGet("http://drrr.com/room/?id=" + roomId)
         if(responce != "error"):
             self.roomId = roomId
-            self.lastOtherSay = tool.getNowTime() #重置处理时间
             self.init()
             # self.send("大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
             self.initRoom()
@@ -445,47 +444,47 @@ class AutoSophia:
         lastRoomId = self.roomId
         nowRoom = self.roomIndex.get(self.roomId, {})
         if(nowRoom.get("total", 0) > 1): #当前房间人数 还有其他人
-            self.send(self.name + "也无法忍受这样的寂静了 债见了各位" + self.tail)
+            # self.send(self.name + "也无法忍受这样的寂静了 债见了各位" + self.tail)
+            pass
         if(self.roomId != ""):
             self.outRoom()
 
-        while(self.roomId == ""):
-            self.getRooms()
-            self.out("选择最活跃房间")
-            i = 0
-            maxNum = 0
-            maxKey = ""
-            for key in self.roomIndex:
-                exist = True
-                room = self.roomIndex[key]
-                total = room.get("total", 0)
-                limit = room.get("limit", 0)
-                music = room.get("music", False)
-                for item in room.get("users", []):
-                    if(item.get("name", "") == self.name):
-                        tool.line()
-                        self.out("异常! 该房间存在同名用户 无法加入 ")
-                        self.showRoom(room.get("id", ""))
-                        exist = False
-                        break
-                    if(item.get("name", "") == "zk" or item.get("name", "") == "Walker" or item.get("name", "") == "cc"): #跟随
-                        self.out("跟随触发 增大权重选中")
-                        maxNum = 20 + int(total)
-                        maxKey = key
-                if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
-                    if(maxNum < total):
-                        maxNum = total
-                        maxKey = key
-                i = i+1
-            if(maxKey != ""):
-                self.out("选中房间:")
-                self.showRoom(maxKey)
-                tool.line()
-                self.goRoom(maxKey)
-            else:
-                tool.line()
-                self.out("异常！！！！！！！！！ 居然无可用房间？")
-                time.sleep(2)
+        self.getRooms()
+        self.out("选择最活跃房间")
+        i = 0
+        maxNum = 0
+        maxKey = ""
+        for key in self.roomIndex:
+            exist = True
+            room = self.roomIndex[key]
+            total = room.get("total", 0)
+            limit = room.get("limit", 0)
+            music = room.get("music", False)
+            for item in room.get("users", []):
+                if(item.get("name", "") == self.name):
+                    tool.line()
+                    self.out("异常! 该房间存在同名用户 无法加入 ")
+                    self.showRoom(room.get("id", ""))
+                    exist = False
+                    break
+                if(item.get("name", "") == "zk" or item.get("name", "") == "Walker" or item.get("name", "") == "cc"): #跟随
+                    self.out("跟随触发 增大权重选中")
+                    maxNum = 20 + int(total)
+                    maxKey = key
+            if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
+                if(maxNum < total):
+                    maxNum = total
+                    maxKey = key
+            i = i+1
+        if(maxKey != ""):
+            self.out("选中房间:")
+            self.showRoom(maxKey)
+            tool.line()
+            self.goRoom(maxKey)
+        else:
+            tool.line()
+            self.out("异常！！！！！！！！！ 居然无可用房间？")
+            time.sleep(2)
         return
 
     # 定时消息发送队列
@@ -544,8 +543,10 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastOtherSay # ms
                     if(detaTime > self.maxDetaOtherSay and self.notWait): #不不停留True
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
-                    if(detaTime > self.maxDetaOtherSay * 2): #若一小时没信息 则 是否掉线?
+                    if(detaTime > self.maxDetaOtherSay * 3): #若一小时没信息 则 是否掉线?
                         self.linkStart = 1
+                        self.login()
+                        self.goARoom()
 
                     if(dt % 600 == 0):
                         self.getRooms() #定时5分钟获取房间最新信息
@@ -827,7 +828,7 @@ class AutoSophia:
                                     oldValue = self.admins.pop(oldId)
                                     # self.addAdmin(fromId, int(oldValue))
                                 self.tripcodeIndex[msgFromName] = fromCode
-                                self.send("[" + msgFromName + "] tc变更[" + str(lastCode) + " - " + str(fromCode) )
+                                # self.send("[" + msgFromName + "] tc变更[" + str(lastCode) + " - " + str(fromCode) )
 
 
                         self.userIndex[msgFromName] = fromId
@@ -1276,7 +1277,7 @@ class AutoSophia:
         
 
 def testCC():
-    root = AutoSophia("cc", 0)
+    root = AutoSophia("zk", 0)
     root.test()
 
     tool.wait()
