@@ -13,7 +13,8 @@ touch test.txt //创建文件
 {
 
     find / -name librtmp.so.1
-
+    whereis 
+    which
     ls -d /imgs/        只显示目录
     ls -F | grep '/$'
     ls -I | grep '^d'
@@ -73,15 +74,7 @@ touch test.txt //创建文件
     server time.nist.gov iburst
     sudo /etc/init.d/ntp restart    //重启
 
-    #定时任务
-    sudo crontab -e #Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本；可执行的任务范围可以是每天夜里自动备份用户的home文件夹，也可以每个小时记录CPU的信息日志。
-    //crontab（cron table）命令用于编辑执行中的定期任务列表，并且操作是基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
-    */5 * * * * /usr/local/tomcat-6.0.41/tomcat_cardniu_stat/monitor.sh //每五分钟
-    0 0 * * *  /home/pi/backup.sh //每天
-    /etc/init.d/crond restart //重启服务
-    service crond restart
-
-
+    
 
 ////////////////////////////////////////////////////////eval xargs
 st="ls | more"
@@ -965,7 +958,52 @@ export PATH=$OPENSSL:$PATH:$HOME/bin
 OpenSSL 1.0.1f 6 Jan 2014
 
 
+#定时任务
+sudo crontab -e 
+crontab -l
+//Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本；可执行的任务范围可以是每天夜里自动备份用户的home文件夹，也可以每个小时记录CPU的信息日志。
+//crontab（cron table）命令用于编辑执行中的定期任务列表，并且操作是基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
+*/5 * * * * /usr/local/tomcat-6.0.41/tomcat_cardniu_stat/monitor.sh //每五分钟
+0 0 * * *  /home/pi/backup.sh //每天
+/etc/init.d/crond restart //重启服务
+service crond restart
+*/4 * * * * /home/pi/project/python/foStart.sh
+0 0 * * * /home/pi/project/python/foRestart.sh
 
+其中排列意思为：
+Bash
+#    m    h    dom    mon    dow    user    command
+#  分    时    日    月      周    用户    命令
+#
+#       m:表示分钟1～59 每分钟用*或者 */1表示
+#       h:表示小时1～23（0表示0点）
+#     dom:表示日期1～31
+#     mon:表示月份1～12
+#     dow:标识号星期0～6（0表示星期天）
+#    user:表示执行命令的用户
+# command:表示要执行的命令
+#
+#   * 代表任意数值
+例程如下：
+Bash
+30 21 * * * /usr/local/etc/rc.d/lighttpd restart
+#上面的例子表示每晚的21:30重启apache。
+45 4 1,10,22 * * /usr/local/etc/rc.d/lighttpd restart
+#上面的例子表示每月1、10、22日的4 : 45重启apache。
+10 1 * * 6,0 /usr/local/etc/rc.d/lighttpd restart
+#上面的例子表示每周六、周日的1 : 10重启apache。
+0,30 18-23 * * * /usr/local/etc/rc.d/lighttpd restart
+#上面的例子表示在每天18 : 00至23 : 00之间每隔30分钟重启apache。
+0 23 * * 6 /usr/local/etc/rc.d/lighttpd restart
+#上面的例子表示每星期六的11 : 00 pm重启apache。
+* */1 * * * /usr/local/etc/rc.d/lighttpd restart
+#每一小时重启apache
+* 23-7/1 * * * /usr/local/etc/rc.d/lighttpd restart
+#晚上11点到早上7点之间，每隔一小时重启apache
+0 11 4 * mon-wed /usr/local/etc/rc.d/lighttpd restart
+#每月的4号与每周一到周三的11点重启apache
+0 4 1 jan * /usr/local/etc/rc.d/lighttpd restart
+#一月一号的4点重启apache
 
 
 
