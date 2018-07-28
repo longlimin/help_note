@@ -590,6 +590,8 @@ class AutoSophia:
             url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
         else:
             url = "http://drrr.com/json.php?fast=1&update="+str(self.lastMsgTime)
+
+        url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
         # self.out(url)
         responce=self.http.doGet(url)
         if(responce != "" and type(responce) != str ):
