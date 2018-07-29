@@ -145,6 +145,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
 }
+sudo apt-get update  更新源
 
 //apt-get
 {
@@ -310,6 +311,25 @@ sudo apt-get install libdc1394-*
 // sudo apt-get install libopencv-dev //??????????自编译非此
 // sudo apt-get install python-opencv
 }
+
+//////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
+//whatweb
+sudo apt-get install whatweb
+异常/usr/bin/whatweb: /usr/lib/ruby/vendor_ruby/rchardet/universaldetector.rb:39: invalid multibyte escape: /[\x80-\xFF]/ (SyntaxError)
+解决
+sudo vi /usr/lib/ruby/vendor_ruby/rchardet/universaldetector.rb
+文件第一行加入
+# encoding: US-ASCII
+
+sudo apt-get install nmap  //渗透测试工具nmap:
+//////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
+
+
+
+
+
+
+
 
 
 

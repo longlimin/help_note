@@ -79,8 +79,10 @@ class AutoSophia:
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
         return
-    def login(self):
+    def login(self, name="", icon="zaika-2x"):
         # tool.line()
+        if(name==""):
+            name = self.name
         self.out("访问主页 获取 token session")
         responce = self.http.doGet('http://drrr.com/')
         re = responce.read()
@@ -97,16 +99,20 @@ class AutoSophia:
             # tool.line()
             self.out("模拟登录")
             responce=self.http.doPost('http://drrr.com/', {
-                        "name":self.name,
+                        "name":name,
                         "login":"ENTER",
                         "token":token,
                         "direct-join":"",
                         "language":"zh-CN",
-                        "icon":"zaika-2x",
+                        "icon":icon,
                 })
+            if(responce != "error"):
+                return True
+            else:
+                return False
         else:
             self.out("error！ 没能抓取到token")
-
+        return False
     def showHelp(self):
 
         self.send("@" + self.name + " \n  0.help \n  0.play/next name \n  0.play music/stop music \n  1.del/rm xxx  \n  2.host \n  <0.admin> ")
@@ -328,7 +334,7 @@ class AutoSophia:
         for key in self.roomIndex:
             room = self.roomIndex[key]
             name = room.get("name", "")
-            if(re.search(roomName, name) != None):
+            if(re.search(roomName, name) != None and room["total"] < room["limit"] ):
                 self.goRoom(key)
                 break
             i = i+1
@@ -337,7 +343,7 @@ class AutoSophia:
     def goRoom(self, roomId):
         if(self.roomId == roomId):
             self.out("已经处于当前房间")
-            return
+            return False
         if(self.roomId != ""):
             self.outRoom()
             time.sleep(10)
@@ -350,7 +356,8 @@ class AutoSophia:
             self.init()
             # self.send("大家好 我是暖手宝" + self.name + " 可以@ [点歌/turn/prev](*^_^*) @不一定会回 不@也不一定不会回(∩_∩) ")
             self.initRoom()
-        return
+            return True
+        return False
     def initRoom(self, roomId=""):
         if(roomId == ""):
             roomId = self.roomId
@@ -1286,6 +1293,7 @@ def testCC():
     tool.wait()
     return
 
+root = {}
 objs = []
 def testMake():
     name = "绝望"
@@ -1333,25 +1341,95 @@ def testMake():
 
     ThreadRun("InputHello." + str(root.count),  inputHello).start() #监控母体
 
+    tool.wait()
+def testAnother():
+    name = "罪歌"
+    root = AutoSophia("罪歌root", -1)
+    root.login()
+    #根据房间 筛选侵入目标
+    # roomsSorted = sorted(rooms, cmp=lambda x,y: cmp(x.get("name",""), y.get("name",""))   )
+    # print(roomsSorted)
+    ThreadRun("InputHello." + str(root.count),  inputHello).start() #监控母体
+    cccc = 0
+    while(True):
+        try:
+            i = 0
+            rooms = root.getRooms()
+            makeRooms = []
+            users = []
+            for room in rooms:
+                total = room.get("total", 0)
+                limit = room.get("limit", 0)
+                music = room.get("music", False)
+                if(total < limit-2 and room.get("language","") == "zh-CN"): # 留一个 空位
+                    makeRooms.append(room)
+                    root.out("#" + tool.fill(str(i),' ',4) + "" + room["id"] + " " + str(room["total"]) + "/" + str(room["limit"]) + "\t " + room["name"])
+                    exist = True
+                    for item in room.get("users", []):
+                        users.append(item)
+                        # if(item.get("name", "") == name):
+                        #     tool.line()
+                        #     root.out("异常! 该房间存在同名用户 无法加入 " + item.get("name"))
+                        #     exist = False
+                        #     break
+                i = i + 1
+        #     整理出来所有房间
+            toSize = len(makeRooms) #侵入房间数量 37
+        #     处理所有房间直到 只剩余每个房间两个空位  留两个房间不处理  一次刷新房间 添加最多20个zobie
+            if(len(makeRooms) < 3):
+                continue
+            for cc in range(20):
+                room = rooms[tool.getRandom(0, len(rooms))]
+                tt = 0
+                while(tt < 6):
+                    tt = tt+1
+                    user = users[tool.getRandom(0, len(users))]
+                    userName = user.get("name", "")
+                    exist = True
+                    for item in room.get("users", []):
+                        users.append(item)
+                        if(item.get("name", "") == userName):
+                            tool.line()
+                            root.out("存在同名用户 无法加入 "  + str(cccc) + " "+ item.get("name") + " " + room.get("name", ""))
+                            exist = False
+                            break
+                    if(exist):
+        #                 注册用户user 加入房间room
+                        obj = AutoSophia(userName, cccc) # 白学家
+                        if(obj.login(userName, user.get("icon", ""))):
+                            if(obj.goRoom(room.get("id", ""))):
+                                    objs.append(obj)
+                                    cccc = cccc + 1
+                                    tool.line()
+                                    root.out(str(cccc) + " " + "侵入" + room.get("name","") + "成功 当前僵尸数量" + str(len(objs)))
+                                    break
+                            else:
+                                root.out("加入房间失败 " + str(cccc) + " " + userName + " " + room.get("name"))
+                        else:
+                            root.out("登录失败 " + str(cccc) + " " + userName)
+            tool.line()
+            root.out("10s后进行下一次侵入")
+            time.sleep(20)
+        except Exception as e:
+            print(traceback.format_exc())
 
     tool.wait()
-
-
 # 手动控制
 def inputHello():
     while(True):
         try:
             cmd=raw_input("")
             if(cmd != ""):
-                print("全局手动发送:" + cmd)
-                for obj in objs:
-                    if(not obj.doMethod(cmd)):
+                if(not root.doMethod(cmd)):
+                    print("全局手动发送:" + cmd)
+                    for obj in objs:
                         obj.doSend(cmd)
+                        time.sleep(1)
         except Exception as e:
             print(traceback.format_exc())
     return
 
 if __name__ == '__main__':
-    testMake()
+    testAnother()
     # testCC()
     
