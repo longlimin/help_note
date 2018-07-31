@@ -103,7 +103,7 @@ class AutoSophia:
                         "token":token,
                         "direct-join":"",
                         "language":"zh-CN",
-                        "icon":"zaika-2x",
+                        "icon":"tanaka",
                 })
         else:
             self.out("error！ 没能抓取到token")
@@ -1165,7 +1165,7 @@ class AutoSophia:
         return
 
 def testCC():
-    root = AutoSophia("三代目otoko", "绝望患者")
+    root = AutoSophia("二代目otoko", "绝望患者")
     root.test()
 
     tool.wait()

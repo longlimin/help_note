@@ -65,7 +65,7 @@ class AutoSophia:
         self.nextNames = [] #下一首序列
         self.musicPlayType = -1
         self.ifOnMusic = False
-        self.notWait = True
+        self.notWait = False
 
         self.adminRes = ""
         self.adminDeta = 2
@@ -474,10 +474,10 @@ class AutoSophia:
                     self.showRoom(room.get("id", ""))
                     exist = False
                     break
-                if(item.get("name", "") == "zk" or item.get("name", "") == "Walker" or item.get("name", "") == "cc"): #跟随
-                    self.out("跟随触发 增大权重选中")
-                    maxNum = 20 + int(total)
-                    maxKey = key
+                # if(item.get("name", "") == "zk" or item.get("name", "") == "Walker" or item.get("name", "") == "cc"): #跟随
+                #     self.out("跟随触发 增大权重选中")
+                #     maxNum = 20 + int(total)
+                #     maxKey = key
             if(limit > total and music and exist and room.get("id", "") != lastRoomId): #有空位 且允许放歌 且该房间不存在同名 且并不是上次的房间
                 if(maxNum < total):
                     maxNum = total
@@ -550,17 +550,18 @@ class AutoSophia:
                     detaTime = tool.getNowTime() - self.lastOtherSay # ms
                     if(detaTime > self.maxDetaOtherSay and self.notWait): #不不停留True
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
-                    if(detaTime > self.maxDetaOtherSay * 3 + 1000): #若一小时没信息 则 是否掉线?
-                        self.shutdown() #等待重启
+                    if(detaTime > self.maxDetaOtherSay * 3 + 1000  and self.notWait): #若一小时没信息 则 是否掉线?
+                        self.out("太久没有获取到消息 是否掉线？ ")
+                        # self.shutdown() #等待重启
 
                     if(dt % 600 == 0):
                         self.getRooms() #定时5分钟获取房间最新信息
-                    if(dt % 120 == 0):
-                        roomsAdmin = self.getUserRoom("zk");
-                        roomsAdmin.extend(self.getUserRoom("Walker"))
-                        if(len(roomsAdmin) > 0):
-                            self.out("跟随 触发")
-                            self.goRoom(roomsAdmin[tool.getRandom(0, len(roomsAdmin))].get("id", ""))
+                    # if(dt % 120 == 0):
+                    #     roomsAdmin = self.getUserRoom("zk");
+                    #     roomsAdmin.extend(self.getUserRoom("Walker"))
+                    #     if(len(roomsAdmin) > 0):
+                    #         self.out("跟随 触发")
+                    #         self.goRoom(roomsAdmin[tool.getRandom(0, len(roomsAdmin))].get("id", ""))
 
                     time.sleep(sleepTime)
                     dt = dt + sleepTime
@@ -568,7 +569,7 @@ class AutoSophia:
                 except Exception as e:
                     self.out(traceback.format_exc())
             # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
-            time.sleep(10)
+            time.sleep(20)
             if(self.roomId == ""): #无房间则自动加入
                 self.goARoom()
     # 定时抓取消息##########################
@@ -596,8 +597,8 @@ class AutoSophia:
             url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
         else:
             url = "http://drrr.com/json.php?fast=1&update="+str(self.lastMsgTime)
-
-        url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
+            self.out(url)
+        # url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
         # self.out(url)
         responce=self.http.doGet(url)
         if(responce != "" and type(responce) != str ):
@@ -608,6 +609,7 @@ class AutoSophia:
                 res = ""
             self.linkStart = 0
         else:
+            tool.line()
             self.out("请求异常:" + str(responce) ) 
             self.linkStart = 1
         return res
@@ -797,7 +799,7 @@ class AutoSophia:
                     self.roomIndex[self.roomId] = obj
             if(talks != ""):
                 onceDocount = 0
-                self.out("获取到消息:" + str(len(talks)))
+                # self.out("获取到消息:" + str(len(talks)))
                 for item in talks:
                     # self.out(item)
                     msgTime = item.get("time", tool.getNowTime())
@@ -946,7 +948,7 @@ class AutoSophia:
                                         code = str(robotRes.get("code", ""))
                                         if(code[0:1] != '4'):
                                             text = self.robot.doParse(robotRes)
-                                            res = ".." + text # '@' + str(msgFromName) +" " +
+                                            res = "" + text # '@' + str(msgFromName) +" " +
                                         else:
                                             self.out("robot接口调用失败 code=" + code)
                                 elif(flag == 10): #让普通消息也接入 cmd 不过没有后续处理
@@ -1061,7 +1063,7 @@ class AutoSophia:
         res = self.doControl(res, msgData, ['out', 'leave'], self.outRoom, fromName, False, 0)
 
         # 295796671
-        res = self.doSetControl(res, msgData, ['wait', 'stay'], "notWait", False, echoStr="决定在这里住下来")
+        res = self.doSetControl(res, msgData, ['wait', 'stay'], "notWait", False, echoStr="") #决定在这里住下来
         res = self.doSetControl(res, msgData, ['开始迎客', 'start hello'], "ifWelcom", True, echoStr="开始迎客")
         res = self.doSetControl(res, msgData, ['停止迎客', 'stop hello'], "ifWelcom", False, echoStr="保持沉默")
         res = self.doSetControl(res, msgData, ['开始存活确认', 'start live'], "ifTime", True, echoStr="开始存活确认")
@@ -1238,7 +1240,7 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         # for i in range(len(self.roomIndex.keys())):
         #     self.goRoom( self.roomIndex.keys()[i] )
@@ -1260,7 +1262,18 @@ class AutoSophia:
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
         ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
         return
-
+    def testLine(self):
+        self.login()
+        self.getRooms()
+        # self.goRoom("QGSNLntBvK")
+        self.goRoomName("潜水艇")
+        # self.goARoom()
+        # self.createRoom()
+        ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
+        ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
+        ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
+        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
+        return
     #开启破坏模式
     def runStart(self):
         ThreadRun("Robot." + str(self.count),  self.getHello).start()
@@ -1292,7 +1305,11 @@ def testCC():
     root.test()
     tool.wait()
     return
-
+def testLine():
+    root = AutoSophia("Launcher", 0)
+    root.testLine()
+    tool.wait()
+    return
 root = {}
 objs = []
 def testMake():
@@ -1430,6 +1447,7 @@ def inputHello():
     return
 
 if __name__ == '__main__':
-    testAnother()
+    # testAnother()
     # testCC()
+    testLine()
     

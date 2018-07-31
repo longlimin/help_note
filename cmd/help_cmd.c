@@ -2,8 +2,9 @@
 #	bat 编程
 #
 cmd路径 \ 反斜杠 linux
-start b.bat 新开cmd窗口
+start b.bat 新开cmd窗口 
 call b.bat 不显示 路径执行  命令/bat
+直接调用exe会终止当前bat后续代码 而 call不会
 
 %1% 取出第一个参数
 
