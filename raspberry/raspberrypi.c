@@ -92,6 +92,10 @@ pwm#通道12 50hz
 123 4-宽-5
 eg: 红2红2黑0橙10^3=1000=1k棕误差1%  -> 220 kΩ
 
+//声音播放器
+sudo apt-get install mplayer
+wget http://blog.lxx1.com/wp-content/uploads/2016/07/shero.mp3
+mplayer shero.mp3
 
 
 // dev/video0 驱动配置

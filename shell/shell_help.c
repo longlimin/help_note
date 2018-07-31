@@ -987,7 +987,7 @@ crontab -l
 0 0 * * *  /home/pi/backup.sh //每天
 /etc/init.d/crond restart //重启服务
 // service crond restart
-service cron show
+service cron status
 /etc/init.d/cron {start|stop|status|restart|reload|force-reload}.
 */4 * * * * /home/pi/project/python/foStart.sh
 0 0 * * * /home/pi/project/python/foRestart.sh

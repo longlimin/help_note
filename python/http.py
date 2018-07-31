@@ -25,11 +25,14 @@ class Http:
         return
     def out(self, *obj):
         print("http." + str(obj))
+
     def getCookie(self):
         res = {}
         for item in self.cookie:
             res[item.name] = item.value
         return res
+
+
     def show(self, response):
         tool.line()
         try:
@@ -45,6 +48,8 @@ class Http:
             self.out(traceback.format_exc())
         tool.line()
         return
+
+
     # 网络文件信息头获取
     def getHeader(self, url):
     # meta = req.info()
@@ -105,6 +110,19 @@ class Http:
         #     self.out(traceback.format_exc())
         #
         # return False
+
+    def encode(self, text=""):
+        if(type(text) == str):
+            return urllib.quote(text)
+        elif(type(text) == dict):
+            return urllib.urlencode(text)
+        return text
+    def decode(self, text=""):
+        if(type(text) == str):
+            return urllib.unquote(text)
+        elif(type(text) == dict):
+            return urllib.urldecode(text)
+        return text
     # 访问地址后 set-cookie自动被设置
     def doGet(self, url):
         response = "error" 
