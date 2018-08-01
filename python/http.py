@@ -45,7 +45,7 @@ class Http:
             self.out("Headers : ")
             self.out(str(response.headers))
         except Exception as e:
-            self.out(traceback.format_exc())
+            print(traceback.format_exc())
         tool.line()
         return
 
@@ -86,7 +86,7 @@ class Http:
         except Exception as e:
             tool.line()
             self.out(str(url))
-            self.out(traceback.format_exc())
+            print(traceback.format_exc())
         return res
     def existAudio(self, url, mimeType="audio"):
         return True
@@ -107,7 +107,7 @@ class Http:
         # except Exception as e:
         #     tool.line()
         #     self.out(str(url))
-        #     self.out(traceback.format_exc())
+        #     print(traceback.format_exc())
         #
         # return False
 
@@ -132,7 +132,7 @@ class Http:
         except Exception as e:
             tool.line()
             self.out(str(url))
-            self.out(traceback.format_exc())
+            print(traceback.format_exc())
         return response
     def doPost(self, url=None, postData=None):
         response = "error" 
@@ -147,7 +147,7 @@ class Http:
             tool.line()
             self.out(str(url))
             self.out(str(postData))
-            self.out(traceback.format_exc())
+            print(traceback.format_exc())
         return response
     def do(self, url=None, postData=None):
         if(url != None and url != ""):

@@ -32,11 +32,12 @@ class AutoSophia:
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
-        self.ifWelcom = True #是否迎客
+        self.ifWelcom = False #是否迎客
         self.ifTime = False #是否存货确认
         self.admins = {}
         self.tripcodeIndex = {} #上次房间记录 的 用户名 绑定的 tc code
         self.linkStart = 0 #链接状态
+        self.linkCount = 0
         self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
 
         self.init()
@@ -515,7 +516,6 @@ class AutoSophia:
                     self.out("消息发送异常 消息队列:")
                     self.out(self.listMsgQue)
                     self.out(traceback.format_exc())
-            # self.out("当前房间roomId:" + self.roomId + " 未加入房间 暂时停止sayHello ")
             time.sleep(3)
     # 定时操作
     def sayHello(self):
@@ -552,10 +552,11 @@ class AutoSophia:
                         self.goARoom() #10分钟没处理过消息 互动 则换房间
                     if(detaTime > self.maxDetaOtherSay * 3 + 1000  and self.notWait): #若一小时没信息 则 是否掉线?
                         self.out("太久没有获取到消息 是否掉线？ ")
+                        self.goARoom()
                         # self.shutdown() #等待重启
 
-                    if(dt % 600 == 0):
-                        self.getRooms() #定时5分钟获取房间最新信息
+                    if(dt % 1200 == 0):
+                        self.getRooms() #定时20分钟获取房间最新信息
                     # if(dt % 120 == 0):
                     #     roomsAdmin = self.getUserRoom("zk");
                     #     roomsAdmin.extend(self.getUserRoom("Walker"))
@@ -593,9 +594,11 @@ class AutoSophia:
         # 获取最新时间的消息1530004210 157 s秒
         res = ""
         url = ""
-        if(self.linkStart == 0):     #正常
+        if(self.linkStart == 0 and self.linkCount < 40):     #正常
             url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
+            self.linkCount = self.linkCount + 1
         else:
+            self.linkCount = 0
             url = "http://drrr.com/json.php?fast=1&update="+str(self.lastMsgTime)
             self.out(url)
         # url = "http://drrr.com/json.php?update="+str(self.lastMsgTime)
@@ -861,114 +864,115 @@ class AutoSophia:
                         url = music.get('url', '')
                         # msgData = '悄悄的的把[' + name + ']给记在小本子上 '  + self.tail
 ######################################################## 不处理
+                    ffff = 1
                     if( self.roomMsg.get(msgId, "") != ""): #已经处理过 或者是自己发送的 或者取出发送者失败
                         # self.out("旧消息 " + msgId + " type:" + msgType + " data:" + msgData)
-                        continue
+                        ffff = 2
+                        # continue
                     self.roomMsg[msgId] = item #标记未已经处理 历史消息
                     if( msgFromName == self.name or msgFromName == "" ):
-                        continue
+                        ffff = 2
+                        # continue
                     if(msgType == "me" or msgType == "message"): #只记录聊天消息
                         self.robot.addMsg(msgId, msgFromName, msgData, msgTime)
-                    if( len(self.makeRooms) > 0): #侵入模式只记录信息
-                        continue
 #############################################################
+                    if(ffff == 1):
+                        #当前消息信息记录
+                        self.fromNameNow = msgFromName
+                        self.fromIdNow = fromId
+                        self.fromNameNow = msgFromName
+                        self.toIdNow = toId
+                        self.toNameNow = toName
 
-                    #当前消息信息记录
-                    self.fromNameNow = msgFromName
-                    self.fromIdNow = fromId
-                    self.fromNameNow = msgFromName
-                    self.toIdNow = toId
-                    self.toNameNow = toName
+                        if(msgType == 'music'):
+                            music = { "name":name, "url":url, "fromName":msgFromName }
+                            res = self.robot.addMusic(music) #添加用户分享记录
+                            if(res):
+                                self.robot.addHistory(music)
+                            self.musicNow = music
+                            self.lastMusicTime = tool.getNowTime()
 
-                    if(msgType == 'music'):
-                        music = { "name":name, "url":url, "fromName":msgFromName }
-                        res = self.robot.addMusic(music) #添加用户分享记录
-                        if(res):
-                            self.robot.addHistory(music)
-                        self.musicNow = music
-                        self.lastMusicTime = tool.getNowTime()
+                        # self.roomMsg[msgId] = item #标记未已经处理 历史消息
 
-                    # self.roomMsg[msgId] = item #标记未已经处理 历史消息
+                        if(self.status>self.statusMax):
+                            self.status = self.statusMax
+                        elif(self.status < self.statusMin):
+                            self.status = self.statusMin
 
-                    if(self.status>self.statusMax):
-                        self.status = self.statusMax
-                    elif(self.status < self.statusMin):
-                        self.status = self.statusMin
+                        detaTime = tool.getNowTime() - self.lastEchoTimeQuene # ms 60s
+                        olRan = tool.getRandom(0,self.maxDetaTime) / 1000    #0-180 过于久没有发过消息了 权重高则可能自回复
+                        weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
+                        ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
 
-                    detaTime = tool.getNowTime() - self.lastEchoTimeQuene # ms 60s
-                    olRan = tool.getRandom(0,self.maxDetaTime) / 1000    #0-180 过于久没有发过消息了 权重高则可能自回复
-                    weight = (self.maxDetaTime - detaTime) / 1000   #多久没说话了 最大多长时间必须说话
-                    ran = int(1.0 * olRan * (1+ 1.0 * (self.status-90) / 100) )
-
-                    # self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
-                    self.out("Msg." + msgId[0:4] + " " + msgFromName[0:10] + "->" + toName[0:10]+ " "+msgType[0:4] + " " + msgData )
-                    msgData = msgData.strip()
-                    flag = 0 #不回复
-                    if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
-                        if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
-                            msgData = re.sub('@' + self.name + "", "", msgData) #摘除@自己
-                            flag = 1
-                            msgData = msgData.strip()
-                            # else:
-                            #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
-                            #     flag = 2
-                            #     msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
-                        elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高 主动搭话概率
-                            flag = 1
-                        elif(toId != ""): #私聊
-                            flag = 1
-                        else:
-                            flag = 10
-
-                        #admin权限认证
-                        if(self.adminRes != "" and str(msgData) == str(self.adminRes)):
-                            self.out("触发权限admin认证." + str(self.adminRes) + "=" + str(msgData) + "." + msgFromName + "." + fromId)
-                            self.send("认证成功[" + str(msgFromName) + "]")
-                            self.addAdmin(fromId)
-                            flag = 0
-                            msgData = ""
-                    else: #事件
-                        flag = 2
-
-                    res = ""
-                    if(self.filterFlag(msgData, msgFromName)):    #最高级 权限是否黑名单过滤
-                        self.lastOtherSay = tool.getNowTime()   #重置处理时间 黑名单消息不计入消息
-
-                        if(flag == 1 or flag == 10):
-                            if(flag == 1 and self.robot.getUser(msgFromName).get("flag", "0") != "0"):
-                                self.out("不想搭理" + msgFromName)
+                        # self.out("Msg." + msgId[0:4] + "." + tool.fill(str(weight) + "" , ' ', 5) + " " + tool.fill(str(olRan) + "->" + str(ran),' ', 5) + "." + tool.fill(msgFromName,' ',8) + "."+tool.fill(msgType,' ',4) + "." + msgData + " ." + str(fromId))
+                        self.out("Msg." + msgId[0:4] + " " + msgFromName[0:10] + "->" + toName[0:10]+ " "+msgType[0:4] + " " + msgData )
+                        msgData = msgData.strip()
+                        flag = 0 #不回复
+                        if(msgType == 'message' or msgType == 'me' ):    #普通聊天消息
+                            if( re.search('@' + self.name + " ", msgData) != None):    #有@自己 且权重不太低
+                                msgData = re.sub('@' + self.name + "", "", msgData) #摘除@自己
+                                flag = 1
+                                msgData = msgData.strip()
+                                # else:
+                                #     self.out("@me 随机数=" + str(ran) + " 小于 说话欲望=" + str(self.status) + " ")
+                                #     flag = 2
+                                #     msg = "生气程度:" + str(100-self.status) + "%,不想搭理"+self.tail
+                            elif(ran > weight and  re.search('@', msgData) == None): # 没有@ 且 权重高 主动搭话概率
+                                flag = 1
+                            elif(toId != ""): #私聊
+                                flag = 1
                             else:
-                                if(flag == 1 and self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
-                                    ran = tool.getRandom(0,100)
-                                    if(ran < 8 and toId == ""): # 20% @ 自动应答 非私聊 不回
-                                        self.out("小概率不接入机器回复")
-                                        msgData = ""
-                                    elif(self.ifWelcom or toId != "" ): #迎客状态或者私聊 做自动回复
-                                        robotRes = self.robot.do(msgData, self.name)
-                                        code = str(robotRes.get("code", ""))
-                                        if(code[0:1] != '4'):
-                                            text = self.robot.doParse(robotRes)
-                                            res = "" + text # '@' + str(msgFromName) +" " +
-                                        else:
-                                            self.out("robot接口调用失败 code=" + code)
-                                elif(flag == 10): #让普通消息也接入 cmd 不过没有后续处理
-                                    self.filterCmd(msgData, msgFromName)
-                                    res = ""
-                        elif(flag == 2):
-                            res = msgData
+                                flag = 10
 
-                        if(res != "" and flag != 0 and onceDocount < 6): # 最多一次抓取发送3个
-                            res = '' + res
-                            onceDocount = onceDocount + 1
-                            self.send(res)
+                            #admin权限认证
+                            if(self.adminRes != "" and str(msgData) == str(self.adminRes)):
+                                self.out("触发权限admin认证." + str(self.adminRes) + "=" + str(msgData) + "." + msgFromName + "." + fromId)
+                                self.send("认证成功[" + str(msgFromName) + "]")
+                                self.addAdmin(fromId)
+                                flag = 0
+                                msgData = ""
+                        else: #事件
+                            flag = 2
+
+                        res = ""
+                        if(self.filterFlag(msgData, msgFromName)):    #最高级 权限是否黑名单过滤
+                            self.lastOtherSay = tool.getNowTime()   #重置处理时间 黑名单消息不计入消息
+
+                            if(flag == 1 or flag == 10):
+                                if(flag == 1 and self.robot.getUser(msgFromName).get("flag", "0") != "0"):
+                                    self.out("不想搭理" + msgFromName)
+                                else:
+                                    if(flag == 1 and self.filterCmd(msgData, msgFromName)):    #若过滤器未处理 则继续交由下面处理
+                                        ran = tool.getRandom(0,100)
+                                        if(ran < 8 and toId == ""): # 20% @ 自动应答 非私聊 不回
+                                            self.out("小概率不接入机器回复")
+                                            msgData = ""
+                                        elif(self.ifWelcom or toId != "" ): #迎客状态或者私聊 做自动回复
+                                            robotRes = self.robot.do(msgData, self.name)
+                                            code = str(robotRes.get("code", ""))
+                                            if(code[0:1] != '4'):
+                                                text = self.robot.doParse(robotRes)
+                                                res = "" + text # '@' + str(msgFromName) +" " +
+                                            else:
+                                                self.out("robot接口调用失败 code=" + code)
+                                    elif(flag == 10): #让普通消息也接入 cmd 不过没有后续处理
+                                        self.filterCmd(msgData, msgFromName)
+                                        res = ""
+                            elif(flag == 2):
+                                res = msgData
+
+                            if(res != "" and flag != 0 and onceDocount < 6): # 最多一次抓取发送3个
+                                res = '' + res
+                                onceDocount = onceDocount + 1
+                                self.send(res)
 
 
-                    #当前消息信息清空
-                    self.fromNameNow = ""
-                    self.fromIdNow = ""
-                    self.fromNameNow = ""
-                    self.toIdNow = ""
-                    self.toNameNow = ""
+                        #当前消息信息清空
+                        self.fromNameNow = ""
+                        self.fromIdNow = ""
+                        self.fromNameNow = ""
+                        self.toIdNow = ""
+                        self.toNameNow = ""
         except Exception as e:
             self.out("Exception:" + str(e))
         # tool.line()
@@ -1266,7 +1270,7 @@ class AutoSophia:
         self.login()
         self.getRooms()
         # self.goRoom("QGSNLntBvK")
-        self.goRoomName("潜水艇")
+        self.goRoomName("的妄想")
         # self.goARoom()
         # self.createRoom()
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
@@ -1306,7 +1310,7 @@ def testCC():
     tool.wait()
     return
 def testLine():
-    root = AutoSophia("Launcher", 0)
+    root = AutoSophia("Lau", 0)
     root.testLine()
     tool.wait()
     return
@@ -1448,6 +1452,6 @@ def inputHello():
 
 if __name__ == '__main__':
     # testAnother()
-    testCC()
-    # testLine()
+    # testCC()
+    testLine()
     
