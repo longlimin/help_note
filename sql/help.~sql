@@ -17,6 +17,14 @@ select * from user_users; --查看当前用户信息 ！
 ---查看表列名
 SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = upper('student') ORDER BY COLUMN_ID
 
+--查看字符编码
+select userenv('language') from dual;
+
+
+
+
+
+
 ---
 --oracle sql 操作模板
 ---

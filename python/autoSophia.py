@@ -38,7 +38,6 @@ class AutoSophia:
         self.tripcodeIndex = {} #上次房间记录 的 用户名 绑定的 tc code
         self.linkStart = 0 #链接状态
         self.linkCount = 0
-        self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
 
         self.init()
         self.tail = " の... "
@@ -60,6 +59,8 @@ class AutoSophia:
         self.maxDetaOtherSay = 1000 * 60 * 15 #最大没人说话时间 换房
         self.maxDetaTime = 1000 * 60 * 5   # 最大沉默时间
         self.lastMusicTime = tool.getNowTime() #上次放歌时间
+        self.lastOtherSay = tool.getNowTime()   #上次其他人说话时间
+
         self.maxMusicTime = 1000 * 60 * 4 #音乐间隔 暂不解析音乐文件时长控制
         self.maxMusicTimeDefault = 1000 * 60 * 4 #默认时间
         self.musicNow = {}
