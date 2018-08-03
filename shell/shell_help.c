@@ -59,6 +59,9 @@ touch test.txt //创建文件
     #去掉控制台颜色代码##########
     top | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 
+
+
+
     设置时间
     sudo ntpd -s -d  //自动同步 
     sudo date --s="2014-08-21 12:33:22" //手动设置
@@ -104,6 +107,15 @@ cat arg.txt | xargs -I {} cat -p {} -l  //{}占位符 替换
 ->
 cat -p file1.txt -l
 cat -p file2.txt -l
+
+//文本格式化
+sed awk grep
+
+
+
+
+
+
 
 
 
