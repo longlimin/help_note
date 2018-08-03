@@ -47,22 +47,6 @@ git push origin master  //推送上传
 6.Finally, force update your repository 
    git push -f origin master
 
-#Github Acount
-1424234500@qq.com
-1234qewr
-#The name and email to show when commit 
-git config --global user.name "Walker" //设置用户名 
-git config --global user.email "1424234500@qq.com" //设置邮箱
-git config --global credential.helper store //设置文件认证
-echo 'http://{username}:{password}@github.com' > .git-credentials //账号密码文件
-http://1424234500%40qq.com:1234qwer@github.com         @->$40
-cat .gitconfig
-[user]
-        name = Walker
-        email = 1424234500@qq.com
-[credential]
-        helper = store
-
 ;/仓库zip下载 链接 更新 ##########################
 unzip xxx.zip
 git init
@@ -234,3 +218,32 @@ git remote set-url origin http://192.168.100.235:9797/john/git_test.git
 git remote 查看所有远程仓库， git remote xxx 查看指定远程仓库地址
 git remote rm origin
 git remote add origin http://192.168.100.235:9797/john/git_test.git
+
+
+
+
+//github ssh免密码登录 
+ssh-keygen -t rsa # 一直回车下去，不输入密码 生成密钥
+cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDsF1xYxThqOIkBHmhd8rlEOM6Wppl+cs95F6ztR2Kl30utGHh0qvFotgT+bhPE81NGlTTtfw1000dtyydyx+6JY4ClTOa856vMlDUaISXMAP346LAVodHskKB0/Kur9Zv4G9iwg1ccyJWfrx7QrultuX/yeLMa6WiyFPj4eLc4AksaUXVmqr282dtPodsO+TME+hvAuZksISgVC8PK56qjlg0CWdZdwD/gxKRe2j3Gn0lAZhvm9oTLkSn0sPRYp1+yYftOZNzBy3hY3pFYKB8JbpOXesWaXMfynGxOTXJuFP7xj6T+/Wp0mztAkxFVINznpZ675Udz2hNo3KyqHB8r walker@Walker
+github user setting add sshkey 
+
+//github https免密码
+#Github Acount
+1424234500@qq.com
+1234qewr
+#The name and email to show when commit 
+git config --global user.name "Walker" //设置用户名 
+git config --global user.email "1424234500@qq.com" //设置邮箱
+git config --global credential.helper store //设置文件认证
+echo 'http://{username}:{password}@github.com' > .git-credentials //账号密码文件
+http://1424234500%40qq.com:xxx@github.com         @->$40
+cat .gitconfig
+[user]
+        name = Walker
+        email = 1424234500@qq.com
+[credential]
+        helper = store
+
+
+
