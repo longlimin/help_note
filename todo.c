@@ -37,6 +37,11 @@ Java IO
 多线程
 Spring、SpringMVC、iBatis/MyBatis 应用经验 了解到它的原理和机制
 Redis Memcache/Couchbase 使用架构
+分布式
+zookeeper服务注册信息的分布式管理
+dubbo 
+Docker/DevOps
+
 Sql优化理论
 
 JVM 原理 rpc案例
