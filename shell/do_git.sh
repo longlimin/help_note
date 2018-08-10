@@ -17,8 +17,8 @@ source do_clean.sh
 
 #echo $git_log
  
-# git config --global user.name 'Walker'  
-# git config --global user.email '1424234500@qq.com'  
+git config --global user.name 'Walker'  
+git config --global user.email '1424234500@qq.com'  
 # git config --global credential.helper store #设置文件认证
 
 function commit(){
@@ -78,10 +78,10 @@ function git_add_commit_push(){
     cd $1
     toolsLineLong >> $git_log
     pwd >> $git_log
-    git add . #>> $git_log
-    git commit -am "`date`" #>> $git_log
-    git push -u origin master #>> $git_log
-    toolsLineLong #>> $git_log 
+    git add . >> $git_log
+    git commit -am "`date`" >> $git_log
+    git push -u origin master >> $git_log
+    toolsLineLong >> $git_log 
 }
 
 function git_add_commit(){
