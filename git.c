@@ -233,10 +233,14 @@ github user setting add sshkey
 1424234500@qq.com
 1234qewr
 #The name and email to show when commit 
-git config --global user.name "Walker" //设置用户名 
-git config --global user.email "1424234500@qq.com" //设置邮箱
-git config --global credential.helper store //设置文件认证
-echo 'http://{username}:{password}@github.com' > .git-credentials //账号密码文件
+ //设置用户名 
+ // //设置邮箱
+ ////设置文件认证
+ // //账号密码文件
+git config --global user.name "Walker"
+git config --global user.email "1424234500@qq.com"
+git config --global credential.helper store
+echo 'http://{username}:{password}@github.com' > .git-credentials
 http://1424234500%40qq.com:xxx@github.com         @->$40
 cat .gitconfig
 [user]
