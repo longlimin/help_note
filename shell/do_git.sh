@@ -17,9 +17,9 @@ source do_clean.sh
 
 #echo $git_log
  
-git config --global user.name 'Walker'  
-git config --global user.email '1424234500@qq.com'  
-git config --global credential.helper store #设置文件认证
+# git config --global user.name 'Walker'  
+# git config --global user.email '1424234500@qq.com'  
+# git config --global credential.helper store #设置文件认证
 
 function commit(){
     git_exefun 'git_add_commit' $1 
