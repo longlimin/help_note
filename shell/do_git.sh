@@ -78,10 +78,10 @@ function git_add_commit_push(){
     cd $1
     toolsLineLong >> $git_log
     pwd >> $git_log
-    git add . >> $git_log
-    git commit -am "`date`" >> $git_log
-    git push -u origin master >> $git_log
-    toolsLineLong >> $git_log 
+    git add . #>> $git_log
+    git commit -am "`date`" #>> $git_log
+    git push -u origin master #>> $git_log
+    toolsLineLong #>> $git_log 
 }
 
 function git_add_commit(){
