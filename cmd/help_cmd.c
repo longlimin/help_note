@@ -2,9 +2,9 @@
 #	bat 编程
 #
 cmd路径 \ 反斜杠 linux
-start b.bat 新开cmd窗口 
-call b.bat 不显示 路径执行  命令/bat
-直接调用exe会终止当前bat后续代码 而 call不会
+1.start b.bat 新开cmd窗口 
+2.call b.bat 不显示 路径执行  命令/bat 等待后续
+3.b.bat 直接调用exe终止 当前bat后续代码 而 call不会
 
 %1% 取出第一个参数
 
@@ -15,7 +15,8 @@ tasklist | find /i "node.exe" || start "node" node proxy.js
 copy  复制文件
 xcopy 复制文件夹
 
-
+等待耗时sleep
+TIMEOUT /T 2
 
 
 

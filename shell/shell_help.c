@@ -1,7 +1,7 @@
 uname -a  //查看系统信息
 cat /proc/version //正在运行的内核版本。
 cat /etc/issue //显示的是发行版本信息
-cat /proc/cpuinfo | more
+cat /proc/cpuinfo | more/less //分页查看
 cat /proc/meminfo 
 fdisk -l //查看磁盘信息
 ethtool eth0 //网卡信息
@@ -11,7 +11,6 @@ touch test.txt //创建文件
 
 //基本命令
 {
-
     find / -name librtmp.so.1
     whereis 
     which
@@ -109,11 +108,14 @@ cat -p file1.txt -l
 cat -p file2.txt -l
 
 //文本格式化
-sed awk grep
+sed awk grep less more
+less比more更强大，提供翻页，跳转，查找等命令
+
+grep -oe<只显示匹配内容><-<C>5 前后五行><-A 5 前><-B 5 后> '.*\[.*\].*' test.sh
+sed -n '5,10p' obcp-server29.log //5-10行
 
 
-
-
+grep -C 60 -oe  '.*MccpMgr.*' obcp-server29.log | less
 
 
 

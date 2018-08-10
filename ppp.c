@@ -1,10 +1,10 @@
 /*
     something not important ?
 */
-123456qwerty
+
 14qr 8
 qwer36 
-16qy 12位 
+16qy 12 
 p36  12
 
 //linyin
@@ -14,6 +14,8 @@ chen_peng_hui@outlook.com
 
 //coding
 
+//google
+WalkerDusts@gmail.com
 
 // tv
 722895183
@@ -58,18 +60,12 @@ bggzr
     socks
     aes-256-cfb
 
-代理配置 Omega.*.bak 网盘
 
 
 //
 39.107.26.100  
 root 
 RUAho1234
-
-
-我叫540
-5201314chenpeng
-5201314chen
 
 
 

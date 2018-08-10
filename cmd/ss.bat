@@ -17,7 +17,7 @@ tasklist|find /i "QQ.exe" || start "QQ" "C:\Program Files (x86)\Tencent\QQ\Bin\Q
 tasklist|find /i "Foxmail" || start "foxmail" "D:\Program Files\Foxmail 7.2\Foxmail"
  
 ::eclipse
-::tasklist|find /i "eclipse.exe" || start "eclipse proj" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\eclipse" 
+tasklist|find /i "eclipse.exe" || start "eclipse proj" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\eclipse" 
 
 ::tasklist|find /i "eclipse.exe" || start "eclipse myself" "D:\eclipse_bak\eclipse\eclipse.exe" 
 
