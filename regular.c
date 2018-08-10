@@ -3,7 +3,8 @@
 
 匹配换行符
 [.\n]
-
+匹配空
+\s 
 
 
 jadf.adf@q.asdf
