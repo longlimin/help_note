@@ -251,3 +251,14 @@ cat .gitconfig
 
 
 
+//git推送异常
+
+
+
+
+
+gnutls_handshake() failed: The TLS connection was non-properly terminated.
+瞅下本机dns配置,添加阿里的dns
+sudo vim /etc/resolv.conf
+nameserver  223.5.5.5
+nameserver  223.6.6.6
