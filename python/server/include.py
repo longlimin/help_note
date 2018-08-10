@@ -19,8 +19,8 @@ import random   # int(random.uniform(1, 10))
 import uuid
 import base64
 
-import cv2
 
+# module = __import__(controller)  #这句话就相当于import controller as module
 
 ##############################
 # 导入父目录为可引用路径
@@ -33,7 +33,6 @@ from python_singleton import singleton
 # 导入工具 模块 .py : tool.exe()
 import tool
 import C
-from cvhelp import CvHelp
 import MSGTYPE
 
 
@@ -74,7 +73,7 @@ from ServiceDb import ServiceDb
 
 # 导入普通类
 from template import Template
-from cv_makecolor import MakeColor
+# from cv_makecolor import MakeColor
 
 # 导入模块Class
 try:
@@ -91,14 +90,7 @@ except Exception as e:
 # 导入服务
 from Msg import Msg
 
-from ServiceServer import ServiceServer
 
-from server_socket import ServerSocket
-# from server_http import ServerHttp
-
-
-from ServerCamera import ServerCamera
-from ServerSensor import ServerSensor
 
 
 

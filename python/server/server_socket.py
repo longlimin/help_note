@@ -2,6 +2,7 @@
 #-*- coding:utf-8 -*-  
 from include import *
 ########################################
+from ServiceServer import ServiceServer
 
 
 class ServerSocket:
@@ -195,7 +196,7 @@ class ServerSocket:
 
 
 if __name__ == '__main__':
-    serverSocket = ServerSocket(False, "39.107.26.100", 8092)
+    serverSocket = ServerSocket("39.107.26.100", 8092)
 
     # main = start("192.168.1.6", 8092)
     main = serverSocket.start()
