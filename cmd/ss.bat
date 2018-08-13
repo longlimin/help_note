@@ -24,7 +24,7 @@ tasklist|find /i "eclipse.exe" || start "eclipse proj" "C:\Users\ThinkPad\AppDat
 ::editor
 tasklist|find /i "WebStorm.exe" || start "WebStorm" "D:\Program Files (x86)\JetBrains\WebStorm 11.0.3\bin\WebStorm.exe" 
 
-::tasklist|find /i "plsqldev.exe" || start "plsqldev" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\plsqldev"
+tasklist|find /i "plsqldev.exe" || start "plsqldev" "C:\Users\ThinkPad\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\plsqldev"
  
 
 ::github tool
@@ -32,10 +32,6 @@ tasklist|find /i "SourceTree" || start "SourceTree" "C:\Users\ThinkPad\AppData\L
 
 
 ::echat_desktop proj
-rem E:
-rem cd /workspace/echat_desktop
-rem tasklist | find /i "node.exe" && taskkill /f /t /im node.exe
-rem tasklist|find /i "node.exe" || start "node" node proxy.js 
 no
 
 

@@ -107,7 +107,7 @@ cat arg.txt | xargs -I {} cat -p {} -l  //{}占位符 替换
 cat -p file1.txt -l
 cat -p file2.txt -l
 
-//文本格式化
+//文本格式化 #######################################################################################
 sed awk grep less more
 less比more更强大，提供翻页，跳转，查找等命令
 
@@ -117,7 +117,7 @@ sed -n '5,10p' obcp-server29.log //5-10行
 
 grep -C 60 -oe  '.*MccpMgr.*' obcp-server29.log | less
 
-
+tail -f obcp-server29.log | grep -v '.*INFO.*' #不看某种类别
 
 
 
