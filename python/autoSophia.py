@@ -32,7 +32,7 @@ class AutoSophia:
         self.roomIndex = {} #房间号 及其<用户>信息
         self.roomMsg = {}   #消息 记录
         self.roomId = ""  #当前房号
-        self.ifWelcom = False #是否迎客
+        self.ifWelcom = True #是否迎客
         self.ifTime = False #是否存货确认
         self.admins = {}
         self.tripcodeIndex = {} #上次房间记录 的 用户名 绑定的 tc code
@@ -1245,22 +1245,12 @@ class AutoSophia:
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
         ThreadRun( "GetHello." + str(self.count),  self.getHello ).start()
-        ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
-
-        # for i in range(len(self.roomIndex.keys())):
-        #     self.goRoom( self.roomIndex.keys()[i] )
-        #     self.music("turn")
-        #     time.sleep(7)
-        #     self.outRoom()
-        #     time.sleep(3)
+        # ThreadRun( "InputHello." + str(self.count),  self.inputHello ).start()
 
         return
     def test2(self):
         self.login()
         self.getRooms()
-        # self.goRoom("QGSNLntBvK")
-        # self.goRoomName("深海")
-        # self.goARoom()
         self.createRoom()
         ThreadRun( "DoSend." + str(self.count),  self.doHello ).start()
         ThreadRun( "SayHello." + str(self.count),  self.sayHello ).start()
@@ -1292,21 +1282,10 @@ class AutoSophia:
             roomId = room.get("id", "")
             self.out("侵入" + str(i) + " " + roomId )
             self.goRoom(roomId)
-            # self.playMusic()
-            # time.sleep(6)
-            # exitCount = 6
-            # while(exitCount >= 0):
-            #     exitCount = exitCount - 1
-            #     if(self.outRoom()):
-            #         break
-            #     time.sleep(2)
-            # time.sleep(10)
-
         self.out("侵入完成:" + str(self.runIds))
-        
 
 def testCC():
-    root = AutoSophia("zk", 0)
+    root = AutoSophia("cc", 0)
     root.test()
     tool.wait()
     return
@@ -1453,6 +1432,6 @@ def inputHello():
 
 if __name__ == '__main__':
     # testAnother()
-    # testCC()
-    testLine()
+    testCC()
+    # testLine()
     
