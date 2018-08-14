@@ -19,6 +19,9 @@ source do_clean.sh
  
 git config --global user.name 'Walker'  
 git config --global user.email '1424234500@qq.com'  
+git config --global core.autocrlf input #提交转换unix
+git config --global core.safecrlf true #拒绝混合lrlf
+
 # git config --global credential.helper store #设置文件认证
 
 function commit(){

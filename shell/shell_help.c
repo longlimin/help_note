@@ -61,29 +61,12 @@ touch test.txt //创建文件
 
 
 
-    设置时间
-    sudo ntpd -s -d  //自动同步 
-    sudo date --s="2014-08-21 12:33:22" //手动设置
-    配置服务
-    sudo vim /etc/ntpconf
-    # You do need to talk to an NTP server or two (or three).
-    # server ntp.your-provider.example
-    在下面添加以下内容，是一些亲测可用的ntp服务器。第一行最后的perfer表示优先使用此服务器，也就是复旦大学的ntp服务器。添加之后按Ctrl+X保存退出。
-    server ntp.fudan.edu.cn iburst perfer
-    server time.asia.apple.com iburst
-    server asia.pool.ntp.org iburst
-    server ntp.nict.jp iburst
-    server time.nist.gov iburst
-    sudo /etc/init.d/ntp restart    //重启
-
-    
 
 ////////////////////////////////////////////////////////eval xargs
 st="ls | more"
 `$st`   //将 | 和 more 看成了参数，而不是将文件按页显示
 eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php shell
 
-xargs 
 #杀死指定规则进程
 ps -ef | grep /usr/local/apache-tomcat-document/ | grep -v grep | cut -c 9-15 | xargs kill -9
 ps -ef | grep 'mccp.conf' | grep -v grep | cut -c 9-15 | xargs kill -9
@@ -107,11 +90,10 @@ cat arg.txt | xargs -I {} cat -p {} -l  //{}占位符 替换
 cat -p file1.txt -l
 cat -p file2.txt -l
 
-//文本格式化 #######################################################################################
-sed awk grep less more
+//文件查找 文本查找 文本格式化 #######################################################################################
+sed awk grep less find
 less比more更强大，提供翻页，跳转，查找等命令
 
-grep -oe<只显示匹配内容><-<C>5 前后五行><-A 5 前><-B 5 后> '.*\[.*\].*' test.sh
 sed -n '5,10p' obcp-server29.log //5-10行
 
 
@@ -119,9 +101,57 @@ grep -C 60 -oe  '.*MccpMgr.*' obcp-server29.log | less
 
 tail -f obcp-server29.log | grep -v '.*INFO.*' #不看某种类别
 
+find test | grep '.*.png' #查找当前路径 下 所有文件 深度优先 的 png图片文件
 
 
-日期date格式化
+// grep  ############
+{
+是指一个用来描述或者匹配一系列符合某个句法规则的字符串的单个字符串。本文介绍如何使用grep及egrep命令。
+而扩展正则表达式比基本正则表达式拥有更强大的功能。  
+grep的主要功能用于检索文件内容，字符串等的工具。
+可以根据用户指定的“模式（pattern）”对目标文本进行搜索过滤，显示出被“模式pattern”匹配到的行。 
+ 
+grep [OPTIONS]PATTERN [FILE...] 
+PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件，
+用单引号‘ ’将pattern括起来以避免shell通配的影响，强引用不替换而显示字符本身。" " 双引号，
+字符串中的` ` ,$, \ 等特殊字符会被shell解释替换后，再传递给grep。
+对普通的字符串（没有特殊字符和空格的字符串）也可以不加引号，直接搜索。 
+ OPTIONS：（这里给出常用的选项） 
+ -i 忽略大小写 
+ -c 显示被匹配到的行数 
+-n 输出行号 
+-v 反向选择，即找没有搜索字符串的行  #############3
+-o 仅显示匹配到的内容   grep -oe<只显示匹配内容><-<C>5 前后五行><-A 5 前><-B 5 后> '.*\[.*\].*' test.sh
+-w 匹配单词 
+-A # 连同匹配行的下#行一并显示，#代表任意数字 
+-B # 连同匹配行的上#行一并显示，#代表任意数字 
+-C # 连同匹配行的上下#行一并显示，#代表任意数字 
+-R或-r 递归搜索目录或子目录下匹配的字所在文件 可配合find命令 ############### 
+-E  相当于egrep 支持扩展的正则表达式 
+-F  相当于fgrep 不支持正则表达式 
+--color对匹配的内容以颜色显示 
+-V  显示grep版本 
+}
+
+
+
+//设置时间
+sudo ntpd -s -d  //自动同步 
+sudo date --s="2014-08-21 12:33:22" //手动设置
+配置服务
+sudo vim /etc/ntpconf
+# You do need to talk to an NTP server or two (or three).
+# server ntp.your-provider.example
+在下面添加以下内容，是一些亲测可用的ntp服务器。第一行最后的perfer表示优先使用此服务器，也就是复旦大学的ntp服务器。添加之后按Ctrl+X保存退出。
+server ntp.fudan.edu.cn iburst perfer
+server time.asia.apple.com iburst
+server asia.pool.ntp.org iburst
+server ntp.nict.jp iburst
+server time.nist.gov iburst
+sudo /etc/init.d/ntp restart    //重启
+
+
+//日期date格式化
 1.date "+%Y-%m-%d"  
 2.2013-02-19  
 3.[root@root ~]# date "+%H:%M:%S"  
@@ -438,7 +468,6 @@ netstat -g 将会显示该主机订阅的所有多播网络。
     后台运行命令 &
     条件执行 && ||
     
-    
     |less 命令对输出进行管道，这样你就可以按你的速度滚动阅读：
 top命令是一个常用的查看系统资源使用情况和查看占用系统资源最多的进程
 htop命令是top的改进版 Linux发行版本都没有安装htop——   sudo apt-get install htop     
@@ -450,18 +479,6 @@ pkill & killall pkill和killall命令可以根据进程的名字杀死一个进�
 renice 用来改变进程的nice值。nice值代表进程的优先级。renice 19 pid    -19的nice值是非常高的优先级，相反，19是非常低的优先级。0是默认的优先级。
 xkill 可以轻易杀死图形程度的命令。运行它之后，你的光标会变成x符号。点击相应的图形程序的窗口就可以杀死该程序。如果你中途要放弃操作，你可以点击鼠标右键取消。
 
-ps -ef|grep LOCAL=NO|grep -v grep|cut -c 9-15|xargs kill -9
-　　管道符“|”用来隔开两个命令，管道符左边命令的输出会作为管道符右边命令的输入。下面说说用管道符联接起来的
-
-几个命令：
-     “ps - ef”是Red Hat 里查看所有进程的命令。这时检索出的进程将作为下一条命令“grep LOCAL=NO”的输入。
-　  “grep LOCAL=NO”的输出结果是，所有含有关键字“LOCAL=NO”的进程，这是Oracle数据库中远程连接进程的共同特点。
-　　“grep -v grep”是在列出的进程中去除含有关键字“grep”的进程。
-　　“cut -c 9-15”是截取输入行的第9个字符到第15个字符，而这正好是进程号PID。
-　　“xargs kill -9”中的xargs命令是用来把前面命令的输出结果（PID）作为“kill -9”命令的参数，并执行该令。    
-“kill -9”会强行杀掉指定进程，这样就成功清除了oracle的所有远程连接进程。其它类似的任务，只需要修改“grep LOCAL=NO”中的关键字部分就可以了。
- 
-ps -ef|grep /usr/local/apache-tomcat-document/|grep -v grep|cut -c 9-15|xargs kill -9
 
 }
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
@@ -622,71 +639,7 @@ unix_unnamed_pipe
 比如，可以利用FIFO实现单服务器、多客户端的应用程序: 
 unix_named_pipe
 
-有了上面的知识准备，现在可以开始讲述，linux多进程并发时，如何控制每次并发的进程数。
 
-// 正则表达式:
-{
-   是指一个用来描述或者匹配一系列符合某个句法规则的字符串的单个字符串。本文介绍如何使用grep及egrep命令。而扩展正则表达式比基本正则表达式拥有更强大的功能。  
-grep的主要功能用于检索文件内容，字符串等的工具。可以根据用户指定的“模式（pattern）”对目标文本进行搜索过滤，显示出被“模式pattern”匹配到的行。 
- 
-grep [OPTIONS]PATTERN [FILE...] 
-PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件，可用单引号‘ ’将pattern括起来以避免shell通配的影响，强引用不替换而显示字符本身。" " 双引号，字符串中的` ` ,$, \ 等特殊字符会被shell解释替换后，再传递给grep。对普通的字符串（没有特殊字符和空格的字符串）也可以不加引号，直接搜索。 
-     OPTIONS：（这里给出常用的选项） 
- -i 忽略大小写 
- -c 显示被匹配到的行数 
--n 输出行号 
--v 反向选择，即找没有搜索字符串的行 
--o 仅显示匹配到的内容 
--w 匹配单词 
--A # 连同匹配行的下#行一并显示，#代表任意数字 
--B # 连同匹配行的上#行一并显示，#代表任意数字 
--C # 连同匹配行的上下#行一并显示，#代表任意数字 
--R或-r 递归搜索目录或子目录下匹配的字所在文件（可配合find命令 
--E  相当于egrep 支持扩展的正则表达式 
--F  相当于fgrep 不支持正则表达式 
---color对匹配的内容以颜色显示 
--V  显示grep版本 
-正则表达式：            
-默认匹配次数：贪婪模式，尽可能多的去匹配 
-    . 匹配任意单个字符 
-    \.表示.本身   \逃逸符 
-     * 匹配其前面的字符任���次可为0次 
-    .* 任意长度的任意字符 
-    \? 匹配其前面字符1次或0次 
-x\{m\}：匹配其前面的字符“x”m次(精确匹配) 
-x\{m,\}：匹配其前面的字符“x”至少m次 
-x\{m,n\}：匹配其前面的字符“x”至少m次，至多n次 
- \{1,\} 1次至无上限 \{0,3\}至少3次 
-    ^ 锚定行首，此字符后面的任意内容必须出现在行首  
-    $ 锚定行尾，次字符前面的任意内容必须出现在行尾  
-    ^$表示空行 
-    [ ] 匹配指定范围内的任意单个字符 
-    [^ ] 匹配指定范围外的任意单个字符 
-    \< 其后面的任意字符必须作为单词的首部出现  \b 
-    \> 其前面的任意字符必须作为单词的尾部出现  \b 
-    \<\> 锚定单词例如 \<root\> 
- 纯数字 [[:digit:]]或[0-9] 
-    小写字母 [[:lower:]]或[a-z] 
-    大写字母 [[:upper:]]或[A-Z] 
-    大小写字母 [[:alpha:]]或[a-zA-Z] 
-    数字加字母 [[:alnum:]]或[0-9a-zA-Z] 
-    空白字符 [[:space:]]  非空白字符[^[:space:]] 
-    标点符号 [[:punct:]] 
-    \d  匹配任何十进制数，相当于[0-9]     -P选项加上 
- \D 匹配任何非数字字符，相当于[^0-9]    -P选项加上 
- \s  匹配任何空白字符， 
-  \S  匹配任何非空白字符， 
-  \w  匹配任何字母数字字符，相当于[a-zA-Z0-9] 
- \W 匹配任何非字母数字字符，相当于[^a-zA-Z0-9]  ' 
- \\  匹配"\" 
- \( \) 分组后项引用  \1 引用第一个左括号以及与之对应的右括号所包括的所有内容。    \2 \3 … 
-扩展正则表达式中增加了几个与正则表达式有区别的新内容： 
-    +   匹配其前面的字符至少1次       \{1,\}正则中近似 
-    ？ 匹配紧挨在其前面的字符0次或1次   \?正则中 
-    {m,n}  匹配前面字符至少m次至多n次 {1，}表示1至无限 {0,3}表示0-3 
-    （）分组  \1 \2 \3 … 
-     |  或者  
-}
 
 //mv命令既可以重命名
 {
