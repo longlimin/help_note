@@ -272,7 +272,7 @@ git config --global core.safecrlf false
 git config --global core.safecrlf warn
 // 转码
 find . -type f | xargs dos2unix
-
+find -type f | grep -v .git | grep 'e/t5.png' | xargs dos2unix
 //git推送异常
 
 
