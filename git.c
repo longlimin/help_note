@@ -241,7 +241,7 @@ git config --global user.name "Walker"
 git config --global user.email "1424234500@qq.com"
 git config --global credential.helper store
 echo 'http://{username}:{password}@github.com' > .git-credentials
-http://1424234500%40qq.com:xxx@github.com         @->$40
+http://1424234500%40qq.com:qr36@github.com         @->$40
 cat .gitconfig
 [user]
         name = Walker
