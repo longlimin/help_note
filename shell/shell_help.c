@@ -96,8 +96,8 @@ less比more更强大，提供翻页，跳转，查找等命令
 
 sed -n '5,10p' obcp-server29.log //5-10行
 
-
-grep -C 60 -oe  '.*MccpMgr.*' obcp-server29.log | less
+#关键词前后10行 分页展示
+grep -C 10 -inoe  '.*MccpMgr.*' obcp-server29.log | less 
 
 tail -f obcp-server29.log | grep -v '.*INFO.*' #不看某种类别
 
@@ -117,8 +117,8 @@ PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件
 字符串中的` ` ,$, \ 等特殊字符会被shell解释替换后，再传递给grep。
 对普通的字符串（没有特殊字符和空格的字符串）也可以不加引号，直接搜索。 
  OPTIONS：（这里给出常用的选项） 
- -i 忽略大小写 
- -c 显示被匹配到的行数 
+-i 忽略大小写 
+-c 显示被匹配到的行数 
 -n 输出行号 
 -v 反向选择，即找没有搜索字符串的行  #############3
 -o 仅显示匹配到的内容   grep -oe<只显示匹配内容><-<C>5 前后五行><-A 5 前><-B 5 后> '.*\[.*\].*' test.sh

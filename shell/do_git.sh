@@ -57,7 +57,7 @@ function git_exefun(){
         fi
     else
         $fun $git_help_note
-        $fun $git_base
+        # $fun $git_base
         $fun $git_BaseSSM
         $fun $git_cc
         $fun $git_GraphicsTools
