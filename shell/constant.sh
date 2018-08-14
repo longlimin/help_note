@@ -41,7 +41,8 @@ git_cc=$_root'/workspace_android/cc'
 git_GraphicsTools=$_root'/workspace_my/GraphicsTools'
 git_AngularApp=$_root'/workspace_my/AngularApp'
 
-git_local_dirs=($git_help_note $git_base $git_BaseSSM $git_cc_old $git_cc $git_GraphicsTools $git_AngularApp)
+git_local_dirs=($git_help_note $git_BaseSSM $git_cc_old $git_cc $git_GraphicsTools $git_AngularApp)
+# $git_base 
 
 # remote urls
 git_remote_help_note='https://github.com/1424234500/help_note.git'     #-> E:/ help_note   
@@ -52,8 +53,8 @@ git_remote_cc='https://github.com/1424234500/cc.git'
 git_remote_GraphicsTools='https://github.com/1424234500/GraphicsTools.git'
 git_remote_AngularApp='https://github.com/1424234500/AngularApp.git'
 
-git_remote_urls=($git_remote_help_note $git_remote_base $git_remote_BaseSSM $git_remote_cc_old $git_remote_cc $git_remote_GraphicsTools $git_remote_AngularApp)
-
+git_remote_urls=($git_remote_help_note $git_remote_BaseSSM $git_remote_cc_old $git_remote_cc $git_remote_GraphicsTools $git_remote_AngularApp)
+# $git_remote_base 
 
 #echo $_root
 #echo $_shell
@@ -70,7 +71,7 @@ function do_project_exefun(){
             $fun $git_help_note
         elif [ "$arg1" = "base" ]
         then
-            $fun $git_base
+            # $fun $git_base
             $fun $git_BaseSSM
         elif [ "$arg1" = "cc" ]
         then
