@@ -21,6 +21,8 @@ git config --global user.name 'Walker'
 git config --global user.email '1424234500@qq.com'  
 # git config --global core.autocrlf input #提交转换unix
 git config --global core.safecrlf true #拒绝混合lrlf
+
+echo 'http://1424234500%40qq.com:qwer301415926@github.com' > ~/git-credentials  #保存配置
 git config --global credential.helper store #设置文件认证
 
 function commit(){
