@@ -27,6 +27,10 @@ function rename(){
 function showdir(){
     dirfile_init $@
 }
+# 转变c sh文件为unix模式crlf -> lf
+function turn(){
+    find $_help -type f | grep -v .git | grep '^.*\(\(\.c\)\|\(\.sh\)\)$' | xargs dos2unix
+}
 function clean(){
     cleanjava $@
     cleanpython $@

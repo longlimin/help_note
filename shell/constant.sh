@@ -11,7 +11,7 @@ if [ ! -d "$_root" ]
 then
     _root='/mnt/e'
 fi
-
+_help=$_root'/help_note'
 _shell=$_root'/help_note/shell'
 _python=$_root'/help_note/python'
 _opencv=$_root'/help_note/python/opencv'
