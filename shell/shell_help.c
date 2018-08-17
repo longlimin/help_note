@@ -98,8 +98,11 @@ sed -n '5,10p' obcp-server29.log //5-10行
 
 #关键词前后10行 分页展示
 grep -C 10 -inoe  '.*MccpMgr.*' obcp-server29.log | less 
-
-tail -f obcp-server29.log | grep -v '.*INFO.*' #不看某种类别
+grep -one  '.*MccpMgr.*' obcp-server29.log | grep -v '.*DEBUG.*' | less 
+grep -ne  'getUserBean\|device:null' obcp-server29.log | grep -v '.*DEBUG.*'| grep -v '.*INFO.*' | less
+grep -ne  obcp-server29.log | grep '.*INFO.*' > obcp.log
+grep -one '.*' obcp-server29.log | grep '.*INFO.*' #查看INFO
+tail -f obcp-server29.log | grep -v '.*INFO.*' #不看INFO
 
 find test | grep '.*.png' #查找当前路径 下 所有文件 深度优先 的 png图片文件
 
