@@ -32,8 +32,8 @@ tasklist|find /i "SourceTree" || start "SourceTree" "C:\Users\ThinkPad\AppData\L
 
 
 ::echat_desktop proj
-no
-
+call no
+call ng
 
 
 
