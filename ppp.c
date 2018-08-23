@@ -3,7 +3,8 @@
 */
 
 14qr 
-qr36 github 
+qr36 git
+Qr36 oracle
 16qy 
 p3  
 
