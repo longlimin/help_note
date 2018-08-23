@@ -178,6 +178,8 @@ begin
   end LOOP;
 
 end p_createRoomTest; 
+
+
 --ађСа
 create sequence SEQ_file_down_up
 minvalue 1

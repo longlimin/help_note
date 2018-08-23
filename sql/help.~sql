@@ -45,7 +45,7 @@ alter table tb_a add  FOREIGN KEY(id ) REFERENCES tb_b(id);
 
 --修改表添加列 默认值
 alter table tb_group add( checked varchar(10) default 'true' );
-
+alter table tb_group rename column checked to newName;
 
 --删除表
 drop  table test  ;
