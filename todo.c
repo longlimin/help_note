@@ -31,26 +31,44 @@ socket 模块
 性能测试
 
 
-//class 浏览器 文件目录模式
-//map 浏览器 分页
-//git 转移ssh模式
+
+SOA服务框架：Dubbo、zookeeper、Proxy、RestFul
+缓存：Redis、ehcache
+分布式消息中间件：KafKa+Flume+ZookeeperKeepalived+Nginx+Proxy
+负载分布式文件：FastDFS
+SSO框架：CAS单点登录
+模块化管理：Maven
+数据库连接池：Alibaba Druid
+核心框架：Spring framework
+安全框架：Apache Shiro
+视图框架：Spring MVC
+富文本：CKEcitor
+动态页签：Jerichotab、对话框：jQuery jBox
+树结构控件：jQuery zTree报表：Echarts、JasperReports
+服务端验证：Hibernate Validator
+布局框架：SiteMesh
+工作流引擎：Activiti 5.15
+任务调度：quartz 1.8.5
+持久层框架：MyBatis
+日志管理：SLF4J 1.7、Log4j
+前端框架：Bootstrap 4 metronic
+客户端验证：JQuery Validation
+
 
 
 //后台开发学习//////////////////////////////////////////////////////////////////////////////////
 《深入理解计算机系统》，《tcp/ip详解 卷一、二、三》，《数据结构与算法》
 
-Java IO 
-多线程
+Java IO nio 多线程
 Spring、SpringMVC、iBatis/MyBatis 应用经验 了解到它的原理和机制
-Redis Memcache/Couchbase 使用架构
-分布式
-zookeeper服务注册信息的分布式管理
-dubbo 
-Docker/DevOps
+分布式SOA服务框架：Dubbo、zookeeper、Proxy、RestFul
+rpc rmi
+缓存：Redis、ehcache
+
 
 Sql优化理论
 
-JVM 原理 rpc案例
+JVM 原理  
 分布式 多线程 缓存 高性能 大数据-高并发经验
  
 Linux vi 搜索 行号 awk文本格式化 
