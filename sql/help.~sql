@@ -20,8 +20,10 @@ SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = upper('student') ORDE
 --查看字符编码
 select userenv('language') from dual;
 
-
-
+--查看会话连接 锁
+select session_id from v$locked_object;
+select sid, serial#, username, osuser from v$session where sid=783;
+alter system kill session '783,18455';
 
 
 
@@ -178,6 +180,8 @@ begin
   end LOOP;
 
 end p_createRoomTest; 
+
+
 --序列
 create sequence SEQ_file_down_up
 minvalue 1
