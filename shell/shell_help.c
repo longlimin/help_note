@@ -192,8 +192,42 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
 }
-sudo apt-get update  更新源
 
+//源配置 suse
+{
+安装源操作：zypper+ 参数
+    repos, lr 列出所有定义的安装源。
+    addrepo, ar 添加一个新的安装源。
+    removerepo, rr 删除指定的安装源。
+    renamerepo, nr 重命名指定的安装源。
+    modifyrepo, mr 修改指定的安装源。
+    refresh, ref 刷新所有安装源。
+    clean 清除本地缓存。
+
+zypper ar http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/11.3/repo/oss/suse main
+zypper ar http://download.opensuse.org/distribution/11.3/repo/non-oss/suse/ nonoss
+zypper ar http://download.opensuse.org/update/11.3/suse update
+}
+//zypper
+{
+    安装某个软件包
+    zypper install package_name<=version>
+    zypper install/remove/update package_name*
+    要一次安装和删除多个包，请使用 +/- 或 ~/! 修改键一次性安装和删除包：
+    zypper install emacs -vim
+    zypper remove emacs +vim 可使用此命令来获取所有可用新包的列表：
+    zypper list-updates  类似的，要列出所有所需的包，请使用：
+    zypper list-patches
+
+    install, in 安装软件包。
+    remove, rm 删除软件包。
+    verify, ve 检验软件包的依赖关系的完整性。
+    update, up 将已经安装的软件包更新到新的版本。
+    dist-upgrade, dup 执行整个系统的升级。
+    source-install, si 安装源代码软件包和它们的编译依赖。
+
+
+}
 //apt-get
 {
 sudo apt autoremove 自动删除无依赖包
@@ -225,6 +259,7 @@ apt-cache madison vim
 apt-get install <<package name>>=<<version>>
 sudo apt-get install openssh-client=1:6.6p1-2ubuntu1
 }
+//apt-get install gcc gcc-c++ //c++编译需要
 
 //opencv
 {
@@ -357,14 +392,13 @@ sudo apt-get install gstreamer0.10-*
 sudo apt-get install libdc1394-*
 // sudo apt-get install libopencv-dev //??????????自编译非此
 // sudo apt-get install python-opencv
-}
 
 //////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
 //whatweb
 sudo apt-get install whatweb
 异常/usr/bin/whatweb: /usr/lib/ruby/vendor_ruby/rchardet/universaldetector.rb:39: invalid multibyte escape: /[\x80-\xFF]/ (SyntaxError)
 解决
-sudo vi /usr/lib/ruby/vendor_ruby/rchardet/universaldetector.rb
+sudo vi /usr/li b/ruby/vendor_ruby/rchardet/universaldetector.rb
 文件第一行加入
 # encoding: US-ASCII
 
@@ -387,14 +421,48 @@ sudo apt-get install nginx php5.0-fpm php5.0-cli php5.0-curl php5.0-gd php5.0-mc
 
 }
 
-//nginx搭建
+//nginx搭建 rtmp模块 pcre openssl zlib
 http://blog.csdn.net/shuxiaogd/article/details/47662115
-sudo apt-get install nginx  默认目录/usr/local/nginx。 
-pi: /etc/nginx
-ln -s /etc/nginx ~/nginx/nginx
-代理静态html angularJs
-转发后台请求python web tornado
-配置/etc/nginx/nginx.conf server  upstream 
+wget http://nginx.org/download/nginx-1.8.0.tar.gz
+wget https://codeload.github.com/arut/nginx-rtmp-module/zip/master #master.zip
+wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.39.tar.gz
+wget http://www.openssl.org/source/openssl-1.0.1c.tar.gz
+wget http://www.zlib.net/zlib-1.2.11.tar.gz
+cd nginx-1.10.1 
+./configure --sbin-path=/usr/local/nginx/nginx --conf-path=/usr/local/nginx/nginx.conf --pid-path=/usr/local/nginx/nginx.pid --with-http_ssl_module --with-pcre=../pcre-8.39 --with-zlib=../zlib-1.2.11 --with-openssl=../openssl-1.0.1c --with-http_stub_status_module --add-module=../nginx-rtmp-module-master
+./configure --sbin-path=/usr/local/nginx/nginx --conf-path=/usr/local/nginx/nginx.conf --pid-path=/usr/local/nginx/nginx.pid --with-http_ssl_module --with-pcre=../pcre-8.39 --with-zlib=../zlib-1.2.11  --with-md5=/root --with-http_ssl_module --with-openssl=../openssl-1.0.1c --add-module=../nginx-rtmp-module-master
+make
+make install
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+--prefix                       #nginx安装目录，默认在/usr/local/nginx
+--conf-path=/usr/local/nginx/nginx.conf  #nginx。配置路径名
+--pid-path=/usr/local/nginx/nginx.pid    #pid问件位置，默认在logs目录
+--lock-path                    #lock问件位置，默认在logs目录
+--with-http_ssl_module         #开启HTTP SSL模块，以支持HTTPS请求。
+--with-http_dav_module         #开启WebDAV扩展动作模块，可为文件和目录指定权限
+--with-http_flv_module         #支持对FLV文件的拖动播放
+--with-http_realip_module      #支持显示真实来源IP地址
+--with-http_gzip_static_module #预压缩文件传前检查，防止文件被重复压缩
+--with-http_stub_status_module #取得一些nginx的运行状态
+--with-mail                     #允许POP3/IMAP4/SMTP代理模块
+--with-mail_ssl_module          #允许POP3／IMAP／SMTP可以使用SSL／TLS
+--with-pcre=../pcre-8.11        #注意是未安装的pcre路径
+--with-zlib=../zlib-1.2.5       #注意是未安装的zlib路径
+--with-debug                    #允许调试日志
+--http-client-body-temp-path    #客户端请求临时文件路径
+--http-proxy-temp-path          #设置http proxy临时文件路径
+--http-fastcgi-temp-path        #设置http fastcgi临时文件路径
+--http-uwsgi-temp-path=/usr/local/nginx/uwsgi #设置uwsgi 临时文件路径
+--http-scgi-temp-path=/usr/local/nginx/scgi   #设置scgi 临时文件路径
+
+--add-module=../nginx-rtmp-module-master
+
+--   Python 2:
+--     Interpreter:     /usr/bin/python2.7 (ver 2.7.12)
+--     Libraries:       /usr/lib/x86_64-linux-gnu/libpython2.7.so (ver 2.7.12)
+--     numpy:           /home/walker/.local/lib/python2.7/site-packages/numpy/core/include (ver 1.13.3)
+--     packages path:   lib/python2.7/dist-packages
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
