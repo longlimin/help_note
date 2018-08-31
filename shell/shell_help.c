@@ -717,7 +717,7 @@ unix_named_pipe
     for i in `seq -w 10`; do touch stu\_$i\_linux.jpg ; done
     rename \_linux '' *.jpg
     rename '\_linux' '' *.jpg       
-mv命令既可以重命名，又可以移动文件或文件夹。     '
+mv命令既可以重命名，又可以移动文件或文件夹。     
 例子：将目录A重命名为B
 mv A B
 例子：将/a目录移动到/b下，并重命名为c
