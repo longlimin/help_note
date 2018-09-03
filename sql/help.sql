@@ -19,6 +19,8 @@ SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = upper('student') ORDE
 
 --查看字符编码
 select userenv('language') from dual;
+select * from V$NLS_PARAMETERS;
+SELECT VALUE FROM nls_database_parameters WHERE parameter='NLS_CHARACTERSET'
 
 --查看会话连接 锁 关闭会话
 select session_id from v$locked_object;
