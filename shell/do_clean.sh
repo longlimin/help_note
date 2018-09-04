@@ -23,7 +23,7 @@ function clean_cleanExe(){
 
     echo 'clean: '$dir' rm res*, *.pyc, p*g, build -R, _* -R'
     rm res* >> $log_temp
-    rm *.pyc >> $log_temp
+    # rm *.pyc >> $log_temp
     rm p*g >> $log_temp
     rm build -R >> $log_temp
     rm _* -R >> $log_temp
@@ -39,13 +39,13 @@ function clean_cleanJavaProject(){
     #echo ' rm build, bin, ccandroid/bin, cchttp/build, ccserver/build, cchttp/WebContent/WEB-INF/classes -R'
 
     cd $1
-    clean_rm build 
-    clean_rm bin 
-    clean_rm WebContent/WEB-INF/classes 
+    # clean_rm build 
+    # clean_rm bin 
+    # clean_rm WebContent/WEB-INF/classes 
     clean_rm ccandroid/bin  
-    clean_rm cchttp/build 
-    clean_rm cchttp/WebContent/WEB-INF/classes 
-    clean_rm ccserver/build 
+    # clean_rm cchttp/build 
+    # clean_rm cchttp/WebContent/WEB-INF/classes 
+    # clean_rm ccserver/build 
 }
 function clean_rm(){
     myPath=$1
