@@ -26,9 +26,6 @@ TIMEOUT /T 2
 msconfig
 
 
-//dns hosts
-C:\Windows\System32\drivers\etc\hosts
-
 //双网卡设置
 无线局域网适配器 WLAN 2: 内网
    连接特定的 DNS 后缀 . . . . . . . :
@@ -104,13 +101,21 @@ P.S.
 　　3.RunServicesOnce键
 　　RunServicesOnce键位于[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce]和[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce]下，其中的程序会在系统加载时自动启动执行一次
 
-arp -a 输出所有ip？该命令显示和修改“地址解析协议 (ARP)”缓存中的项目。ARP 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。 
+
+
+
+//dns hosts 
+//域名-ip转换表
+C:\Windows\System32\drivers\etc\hosts
+//ip-mac转换表 该命令显示和修改“地址解析协议 (ARP)”缓存中的项目。ARP 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。 
+arp -a 
+
 ping -a ip  ping -a 将地址解析为计算机名。用户名
 nbtstat -a ip 来获得更详细的信息，包括计算机的名称已经硬件Mac地址，这样不论他们怎么变化遁形，都逃不过你的法眼啦，赶紧试试吧。
 
 ping 目标计算机名
 nbtstat -a 目标计算机名（可以省去）
-?////////////////////ip和用户名互转
+////////////////////ip和用户名互转
 
 ping -l 1472 -f www.baidu.com //mtu 不分包测试 1500默认 = 1472 + 28 = 8icmp 20ip
 ping中"-l"指定的是IP包中数据净荷的长度,加上8字节的ICMP封装和20字节的IP报头
