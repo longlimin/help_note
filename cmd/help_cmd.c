@@ -26,7 +26,8 @@ TIMEOUT /T 2
 msconfig
 
 
-
+//dns hosts
+C:\Windows\System32\drivers\etc\hosts
 
 //双网卡设置
 无线局域网适配器 WLAN 2: 内网
@@ -111,7 +112,14 @@ ping 目标计算机名
 nbtstat -a 目标计算机名（可以省去）
 ?////////////////////ip和用户名互转
 
+ping -l 1472 -f www.baidu.com //mtu 不分包测试 1500默认 = 1472 + 28 = 8icmp 20ip
+ping中"-l"指定的是IP包中数据净荷的长度,加上8字节的ICMP封装和20字节的IP报头
+1、查看自己当前网络的 MTU 值，请命令提示符下输入以下命令并回车：
+netsh interface ipv4 show subinterfaces
+
 runas /user:administrator "cmd /k"
+
+
 
 netplwiz”打开“用户账户”面板
 
