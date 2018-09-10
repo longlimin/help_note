@@ -237,6 +237,7 @@ github user setting add sshkey
  // //设置邮箱
  ////设置文件认证
  // //账号密码文件
+//全局 默认 --global 进入仓库 单独设定
 git config --global user.name "Walker"
 git config --global user.email "1424234500@qq.com"
 git config --global credential.helper store
@@ -249,7 +250,9 @@ cat .gitconfig
 [credential]
         helper = store
 
-
+//修改提交邮箱
+如果只需要最近一次提交，那么很简单直接使用 git commit --amend 就可以搞定
+git commit --amend --author="NewAuthor <NewEmail@address.com>"
 
 //git 编码
 # 提交时转换为LF，检出时转换为CRLF
