@@ -231,7 +231,6 @@ github user setting add sshkey
 //github https免密码
 #Github Acount
 1424234500@qq.com
-1234qewr
 #The name and email to show when commit 
  //设置用户名 
  // //设置邮箱
