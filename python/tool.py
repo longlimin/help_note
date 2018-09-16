@@ -86,7 +86,7 @@ def toJson(jsonStr):
         return makeObj(jsonStr)
     if(jsonStr == None or jsonStr == ""):
         return {}
-    if(jsonStr.strip()[0:1] != "{"):
+    if(jsonStr.strip()[0:1] != "{" and jsonStr.strip()[0:1] != "["):
         return {"error":jsonStr}
     return makeObj(json.loads(jsonStr))
 
@@ -134,8 +134,14 @@ def doMethod(cls, methodName, *params):
 def sleep(mills):
     time.sleep(mills)
 
+# time 199313231000
 def getNowTime():
     return int(time.time()*1000)
+def parseTime(timeStamp = 0, format = "%Y-%m-%d %H:%M:%S"):
+    # 使用time
+    timeArray = time.localtime(timeStamp)
+    res = time.strftime(format, timeArray)
+    return res
 def line():
     print("--------------------------------")
 def toString(dictObj):

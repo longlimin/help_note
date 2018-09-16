@@ -22,6 +22,9 @@ from python_sqlite import Database
 # cochat 自动化
 class AutoCochat:
     def __init__(self, name="Test", id="18408249138", pwd="1234qwer"):
+        reload(sys)
+        sys.setdefaultencoding('utf8') #针对socket发送中文异常
+
         self.id = id
         self.pwd = pwd
         self.name = name
@@ -40,7 +43,7 @@ class AutoCochat:
                 count       text
             )
             ''' )
-
+        self.sendList = {} #发送队列 time:(type, data)
         return
     # 日志输出
     def out(self, obj):
@@ -85,6 +88,30 @@ class AutoCochat:
             except Exception as e:
                 self.out(repr(e))
         return
+
+    # 定时任务
+    def timeSend(self):
+        self.out("开启定时任务 发送队列！")
+        while(True):
+            time.sleep(60) #每分钟扫描 只对非凌晨时间处理 延时一小时发送
+            timeNow = tool.getNowTime()
+            hour = tool.parseTime(timeNow/1000, "%H:%M")
+            if(hour >= "23:30" or hour <= "7:20" or self.ifOk == False):
+                continue
+            try:
+                for key in self.sendList.keys():
+                    timeInt = int(key)
+                    timeDeta = timeNow - timeInt
+                    if(timeDeta >= 3000 * 1000):
+                        self.out(timeInt)
+                        (type, data) = self.sendList.pop(key)
+                        self.sendTrue(type, data)
+                        time.sleep(0.5) #推送间隔
+
+            except Exception as e:
+                self.out(repr(e))
+        return
+
     # 定时任务
     def timeHello(self):
         self.out("开启定时任务！")
@@ -101,6 +128,7 @@ class AutoCochat:
     def test(self):
         self.login()
         ThreadRun( "TimeHello." + str(self.name),  self.timeHello ).start()
+        ThreadRun( "TimeSend." + str(self.name),  self.timeSend ).start()
         self.socket.waitRead(self.onException)    #异常回调
         tool.wait()
         return
@@ -116,8 +144,8 @@ class AutoCochat:
                 i = i + 1
             except Exception as e:
                 self.out(traceback.format_exc())
-            self.out("登录异常,5s后重试 try:" + str(i))
-            time.sleep(15)
+                self.out("登录异常,5s后重试 try:" + str(i))
+            time.sleep(5)
         return
 
     # 认证登录
@@ -181,7 +209,7 @@ class AutoCochat:
         self.out("socket初始化事件完成，开始发送认证")
         self.data = {
             "userName":obj.get("USER_CODE", ""),
-            "displayName": "ccc",# tool.encode(obj.get("ORG_VARS", {}).get("@USER_NAME@", "") ),
+            "displayName": tool.encode(obj.get("ORG_VARS", {}).get("@USER_NAME@", "") ), #"ccc",#
             "odept":obj.get("ORG_VARS", {}).get("@ODEPT_CODE@", ""),
             "token":obj.get("USER_TOKEN", ""),
             "uuid":"" + str(uuid.uuid1()),
@@ -233,27 +261,39 @@ class AutoCochat:
         self.out("onexception")
         print(args)
     def turnArray(self, args):
-        #args (1, 2, 3) 直接调用型 exe("select x x", 1, 2, 3)
-        #return [1, 2, 3] <- list(args)
-        #args ([1, 2, 3], ) list传入型 exe("select x x",[ 1, 2, 3]) len(args)=1 && type(args[0])=list
-        #return [1, 2, 3]
-        if(args and len(args) == 1 and (type(args[0]) is list) ):
-            res = args[0]
+        if(len(args) == 1):
+            args = args[0]
+            reg = re.match(r'^\d+', args)         #25[xxxx] -> [xxxxx]
+            if(reg is not None):
+                start = reg.group()
+                args = args[len(start):999999]
+            # reg = re.match(r'^\["\w+",', args)         #["message",  {"to":{"id":" ->  {"to":xxxx
+            # if(reg is not None):
+            #     start = reg.group()
+            #     args = args[len(start):999999]
+            #     mtype = start[2:-2]
+            res = tool.toJson(args)
         else:
             res = list(args)
+            if(len(res) <= 1):
+                res = ( 'null', res[0])
+            elif(callable(res[1])):
+                res = ( 'fun', res[0])
+
         return res
     def message(self, *args): # 普通消息
         try:
-
-            # tool.line()
-            args = self.turnArray(args)
-            # print("收到message")
+            # print("收到message ")
             # print(args)
-            # 两种形式
-            # '26["message",{"to":{"
-            # {u'body': u'222222',
-            if(len(args) == 2):
-                data = args[0]
+            # tool.line()
+            # print("转换")
+            args = self.turnArray(args)
+            # print(args[0])
+            # print(args[1])
+
+            data = args[1] #{}
+            mtype = args[0] #message null fun
+            if(mtype == 'message'):
                 data = tool.toJson(data)
                 fro = data.get("from", {})
                 to = data.get("to", {})
@@ -264,54 +304,85 @@ class AutoCochat:
 
                 uid = self.data.get("uuid")
                 tTag = data.get("timeMillis", tool.getNowTime())
+                tool.line()
                 self.out("Msg:" + fro.get("nickName","from") + ">>" + msg + ">>" + to.get("nickName","to") + " time:" + data.get("time"))
+                self.out(msg);
 
+                # 自发消息不需要处理
+                if(fro.get("nickName","from").find(self.loginUser.get("ORG_VARS", {}).get("@USER_NAME@", "")) >= 0):
+                    return
 
-                # self.socket.emit("updateConversationStatus", {
-                #     'contactFullId': fullId,
-                #     'clientId': uid,
-                #     'timeTag': tTag
-                # })
-                self.socket.emit("updateMsgStatus", {
+                self.send("updateConversationStatus", {
+                    'contactFullId': fullId,
+                    'clientId': uid,
+                    'timeTag': tTag
+                })
+                self.send("updateMsgStatus", {
                     "messages":data.get("id","")
                 })
-                # ff = sessionName.find("陈鹏辉")
-                # if(ff < 0):
-                #     return
-                # print("自动回复:" + str(ff))
-                #
-                # obj = {}
-                # # if(contact.get("type") == "GROUP"):
-                # msg = self.robot.do(msg, fro.get("nickName"))
-                # obj["body"] = msg #"666" + str(tool.getNowTime())
-                # obj["bodyType"] = "text"
-                # obj["clientId"] = str(uuid.uuid1())
-                # obj["retry"] = 1
-                # obj["from"] = {}
-                # obj["from"]["fullId"] = "u__" + self.data.get("userName")
-                # obj["from"]["id"] = self.data.get("userName")
-                # obj["from"]["nickName"] = "fromnickname"
-                # obj["to"] = {}
-                #
+
+
+                # 自发言 且 只有自己auto回复
+                if(self.id != "18408249138"):
+                    return
+                # 过滤
+                ff = sessionName.find("陈鹏辉")
+                hh = fro.get("nickName","from").find("许欢")
+                zz = fro.get("nickName","from").find("赵振国")
+                cdf = fro.get("nickName","from").find("迪")
+                cdf1 = sessionName.find("迪")
+
+                if(ff < 0 or cdf1 >= 0):
+                    self.out("未命中自己title 命中特殊 不回复")
+                    return
+                point = 76
+                if(hh >= 0 or zz >= 0):
+                    point = 33
+                if(tool.getRandom(0,100) < point):
+                    self.out("概率不自动回复" + str(point))
+                    return
+                print("自动回复:" + str(ff))
+
+                # data["body"] = str(data["body"]) + "."
+                # self.send("message", data)
+
+                obj = {}
                 # if(contact.get("type") == "GROUP"):
-                #     obj["to"]["fullId"] = contact.get("fullId")
-                # else:
-                #     obj["to"]["fullId"] = fro.get("fullId")
-                # obj["to"]["nickName"] = "tonickname"
-                #
-                # obj["from"]["nickName"] = "from-nickName"
-                # obj["to"]["nickName"] = "to-nickName"
-                #
-                # print(obj)
-                # self.socket.send("message", obj)
+                # unicode(self.robot.do(msg, fro.get("nickName")))
+                msg = self.robot.do(msg, fro.get("nickName"))
+                msg = msg.get("text", '');
+                if(msg == ''):
+                    return
+                obj["body"] = msg #"666" + str(tool.getNowTime())
+                obj["bodyType"] = "text"
+                obj["clientId"] = str(uuid.uuid1())
+                obj["retry"] = 1
+                obj["from"] = {}
+                obj["from"]["fullId"] = "u__" + self.data.get("userName")
+                obj["from"]["id"] = self.data.get("userName")
+                obj["from"]["nickName"] = "fromnickname"
+                obj["to"] = {}
+
+                if(contact.get("type") == "GROUP"):
+                    obj["to"]["fullId"] = contact.get("fullId")
+                else:
+                    obj["to"]["fullId"] = fro.get("fullId")
+                obj["to"]["nickName"] = "tonickname"
+
+                obj["from"]["nickName"] = self.loginUser["ORG_VARS"]["@USER_NAME@"]   # "from-nickName"
+                obj["to"]["nickName"] = "to-nickName"
+
+                print(obj)
+                self.socket.send("message", obj)
             else:
-                self.out("args len 不合理数据:" + str(args)[0:40])
+                self.out("其他data:" + str(args)[0:40])
                 # print(args)
                 # tool.line()
         except Exception as e:
             self.out(traceback.format_exc())
 
         return
+
     def event(self, *args): # 事件消息 群创建？
         tool.line()
         print("event")
@@ -323,7 +394,14 @@ class AutoCochat:
         print(data)
         return
 
+
     def send(self, type, data):
+
+        self.sendList[str(tool.getNowTime())] = (type, data)
+
+
+        return
+    def sendTrue(self, type, data):
         self.socket.send(type, data)
         return
 
