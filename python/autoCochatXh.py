@@ -24,6 +24,7 @@ class AutoCochat:
     def __init__(self, name="Test", id="18408249138", pwd="1234qwer"):
         reload(sys)
         sys.setdefaultencoding('utf8') #针对socket发送中文异常
+        self.detaTime = 3000 * 1000 #推送延时
 
         self.id = id
         self.pwd = pwd
@@ -83,17 +84,19 @@ class AutoCochat:
                 cmd=raw_input("")
                 if(cmd != ""):
                     if(not self.doMethod(cmd.split(" "))):
-                        self.out("exm???")
-                        self.out(cmd)
+                        # self.out("exm???")
+                        # self.out(cmd)
                         pass
                     time.sleep(1)
             except Exception as e:
                 self.out(repr(e))
         return
     def showTask(self):
+        tool.line()
+
         timeNow = tool.getNowTime()
         hour = tool.parseTime(timeNow/1000, "%H:%M")
-        print(hour, self.ifOk, timeNow)
+        print( hour, self.ifOk, timeNow)
         if(hour >= "23:30" or hour <= "07:20" or self.ifOk == False):
             self.out("不是白天 或者 没有登录")
             return
@@ -103,11 +106,13 @@ class AutoCochat:
                 timeDeta = timeNow - timeInt
                 (type, data) = self.sendList[key]
                 info = ""
-                timePre = timeInt + 1000 * 1000
-                hour = tool.parseTime(timePre/1000, "%D %H:%M%S")
-                info = "推送时刻:" + str(hour)
-                if(timeDeta >= 1000 * 1000):
-                    info += " 推送 now"
+                timePre = timeInt + self.detaTime
+                hour = tool.parseTime(timePre/1000, "%D %H:%M:%S")
+                info = str(timeDeta) + "->" + str(self.detaTime)  + " 推送时刻:" + str(hour)
+                if(timeDeta >= self.detaTime):
+                    info += " 推送触发"
+                    (type, data) = self.sendList.pop(key)
+                    self.sendTrue(type, data)
                 else:
                     info += " 不到时候"
 
@@ -115,6 +120,8 @@ class AutoCochat:
 
         except Exception as e:
             self.out(repr(e))
+        tool.line()
+
         return
     # 定时任务
     def timeSend(self):
@@ -123,17 +130,27 @@ class AutoCochat:
             time.sleep(60) #每分钟扫描 只对非凌晨时间处理 延时一小时发送
             timeNow = tool.getNowTime()
             hour = tool.parseTime(timeNow/1000, "%H:%M")
-            if(hour >= "23:30" or hour <= "7:20" or self.ifOk == False):
-                continue
+            # self.showTask()
+            if(hour >= "23:30" or hour <= "07:20" or self.ifOk == False):
+                self.out("不是白天 或者 没有登录")
+                return
             try:
                 for key in self.sendList.keys():
                     timeInt = int(key)
                     timeDeta = timeNow - timeInt
-                    if(timeDeta >= 1000 * 1000):
-                        self.out(timeInt)
+                    (type, data) = self.sendList[key]
+                    info = ""
+                    timePre = timeInt + self.detaTime
+                    hour = tool.parseTime(timePre/1000, "%D %H:%M:%S")
+                    info = str(timeDeta) + "->" + str(self.detaTime)  + " 推送时刻:" + str(hour)
+                    if(timeDeta >= self.detaTime):
+                        info += " 触发"
                         (type, data) = self.sendList.pop(key)
                         self.sendTrue(type, data)
-                        time.sleep(0.5) #推送间隔
+                    else:
+                        info += " "
+
+                    self.out(str(timeInt) + "." + str(type) + "." + str(data)[0:10] + "." + info)
 
             except Exception as e:
                 self.out(repr(e))
@@ -155,8 +172,8 @@ class AutoCochat:
     def test(self):
         self.login()
         ThreadRun( "TimeHello." + str(self.name),  self.timeHello ).start()
-        ThreadRun( "TimeCtrl." + str(self.name),  self.timeHello ).start()
-        # ThreadRun( "TimeSend." + str(self.name),  self.inputHello ).start()
+        # ThreadRun( "TimeCtrl." + str(self.name),  self.inputHello ).start()
+        ThreadRun( "TimeSend." + str(self.name),  self.timeSend ).start()
         self.socket.waitRead(self.onException)    #异常回调
         tool.wait()
         return
@@ -358,9 +375,10 @@ class AutoCochat:
                 hh = fro.get("nickName","from").find("许欢")
                 zz = fro.get("nickName","from").find("赵振国")
                 cdf = fro.get("nickName","from").find("迪")
-                cdf1 = sessionName.find("迪")
-
-                if(ff < 0 or cdf1 >= 0):
+                d1 = sessionName.find("迪")
+                d2 = sessionName.find("祝")
+                d3 = sessionName.find("纯")
+                if(ff < 0 or d1 >= 0 or d2 >= 0 or d3 >= 0):
                     self.out("未命中自己title 命中特殊 不回复")
                     return
                 point = 76
@@ -372,7 +390,6 @@ class AutoCochat:
                 if(tool.getRandom(0,100) < point):
                     self.out("概率不自动回复" + str(point))
                     return
-                print("自动回复:" + str(ff))
 
                 # data["body"] = str(data["body"]) + "."
                 # self.send("message", data)
@@ -403,7 +420,6 @@ class AutoCochat:
                 obj["from"]["nickName"] = self.loginUser["ORG_VARS"]["@USER_NAME@"]   # "from-nickName"
                 obj["to"]["nickName"] = "to-nickName"
 
-                print(obj)
                 self.sendTrue("message", obj)
             else:
                 self.out("其他data:" + str(args)[0:40])
