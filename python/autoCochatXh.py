@@ -24,7 +24,7 @@ class AutoCochat:
     def __init__(self, name="Test", id="18408249138", pwd="1234qwer"):
         reload(sys)
         sys.setdefaultencoding('utf8') #针对socket发送中文异常
-        self.detaTime = 3000 * 1000 #推送延时
+        self.detaTime = 300 * 1000 #推送延时
 
         self.id = id
         self.pwd = pwd
