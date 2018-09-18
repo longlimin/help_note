@@ -7,6 +7,7 @@ import time
 import json
 import traceback
 import uuid
+import ast
 import tool
 import BeautifulSoup
 from socketIO_client import SocketIO
@@ -24,7 +25,7 @@ class AutoCochat:
     def __init__(self, name="Test", id="18408249138", pwd="1234qwer"):
         reload(sys)
         sys.setdefaultencoding('utf8') #针对socket发送中文异常
-        self.detaTime = 3000 * 1000 #推送延时
+        self.detaTime = 3600 * 1000 #推送延时
 
         self.id = id
         self.pwd = pwd
@@ -35,16 +36,21 @@ class AutoCochat:
         self.socket = Socket()
         self.onConnect = False
         self.ifOk = False
+        # sendTime添加时间, type消息类型, msg发送消息体, deta间隔发送时间, preTime预期发送时间节点
         self.db.execute(
             ''' 
-            create table if not exists music(
-                url         text primary key,
-                name        text,
-                fromName    text,
-                count       text
+            create table if not exists cochat(
+                sendTime    text,
+                sendTimeT text,
+                deta    text,
+                preTime text,
+                preTimeT text,
+                type        text,
+                msg    text,
+                flag    text
             )
             ''' )
-        self.sendList = {} #发送队列 time:(type, data)
+        self.sendList = [] #发送队列 (time, deta, type, data)
         return
     # 日志输出
     def out(self, obj):
@@ -89,7 +95,7 @@ class AutoCochat:
                         pass
                     time.sleep(1)
             except Exception as e:
-                self.out(repr(e))
+                self.out(traceback.format_exc())
         return
     def showTask(self):
         tool.line()
@@ -119,41 +125,63 @@ class AutoCochat:
                 self.out(str(timeInt) + "." + str(type) + "." + str(data) + "." + info)
 
         except Exception as e:
-            self.out(repr(e))
+            self.out(traceback.format_exc())
         tool.line()
+
+        return
+    def send(self, ttt, data, deta=-1):
+        if(deta == -1):
+            deta = self.detaTime
+        sendTime = tool.getNowTime()
+        preTime = sendTime + deta
+        sendTimeT = tool.parseTime(sendTime/1000, "%D %H:%M:%S")
+        preTimeT = tool.parseTime(preTime/1000, "%D %H:%M:%S")
+
+        # self.sendList1.append((sendTime, deta, preTime, type, data))
+        # sendTime添加时间, type消息类型, msg发送消息体, deta间隔发送时间, preTime预期发送时间节点
+        self.db.execute("insert into cochat values(?,?,?,?,?,?,?,?)", str(sendTime),str(sendTimeT), str(deta), str(preTime),str(preTimeT), str(ttt), str(data),'0')
 
         return
     # 定时任务
     def timeSend(self):
         self.out("开启定时任务 发送队列！")
+        self.nowNight = 0
         while(True):
-            time.sleep(60) #每分钟扫描 只对非凌晨时间处理 延时一小时发送
+            time.sleep(5) #每分钟扫描 只对非凌晨时间处理 延时一小时发送
             timeNow = tool.getNowTime()
             hour = tool.parseTime(timeNow/1000, "%H:%M")
             # self.showTask()
             if(hour >= "23:30" or hour <= "07:20" or self.ifOk == False):
-                self.out("不是白天 或者 没有登录")
+                if(self.nowNight != 1):
+                    self.out("不是白天 或者 没有登录 now:" + str(hour) )
+                self.nowNight = 1
                 return
+            self.nowNight = 0
             try:
-                for key in self.sendList.keys():
-                    timeInt = int(key)
-                    timeDeta = timeNow - timeInt
-                    (type, data) = self.sendList[key]
+                # self.sendList1.append((sendTime, deta, preTime, type, data))
+                self.sendList = self.db.executeQuery("select * from cochat where preTime<=? and flag=0", timeNow)
+                i = len(self.sendList) - 1
+                while(i >= 0):
+                    obj = self.sendList[i]
+                    sendTime = int(obj.get("sendTime", 0))
+                    deta = int(obj.get("deta", 0))
+                    preTime = int(obj.get("preTime", 0))
+                    type = str(obj.get("type", ""))
+                    data = ast.literal_eval((str(obj.get("msg", ""))))
                     info = ""
-                    timePre = timeInt + self.detaTime
-                    hour = tool.parseTime(timePre/1000, "%D %H:%M:%S")
-                    info = str(timeDeta) + "->" + str(self.detaTime)  + " 推送时刻:" + str(hour)
-                    if(timeDeta >= self.detaTime):
+                    hour = tool.parseTime(preTime/1000, "%D %H:%M:%S")
+                    info = str(timeNow) + "->" + str(preTime) + " 推送时刻:" + str(hour)
+                    if(timeNow >= preTime):
                         info += " 触发"
-                        (type, data) = self.sendList.pop(key)
                         self.sendTrue(type, data)
+                        # self.sendList.pop(i)
                     else:
                         info += " "
-
-                    self.out(str(timeInt) + "." + str(type) + "." + str(data)[0:10] + "." + info)
-
+                    self.out(tool.parseTime(timeNow/1000, "%D %H:%M:%S") + "." + str(type) + "." + str(data) + "." + info)
+                    i = i - 1
+                self.db.execute("update cochat set flag='1' where preTime<=? and flag=0", timeNow)
             except Exception as e:
-                self.out(repr(e))
+                self.out(traceback.format_exc())
         return
 
     # 定时任务
@@ -335,6 +363,8 @@ class AutoCochat:
             args = self.turnArray(args)
             # print(args[0])
             # print(args[1])
+            if(len(args) <= 1):
+                return
 
             data = args[1] #{}
             mtype = args[0] #message null fun
@@ -351,20 +381,25 @@ class AutoCochat:
                 tTag = data.get("timeMillis", tool.getNowTime())
                 tool.line()
                 self.out("Msg:" + fro.get("nickName","from") + ">>" + msg + ">>" + to.get("nickName","to") + " time:" + data.get("time"))
-                self.out(msg);
+                # self.out(msg);
 
                 # 自发消息不需要处理
                 if(fro.get("nickName","from").find(self.loginUser.get("ORG_VARS", {}).get("@USER_NAME@", "")) >= 0):
                     return
 
-                self.send("updateConversationStatus", {
-                    'contactFullId': fullId,
-                    'clientId': uid,
-                    'timeTag': tTag
-                })
+                # self.send("updateConversationStatus", {
+                #     'contactFullId': fullId,
+                #     'clientId': uid,
+                #     'timeTag': tTag
+                # })
+                ttt = self.detaTime
+                reg = re.match(r'^\d+$', str(msg))
+                if(reg is not None):
+                    ttt = int(msg) * 1000
+
                 self.send("updateMsgStatus", {
                     "messages":data.get("id","")
-                })
+                }, ttt)
 
 
                 # 自发言 且 只有自己auto回复
@@ -442,12 +477,6 @@ class AutoCochat:
         return
 
 
-    def send(self, type, data):
-
-        self.sendList[str(tool.getNowTime())] = (type, data)
-
-
-        return
     def sendTrue(self, type, data):
         self.socket.send(type, data)
         return
@@ -469,7 +498,8 @@ class AutoCochat:
         tool.line()
         return
 if __name__ == '__main__':
-    obj = AutoCochat("Test", "18408249138", "1234qwer")
+    # obj = AutoCochat("Test")
+    obj = AutoCochat("Test", "18262600672", "654321")
     # obj = AutoCochat("Test")
     obj.test()
 

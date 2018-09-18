@@ -8,6 +8,7 @@ import time
 import uuid
 import threading
 import random
+import ast
 
 ########################################
 # from cv_makecolor import MakeColor
@@ -82,13 +83,17 @@ def makeObj(data):
     return encode(data)
 # 通过字符串 解析为json 并编码 Unicode
 def toJson(jsonStr):
+    # print("toJson")
+    # print(jsonStr)
+    # print(type(jsonStr))
     if isinstance(jsonStr, dict):
         return makeObj(jsonStr)
     if(jsonStr == None or jsonStr == ""):
         return {}
-    if(jsonStr.strip()[0:1] != "{" and jsonStr.strip()[0:1] != "["):
+    if(type(jsonStr) is str and jsonStr.strip()[0:1] != "{" and jsonStr.strip()[0:1] != "["):
         return {"error":jsonStr}
-    return makeObj(json.loads(jsonStr))
+    # json.loads(jsonStr) 针对单引号问题ast.literal_eval(jsonStr)
+    return makeObj(json.loads(jsonStr) )
 
 
 
