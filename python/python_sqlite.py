@@ -22,7 +22,10 @@ class Database :
     conn = None
     showsql = False
 
-    def __init__(self):
+    def __init__(self, dbfile=''):
+        if(dbfile == ''):
+            dbfile = self.dbfile
+        self.dbfile = dbfile
         self.conn = self.getConn()
     #输出工具
     def out(self, outStr, *args):
@@ -60,9 +63,11 @@ class Database :
         res = 2
         if(not conn is None):
             conn.close()
+            conn = None
             res = res - 1
         if(not self.conn is None):
             self.conn.close()
+            self.conn = None
             res = res - 1
         self.out("db close res : " + str(res))
         return res
@@ -113,6 +118,7 @@ class Database :
                     item[key] = tool.encode(item[key])
         else:
             res = []
+        # self.close()
         return res   
     def executeQueryOne(self, sql, *args):
         args = self.turnArray(args)
@@ -134,7 +140,7 @@ class Database :
         #sql占位符 填充args 可以是tuple(1, 2)(动态参数数组) 也可以是list[1, 2] list(tuple) tuple(list)
         res = cursor.execute(sql, args).fetchall()
         conn.commit()
-        #self.close(conn)
+        # self.close()
         return res   
     #查询列名列表array[str]  eg: ['id', 'name', 'birth']
     def getColumnNames(self, sql, *args):
@@ -146,6 +152,7 @@ class Database :
             cursor = conn.cursor()
             cursor.execute(sql, args)
             res = [tuple[0] for tuple in cursor.description]
+        self.close()
         return res   
     #查询结果为单str eg: 'xxxx'
     def getString(self, sql, *args):

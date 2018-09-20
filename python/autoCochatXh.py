@@ -32,7 +32,7 @@ class AutoCochat:
         self.name = name
         self.robot = Robot()
         self.http = Http()
-        self.db = Database()
+        self.db = Database('sqlite_' + self.id + '.db')
         self.socket = Socket()
         self.onConnect = False
         self.ifOk = False
@@ -355,16 +355,17 @@ class AutoCochat:
                 if(fro.get("nickName","from").find(self.loginUser.get("ORG_VARS", {}).get("@USER_NAME@", "")) >= 0):
                     return
 
-                self.send("updateConversationStatus", {
-                    'contactFullId': fullId,
-                    'clientId': uid,
-                    'timeTag': tTag
-                })
                 ttt = self.detaTime
                 reg = re.match(r'^\d+$', str(msg))
                 if(reg is not None):
                     ttt = int(msg) * 1000
 
+
+                self.send("updateConversationStatus", {
+                    'contactFullId': fullId,
+                    'clientId': uid,
+                    'timeTag': tTag
+                }, ttt)
                 self.send("updateMsgStatus", {
                     "messages":data.get("id","")
                 }, ttt)

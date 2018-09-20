@@ -9,13 +9,10 @@
 
 前后端完全分离 ajax 和 socket
 前端架构 angular 或 vue
-数据库集成 连接池 Redis 缓存 可配置
-MVC 抽离controller 通用 spring mvc restful
+//数据库集成 连接池 Redis 缓存 可配置
+//MVC 抽离controller 通用 spring mvc restful
 
 socket 通信 http 临界资源 进程通信
-
-前端模块
-架构 vue angular
 
 socket 模块 
 实现 中转站 多队列 任务线程数量限制
