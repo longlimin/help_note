@@ -40,6 +40,7 @@ class AutoCochat:
         self.db.execute(
             ''' 
             create table if not exists cochat(
+                id  text,
                 sendTime    text,
                 sendTimeT text,
                 deta    text,
@@ -97,38 +98,6 @@ class AutoCochat:
             except Exception as e:
                 self.out(traceback.format_exc())
         return
-    def showTask(self):
-        tool.line()
-
-        timeNow = tool.getNowTime()
-        hour = tool.parseTime(timeNow/1000, "%H:%M")
-        print( hour, self.ifOk, timeNow)
-        if(hour >= "23:30" or hour <= "07:20" or self.ifOk == False):
-            self.out("不是白天 或者 没有登录")
-            return
-        try:
-            for key in self.sendList.keys():
-                timeInt = int(key)
-                timeDeta = timeNow - timeInt
-                (type, data) = self.sendList[key]
-                info = ""
-                timePre = timeInt + self.detaTime
-                hour = tool.parseTime(timePre/1000, "%D %H:%M:%S")
-                info = str(timeDeta) + "->" + str(self.detaTime)  + " 推送时刻:" + str(hour)
-                if(timeDeta >= self.detaTime):
-                    info += " 推送触发"
-                    (type, data) = self.sendList.pop(key)
-                    self.sendTrue(type, data)
-                else:
-                    info += " 不到时候"
-
-                self.out(str(timeInt) + "." + str(type) + "." + str(data) + "." + info)
-
-        except Exception as e:
-            self.out(traceback.format_exc())
-        tool.line()
-
-        return
     def send(self, ttt, data, deta=-1):
         if(deta == -1):
             deta = self.detaTime
@@ -139,7 +108,7 @@ class AutoCochat:
 
         # self.sendList1.append((sendTime, deta, preTime, type, data))
         # sendTime添加时间, type消息类型, msg发送消息体, deta间隔发送时间, preTime预期发送时间节点
-        self.db.execute("insert into cochat values(?,?,?,?,?,?,?,?)", str(sendTime),str(sendTimeT), str(deta), str(preTime),str(preTimeT), str(ttt), str(data),'0')
+        self.db.execute("insert into cochat values(?,?,?,?,?,?,?,?,?)", str(self.id), str(sendTime),str(sendTimeT), str(deta), str(preTime),str(preTimeT), str(ttt), str(data),'0')
 
         return
     # 定时任务
@@ -150,7 +119,6 @@ class AutoCochat:
             time.sleep(5) #每分钟扫描 只对非凌晨时间处理 延时一小时发送
             timeNow = tool.getNowTime()
             hour = tool.parseTime(timeNow/1000, "%H:%M")
-            # self.showTask()
             if(hour >= "23:30" or hour <= "07:20" or self.ifOk == False):
                 if(self.nowNight != 1):
                     self.out("不是白天 或者 没有登录 now:" + str(hour) )
@@ -159,7 +127,7 @@ class AutoCochat:
             self.nowNight = 0
             try:
                 # self.sendList1.append((sendTime, deta, preTime, type, data))
-                self.sendList = self.db.executeQuery("select * from cochat where preTime<=? and flag=0", timeNow)
+                self.sendList = self.db.executeQuery("select * from cochat where preTime<=? and flag=0 and id=?", timeNow, str(self.id) )
                 i = len(self.sendList) - 1
                 while(i >= 0):
                     obj = self.sendList[i]
@@ -179,7 +147,7 @@ class AutoCochat:
                         info += " "
                     self.out(tool.parseTime(timeNow/1000, "%D %H:%M:%S") + "." + str(type) + "." + str(data) + "." + info)
                     i = i - 1
-                self.db.execute("update cochat set flag='1' where preTime<=? and flag=0", timeNow)
+                self.db.execute("update cochat set flag='1' where preTime<=? and flag=0 and id=? ", timeNow, str(self.id))
             except Exception as e:
                 self.out(traceback.format_exc())
         return
@@ -387,11 +355,11 @@ class AutoCochat:
                 if(fro.get("nickName","from").find(self.loginUser.get("ORG_VARS", {}).get("@USER_NAME@", "")) >= 0):
                     return
 
-                # self.send("updateConversationStatus", {
-                #     'contactFullId': fullId,
-                #     'clientId': uid,
-                #     'timeTag': tTag
-                # })
+                self.send("updateConversationStatus", {
+                    'contactFullId': fullId,
+                    'clientId': uid,
+                    'timeTag': tTag
+                })
                 ttt = self.detaTime
                 reg = re.match(r'^\d+$', str(msg))
                 if(reg is not None):
