@@ -25,7 +25,8 @@ class AutoCochat:
     def __init__(self, name="Test", id="18408249138", pwd="1234qwer"):
         reload(sys)
         sys.setdefaultencoding('utf8') #针对socket发送中文异常
-        self.detaTime = 3600 * 1000 #推送延时
+        self.detaTime = 3600 * 1000 #推送延时 60min
+        self.detaTimeMin = 1200 * 1000 #推送延时 20min
 
         self.id = id
         self.pwd = pwd
@@ -100,7 +101,7 @@ class AutoCochat:
         return
     def send(self, ttt, data, deta=-1):
         if(deta == -1):
-            deta = self.detaTime
+            deta = tools.getRandom(self.detaTime, self.detaTimeMin)
         sendTime = tool.getNowTime()
         preTime = sendTime + deta
         sendTimeT = tool.parseTime(sendTime/1000, "%D %H:%M:%S")
@@ -425,8 +426,13 @@ class AutoCochat:
                 obj["to"]["nickName"] = "to-nickName"
 
                 self.sendTrue("message", obj)
+            elif(str(mtype) == 'fun'):
+                pass
+            elif(str(mtype) == 'event'):
+                pass
             else:
-                self.out("其他data:" + str(args)[0:40])
+                self.out("其他:" + str(mtype))
+                print(data)
                 # print(args)
                 # tool.line()
         except Exception as e:
@@ -435,10 +441,8 @@ class AutoCochat:
         return
 
     def event(self, *args): # 事件消息 群创建？
-        tool.line()
         print("event")
-        print(str(args)[0:40])
-        tool.line()
+        print(args)
         return
     def onSocketLogin(self, *data):
         self.out("socket登录回调:")
