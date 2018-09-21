@@ -123,7 +123,7 @@ class AutoCochat:
                 if(self.nowNight != 1):
                     self.out("不是白天 或者 没有登录 now:" + str(hour) )
                 self.nowNight = 1
-                return
+                continue
             self.nowNight = 0
             try:
                 # self.sendList1.append((sendTime, deta, preTime, type, data))
