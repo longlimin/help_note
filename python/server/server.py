@@ -19,7 +19,7 @@ ServiceDb().init()
 
 
 # Socket后台
-serverSocket = ServerSocket("39.107.26.100", 8092)
+serverSocket = ServerSocket("192.168.0.10", 8092)
 # serverSocket = ServerSocket("127.0.0.1", 8092)
 serverSocket.start()
 sleep(1)
