@@ -8,7 +8,7 @@
 权限管理模块
 
 前后端完全分离 ajax 和 socket
-前端架构 angular 或 vue
+//前端架构 angular
 //数据库集成 连接池 Redis 缓存 可配置
 //MVC 抽离controller 通用 spring mvc restful
 
