@@ -31,8 +31,16 @@ touch test.txt //创建文件
 　　(3) bg %N 使第N个任务在后台运行(%前有空格)
 　　(4) fg %N 使第N个任务在前台运行
 　　  默认bg,fg不带%N时表示对最后一个进程操作!
-    vim :set number 设置行号 
-    :set nu
+    
+    //vim 
+    esc :set number 显示行号 
+    esc :set nu
+    esc /str 查找1 正向 支持 * 通配符号
+    esc ?str 查找2 反向  n next  shift+n/N previous
+    esc shift + * 查找当前所在单词
+    esc yw 复制当前到单词结尾
+    esc p paste粘贴
+
     id  查看当前用户组及其他状态
 	apt-cache madison python-rpi.gpio	查看安装 的软件版本
 	sudo killall -9 nginx
