@@ -60,7 +60,7 @@ Java IO nio 多线程
 Spring、SpringMVC、iBatis/MyBatis 应用经验 了解到它的原理和机制
 分布式SOA服务框架：Dubbo、zookeeper、Proxy、RestFul
 rpc rmi
-缓存：Redis、ehcache
+Redis、ehcache
 
 
 Sql优化理论
