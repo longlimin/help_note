@@ -6,7 +6,28 @@
 数据库数据通用展示 管理 接口
 服务器 监 控
 权限管理模块
-   
+
+webservice 封装
+
+路由层
+1.  基于 spirng 路由功能
+2.  支持 http协议中 GET/POST/DELTE/PUT等方法
+3.  支持REST风格请求及普通http请求
+控制器层
+1.  支持Controller及RestController
+2.  请求参数形式多样化
+3.  参数格式统一转换为json
+业务逻辑层
+1.  接收json格式数据，处理业务逻辑，调用数据访问层。
+数据访问层
+2.  业务逻辑持久化数据的中间层。调用数据库或文件系统
+持久化层
+1.基于MyBatis持久化框架
+2.结合sharding-jdbc分表分库
+3.支持多数据库
+
+
+
 前后端完全分离 ajax 和 socket
 //前端架构 angular
 //数据库集成 连接池 Redis 缓存 可配置
@@ -20,6 +41,8 @@ socket 模块
 数据库 及缓存模块
 
 文件模块
+通用 浏览器http 移动端http 文件上传工具
+swfupload
 
 权限模块
 
