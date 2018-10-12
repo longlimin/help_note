@@ -1,6 +1,8 @@
 asdfasdf;
 adf;
 
+SELECT * FROM student
+
 SELECT * FROM launch ;
 
 SELECT * FROM launch where rownum <= 1;
@@ -160,12 +162,12 @@ cache 20;
 
 create  sequence SEQ_student
 minvalue 1
-maxvalue 9999
+maxvalue 99999999
 start with 1000
 increment by 1
 cache 20;
  
-
+select SEQ_student.nextval from dual;
 
 
 --·¹Æ±¼ÆËãÄ£¿é

@@ -159,7 +159,7 @@ git diff aa6492c71ea38371d95f26fc705ebc9be1edfd19 e4514488d2772ea2acb8e62442eaea
 // app/modules/home/templates/todo/moreTodo.html
 // app/modules/home/templates/todo/tableSort.html
 // app/modules/home/templates/todo/todoTable.html
-
+ git diff aaa bbb  --stat --name-only | gzip > package.tar.gz
 
 %H 提交对象（commit）的完整哈希字串
 %h 提交对象的简短哈希字串

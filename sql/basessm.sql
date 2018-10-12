@@ -12,11 +12,18 @@ SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = upper('info') ORDER B
 SELECT t.*,rownum FROM info t;
 SELECT * FROM log_time order by time desc;
 SELECT * FROM loginuser for update;
+
+--文件上传 监控
 SELECT * FROM fileinfo for update;
 SELECT  (select count(*) from file_down_up where fileid=f.id) count,f.* FROM fileinfo f;
 
+SELECT * FROM file_down_up;
+
+
 DELETE FROM fileinfo;
 DELETE FROM file_down_up;
+
+
 
 SELECT * FROM file_down_up;
 SELECT fi.name,fi.id,fi.filesize,fdu.type,fdu.costtime,fdu.time FROM file_down_up fdu,fileinfo fi where fi.id=fdu.fileid;
