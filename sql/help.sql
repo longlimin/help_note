@@ -33,14 +33,6 @@ alter system kill session '783,18455';
 --oracle sql 操作模板
 ---
 create table test(id varchar(20), time date);
-insert into test values('0002', to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss') );
-SELECT  to_char(time, 'yyyy-mm-dd hh24:mi:ss' ), id  FROM test;
-
-SELECT  to_char(  to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') FROM dual
-
-
-
-
 
 
 
@@ -57,6 +49,36 @@ drop  table test  ;
 create table test ( id varchar(20) primary key, time date, num number(3, 1), test varchar(20) not null, value varchar(20) default 'about' );
 create table test2( id varchar(20), tid varchar(20), name varchar(30) );
 create table test3 AS select id,tid from test2 where 1=2; 
+
+
+--select
+
+insert into test values('0002', to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss') );
+SELECT  to_char(time, 'yyyy-mm-dd hh24:mi:ss' ), id  FROM test;
+
+SELECT  to_char(  to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') FROM dual
+--上个月
+select to_char(add_months(trunc(sysdate),1),'yyyy-mm') from dual;
+当前时间减去7分钟的时间
+select  sysdate,sysdate - interval '7' MINUTE  from dual
+当前时间减去7小时的时间
+select  sysdate - interval '7' hour  from dual
+当前时间减去7天的时间
+select  sysdate - interval '7' day  from dual
+当前时间减去7月的时间
+select  sysdate,sysdate - interval '7' month from dual
+当前时间减去7年的时间
+select  sysdate,sysdate - interval '7' year   from dual
+时间间隔乘以一个数字
+select  sysdate,sysdate - 8 *interval '2' hour   from dual
+--临时表 
+with 
+tempTable as (SELECT * FROM test),
+tempTable2 as (SELECT * FROM test)
+SELECT * FROM tempTable,tempTable2 whre a=1;
+
+--计算百分比
+SELECT * FROM round(100 / 200, 4) * 100 || '%' from dual;
 
 --插入表
 insert into test(id, time, test, num) values ('1', sysdate, 'test', '12.1');

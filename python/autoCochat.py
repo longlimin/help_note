@@ -375,7 +375,7 @@ class AutoCochat:
                 # 自发言 且 只有自己auto回复
                 if(self.id != "18408249138"):
                     return
-                # 过滤
+                # 过滤 
                 ff = sessionName.find("陈鹏辉")
                 hh = fro.get("nickName","from").find("许欢")
                 zz = fro.get("nickName","from").find("赵振国")
