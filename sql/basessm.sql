@@ -1,5 +1,7 @@
 asdfasdf;
 adf;
+SELECT * FROM sys_config
+
 
 SELECT * FROM student
 
@@ -14,7 +16,7 @@ SELECT * FROM log_time order by time desc;
 SELECT * FROM loginuser for update;
 
 --文件上传 监控
-SELECT * FROM fileinfo for update;
+SELECT * FROM fileinfo order by path for update ;
 SELECT  (select count(*) from file_down_up where fileid=f.id) count,f.* FROM fileinfo f;
 
 SELECT * FROM file_down_up;
@@ -123,7 +125,7 @@ asdlfjasldf;
 
 
 create table sys_config( key varchar(200) primary key, value varchar(2000), info varchar(2000), time varchar(40) ); 
-
+INSERT INTO sys_config values('db_once', '400', 'database once query max', to_char(sysdate, 'yyyy-mm-dd hh24:mi:ss'));
 
 --创建表/序列/触发器
 create table student( id varchar(20) primary key, name varchar(40), time date  ); 

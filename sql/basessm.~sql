@@ -19,9 +19,7 @@ SELECT  (select count(*) from file_down_up where fileid=f.id) count,f.* FROM fil
 
 SELECT * FROM file_down_up;
 
-
-DELETE FROM fileinfo;
-DELETE FROM file_down_up;
+select * from fileinfo where 1=1  and TYPE in ('png', 'jpg')
 
 
 
@@ -122,8 +120,12 @@ drop table launch;
 
 
 asdlfjasldf;
+
+
+create table sys_config( key varchar(200) primary key, value varchar(2000), info varchar(2000), time varchar(40) ); 
+
+
 --创建表/序列/触发器
---
 create table student( id varchar(20) primary key, name varchar(40), time date  ); 
 --登录用户操作日志info: id, time userid url ip mac 端口
 create table info( id varchar(20) primary key, userid varchar(40), time date, url varchar(100), ip varchar(20), mac varchar(20), port varchar(20), about varchar(200)   ); 

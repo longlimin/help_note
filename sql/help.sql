@@ -76,6 +76,8 @@ with
 tempTable as (SELECT * FROM test),
 tempTable2 as (SELECT * FROM test)
 SELECT * FROM tempTable,tempTable2 whre a=1;
+--exists
+select * from T1 where exists(select 1 from T2 where T1.a=T2.a) ;
 
 --计算百分比
 SELECT * FROM round(100 / 200, 4) * 100 || '%' from dual;

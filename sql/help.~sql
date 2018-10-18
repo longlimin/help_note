@@ -72,10 +72,13 @@ select  sysdate,sysdate - interval '7' year   from dual
 时间间隔乘以一个数字
 select  sysdate,sysdate - 8 *interval '2' hour   from dual
 --临时表 
-with tempTable as (SELECT * FROM test),
-with tempTable2 as (SELECT * FROM test)
+with 
+tempTable as (SELECT * FROM test),
+tempTable2 as (SELECT * FROM test)
 SELECT * FROM tempTable,tempTable2 whre a=1;
 
+--计算百分比
+SELECT * FROM round(100 / 200, 4) * 100 || '%' from dual;
 
 --插入表
 insert into test(id, time, test, num) values ('1', sysdate, 'test', '12.1');
