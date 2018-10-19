@@ -113,7 +113,7 @@ grep -one '.*' obcp-server29.log | grep '.*INFO.*' #查看INFO
 tail -f obcp-server29.log | grep -v '.*INFO.*' #不看INFO
 
 find test | grep '.*.png' #查找当前路径 下 所有文件 深度优先 的 png图片文件
- 
+  
 
 // grep  ############
 {
