@@ -55,7 +55,7 @@ create table test3 AS select id,tid from test2 where 1=2;
 
 insert into test values('0002', to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss') );
 SELECT  to_char(time, 'yyyy-mm-dd hh24:mi:ss' ), id  FROM test;
-
+SELECT substr(to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss:ff'), 0, 23 ) FROM dual; --毫秒 截取
 SELECT  to_char(  to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') FROM dual
 --上个月
 select to_char(add_months(trunc(sysdate),1),'yyyy-mm') from dual;
@@ -81,7 +81,8 @@ select * from T1 where exists(select 1 from T2 where T1.a=T2.a) ;
 
 --计算百分比
 SELECT * FROM round(100 / 200, 4) * 100 || '%' from dual;
-
+--随机数
+SELECT  DBMS_RANDOM.VALUE(1,100) from dual;
 --插入表
 insert into test(id, time, test, num) values ('1', sysdate, 'test', '12.1');
 insert into test(id, time, test, num) values ('3', sysdate, 'test3', '12.2');
