@@ -21,7 +21,7 @@ tasklist|find /i "eclipse.exe" || start "eclipse myself" "D:\eclipse_bak\eclipse
 
 ::editor
 tasklist|find /i "sublime_text" || start "sublime" "D:\Program Files\Sublime Text 3\sublime_text.exe" 
-tasklist|find /i "WebStorm.exe" || start "WebStorm" "D:\Program Files (x86)\JetBrains\WebStorm 11.0.3\bin\WebStorm.exe" 
+rem tasklist|find /i "WebStorm.exe" || start "WebStorm" "D:\Program Files (x86)\JetBrains\WebStorm 11.0.3\bin\WebStorm.exe" 
 
 ::github tool
 tasklist|find /i "SourceTree" || start "SourceTree" "C:\Users\ThinkPad\AppData\Local\SourceTree\SourceTree.exe" 

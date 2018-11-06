@@ -81,7 +81,8 @@ select * from T1 where exists(select 1 from T2 where T1.a=T2.a) ;
 
 --计算百分比
 SELECT * FROM round(100 / 200, 4) * 100 || '%' from dual;
-
+--随机数
+SELECT  DBMS_RANDOM.VALUE(1,100) from dual;
 --插入表
 insert into test(id, time, test, num) values ('1', sysdate, 'test', '12.1');
 insert into test(id, time, test, num) values ('3', sysdate, 'test3', '12.2');
