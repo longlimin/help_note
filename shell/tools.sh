@@ -8,6 +8,7 @@ _toolsres='toolsTemp.txt'
 #toolsShow $@
 function toolsShow(){
     toolsLineLong
+    echo ">>date: "`date "+%Y-%m-%d %H:%M:%S" `
     echo ">>shell: "${0}
     echo ">>params: "$*    
     toolsLineShort  
