@@ -21,7 +21,7 @@ function toolsShowMethod(){
     echo ">>params: "${2}     
     toolsLineShort  
 }
-
+ 
 #toolsMakefile filename.txt
 function toolsMakefile(){
     filename=$1
