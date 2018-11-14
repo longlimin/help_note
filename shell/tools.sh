@@ -15,7 +15,7 @@ function toolsShow(){
 }
 
 #toolsShowMethod $method ${params[*]}
-function toolsShowMethod(){
+function toolsShowMethod(){ 
     #toolsLineShort  
     echo ">>method: "${1}
     echo ">>params: "${2}     
