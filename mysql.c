@@ -11,6 +11,7 @@ update user set password<authentication_string> = pasword('ruaho1234') where use
 //安全模式
 safemode
 
+
 //Backup 备份
 mysqldump -uroot -proot student > student.sql;	//导出 导入
 mysql -uroot -proot student < student.sql;	//~当前用户根root目录 /根目录

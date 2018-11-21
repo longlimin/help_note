@@ -72,63 +72,6 @@ SQL>alter system disable restricted session;
 
 
 
-1. 复制表结构及其数据： 
-create table table_name_new as select * from table_name_old 
-2. 只复制表结构： 
-create table table_name_new as select * from table_name_old where 1=2; 
-create table table_name_new like table_name_old 
-3. 只复制表数据： 
-如果两个表结构一样： 
-insert into table_name_new select * from table_name_old 
-如果两个表结构不一样： 
-insert into table_name_new(column1,column2...) select column1,column2... from table_name_old
- 
-
---定长位数补齐
- select 'SCJS' || lpad(SEQ_T_CONTRACT_THREE.nextval,3, '0') from dual 
- --序列创建
-create sequence SEQ_T_CONTRACT_THREE
-minvalue 1
-maxvalue 999
-start with 1
-increment by 1
-cache 20;
-1、给用户解锁 
-alter user scott account unlock; 
-2、注销、断开、切换当前用户连接 
-quit
-conn scott/tiger
- 3、用户权限查询
-A .查看所有用户：
-select * from dba_users;
-select * from all_users;
-select * from user_users;
-B.查看用户或角色系统权限(直接赋值给用户或角色的系统权限)：
-select * from dba_sys_privs;
-select * from user_sys_privs;
-C.查看角色(只能查看登陆用户拥有的角色)所包含的权限
-select * from role_sys_privs;
-D.查看用户对象权限：
-select * from dba_tab_privs;
-select * from all_tab_privs;
-select * from user_tab_privs;
-E.查看所有角色：
-select * from dba_roles;
-F.查看用户或角色所拥有的角色：
-select * from dba_role_privs; s
-elect * from user_role_privs;
-G.查看哪些用户有sysdba或sysoper系统权限(查询时需要相应权限)
-select * from V$PWFILE_USERS
-4、用户管理
-A、创建用户
-create user username identified by password;
-create user username identified by password default tablespace users quota 10M on users;
-B、修改密码
-alter user username identified by pass;
-密码就从password改成pass了；同样登陆后输入password也可以修改密码
-C、删除用户
-drop user username;
-drop user username cascade;
 
 大多情况都可以用Oracle数据导入导出完成数据的备份和还原（不会造成数据的丢失）。
  Oracle有个好处，虽然你的电脑不是服务器，但是你装了oracle客户端，并建立了连接
@@ -152,7 +95,7 @@ drop user username cascade;
  3 将数据库中的表table1 、table2导出
    exp system/manager@TEST file=d:\daochu.dmp tables=(table1,table2) 
  4 将数据库中的表table1中的字段filed1以"00"打头的数据导出
-   exp system/manager@TEST file=d:\daochu.dmp tables=(table1) query=\" where filed1 like  '00%'\"
+   exp system/manager@TEST file=d:\daochu.dmp tables=(table1) query=\" where filed1 like  '00%'\" '"
        上面是常用的导出，对于压缩我不太在意，用winzip把dmp文件可以很好的压缩。
                      不过在上面命令后面 加上 compress=y  就可以了
 数据的导入
