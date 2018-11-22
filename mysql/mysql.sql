@@ -9,6 +9,6 @@ show variables like ‘SQL_SAFE_UPDATES‘;
 SET SQL_SAFE_UPDATES = 0;
 
 
-
+ 
 
 
