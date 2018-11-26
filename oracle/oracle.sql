@@ -111,8 +111,14 @@ insert into test(id, time, test, num) values ('3', sysdate, 'test3', '12.2');
 insert into test(id, time, test, num) 
 values ('2', to_date('1000-12-12 22:22:22','yyyy-mm-dd hh24:mi:ss'), 'test', '12.1');
 insert into test2 values('1212', '1', 'name1');
---修改数据
+--update
 update  test set pwd=MD5('cc'||id||MD5('cc'||id||'qwer')) where id='admin';
+--查润update 单行操作
+update test
+SET(id,test,value)=(SELECT 'No.'||rownum newId,num,value FROM test WHERE 1=1 and id='1')
+WHERE id='1';
+SELECT * FROM test;
+
 --删除数据
 DELETE FROM test where 1=1 and id = 'aaa';
 --删除所有表数据
