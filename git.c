@@ -283,3 +283,20 @@ gnutls_handshake() failed: The TLS connection was non-properly terminated.
 sudo vim /etc/resolv.conf
 nameserver  223.5.5.5
 nameserver  223.6.6.6
+
+
+//git 回滚
+git reflog
+57541c2 HEAD@{0}: pull origin master: Fast-forward
+3915130 HEAD@{1}: commit: Fri Mar 16 09:07:03 DST 2018
+cc7b6de HEAD@{17}: commit: Thu Nov 30 15:10:42 DST 2017
+77b1fc9 HEAD@{18}: commit: datepicker button
+ad863f7 HEAD@{19}: commit (initial): start
+
+
+git reset --hard 3915130
+Unlink of file 'pro/WEB-INF/lib/DSPClient-1.0.2018092600.jar' failed. Should I t 
+ry again? (y/n) 
+y
+
+
