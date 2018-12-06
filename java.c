@@ -14,6 +14,10 @@ PATH
 javap -v ServiceImpl.class
 javap -verbose ServiceImpl.class
 
+eclipse启动jvm内存
+eclipse启动程序 jvm 内存不够oom
+Jdk edit 附加参数
+-Xmx1024M
 
 
 J2SE 8 = 52,
