@@ -9,7 +9,7 @@ startup;     --启动
 show parameter processes;  --查看进程参数配置
 
 ---
----oracle管理
+---oracle管理 
 ---
 
 --查看字符编码
@@ -17,12 +17,14 @@ select userenv('language') from dual;
 select * from V$NLS_PARAMETERS;
 SELECT VALUE FROM nls_database_parameters WHERE parameter='NLS_CHARACTERSET'
 
---查看会话连接 锁 关闭会话
+--查看会话连接 锁 关闭会话 sysdba
 select session_id from v$locked_object;
-select sid, serial#, username, osuser from v$session where sid=783;
+select sid, serial#, username, osuser from v$session;-- where sid=783;
 alter system kill session '783,18455';
 
-
+select b.owner, b.object_name, a.session_id, a.locked_mode 
+from v$locked_object a, dba_objects b
+where b.object_id = a.object_id;
 
 ---
 ---用户管理
