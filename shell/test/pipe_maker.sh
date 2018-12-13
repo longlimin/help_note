@@ -5,45 +5,34 @@
 ########################################### 
 
 echo 'pipe maker start'
-echo 'pid.'$$
+echo $$
 
-tempfifo='make.'$$'.fifo'
+tempfifo=$$'.fifo'
 
 
 # exec 1000>&-;表示关闭文件描述符1000的写
 # exec 1000<&-;表示关闭文件描述符1000的读
 trap "exec 1000>&-;exec 1000<&-;exit 0" 2 #捕获中断命令 
 
-mkfifo -m 0644 $tempfifo # 创建一个管道文件
+mkfifo  $tempfifo # 创建一个管道文件
 # 将文件描述符1000与FIFO进行绑定，<读的绑定，>写的绑定，<>则标识对文件描述符1000的所有操作等同于对管道文件$tempfifo的操作
 exec 1000<>$tempfifo #创建文件标示符“5”，这个数字可以为除“0”、“1”、“2”之外的所有未声明过的字符，以读写模式操作管道文件；系统调用exec是以新的进程去代替原来的进程，但进程的PID保持不变，换句话说就是在调用进程内部执行一个可执行文件
 rm -rf $tempfifo #清除创建的管道文件
-for ((i=1; i<=5; i++))
+for ((i=1; i<=8; i++))
 do
-    echo "source."$i >&1000
+    echo "count="$i >&1000
+
 done
 
 
 
-#定时打印资源列表
-echo 'show source list: '
-for ((i=1; i<=99999; i++))
-do
-    read -u1000 readStr
-    echo $i"."$readStr
-    echo $readStr >&1000
-    sleep 10
+# read -u1000 读取行 阻塞
+for ((i=1; i<=18; i++))
+    readStr=`read -u1000`
+    {
+        echo "read: "$readStr
+    } &
 done
-
-# read -u1000 读取行 阻塞 
-# for ((i=1; i<=18; i++))
-# do
-#     read -u1000 readStr
-#     {
-#         echo "get Source: "$readStr
-#         echo $i"."$readStr >&1000
-#     } &
-# done
 
 
 wait
