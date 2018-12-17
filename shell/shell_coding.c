@@ -215,165 +215,29 @@ Mon Feb 18 13:11:58 CST 2013
 
 
 //进程并发数控制 管道 同步
-{
-最近小A需要生产2015年全年的KPI数据报表，现在小A已经将生产脚本写好了，生产脚本一次只能生产指定一天的KPI数据，假设跑一次生产脚本需要5分钟，那么： 
-* 如果是循环顺序执行，那么需要时间：5 * 365 = 1825 分钟，约等于 6 天 
-* 如果是一次性放到linux后台并发执行，365个后台任务，系统可承受不住哦！
-
-既然不能一次性把365个任务放到linux后台执行，那么，能不能实现自动地每次将N个任务放到后台并发执行呢？当然是可以的啦。
-
-#! /bin/bash
-source /etc/profile;
-
-# -----------------------------
-
-tempfifo=$$.fifo        # $$表示当前执行文件的PID
-begin_date=$1           # 开始时间 $1表示脚本入参的第一个参数，等于2015-01-01
-end_date=$2             # 结束时间$2表示脚本入参的第二个参数，等于2015-12-01
-
-if [ $# -eq 2 ] #表示脚本入参的个数，等于2 第6～22行：比如：sh loop_kpi_report.sh 2015-01-01 2015-12-01： 
-then
-    if [ "$begin_date" \> "$end_date" ] #第13行用于比较传入的两个日期的大小，\>是转义
-    then
-        echo "Error! $begin_date is greater than $end_date"
-        exit 1;
-    fi
-else
-    echo "Error! Not enough params."
-    echo "Sample: sh loop_kpi 2015-12-01 2015-12-07"
-    exit 2;
-fi
-
-# -----------------------------
-
-#// 第26行：表示在脚本运行过程中，如果接收到Ctrl+C中断命令，则关闭文件描述符1000的读写，并正常退出 
-#// exec 1000>&-;表示关闭文件描述符1000的写
-#// exec 1000<&-;表示关闭文件描述符1000的读
-#// trap是捕获中断命令
-#第28行，将文件描述符1000与FIFO进行绑定，<读的绑定，>写的绑定，<>则标识对文件描述符1000的所有操作等同于对管道文件$tempfifo的操作
-trap "exec 1000>&-;exec 1000<&-;exit 0" 2
-#创建一个管道文件
-mkfifo $tempfifo 
-#第29行，可能会有这样的疑问：为什么不直接使用管道文件呢？事实上这并非多此一举，管道的一个重要特性，就是读写必须同时存在，缺失某一个操作，另一个操作就是滞留，而第28行的绑定文件描述符（读、写绑定）正好解决了这个问题
-
-exec 1000<>$tempfifo
-rm -rf $tempfifo
-
-#第31～34行：对文件描述符1000进行写入操作。通过循环写入8个空行，这个8就是我们要定义的后台并发的线程数。为什么是写空行而不是写其它字符？因为管道文件的读取，是以行为单位的
-for ((i=1; i<=8; i++))
-do
-    echo "item"$i >&1000
-done
-
-while [ $begin_date != $end_date ]
-do
-#第37行，read -u1000的作用就是读取管道中的一行，在这里就是读取一个空行；每次读取管道就会减少一个空行
-    read -u1000 value
-    {
-        echo $value
-        #第41行，执行完后台任务之后，往文件描述符1000中写入一个空行。这是关键所在了，由于read -u1000每次操作，都会导致管道减少一个空行，当linux后台放入了8个任务之后，由于文件描述符1000没有可读取的空行，将导致read -u1000一直处于等待。
-        echo >&1000
-    } &
-    #第39～41行，注意到第42行结尾的&吗？它表示进程放到linux后台中执行
-
-    begin_date=`date -d "+1 day $begin_date" +"%Y-%m-%d"`
-done
-
-wait
-echo "done  "
-
-
-}
-
-
-
-
-
-
-
-
-
-
+见pipe_maker.sh 案例
 
 ////////////////////////////自动化输入 expect
 spawn ./update.sh
-
 expect "Username for 'https://gitee.com'"
-
 send -- "617772977@qq.com\n"
-
 expect "Password for 'https://617772977@qq.com@gitee.com'"
-
 send -- "这里替换成你自己的密码就好了\n"
-
 interact
+////////////////////////////自动化输入 管道
+#! /bin/bash
+read -p "enter number:" no
+read -p "enter name:" name
+echo you have entered $no, $name
 
-////////////////////////自动化输入 管道
+// 管道输入
+echo -e '222\nbbb' | ./exe_reader.sh
 
-#===========autotelnet.sh==============
-#!/bin/bash
-if (( $# != 1 ))
-then
-  echo " usage: $0 address "
-  exit 1
-fi
-ip=$1
-inp1=`cat param |grep "$ip" |awk '{ print $2 }'`
-inp2=`cat param |grep "$ip" |awk '{ print $3 }'`
-inp3=`cat param |grep "$ip" |awk '{ print $4 }'`
-
-inputfile=in
-outputfile=out
-rm -fr $inputfile
-rm -fr $outputfile
-mknod $inputfile p
-touch $outputfile
-
-#file description 7 for out and 8 for in
-exec 7<>$outputfile
-exec 8<>$inputfile
-
-telnet $ip <&8 >&7 &
-
-sleep 1; echo $inp1 >> $inputfile
-sleep 1; echo $inp2 >> $inputfile
-sleep 1; echo $inp3 >> $inputfile
-
-tail -f $outputfile &
-
-while true
-do
-  read str
-  if [[ $str = "quit" || $str = "exit" ]]
-  then echo $str >> $inputfile ; exit
-  else echo $str >> $inputfile
-  fi
-done
-#==================================
+//文件管道输入
+./exe_reader.sh < filename.txt
 
 
-参数文件, 输入在出现正常提示符之前需要输入的所有内容, 用空格分开, 以ip地址或者hostname开头
-#=====param============
-localhost root password
 
-#=====================
-
-原理就是
-建立一个管道文件，$inputfile
-建立一个临时文件，$outputfile
-分别作为 telnet 程序的输入输出。
-
-然后以后再向 $input 中写的东西
-就会传递个 telnet 的标准输入。
-exec 7<>filename
-
-把file descriptor 7 ，做为打开文件 filename 。
-
-以后的子进程都会继承父进程所打开的FD
-
-所以 telnet <&8 >&7 才起作用。
-
-关于 File descriptor 还有输入输出重定向，
 
 
 
