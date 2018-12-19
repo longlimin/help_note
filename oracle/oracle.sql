@@ -30,13 +30,12 @@ select b.owner, b.object_name, a.session_id, a.locked_mode
 from v$locked_object a, dba_objects b
 where b.object_id = a.object_id;
 
-select value from v$parameter where name = 'processes' --数据库允许的最大连接数
+select value from v$parameter where name = 'processes'; --数据库允许的最大连接数
+show parameter processes; --最大连接
 alter system set processes=500 scope=spfile; --设置进程数量
 alter system set sessions=500 scope=spfile;--设置会话数量
 shutdown immediate;           --关闭  
-startup;     --启动
-show parameter processes;  --查看进程参数配置
-
+startup;     --启动 
 
 ---
 ---用户管理
@@ -261,7 +260,7 @@ select
 ,(case when t.id='1' then '省公司1' when t.id='2' then '省公司2' else '分公司' end) name
  from test t;
 
---文件大小计算文本函数
+--自定义函数 文件大小计算文本
 CREATE OR REPLACE FUNCTION FILE_SIZE(n IN VARCHAR2) RETURN VARCHAR2 IS retval varchar2(32);
 BEGIN
  retval := '';
