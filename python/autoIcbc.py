@@ -96,29 +96,24 @@ class Auto:
     # 认证登录
     def login(self):
         self.out("访问主页 获取 token session")
-        responce = self.http.doGet('http://drrr.com/')
+# "http://content.icbc.com.cn/site1/a5f9ff6d068a46e68d363426ca69bd07/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=1545268253550"
+        ttt = '1545268253550' #str(tool.getNowTime())
+        kkk = 'a5f9ff6d068a46e68d363426ca69bd07'
+        url = "http://content.icbc.com.cn/site1/" + kkk + "/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=" + ttt
+        
+        responce = self.http.doGet(url)
         re = responce.read()
         soup =BeautifulSoup.BeautifulSoup(re)
-        nameList = soup.findAll('input',{'name':{'token'}})
+        nameList = soup.findAll('button',{'id':{'login_btn'}})
         if(len(nameList) > 0):
-            token = nameList[0]['data-value']
-            token = tool.encode(token)
+            self.out(nameList)
             self.out("抓取成功: ")
-            self.out("token\t " + token)
             self.out("cookie\t " + tool.toString(self.http.getCookie()))
             self.out("模拟登录")
-            responce=self.http.doPost('http://drrr.com/', {
-                        "name":name,
-                        "login":"ENTER",
-                        "token":token,
-                        "direct-join":"",
-                        "language":"zh-CN",
-                        "icon":icon,
-                })
-            if(responce != "error"):
-                return True
-            else:
-                return False
+# http://content.icbc.com.cn/cmp/AuthSkipController.do?method=authSkip&ajaxRequest=true
+            url = "http://content.icbc.com.cn/cmp/AuthSkipController.do?method=authSkip&ajaxRequest=true"
+            json=self.http.doJson(url)
+            self.out((json))
         else:
             self.out("error！ 没能抓取到token")
         return False

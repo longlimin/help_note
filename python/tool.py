@@ -183,7 +183,10 @@ def calcTime(mills=60000):
     else:
         res = str(mills) + "ms"
     return res
-
+# 日志输出
+def out(obj):
+    print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + str(obj))
+    return
 
 
 

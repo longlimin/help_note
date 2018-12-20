@@ -127,6 +127,7 @@ class Http:
     def doGet(self, url):
         response = "error" 
         try:
+            self.out(url)
             response = self.opener.open(url)
             # self.show(response)
         except Exception as e:
@@ -137,8 +138,10 @@ class Http:
     def doPost(self, url=None, postData=None):
         response = "error" 
         try:
+            self.out(url)
             if(postData != None):
                 postData = urllib.urlencode(postData)
+                self.out(postData)
                 response = self.opener.open(url, postData) 
             else:
                 response  = self.opener.open(url)
