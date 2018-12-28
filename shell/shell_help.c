@@ -1,4 +1,4 @@
-uname -a  //查看系统信息
+xuname -a  //查看系统信息
 cat /proc/version //正在运行的内核版本。
 cat /etc/issue //显示的是发行版本信息
 cat /proc/cpuinfo | more/less //分页查看
