@@ -1,4 +1,4 @@
-rMakefile的书写规则。
+wrMakefile的书写规则。
 
 在Makefile中的命令，必须要以[Tab]键开始。
 顺序找寻文件名为“GNUmakefile”、“makefile”、“Makefile”

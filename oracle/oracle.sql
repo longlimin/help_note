@@ -17,7 +17,8 @@ select count(*) from v$process; --查看进程数量
 SELECT * FROM v$process;
 select count(*) from v$session; --查看会话
 SELECT * FROM v$session;
-SELECT * FROM v$session where status='ACTIVE'; --并发连接数
+SELECT * FROM v$session 
+where status='ACTIVE'; --并发连接数
 
 
 
