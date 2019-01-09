@@ -668,14 +668,10 @@ PID=$$
 
 # 查看当前进程的文件描述符指向
 ll /proc/$PID/fd
-echo "-------------------";echo
 
 # 文件描述符1与文件tempfd1进行绑定
 ( [ -e ./tempfd1 ] || touch ./tempfd1 ) && exec 1<>./tempfd1
 
-# 查看当前进程的文件描述符指向
-ll /proc/$PID/fd
-echo "-------------------";echo; 
 [ouyangyewei@localhost learn_linux]$ sh learn_redirect.sh 
 total 0
 lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 0 -> /dev/pts/0
@@ -754,6 +750,25 @@ sudo dpkg-reconfigure dash
 
 //回响
 ///$ echo -e ${PATH////'\n'}
+ -n 不尾随换行符 文件追加 lf lrlf异常
+  -e 启用解释反斜杠的转义功能
+  -E 禁用解释反斜杠的转义功能(默认)
+      --help 显示此帮助信息并退出
+      --version 显示版本信息并退出
+若-e 可用，则以下序列即可识别：
+  \\    反斜杠
+  \a    响铃声
+  \b    退格
+  \c    不再产生新的输出
+  \e    转义符  
+  \f    换页
+  \n    新行
+  \r    回车
+  \t    水平制表符
+  \v    竖直制表符
+  \0NNN   字节数以八进制数 NNN (1至3位)表示
+  \xHH    字节数以十六进制数 HH (1至2位)表示
+
 //邮件
 安装 Evolution 
 有PPA可用，支持 Ubuntu 14.04 及衍生系统。打开终端，输入以下命令： 

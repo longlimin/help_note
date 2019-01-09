@@ -147,7 +147,7 @@ git tag -a start.1.0 558151a 忘了给某个提交打标签，又将它发布了
 
 //git 日志格式化
 git log --pretty=format:"%H %an %cd %cr"
-git log --pretty=format:"%H %an %cd %cr" --after="2018-4-09 17:37:42" --before="2022-11-06 17:45:42"
+git log --date=iso --pretty=format:"%H %an %cd %cr" --after="2018-4-09 17:37:42" --before="2022-11-06 17:45:42"
 // aa6492c71ea38371d95f26fc705ebc9be1edfd19 chenpenghui Wed Apr 11 10:41:03 2018 +0800 36 minutes ago
 // e4514488d2772ea2acb8e62442eaea6e3331dbec chenpenghui Tue Apr 10 15:34:20 2018 +0800 20 hours ago
 // e68d8075414572e8097e312dd02e2dfefc45a358 chenpenghui Mon Apr 9 18:42:27 2018 +0800 2 days ago
@@ -169,7 +169,7 @@ git diff aa6492c71ea38371d95f26fc705ebc9be1edfd19 e4514488d2772ea2acb8e62442eaea
 %p 父对象的简短哈希字串
 %an 作者（author）的名字
 %ae 作者的电子邮件地址
-%ad 作者修订日期（可以用-date= 选项定制格式）
+%ad 作者修订日期（可以用--date= 选项定制格式） --date=iso local rfc short raw relative
 %ar 作者修订日期，按多久以前的方式显示
 %cn 提交者(committer)的名字
 %ce 提交者的电子邮件地址
