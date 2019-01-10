@@ -9,8 +9,8 @@ _root=''
 _roots=( '/mnt/f' '/mnt/e' '/home/walker/e' )
 for ((i=0; i<${#_roots[@]}; i++))
 do
-    local ddir=${_roots[$i]}
-    if [ ! -d "$ddir" ]
+    ddir=${_roots[$i]}
+    if [ -d "$ddir" ]
     then
         _root=$ddir
         break
