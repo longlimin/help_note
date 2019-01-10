@@ -5,12 +5,19 @@
 ###########################################
 source tools.sh
 
+_root=''
+_roots=( '/mnt/f' '/mnt/e' '/home/walker/e' )
+for ((i=0; i<${#_roots[@]}; i++))
+do
+    local ddir=${_roots[$i]}
+    if [ ! -d "$ddir" ]
+    then
+        _root=$ddir
+        break
+    fi
+done
+echo 'System root: '$_root
 
-_root='/mnt/f'
-if [ ! -d "$_root" ]
-then
-    _root='/mnt/e'
-fi
 _help=$_root'/help_note'
 _shell=$_root'/help_note/shell'
 _python=$_root'/help_note/python'
@@ -20,7 +27,7 @@ _server=$_root'/help_note/python/server'
 _temp='constant.sh'   #临时变量 用于临时存储导入文件名
 
 # log files
-_nowday=$(date "+%Y-%m-%d")     #2018-3-20 避免大量长期日志堆积大文件
+_nowday=$(date "+%Y-%m")     #2018-3-20 避免大量长期日志堆积大文件-%d
 git_log=$_root'/git.log' #$_nowday'.log'
 server_python_socket_log=$_root'/python.socket.log' #$_nowday'.log'  
 server_python_web_log=$_root'/python.web.log' #$_nowday'.log'

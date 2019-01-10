@@ -15,7 +15,7 @@ source do_clean.sh
 #_root='/mnt/e'
 #_shell=$_root"/help_note/shell"
 
-#echo $git_log
+echo 'Git log file: '$git_log
  
 git config --global user.name 'Walker'  
 git config --global user.email '1424234500@qq.com'  

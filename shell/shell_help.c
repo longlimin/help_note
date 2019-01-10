@@ -43,7 +43,6 @@ touch test.txt //创建文件
 
     id  查看当前用户组及其他状态
 	apt-cache madison python-rpi.gpio	查看安装 的软件版本
-	sudo killall -9 nginx
     tar -xvf 解压
     tar -zvf 
     unzip opencv-2.4.13.zip
@@ -113,7 +112,6 @@ grep -one '.*' obcp-server29.log | grep '.*INFO.*' #查看INFO
 tail -f obcp-server29.log | grep -v '.*INFO.*' #不看INFO
 
 find test | grep '.*.png' #查找当前路径 下 所有文件 深度优先 的 png图片文件
-  
 
 // grep  ############
 {
@@ -147,10 +145,10 @@ PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件
 
 
 //设置时间
-sudo ntpd -s -d  //自动同步 
-sudo date --s="2014-08-21 12:33:22" //手动设置
+ntpd -s -d  //自动同步 
+date --s="2014-08-21 12:33:22" //手动设置
 配置服务
-sudo vim /etc/ntpconf
+vim /etc/ntpconf
 # You do need to talk to an NTP server or two (or three).
 # server ntp.your-provider.example
 在下面添加以下内容，是一些亲测可用的ntp服务器。第一行最后的perfer表示优先使用此服务器，也就是复旦大学的ntp服务器。添加之后按Ctrl+X保存退出。
@@ -159,46 +157,108 @@ server time.asia.apple.com iburst
 server asia.pool.ntp.org iburst
 server ntp.nict.jp iburst
 server time.nist.gov iburst
-sudo /etc/init.d/ntp restart    //重启
+/etc/init.d/ntp restart    //重启
 
 
 //日期date格式化
 1.date "+%Y-%m-%d"  
 2.2013-02-19  
-3.[root@root ~]# date "+%H:%M:%S"  
+date "+%H:%M:%S"  
 4.13:13:59  
-5.[root@root ~]# date "+%Y-%m-%d %H:%M:%S"  
+date "+%Y-%m-%d %H:%M:%S"  
 6.2013-02-19 13:14:19  
-7.[root@root ~]# date "+%Y_%m_%d %H:%M:%S"    
+date "+%Y_%m_%d %H:%M:%S"    
 8.2013_02_19 13:14:58  
-9.[root@root ~]# date -d today   
+date -d today   
 10.Tue Feb 19 13:10:38 CST 2013  
-11.[root@root ~]# date -d now  
+date -d now  
 12.Tue Feb 19 13:10:43 CST 2013  
-13.[root@root ~]# date -d tomorrow  
+date -d tomorrow  
 14.Wed Feb 20 13:11:06 CST 2013  
-15.[root@root ~]# date -d yesterday  
+date -d yesterday  
 16.Mon Feb 18 13:11:58 CST 2013  
 
 //源配置
 {
-sudo vim /etc/apt/sources.list                                                 
+
+vim /etc/apt/sources.list                                                 
+
+	//for pi
 deb http://mirrors.aliyun.com/raspbian/raspbian/ stretch main contrib non-free rpi 
 
 
-# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
-deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+	//for pc	
 
-# 预发布软件源，不建议启用
-# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX-backports main restricted universe multiverse
+#deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX main restricted universe multiverse
+#deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX-security main restricted universe multiverse
+#deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX-updates main restricted universe multiverse
+#deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX-proposed main restricted universe multiverse
+#deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX-backports main restricted universe multiverse 
+
+
+//default ubuntu copy
+#deb cdrom:[Ubuntu 18.04.1 LTS _Bionic Beaver_ - Release amd64 (20180725)]/ bionic main restricted
+
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+deb http://cn.archive.ubuntu.com/ubuntu/ bionic main restricted
+# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic main restricted
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb http://cn.archive.ubuntu.com/ubuntu/ bionic-updates main restricted
+# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-updates main restricted
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://cn.archive.ubuntu.com/ubuntu/ bionic universe
+# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic universe
+deb http://cn.archive.ubuntu.com/ubuntu/ bionic-updates universe
+# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-updates universe
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
+## team, and may not be under a free licence. Please satisfy yourself as to 
+## your rights to use the software. Also, please note that software in 
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb http://cn.archive.ubuntu.com/ubuntu/ bionic multiverse
+# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic multiverse
+deb http://cn.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
+# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
+
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+deb http://cn.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse
+# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse
+
+## Uncomment the following two lines to add software from Canonical's
+## 'partner' repository.
+## This software is not part of Ubuntu, but is offered by Canonical and the
+## respective vendors as a service to Ubuntu users.
+# deb http://archive.canonical.com/ubuntu bionic partner
+# deb-src http://archive.canonical.com/ubuntu bionic partner
+
+deb http://security.ubuntu.com/ubuntu bionic-security main restricted
+# deb-src http://security.ubuntu.com/ubuntu bionic-security main restricted
+deb http://security.ubuntu.com/ubuntu bionic-security universe
+# deb-src http://security.ubuntu.com/ubuntu bionic-security universe
+deb http://security.ubuntu.com/ubuntu bionic-security multiverse
+# deb-src http://security.ubuntu.com/ubuntu bionic-security multiverse
+
+//then config dns 8.8.8.8 ??? proxy
+
+
+
+
 }
 
 //源配置 suse
@@ -238,23 +298,24 @@ zypper ar http://download.opensuse.org/update/11.3/suse update
 }
 //apt-get
 {
-sudo apt autoremove 自动删除无依赖包
-sudo apt-get update  更新源
-sudo apt-get install package 安装包
-sudo apt-get remove package 删除包
-sudo apt-cache search package 搜索软件包
-sudo apt-cache show package  获取包的相关信息，如说明、大小、版本等
-sudo apt-get install package --reinstall  重新安装包
-sudo apt-get -f install  修复安装
-sudo apt-get remove package --purge 删除包，包括配置文件等
-sudo apt-get build-dep package 安装相关的编译环境
-sudo apt-get upgrade 更新已安装的包
-sudo apt-get dist-upgrade 升级系统
-sudo apt-cache depends package 了解使用该包依赖那些包
-sudo apt-cache rdepends package 查看该包被哪些包依赖
-sudo apt-get source package  下载该包的源代码
-sudo apt-get clean && sudo apt-get autoclean 清理无用的包
-sudo apt-get check 检查是否有损坏的依赖
+apt autoremove 自动删除无依赖包
+apt-get update  更新源
+apt-get upgrade 更新已安装的包
+apt-get dist-upgrade 更新已安装的包 and auto dependcy
+apt-get install python<=2.7> <--reinstall> 安装包
+apt-get remove package 删除包
+apt-get remove package --purge 删除包，包括配置文件等
+apt-cache search package 搜索软件包
+apt-cache show package  获取包的相关信息，如说明、大小、版本等
+apt-get -f install  修复安装
+apt-get -f -y install  ???
+
+apt-get build-dep package 安装相关的编译环境
+apt-cache depends package 了解使用该包依赖那些包
+apt-cache rdepends package 查看该包被哪些包依赖
+apt-get source package  下载该包的源代码
+apt-get clean && apt-get autoclean 清理无用的包
+apt-get check 检查是否有损坏的依赖
 //指定版本安装
 apt-cache madison <<package name>>
 将列出所有来源的版本。如下输出所示：
@@ -265,14 +326,14 @@ apt-cache madison vim
    vim | 2:7.3.429-2 | http://debian.mirrors.tds.net/debian/ testing/main Sources
    vim | 2:7.3.547-1 | http://debian.mirrors.tds.net/debian/ unstable/main Sources
 apt-get install <<package name>>=<<version>>
-sudo apt-get install openssh-client=1:6.6p1-2ubuntu1
+apt-get install openssh-client=1:6.6p1-2ubuntu1
 }
 //apt-get install gcc gcc-c++ //c++编译需要
 
 //opencv
 {
 //这是win10下的子系统ubuntu终端使用的依赖
-sudo apt-get install \ 
+apt-get install \ 
     libopencv-dev \         ##
     build-essential \ 
     checkinstall \ 
@@ -316,21 +377,21 @@ sudo apt-get install \
 apt-cache madison vim
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!需要配置专业的源pi专用最新 自动识别依赖
 // 安装build-essential、cmake、git和pkg-config
-sudo apt-get install build-essential cmake git pkg-config
+apt-get install build-essential cmake git pkg-config
 // 安装jpeg格式图像工具包
-sudo apt-get install libjpeg8-dev  
+apt-get install libjpeg8-dev  
 // 安装tif格式图像工具包 
-sudo apt-get install libtiff5-dev   
+apt-get install libtiff5-dev   
 // 安装JPEG-2000图像工具包
-sudo apt-get install libjasper-dev 
+apt-get install libjasper-dev 
 // 安装png图像工具包
-sudo apt-get install libpng12-dev 
+apt-get install libpng12-dev 
 //再安装视频I/O包（注意最后一个包的数字“4”后面是“L”）：
-sudo apt-get install ffmpeg libavcodec-dev libavformat-dev  libavdevice-dev libswscale-dev libv4l-dev
+apt-get install ffmpeg libavcodec-dev libavformat-dev  libavdevice-dev libswscale-dev libv4l-dev
 //下面安装gtk2.0（树莓派很可能下载错误，更换中科大或者清华源即可，ubuntu有可能出现包版本过高的情况，需要将依赖包降级安装）：
-sudo apt-get install libgtk2.0-dev
+apt-get install libgtk2.0-dev
 //优化函数包：
-sudo apt-get install libatlas-base-dev gfortran
+apt-get install libatlas-base-dev gfortran
  打开源码文件夹，这里以我修改文章时最新的3.4.1为例
 //开始编译
 cd opencv-3.4.1
@@ -343,13 +404,13 @@ cd release
 
 // CMAKE_BUILD_TYPE是编译方式，CMAKE_INSTALL_PREFIX是安装目录，OPENCV_EXTRA_MODULES_PATH是加载额外模块，INSTALL_PYTHON_EXAMPLES是安装官方python例程，BUILD_EXAMPLES是编译例程（这两个可以不加，不加编译稍微快一点点，想要C语言的例程的话，在最后一行前加参数INSTALL_C_EXAMPLES=ON \）
 
-sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
     -D INSTALL_PYTHON_EXAMPLES=ON \
     -D BUILD_EXAMPLES=ON ..
 
-sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
  -D CMAKE_INSTALL_PREFIX=/usr/local \
  -D INSTALL_C_EXAMPLES=ON \
  -D INSTALL_PYTHON_EXAMPLES=ON \
@@ -363,20 +424,20 @@ message(FATAL_ERROR "FFMPEG: test check build log:\n${TRY_OUT}")
 之后开始正式编译过程（如果之前一步因为网络问题导致cmake下载缺失文件失败的话，可以尝试使用手机热点，并将release文件夹删除掉，重新创建release文件夹并cmake）：
 
 // 编译，以管理员身份，否则容易出错
-sudo make
+make
 // 安装
-sudo make install
+make install
 // 更新动态链接库
-sudo ldconfig 
+ldconfig 
 
 
-sudo pip install --upgrade setuptools
-sudo pip install numpy Matplotlib scipy
+pip install --upgrade setuptools
+pip install numpy Matplotlib scipy
 //////////////////////////////////////////////////////////
 在release目录下寻找lib目录里的cv2.so，
 这个是python需要的，将其拷贝到python的库目录里。一般情况下是在
 “/usr/local/lib/python2.7/dist-packages”里。
-sudo cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
+cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
  
 默认pkg-config(笔者的安装版本） 只会寻找 
 /usr/share/pkgconfig/*.pc 和 */
@@ -392,25 +453,25 @@ export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig;$PKG_CONFIG_PATH
 
 //需要清理build 重新cmake
 
-sudo apt-get install gtk+-3.0 gstreamer-base-1.0 gstreamer-video-1.0 gstreamer-app-1.0 gstreamer-riff-1.0 gstreamer-pbutils-1.0 libdc1394-2 libdc1394 
+apt-get install gtk+-3.0 gstreamer-base-1.0 gstreamer-video-1.0 gstreamer-app-1.0 gstreamer-riff-1.0 gstreamer-pbutils-1.0 libdc1394-2 libdc1394 
 
-sudo apt-get install libgphoto2-dev gstreamer0.10-* libdc1394-*
-sudo apt-get install libgphoto2-dev
-sudo apt-get install gstreamer0.10-*
-sudo apt-get install libdc1394-*
-// sudo apt-get install libopencv-dev //??????????自编译非此
-// sudo apt-get install python-opencv
+apt-get install libgphoto2-dev gstreamer0.10-* libdc1394-*
+apt-get install libgphoto2-dev
+apt-get install gstreamer0.10-*
+apt-get install libdc1394-*
+// apt-get install libopencv-dev //??????????自编译非此
+// apt-get install python-opencv
 
 //////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
 //whatweb
-sudo apt-get install whatweb
+apt-get install whatweb
 异常/usr/bin/whatweb: /usr/lib/ruby/vendor_ruby/rchardet/universaldetector.rb:39: invalid multibyte escape: /[\x80-\xFF]/ (SyntaxError)
 解决
-sudo vi /usr/li b/ruby/vendor_ruby/rchardet/universaldetector.rb
+vi /usr/li b/ruby/vendor_ruby/rchardet/universaldetector.rb
 文件第一行加入
 # encoding: US-ASCII
 
-sudo apt-get install nmap  //渗透测试工具nmap:
+apt-get install nmap  //渗透测试工具nmap:
 //////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
 
 
@@ -424,8 +485,8 @@ sudo apt-get install nmap  //渗透测试工具nmap:
 
 //php环境
 {
-sudo apt-get install nginx php7.0-fpm php7.0-cli php7.0-curl php7.0-gd php7.0-mcrypt php7.0-cgi
-sudo apt-get install nginx php5.0-fpm php5.0-cli php5.0-curl php5.0-gd php5.0-mcrypt php5.0-cgi
+apt-get install nginx php7.0-fpm php7.0-cli php7.0-curl php7.0-gd php7.0-mcrypt php7.0-cgi
+apt-get install nginx php5.0-fpm php5.0-cli php5.0-curl php5.0-gd php5.0-mcrypt php5.0-cgi
 
 }
 
@@ -549,7 +610,7 @@ netstat -g 将会显示该主机订阅的所有多播网络。
     
     |less 命令对输出进行管道，这样你就可以按你的速度滚动阅读：
 top命令是一个常用的查看系统资源使用情况和查看占用系统资源最多的进程
-htop命令是top的改进版 Linux发行版本都没有安装htop——   sudo apt-get install htop     
+htop命令是top的改进版 Linux发行版本都没有安装htop——   apt-get install htop     
 ps命令可以列出正在运行的进程。以下命令列出所有在你系统上运行的命令： ps -A 
 pstree  以显示进程信息。它以树的形式显示
 kill 可以根据进程ID来杀死进程。你可以使用ps -A，top,或者grep命令获取到进程ID。 kill pid 
@@ -562,7 +623,7 @@ xkill 可以轻易杀死图形程度的命令。运行它之后，你的光标�
 }
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
 {
-     sudo service openbsd-inetd start  
+     service openbsd-inetd start  
      /etc/init.d/openbsd-inetd restart
     
 您的位置: Linux系统教程 > Ubuntu系统 >
@@ -621,23 +682,23 @@ SOCKS 代理 – 允许你将一个支持SOCKET代理的应用上的所有连接
 在本地机器输入一次密码，然后就可以通过ssh的key代理来使用安全身份登陆其余的远端机器，而不需要重复输入你的密码了。
 
 
-  sudo service ssh start   
+service ssh start   
  /etc/init.d/ssh restart
 下列软件包有未满足的依赖关系： 版本
  openssh-server : 依赖: openssh-client (= 1:6.6p1-2ubuntu1)
 E: 无法修正错误，因为您要求某些软件包保持现状，就是它们破坏了软件包间的依赖关系。
-sudo apt-get install openssh-client=1:6.6p1-2ubuntu1
+apt-get install openssh-client=1:6.6p1-2ubuntu1
 openssh-server是依赖于openssh-clien的,那ubuntu不是自带了openssh-client吗?原由是自带的openssh-clien与所要安装的openssh-server所依赖的版本不同,这里所依赖的版本是
 
 //免密码登录ssh
 对于debian/ubuntu系统来说，安装方式很简单：
-sudo apt-get install sshpass
+apt-get install sshpass
 对于其他的linux,可以编译sshpass的源码安装：
 wget http://sourceforge.net/projects/sshpass/files/sshpass/1.05/sshpass-1.05.tar.gz  
 tar xvzf sshpass-1.05.tar.gz  
 ./configure 
 make  
-sudo make install
+make install
 sshpass -p "XXX" ssh user@IP
 //首次需要ssh 直接登录一次 
 //之后才能使用sshpass登录?
@@ -726,13 +787,7 @@ mv命令既可以重命名，又可以移动文件或文件夹。
 mv A B
 例子：将/a目录移动到/b下，并重命名为c
 mv /a /b/c
-其实在文本模式中要重命名文件或目录，只需要使用mv命令就可以了，比如说要将一个名为abc的文件重命名为1234：
 mv abc 1234
-注意，如果当前目录下也有个1234的文件的话，这个文件是会将它覆盖的。
-下面介绍Linux系统中另一个重命名命令 rename命令的用法。
-
-rename版本如果是perl版本的，那rename命令是支持正则的；因此在perl版本的rename下，执行上述命令就可以成功，如果rename版本是c版本的，那么上述命令是不成功的。
-这个是版本支持的问题，所以不必深究。
 }
 //软链接 硬链接
 ln -s source     dist     #建立软连接 快捷方式
@@ -745,7 +800,7 @@ lrwxrwxrwx 1 root root 4 11月  9 10:17 /bin/sh -> dash*
 
 ln -s /bin/bash /bin/sh
 或者如下：
-sudo dpkg-reconfigure dash
+dpkg-reconfigure dash
 出现提示界面问是否要dash的时候，选No就行了。反馈如下：
 
 //回响
@@ -772,19 +827,19 @@ sudo dpkg-reconfigure dash
 //邮件
 安装 Evolution 
 有PPA可用，支持 Ubuntu 14.04 及衍生系统。打开终端，输入以下命令： 
-sudo add-apt-repository ppa:fta/gnome3 
-sudo apt-get update 
-sudo apt-get install evolution
+add-apt-repository ppa:fta/gnome3 
+apt-get update 
+apt-get install evolution
 
 
 //QQ
-    sudo dpkg -i fonts-wqy-microhei_0.2.0-beta-2_all.deb  
-    sudo dpkg -i ttf-wqy-microhei_0.2.0-beta-2_all.deb  
-    sudo dpkg -i wine-qqintl_0.1.3-2_i386.deb   
+    dpkg -i fonts-wqy-microhei_0.2.0-beta-2_all.deb  
+    dpkg -i ttf-wqy-microhei_0.2.0-beta-2_all.deb  
+    dpkg -i wine-qqintl_0.1.3-2_i386.deb   
     如果，最后一步报错。使用如下命令修复：
    [objc] view plain copy
-    sudo apt-get -f install   
-    sudo dpkg -i wine-qqintl_0.1.3-2_i386.deb  
+    apt-get -f install   
+    dpkg -i wine-qqintl_0.1.3-2_i386.deb  
 
 //eclipse 启动
 Eclipse运行时需要JRE的支持，因为Eclipse包里是不带JRE的，因此要使用Eclipse首先就要安装好JRE或JDK
@@ -882,32 +937,32 @@ unrar e file.rar //解压rar
 unzip file.zip //解压zip 
 --exclude FILE：在压缩的过程中，不要将 FILE 打包！
 范例一：将整个 /etc 目录下的文件全部打包成为 /tmp/etc.tar
-[root@linux ~]# tar -cvf /tmp/etc.tar /etc　　　　<==仅打包，不压缩！
-[root@linux ~]# tar -zcvf /tmp/etc.tar.gz /etc　　<==打包后，以 gzip 压缩
-[root@linux ~]# tar -jcvf /tmp/etc.tar.bz2 /etc　　<==打包后，以 bzip2 压缩
+tar -cvf /tmp/etc.tar /etc　　　　<==仅打包，不压缩！
+tar -zcvf /tmp/etc.tar.gz /etc　　<==打包后，以 gzip 压缩
+tar -jcvf /tmp/etc.tar.bz2 /etc　　<==打包后，以 bzip2 压缩
 # 特别注意，在参数 f 之后的文件档名是自己取的，我们习惯上都用 .tar 来作为辨识。
 # 如果加 z 参数，则以 .tar.gz 或 .tgz 来代表 gzip 压缩过的 tar file ～
 # 如果加 j 参数，则以 .tar.bz2 来作为附档名啊～
 # 上述指令在执行的时候，会显示一个警告讯息：
 # '『tar: Removing leading `/" from member names』那是关於绝对路径的特殊设定。 '
 范例二：查阅上述 /tmp/etc.tar.gz 文件内有哪些文件？ 
-[root@linux ~]# tar -ztvf /tmp/etc.tar.gz
+tar -ztvf /tmp/etc.tar.gz
 # 由於我们使用 gzip 压缩，所以要查阅该 tar file 内的文件时，
 # 就得要加上 z 这个参数了！这很重要的！
 范例三：将 /tmp/etc.tar.gz 文件解压缩在 /usr/local/src 底下
-[root@linux ~]# cd /usr/local/src
-[root@linux src]# tar -zxvf /tmp/etc.tar.gz
+cd /usr/local/src
+tar -zxvf /tmp/etc.tar.gz
 # 在预设的情况下，我们可以将压缩档在任何地方解开的！以这个范例来说
 # 我先将工作目录变换到 /usr/local/src 底下，并且解开 /tmp/etc.tar.gz
 # 则解开的目录会在 /usr/local/src/etc ，另外，如果您进入 /usr/local/src/etc
 # 则会发现，该目录下的文件属性与 /etc/ 可能会有所不同喔！
 范例四：在 /tmp 底下，我只想要将 /tmp/etc.tar.gz 内的 etc/passwd 解开而已
-[root@linux ~]# cd /tmp
-[root@linux tmp]# tar -zxvf /tmp/etc.tar.gz etc/passwd
+cd /tmp
+tar -zxvf /tmp/etc.tar.gz etc/passwd
 # 我可以透过 tar -ztvf 来查阅 tarfile 内的文件名称，如果单只要一个文件，
 # 就可以透过这个方式来下达！注意到！ etc.tar.gz 内的根目录 / 是被拿掉了！
 范例五：我要备份 /home, /etc ，但不要 /home/dmtsai
-[root@linux ~]# tar --exclude /home/dmtsai -zcvf myfile.tar.gz /home/* /etc  */
+tar --exclude /home/dmtsai -zcvf myfile.tar.gz /home/* /etc  */
 另外：tar命令的C参数
 　　$ tar -cvf file2.tar /home/usr2/file2
 　　tar: Removing leading '/' from members names
@@ -927,7 +982,7 @@ unzip file.zip //解压zip
 　　tar: Error exit delayed from previous errors 
 //对于.7z
 支持 7Z,ZIP,Zip64,CAB,RAR,ARJ,GZIP,BZIP2,TAR,CPIO,RPM,ISO,DEB 压缩文件格式
-安装： sudo apt-get install p7zip p7zip-full p7zip-rar
+安装： apt-get install p7zip p7zip-full p7zip-rar
 # 7z a yajiu.7z yajiu.jpg yajiu.png 将yajiu.jpg和yajiu.png压缩成一个7z包
 # 7z a yajiu.7z *.jpg 将所有.jpg的文件压缩成一个7z包
 # 7z a yajiu.7z yajiu 将文件夹yajiu压缩成一个7z包
@@ -937,8 +992,10 @@ unzip file.zip //解压zip
 }
 
 //挂载ntfs磁盘问题
-sudo apt-get install ntfsprogs
-sudo ntfsfix /dev/sda5 
+apt-get install ntfsprogs
+ntfsfix /dev/sda5 
+//挂载磁盘为虚拟路径
+mount /dev/sda6 /home/e
 
 
 
@@ -959,30 +1016,26 @@ su - 而不是su，这是因为su -和su的区别在于su - 拥有root的环境�
 usermod -l walker walkerdust
 //初次登录ubuntu的root登录问题
 输入 root 密码 安装时 设置的是用户密码 而不是root 密码 ununtu 只能调用 root 不能直接 root登录
-设置root密码 方法如下：
-1：输入 sudo passwd root
-2：输入用户密码（安装时设置的）
-3：输入想设置的root密码
-4：再次输入root密码 enter结束 就成功了
+输入 passwd root
 
 ps 查看tty？
 top来对进程排序，结束进程等.
 
 //python-rtmp
 {   
-sudo pip install python-librtmp     //只需要此
+pip install python-librtmp     //只需要此
 
 
-sudo apt-get install gcc* python-dev libffi-dev* -y
+apt-get install gcc* python-dev libffi-dev* -y
 git clone git://git.ffmpeg.org/rtmpdump
 cd rtmpdump/librtmp
 make && make install 
 wget -S https://pypi.python.org/packages/83/3c/00b553fd05ae32f27b3637f705c413c4ce71290aa9b4c4764df694e906d9/cffi-1.7.0.tar.gz#md5=34122a545060cee58bab88feab57006d
 cd cffi-1.7.0
-sudo python setup.py install
+python setup.py install
 wget -S https://pypi.python.org/packages/48/a6/33b1a5864e22de3e59dd29fcbc2602462511c04a31057b16baec639d7d4f/python-librtmp-0.3.0.tar.gz#md5=f7afe8d463214072281998fa84553927
 cd python-librtmp-0.3.0
-sudo python setup.py install 
+python setup.py install 
 python
 import librtmp
 find / -name librtmp.so.1
@@ -999,7 +1052,7 @@ cd ffmpeg-3.0
 ./configure --host-cppflags=-fPIC --host-cflags=-fPIC --enable-shared 
 
 make 
-sudo make install
+make install
 }
 
 
@@ -1013,7 +1066,7 @@ sudo make install
 6[...../openssl-1.0.1f]# make depend
 7[...../openssl-1.0.1f]# cd /usr/local
 8/usr/local]# ln -s openssl ssl
-9 [...../openssl-1.0.1f]#sudo make install
+9 [...../openssl-1.0.1f]#make install
 10在/etc/ld.so.conf文件的最后面，添加如下内容：
 /usr/local/openssl/lib
 11...]# ldconfig
@@ -1024,8 +1077,8 @@ export PATH=$OPENSSL:$PATH:$HOME/bin
 13退出命令界面，再从新登录。
 14、以上OPENSSL就安装完毕，下面进行一些检查。
 15依次如下执行：
-[root@localhost /]# cd /usr/local
-[root@localhost local]# ldd /usr/local/openssl/bin/openssl
+cd /usr/local
+ldd /usr/local/openssl/bin/openssl
 会出现类似如下信息：
         linux-vdso.so.1 =>  (0x00007fff2116a000)
         libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f378e239000)
@@ -1040,7 +1093,7 @@ OpenSSL 1.0.1f 6 Jan 2014
 
 
 #定时任务
-sudo crontab -e 
+crontab -e 
 crontab -l
 //Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本；可执行的任务范围可以是每天夜里自动备份用户的home文件夹，也可以每个小时记录CPU的信息日志。
 //crontab（cron table）命令用于编辑执行中的定期任务列表，并且操作是基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
