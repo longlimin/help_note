@@ -23,19 +23,7 @@ do
     echo "source."$i >&1000
 done
 
-
-
-#定时打印资源列表
-echo 'show source list: '
-for ((i=1; i<=99999; i++))
-do
-    read -u1000 readStr
-    echo $i"."$readStr
-    echo $readStr >&1000
-    sleep 10
-done
-
-# read -u1000 读取行 阻塞 
+# read -u1000 readStr #读取行 阻塞 
 # for ((i=1; i<=18; i++))
 # do
 #     read -u1000 readStr

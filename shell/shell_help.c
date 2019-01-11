@@ -3,10 +3,9 @@ cat /proc/version //正在运行的内核版本。
 cat /etc/issue //显示的是发行版本信息
 cat /proc/cpuinfo | more/less //分页查看
 cat /proc/meminfo 
-fdisk -l //查看磁盘信息
+
 ethtool eth0 //网卡信息
-//查看文件大小 占用
-du -sh *
+du -sh * #查看文件大小 占用
 touch test.txt //创建文件
 
 //基本命令
@@ -66,6 +65,26 @@ touch test.txt //创建文件
     top | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 
 
+安装ubuntu后操作记录
+{
+英文版本
+安装中文输入法
+apt install ibus-pinyin
+设置系统为中文展示
+language 配置 input source chinese - pinyin 拖动汉语before english
+配置自动挂载磁盘 结合修改help_note目录git同步
+安装python git 
+
+点击应用关闭
+gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+底座下靠
+
+chrome
+eclipse
+jdk
+tomcat resin
+
+}
 
 
 
@@ -842,9 +861,6 @@ apt-get install evolution
     dpkg -i wine-qqintl_0.1.3-2_i386.deb  
 
 //eclipse 启动
-Eclipse运行时需要JRE的支持，因为Eclipse包里是不带JRE的，因此要使用Eclipse首先就要安装好JRE或JDK
-然后给Eclipse做相应配置。
-大致说来，配置Eclipse启动时使用JRE有四种方式：
 一、把jre目录直接拷贝到eclipse目录下面
 二、在eclipse.ini里面添加，例如：
 -vm
@@ -857,30 +873,8 @@ G:\Program Files\Java\jre7\bin\javaw.exe
 export JAVA_HOME=/home/walker/software/jdk1.7.0_79
 export CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/bin  
 PATH=$PATH:$CLASSPATH
-source /etc/profile
 
-1、在/etc/profile文件中添加变量【对所有用户生效（永久的）】
-      用VI在文件/etc/profile文件中增加变量，该变量将会对Linux下所有用户有效，并且是“永久的”。
-      例如：编辑/etc/profile文件，添加CLASSPATH变量
-      # vi /etc/profile
-      export CLASSPATH=./JAVA_HOME/lib;$JAVA_HOME/jre/lib
-      注：修改文件后要想马上生效还要运行# source /etc/profile不然只能在下次重进此用户时生效。
-      2、在用户目录下的.bash_profile文件中增加变量【对单一用户生效（永久的）】
-      用VI在用户目录下的.bash_profile文件中增加变量，改变量仅会对当前用户有效，并且是“永久的”。
-      例如：编辑guok用户目录（/home/guok）下的.bash_profile
-      $ vi /home/guok/.bash.profile
-      添加如下内容：
-      export CLASSPATH=./JAVA_HOME/lib;$JAVA_HOME/jre/lib
-      注：修改文件后要想马上生效还要运行$ source /home/guok/.bash_profile不然只能在下次重进此用户时生效。
-      3、直接运行export命令定义变量【只对当前shell（BASH）有效（临时的）】
-      在shell的命令行下直接使用[export 变量名=变量值]
-      定义变量，该变量只在当前的shell（BASH）或其子shell（BASH）下是有效的，shell关闭了，变量也就失效了，再打开新shell时就没有这个变量，需要使用的话还需要重新定义。
-三、PATH声明，其格式为：
-      PATH=$PATH:<PATH 1>:<PATH 2>:<PATH 3>:------:<PATH N>
-      你可以自己加上指定的路径，中间用冒号隔开。环境变量更改后，在用户下次登陆时生效。
-      如果想立刻生效，则可执行下面的语句：$source .bash_profile
-      需要注意的是，最好不要把当前路径”./”放到PATH里，这样可能会受到意想不到的攻击。
-      完成后，可以通过$ echo $PATH查看当前的搜索路径。这样定制后，就可以避免频繁的启动位于shell搜索的路径之外的程序了
+source /etc/profile
 
 //防火墙问题
       {
@@ -996,6 +990,20 @@ apt-get install ntfsprogs
 ntfsfix /dev/sda5 
 //挂载磁盘为虚拟路径
 mount /dev/sda6 /home/e
+
+fdisk -l    #磁盘
+df -h                          # 查看已经挂载的磁盘
+mkfs.ext4 /dev/vdb             # 初始化磁盘
+mount /dev/vdb /u01            # mount 磁盘到/u01，保证/u01为空
+blkid                          # 获取磁盘的uuid和属性，用uuid来进行开机mount
+vim /etc/fstab                 # 开机mount，模板是UUID=********** /home/u01  ntfs  defaults  1 1
+mkfs.ext4 /dev/vdb  #初始化磁盘 格式化？  
+
+unmount /dev/vdb #扩容 取消挂载 重新处理 后 再挂载
+e2fsck -f /dev/vdb   # 诊治数据磁盘，返回磁盘信息
+resize2fs /dev/vdb   # 重置数据磁盘大小
+
+//启动项
 
 
 

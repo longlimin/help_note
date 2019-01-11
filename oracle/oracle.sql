@@ -19,7 +19,8 @@ select count(*) from v$session; --查看会话
 SELECT * FROM v$session;
 SELECT * FROM v$session 
 where status='ACTIVE'; --并发连接数
-
+--concat join with ','
+select vm_concat(name) from test;
 
 
 --查看会话连接 锁 关闭会话 sysdba
