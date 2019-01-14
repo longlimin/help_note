@@ -63,7 +63,7 @@ SQL>alter system disable restricted session;
  3 将数据库中的表table1 、table2导出
    exp system/manager@TEST file=d:\daochu.dmp tables=(table1,table2) 
  4 将数据库中的表table1中的字段filed1以"00"打头的数据导出
-   exp system/manager@TEST file=d:\daochu.dmp tables=(table1) query=\" where filed1 like  '00%'\" '"
+   exp system/manager@TEST file=d:\daochu.dmp tables=(table1) query=\" where filed1 like  '00%'\"
        上面是常用的导出，对于压缩我不太在意，用winzip把dmp文件可以很好的压缩。
                      不过在上面命令后面 加上 compress=y  就可以了
 // 数据的导入

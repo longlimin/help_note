@@ -64,6 +64,7 @@ touch test.txt //创建文件
     #去掉控制台颜色代码##########
     top | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 
+    eval $st 二次解析？
 
 安装ubuntu后操作记录
 {
@@ -161,8 +162,6 @@ PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件
 -V  显示grep版本 
 }
 
-
-
 //设置时间
 ntpd -s -d  //自动同步 
 date --s="2014-08-21 12:33:22" //手动设置
@@ -218,65 +217,6 @@ deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX-backports main restricted universe
 #deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX-updates main restricted universe multiverse
 #deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX-proposed main restricted universe multiverse
 #deb-src http://mirrors.aliyun.com/ubuntu/ XXXXXXX-backports main restricted universe multiverse 
-
-
-//default ubuntu copy
-#deb cdrom:[Ubuntu 18.04.1 LTS _Bionic Beaver_ - Release amd64 (20180725)]/ bionic main restricted
-
-# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
-# newer versions of the distribution.
-deb http://cn.archive.ubuntu.com/ubuntu/ bionic main restricted
-# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic main restricted
-
-## Major bug fix updates produced after the final release of the
-## distribution.
-deb http://cn.archive.ubuntu.com/ubuntu/ bionic-updates main restricted
-# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-updates main restricted
-
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
-## team. Also, please note that software in universe WILL NOT receive any
-## review or updates from the Ubuntu security team.
-deb http://cn.archive.ubuntu.com/ubuntu/ bionic universe
-# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic universe
-deb http://cn.archive.ubuntu.com/ubuntu/ bionic-updates universe
-# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-updates universe
-
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
-## team, and may not be under a free licence. Please satisfy yourself as to 
-## your rights to use the software. Also, please note that software in 
-## multiverse WILL NOT receive any review or updates from the Ubuntu
-## security team.
-deb http://cn.archive.ubuntu.com/ubuntu/ bionic multiverse
-# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic multiverse
-deb http://cn.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
-# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
-
-## N.B. software from this repository may not have been tested as
-## extensively as that contained in the main release, although it includes
-## newer versions of some applications which may provide useful features.
-## Also, please note that software in backports WILL NOT receive any review
-## or updates from the Ubuntu security team.
-deb http://cn.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse
-# deb-src http://cn.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse
-
-## Uncomment the following two lines to add software from Canonical's
-## 'partner' repository.
-## This software is not part of Ubuntu, but is offered by Canonical and the
-## respective vendors as a service to Ubuntu users.
-# deb http://archive.canonical.com/ubuntu bionic partner
-# deb-src http://archive.canonical.com/ubuntu bionic partner
-
-deb http://security.ubuntu.com/ubuntu bionic-security main restricted
-# deb-src http://security.ubuntu.com/ubuntu bionic-security main restricted
-deb http://security.ubuntu.com/ubuntu bionic-security universe
-# deb-src http://security.ubuntu.com/ubuntu bionic-security universe
-deb http://security.ubuntu.com/ubuntu bionic-security multiverse
-# deb-src http://security.ubuntu.com/ubuntu bionic-security multiverse
-
-//then config dns 8.8.8.8 ??? proxy
-
-
-
 
 }
 
@@ -349,138 +289,6 @@ apt-get install openssh-client=1:6.6p1-2ubuntu1
 }
 //apt-get install gcc gcc-c++ //c++编译需要
 
-//opencv
-{
-//这是win10下的子系统ubuntu终端使用的依赖
-apt-get install \ 
-    libopencv-dev \         ##
-    build-essential \ 
-    checkinstall \ 
-    cmake \ 
-    pkg-config \ 
-    yasm \ 
-    libjpeg-dev \ 
-    libpng-dev \ 
-    libgphoto2-dev \ 
-    libtiff5-dev \ 
-    libjasper-dev \ 
-    libavcodec-dev \ 
-    libavformat-dev \ 
-    libwebp-dev \
-    libswscale-dev \ 
-    libdc1394-22-dev \ 
-    libxine2-dev \ 
-    libgstreamer0.10-dev \ 
-    libgstreamer-plugins-base0.10-dev \ 
-    libv4l-dev \ 
-    python-dev \ 
-    python-numpy \ 
-    libtbb-dev \ 
-    libqt4-dev \    ##
-    libgtk2.0-dev \ 
-    libfaac-dev \   #libfaad-dev
-    libmp3lame-dev \ 
-    libopencore-amrnb-dev \ 
-    libopencore-amrwb-dev \ 
-    libtheora-dev \ 
-    libvorbis-dev \ 
-    libxvidcore-dev \ 
-    x264 \ 
-    v4l-utils \ 
-    ffmpeg \ 
-    gstreamer-plugins-base-devel \ ##
-    qt5-default \ 
-
-
-//整理树形版本依赖! !!!!!!!!!!!!!
-apt-cache madison vim
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!需要配置专业的源pi专用最新 自动识别依赖
-// 安装build-essential、cmake、git和pkg-config
-apt-get install build-essential cmake git pkg-config
-// 安装jpeg格式图像工具包
-apt-get install libjpeg8-dev  
-// 安装tif格式图像工具包 
-apt-get install libtiff5-dev   
-// 安装JPEG-2000图像工具包
-apt-get install libjasper-dev 
-// 安装png图像工具包
-apt-get install libpng12-dev 
-//再安装视频I/O包（注意最后一个包的数字“4”后面是“L”）：
-apt-get install ffmpeg libavcodec-dev libavformat-dev  libavdevice-dev libswscale-dev libv4l-dev
-//下面安装gtk2.0（树莓派很可能下载错误，更换中科大或者清华源即可，ubuntu有可能出现包版本过高的情况，需要将依赖包降级安装）：
-apt-get install libgtk2.0-dev
-//优化函数包：
-apt-get install libatlas-base-dev gfortran
- 打开源码文件夹，这里以我修改文章时最新的3.4.1为例
-//开始编译
-cd opencv-3.4.1
-之后我们新建一个名为release的文件夹用来存放cmake编译时产生的临时文件：
-// 新建release文件夹
-mkdir release
-// 进入release文件夹
-cd release
-设置cmake编译参数，安装目录默认为/usr/local ，注意参数名、等号和参数值之间不能有空格，但每行末尾“\”之前有空格，参数值最后是两个英文的点：
-
-// CMAKE_BUILD_TYPE是编译方式，CMAKE_INSTALL_PREFIX是安装目录，OPENCV_EXTRA_MODULES_PATH是加载额外模块，INSTALL_PYTHON_EXAMPLES是安装官方python例程，BUILD_EXAMPLES是编译例程（这两个可以不加，不加编译稍微快一点点，想要C语言的例程的话，在最后一行前加参数INSTALL_C_EXAMPLES=ON \）
-
-cmake -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
-    -D BUILD_EXAMPLES=ON ..
-
-cmake -D CMAKE_BUILD_TYPE=RELEASE \
- -D CMAKE_INSTALL_PREFIX=/usr/local \
- -D INSTALL_C_EXAMPLES=ON \
- -D INSTALL_PYTHON_EXAMPLES=ON \
- -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.3.0/modules \
- -D BUILD_EXAMPLES=ON ..
-
--- WARNING: Can't build ffmpeg test code ' 模块丢失
-打开详细提示
-So I uncommented cmake/OpenCVFindLibsVideo.cmake:238 :
-message(FATAL_ERROR "FFMPEG: test check build log:\n${TRY_OUT}")
-之后开始正式编译过程（如果之前一步因为网络问题导致cmake下载缺失文件失败的话，可以尝试使用手机热点，并将release文件夹删除掉，重新创建release文件夹并cmake）：
-
-// 编译，以管理员身份，否则容易出错
-make
-// 安装
-make install
-// 更新动态链接库
-ldconfig 
-
-
-pip install --upgrade setuptools
-pip install numpy Matplotlib scipy
-//////////////////////////////////////////////////////////
-在release目录下寻找lib目录里的cv2.so，
-这个是python需要的，将其拷贝到python的库目录里。一般情况下是在
-“/usr/local/lib/python2.7/dist-packages”里。
-cp lib/cv2.so /usr/local/lib/python2.7/dist-packages/
- 
-默认pkg-config(笔者的安装版本） 只会寻找 
-/usr/share/pkgconfig/*.pc 和 */
-/usr/lib/pkgconfig/*.pc ， */
-/usr/lib64/pkgconfig/*.pc 。 '*/
-而我通过源码方式安装的时候， 
-对应的库的pc文件 默认安装到了 
-/usr/local/lib/pkgconfig/。
- 所以pkg-config找不到，也就认为没有安    装了。 
- 经过笔者测试，如果通过 yum 安装的方式，则pc文件会放到 /usr/lib 或者 /usr/lib64/ 里，所以就没有这个问题。
-解决方法：
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig;$PKG_CONFIG_PATH
-
-//需要清理build 重新cmake
-
-apt-get install gtk+-3.0 gstreamer-base-1.0 gstreamer-video-1.0 gstreamer-app-1.0 gstreamer-riff-1.0 gstreamer-pbutils-1.0 libdc1394-2 libdc1394 
-
-apt-get install libgphoto2-dev gstreamer0.10-* libdc1394-*
-apt-get install libgphoto2-dev
-apt-get install gstreamer0.10-*
-apt-get install libdc1394-*
-// apt-get install libopencv-dev //??????????自编译非此
-// apt-get install python-opencv
-
 //////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
 //whatweb
 apt-get install whatweb
@@ -492,15 +300,6 @@ vi /usr/li b/ruby/vendor_ruby/rchardet/universaldetector.rb
 
 apt-get install nmap  //渗透测试工具nmap:
 //////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
 
 //php环境
 {
@@ -521,38 +320,6 @@ cd nginx-1.10.1
 ./configure --sbin-path=/usr/local/nginx/nginx --conf-path=/usr/local/nginx/nginx.conf --pid-path=/usr/local/nginx/nginx.pid --with-http_ssl_module --with-pcre=../pcre-8.39 --with-zlib=../zlib-1.2.11  --with-md5=/root --with-http_ssl_module --with-openssl=../openssl-1.0.1c --add-module=../nginx-rtmp-module-master
 make
 make install
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
---prefix                       #nginx安装目录，默认在/usr/local/nginx
---conf-path=/usr/local/nginx/nginx.conf  #nginx。配置路径名
---pid-path=/usr/local/nginx/nginx.pid    #pid问件位置，默认在logs目录
---lock-path                    #lock问件位置，默认在logs目录
---with-http_ssl_module         #开启HTTP SSL模块，以支持HTTPS请求。
---with-http_dav_module         #开启WebDAV扩展动作模块，可为文件和目录指定权限
---with-http_flv_module         #支持对FLV文件的拖动播放
---with-http_realip_module      #支持显示真实来源IP地址
---with-http_gzip_static_module #预压缩文件传前检查，防止文件被重复压缩
---with-http_stub_status_module #取得一些nginx的运行状态
---with-mail                     #允许POP3/IMAP4/SMTP代理模块
---with-mail_ssl_module          #允许POP3／IMAP／SMTP可以使用SSL／TLS
---with-pcre=../pcre-8.11        #注意是未安装的pcre路径
---with-zlib=../zlib-1.2.5       #注意是未安装的zlib路径
---with-debug                    #允许调试日志
---http-client-body-temp-path    #客户端请求临时文件路径
---http-proxy-temp-path          #设置http proxy临时文件路径
---http-fastcgi-temp-path        #设置http fastcgi临时文件路径
---http-uwsgi-temp-path=/usr/local/nginx/uwsgi #设置uwsgi 临时文件路径
---http-scgi-temp-path=/usr/local/nginx/scgi   #设置scgi 临时文件路径
-
---add-module=../nginx-rtmp-module-master
-
---   Python 2:
---     Interpreter:     /usr/bin/python2.7 (ver 2.7.12)
---     Libraries:       /usr/lib/x86_64-linux-gnu/libpython2.7.so (ver 2.7.12)
---     numpy:           /home/walker/.local/lib/python2.7/site-packages/numpy/core/include (ver 1.13.3)
---     packages path:   lib/python2.7/dist-packages
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
 
 //设置DNS
 {
@@ -871,10 +638,15 @@ G:\Program Files\Java\jre7\bin\javaw.exe
 
 //环境变量
 export JAVA_HOME=/home/walker/software/jdk1.7.0_79
-export CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/bin  
+# export CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/bin
+export CLASSPATH=$JAVA_HOME/bin   #jdk11 
 PATH=$PATH:$CLASSPATH
 
 source /etc/profile
+
+//eclipse高版本配置 当path无效
+ln -s /home/walker/software/jdk11 jre
+
 
 //防火墙问题
       {

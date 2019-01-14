@@ -52,22 +52,22 @@ var=`命令` # 注意此处不是普通的单引号
     ##*/    删除最多匹配*/
     %/*    倒数 删除最少的/*               */
     %%/*   倒数 删除最多的/*    */
-        1、提取文件名
-        [root@localhost log]# var=/dir1/dir2/file.txt
-        [root@localhost log]# echo ${var##*/}
-        file.txt
-        2、提取后缀
-        [root@localhost log]# echo ${var##*.}
-        txt
-        3、提取不带后缀的文件名，分两步
-        [root@localhost log]# tmp=${var##*/}
-        [root@localhost log]# echo $tmp
-        file.txt
-        [root@localhost log]# echo ${tmp%.*}
-        file
-        4、提取目录
-        ;//[root@localhost log]# echo ${var%/*}
-        /dir1/dir2
+    1、提取文件名
+    [root@localhost log]# var=/dir1/dir2/file.txt
+    [root@localhost log]# echo ${var##*/}
+    file.txt
+    2、提取后缀
+    [root@localhost log]# echo ${var##*.}
+    txt
+    3、提取不带后缀的文件名，分两步
+    [root@localhost log]# tmp=${var##*/}
+    [root@localhost log]# echo $tmp
+    file.txt
+    [root@localhost log]# echo ${tmp%.*}
+    file
+    4、提取目录
+    ;//[root@localhost log]# echo ${var%/*}
+    /dir1/dir2
     echo ${var:0:5}
     其中的 0 表示左边第一个字符开始，5 表示字符的总个数。
     结果是：http:
@@ -138,35 +138,45 @@ eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php
     do
 
     done
+    
+_roots=( '/mnt/f' '/mnt/e' '/home/walker/e' )
+_roots=( ` ls ` )
+_roots=( ` ls | tr ' ' "\n" ` )
+for ((i=0; i<${#_roots[@]}; i++))
+do
+    ddir=${_roots[$i]}
+    if [ -d "$ddir" ]
+    then
+        _root=$ddir
+        break
+    fi
+done    
+    
 }
-//文件读取 while read line
+//行列分隔符ifs
+IFS_old=$IFS #将原IFS值保存，以便用完后恢复 
+IFS=$’\n’ #更改IFS值为$’\n’ ，注意，以回车做为分隔符，IFS必须为：$’\n’ 
+xxxxxxxxxxxxxxxxxxxx
+IFS=$IFS_old #恢复原IFS值
 
+
+//文件读取 while read line
 while read line
 do
        …
 done < file
-read通过输入重定向，把file的第一行所有的内容赋值给变量line，循环体内的命令一般包含对变量line的处理；
-然后循环处理file的第二行、第三行。。。一直到file的最后一行。还记得while根据其后的命令退出状态来判断是否执行循环体吗？
-是的，read命令也有退出状态，当它从文件file中读到内容时，退出状态为0，循环继续惊醒；当read从文件中读完最后一行后，
-下次便没有内容可读了，此时read的退出状态为非0，所以循环才会退出。
-另一种也很常见的用法：
+
 command | while read line
 do
     …
 done
-如果你还记得管道的用法，这个结构应该不难理解吧。command命令的输出作为read循环的输入，
-这种结构长用于处理超过一行的输出，当然awk也很擅长做这种事。
+
 //函数
 {
 
 ./do show pp
 #$0<./do>-n取参数,$#<2>参数个数,$@<数组".do" "show" "pp">,$*<串"./do show pp">,$?<int0/1>函数返回值 
 $$PID<59>
-
-#不能为空函数!!!!!!!!!!!!!!!!!!!!!!!    
-root=`cat toolsTemp.txt` 变量可以接受输出echo cat返回值 
-
-    
 }
 
 #批量创建文件
@@ -178,22 +188,8 @@ root=`cat toolsTemp.txt` 变量可以接受输出echo cat返回值
 -rw-r--r-- 1 root root 0 Oct 9 21:22 stu_02_linux.jpg 
 使用rename进行修改
 [root@linuxidc net]# rename \_linux '' *.jpg
-[root@linuxidc net]# sl
-total 0
 -rw-r--r-- 1 root root 0 Oct 9 21:22 stu_01.jpg
 -rw-r--r-- 1 root root 0 Oct 9 21:22 stu_02.jpg 
-注意，如果想要替换掉下划线，那么你不能加任何引号。
-[root@linuxidc net]# for i in `seq -w 10`; do touch stu\_$i\_linux.jpg; done
-[root@linuxidc net]# sl
-total 0
--rw-r--r-- 1 root root 0 Oct 9 21:58 stu_01_linux.jpg
--rw-r--r-- 1 root root 0 Oct 9 21:58 stu_02_linux.jpg 
-[root@linuxidc net]# rename '\_linux' '' *.jpg
-[root@linuxidc net]# sl
-total 0
--rw-r--r-- 1 root root 0 Oct 9 21:27 stu_01_linux.jpg
--rw-r--r-- 1 root root 0 Oct 9 21:27 stu_02_linux.jpg 
--rw-r--r--
 }
 
 //日期格式化
@@ -218,7 +214,7 @@ Mon Feb 18 13:11:58 CST 2013
 //进程并发数控制 管道 同步
 见pipe_maker.sh 案例
 
-////////////////////////////自动化输入 expect
+//自动化输入 expect
 spawn ./update.sh
 expect "Username for 'https://gitee.com'"
 send -- "617772977@qq.com\n"
