@@ -53,6 +53,21 @@ SQL> shutdown immediate;
 SQL> startup
 SQL>alter system disable restricted session;
 
+
+//dblink 跨数据库数据操作
+-- 查看wangyong用户是否具备创建database link 权限
+select * from user_sys_privs where privilege like upper('%DATABASE LINK%') AND USERNAME='WANGYONG';
+-- 给wangyong用户授予创建dblink的权限
+grant create public database link to wangyong; 
+-- 注意一点，如果密码是数字开头，用“”括起来
+create public database link TESTLINK2 connect to WANGYONG identified by "123456" USING 'ORCL21'
+
+create database link xxx----即将建立的dblink名
+  connect to 数据库用户名 identified by "密码"
+  using 'xxx.xxx.xxx.xx-----数据库IP';
+
+select * from tbl_ost_notebook@dblink;
+
 // 数据导入导出
  DOS中可以执行时由于 在oracle 8i 中  安装目录\$ora10g\BIN被设置为全局路径，
 // 数据导出：
