@@ -5,6 +5,19 @@
 
 _toolsres='toolsTemp.txt'
 
+function out(){
+    echo `date "+%Y-%m-%d %H:%M:%S" `' '$@
+}
+
+function thread(){
+    {
+        $1
+    } & 
+}
+
+
+
+
 #toolsShow $@
 function toolsShow(){
     toolsLineLong
@@ -105,6 +118,20 @@ function toolsLineLong(){
 function toolsLineShort(){
     toolsLine 8
 }
+
+function start_main(){
+    echo $_temp' start_main of args:'
+    echo $@
+}
+
+# 单独执行文件时操作如下 引入时提示
+_temp='tools.sh'
+if [[ $0 =~ $_temp ]]
+then
+    start_main $@
+else
+    echo 'source '$_temp
+fi 
 
 
 

@@ -76,6 +76,8 @@ language 配置 input source chinese - pinyin 拖动汉语before english
 配置自动挂载磁盘 结合修改help_note目录git同步
 安装python git 
 
+gedit插件安装 编辑器
+sudo apt-get install gedit-plugins 
 点击应用关闭
 gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
 底座下靠
