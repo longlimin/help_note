@@ -143,18 +143,15 @@ eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php
 
     done
     
-_roots=( '/mnt/f' '/mnt/e' '/home/walker/e' )
-_roots=( ` ls ` )
-_roots=( ` ls | tr ' ' "\n" ` )
-for ((i=0; i<${#_roots[@]}; i++))
+local arr=( '/mnt/f' '/mnt/e' '/home/walker/e' )
+local arr=( ` ls ` )
+local arr=( ` ls | tr ' ' "\n" ` )
+local arr=( 'date ' 'echo aaa' )
+for ((i=0; i<${#arr[@]}; i++))
 do
-    ddir=${_roots[$i]}
-    if [ -d "$ddir" ]
-    then
-        _root=$ddir
-        break
-    fi
-done    
+    item=${arr[$i]}
+    call $item
+done   
     
 }
 //行列分隔符ifs

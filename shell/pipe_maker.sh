@@ -41,7 +41,7 @@ function signalMake(){
         cmd=`date "+%Y-%m-%d %H:%M:%S"`
         signal="make-"$cmd
         echo $signal >&1000
-        sleep 1
+        sleep $(($RANDOM%2))
     done
 }
 
@@ -51,7 +51,7 @@ function signalUse(){
         read -u1000 readStr
         {
             out "get Source: "$readStr
-            sleep 1
+            sleep $(($RANDOM%5))
         } &
     done
 }

@@ -63,8 +63,7 @@ touch test.txt //创建文件
 
     #去掉控制台颜色代码##########
     top | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
-
-    eval $st 二次解析？
+ 
 
 安装ubuntu后操作记录
 {
@@ -123,13 +122,61 @@ cat -p file2.txt -l
 sed awk grep less find
 less比more更强大，提供翻页，跳转，查找等命令
 
+ps -lf | awk -Fwalker '{print NR,NF,$1,$NF}' OFS="\t"
+ps -lf | awk -F" " 'NR!=1{print NR,NF,$1,$NF}' OFS="\t" #不要第一行
+----------------------------------------
+ps -lf | awk -F" " '
+BEGIN{before=0;after=0;deta=5000}
+{
+    if($4>deta){
+        after++; 
+        print $4,"large",$4">"deta
+    }
+    else {
+        before++;
+        print $4,"small----",$4"<"deta;
+        print $4,"small",$4"<"deta
+        
+    }
+}
+END{printf "Total before:%-8s after:%-8s\n", before, after}
+'
+-----------------------------------
+
+print ($3>100 ? "yes":"no")
+
+一个或多个连续的空格或制表符看做一个定界符，即多个空格看做一个空格
+,代表分隔符OFS输出
+
+awk [-F|-f|-v] ‘BEGIN{} //{command1; command2} END{}’ file
+-F指定分隔符，-f调用脚本，-v定义变量 var=value
+
+'  '          引用代码块
+BEGIN   初始化代码块，在对每一行进行处理之前，初始化代码，主要是引用全局变量，设置FS分隔符
+//           匹配代码块，可以是字符串或正则表达式
+{}           命令代码块，包含一条或多条命令
+；          多条命令使用分号分隔
+END      结尾代码块，在对每一行进行处理之后再执行的代码块，主要是进行最终计算或输出结尾摘要信息
+ 
+$0          表示整个当前行 
+$1           每行第一个字段
+NF          字段数量变量    
+NR          每行的记录号，多文件记录递增
+FNR        与NR类似，不过多文件记录不递增，每个文件都从1开始  
+FS          BEGIN时定义分隔符
+RS       输入的记录分隔符， 默认为换行符(即文本是按一行一行输入)
+FILENAME 文件名
+OFS      输出字段分隔符， 默认也是空格，可以改为制表符等
+ORS        输出的记录分隔符，默认为换行符,即处理结果也是一行一行输出到屏幕
+-F'[:#/]'   定义三个分隔符
+ 
 sed -n '5,10p' obcp-server29.log //5-10行
 
 #关键词前后10行 分页展示
 grep -C 10 -inoe  '.*MccpMgr.*' obcp-server29.log | less 
 grep -one  '.*MccpMgr.*' obcp-server29.log | grep -v '.*DEBUG.*' | less 
 grep -ne  'getUserBean\|device:null' obcp-server29.log | grep -v '.*DEBUG.*'| grep -v '.*INFO.*' | less
-grep -ne  obcp-server29.log | grep '.*INFO.*' > obcp.log
+
 grep -one '.*' obcp-server29.log | grep '.*INFO.*' #查看INFO
 tail -f obcp-server29.log | grep -v '.*INFO.*' #不看INFO
 

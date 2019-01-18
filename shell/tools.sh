@@ -9,29 +9,41 @@ function out(){
     echo `date "+%Y-%m-%d %H:%M:%S" `' '$@
 }
 
+# start a function or a system call &
+# thread toolsShow 
 function thread(){
     {
-        $1
+        eval $*
     } & 
 }
-
-
+# start a function or a system call nohup &
+# call "echo aasdb"
+function call(){
+    local tools_out='nohup '$*' & '
+    out $tools_out
+    eval $tools_out
+}
+# do the cmd and show cmd
+# do "echo asdf"
+function doShell(){
+    out $*
+    eval $*
+}
 
 
 #toolsShow $@
 function toolsShow(){
     toolsLineLong
-    echo ">>date: "`date "+%Y-%m-%d %H:%M:%S" `
-    echo ">>shell: "${0}
-    echo ">>params: "$*     
+    out ">>shell: "${0}
+    out ">>params: "$*     
     toolsLineShort  
 }
 
 #toolsShowMethod $method ${params[*]}
 function toolsShowMethod(){ 
     #toolsLineShort  
-    echo ">>method: "${1}
-    echo ">>params: "${2}     
+    out ">>method: "${1}
+    out ">>params: "${2}     
     toolsLineShort  
 }
  
@@ -40,7 +52,7 @@ function toolsMakefile(){
     filename=$1
     if [ "$filename" = "" ]
     then
-        echo 'toolsMakefile create a file must with a filename '
+        out 'toolsMakefile create a file must with a filename '
         exit
     else
         if [ ! -f "$filename" ]    # 这里的-f参数判断$myFile是否存在
@@ -74,7 +86,7 @@ function toolsMakestr(){
     count=$2 
     if [ -z "$count" ]
     then
-        echo 'toolsMakestr eg: toolsMakestr "" "10" '
+        out 'toolsMakestr eg: toolsMakestr "" "10" '
         res=''
     else
         for ((i=1; i<=$count; i++))
@@ -108,7 +120,7 @@ function toolsLine(){
         str=$str""$split
     done
 
-    echo $str
+    out $str
 }
  
 function toolsLineLong(){

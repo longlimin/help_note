@@ -11,15 +11,15 @@ source do_renames.sh
 source do_dirfile.sh
 source do_clean.sh
 
-source do_start.sh
+source do_start_software.sh
 
 ##-----------------------------------------
 
 function stop(){
-    stop_raspberry $@
+    echo 'stop'
 }
 function start(){
-    start_raspberry $@
+    do_start_sftware_start $@
 }
 function rename(){
     renames_rename $@
