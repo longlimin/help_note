@@ -177,7 +177,8 @@ with
 tempTable as (SELECT * FROM test),
 tempTable2 as (SELECT * FROM test)
 SELECT * FROM tempTable,tempTable2 whre a=1;
-
+ 
+ 
 --exists ¥Ê‘⁄≈–∂œ
 select * from T1 where exists(select 1 from T2 where T1.a=T2.a) ;
 

@@ -25,7 +25,7 @@ class AutoCochat:
     def __init__(self, name="Test", id="18408249138", pwd="1234qwer"):
         reload(sys)
         sys.setdefaultencoding('utf8') #针对socket发送中文异常
-        self.detaTime = 3600 * 1000 #推送延时 60min
+        self.detaTime = 1.5 * 3600 * 1000 #推送延时 60min
         self.detaTimeMin = 1200 * 1000 #推送延时 20min
 
         self.id = id
@@ -120,7 +120,7 @@ class AutoCochat:
             time.sleep(5) #每分钟扫描 只对非凌晨时间处理 延时一小时发送
             timeNow = tool.getNowTime()
             hour = tool.parseTime(timeNow/1000, "%H:%M")
-            if(hour >= "23:30" or hour <= "07:20" or self.ifOk == False):
+            if(hour >= "23:30" or hour <= "07:40" or self.ifOk == False):
                 if(self.nowNight != 1):
                     self.out("不是白天 或者 没有登录 now:" + str(hour) )
                 self.nowNight = 1

@@ -10,49 +10,38 @@ touch test.txt //创建文件
 
 //基本命令
 {
+    
     find / -name librtmp.so.1
     whereis 
     which
     ls -d /imgs/        只显示目录
     ls -F | grep '/$'
     ls -I | grep '^d'
-    type ls 查看命令位置
-    $uname -m -r
-    $uname -mr
+    type ls 查看命令位置 查看执行结果?
     date --version / -v   --引领一整个英文单词
-    date --set="1999-01-01 08:00:00"
+    date --set="1999-01-01 08:00:00" # 设置时间
     whatis ls   简述
     man ls 帮助文档
     info ls 更详细的文档
-    $history    历史 
-    (1)CTRL+Z挂起进程并放入后台
-　　(2) jobs 显示当前暂停的进程 ###########################################
-　　(3) bg %N 使第N个任务在后台运行(%前有空格)
-　　(4) fg %N 使第N个任务在前台运行
-　　  默认bg,fg不带%N时表示对最后一个进程操作!
+    (1) CTRL+Z挂起进程并放入后台
+　 　(2) jobs 显示当前暂停的进程 ###########################################
+　 　(3) bg %N 使第N个任务在后台运行(%前有空格)
+　 　(4) fg %N 使第N个任务在前台运行
+　　 默认bg,fg不带%N时表示对最后一个进程操作!
     
-    //vim 
-    esc :set number 显示行号 
-    esc :set nu
-    esc /str 查找1 正向 支持 * 通配符号
-    esc ?str 查找2 反向  n next  shift+n/N previous
-    esc shift + * 查找当前所在单词
-    esc yw 复制当前到单词结尾
-    esc p paste粘贴
-
     id  查看当前用户组及其他状态
 	apt-cache madison python-rpi.gpio	查看安装 的软件版本
     tar -xvf 解压
-    tar -zvf 
+    tar -zvf 压缩
     unzip opencv-2.4.13.zip
     cd opencv-2.4.13/
     cmake -D WITH_GTK_2_X=ON -D CMAKE_INSTALL_PREFIX=/usr/local .
     make    # make -j4表示开4个线程来进行编译
     make install
-    通配符 星号”*”
+    
     命令行历史 history
-    目录~,.& ..
-    ./startup.sh & 后台运行命令 & 终端相关/注销则终止
+    date &              #后台执行
+    date && echo ''     #依次执行 逻辑控制
     wait 等待所有&执行完毕
     nohup ./startup.sh & 守护进程？无关终端 忽略所有挂断（SIGHUP）信号 无视注销/关闭终端
     ldconfig 通常在系统启动时运行，加载新的动态链接库时，就需要手工运行这个命令。 
@@ -88,24 +77,30 @@ tomcat resin
 
 }
 
-
+//vim 
+esc :set number 显示行号 
+esc :set nu
+esc /str 查找1 正向 支持 * 通配符号
+esc ?str 查找2 反向  n next  shift+n/N previous
+esc shift + * 查找当前所在单词
+esc yw 复制当前到单词结尾
+esc p paste粘贴
 
 ////////////////////////////////////////////////////////eval xargs
 st="ls | more"
 `$st`   //将 | 和 more 看成了参数，而不是将文件按页显示
 eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php shell
 
-#杀死指定规则进程
-ps -ef | grep /usr/local/apache-tomcat-document/ | grep -v grep | cut -c 9-15 | xargs kill -9
-ps -ef | grep 'mccp.conf' | grep -v grep | cut -c 9-15 | xargs kill -9
-kill -9 25718 25719 25811 25812 一次排在后边
+#杀死指定规则进程pid获取
+#字符分离数组
+ps -lf | grep 'python' | grep -v 'grep' | awk '{print $4}'
+#截取
+ps -lf | cut -c 9-15 
+#kill
+'239 39234 2343' | xargs kill -9
+kill -9 25718 25719 25811 25812 依次排在后边
 killall nginx #删除所有依据名字
 ps -elf | grep <-v反转> 'aaa'
-ps - ef”是Red Hat 里查看所有进程的命令。这时检索出的进程将作为下一条命令“grep LOCAL=NO”的输入。
-　  grep LOCAL=NO”的输出结果是，所有含有关键字“LOCAL=NO”的进程，这是Oracle数据库中远程连接进程的共同特点。
-　　grep -v grep”是在列出的进程中去除含有关键字“grep”的进程。
-　　cut -c 9-15”是截取输入行的第9个字符到第15个字符，而这正好是进程号PID。
-　　xargs kill -9”中的xargs命令是用来把前面命令的输出结果（PID）作为“kill -9”命令的参数，并执行该令。    
 
 xargs的默认命令是echo，空格是默认定界符
 cat test.txt | xargs -n3 //多行
@@ -169,26 +164,20 @@ FILENAME 文件名
 OFS      输出字段分隔符， 默认也是空格，可以改为制表符等
 ORS        输出的记录分隔符，默认为换行符,即处理结果也是一行一行输出到屏幕
 -F'[:#/]'   定义三个分隔符
- 
-sed -n '5,10p' obcp-server29.log //5-10行
 
+//sed
+sed -n '5,10p' obcp-server29.log //5-10行
+//find
+find test | grep '.*.png' #查找当前路径 下 所有文件 深度优先 的 png图片文件
+
+// grep  ############
 #关键词前后10行 分页展示
 grep -C 10 -inoe  '.*MccpMgr.*' obcp-server29.log | less 
 grep -one  '.*MccpMgr.*' obcp-server29.log | grep -v '.*DEBUG.*' | less 
 grep -ne  'getUserBean\|device:null' obcp-server29.log | grep -v '.*DEBUG.*'| grep -v '.*INFO.*' | less
 
-grep -one '.*' obcp-server29.log | grep '.*INFO.*' #查看INFO
-tail -f obcp-server29.log | grep -v '.*INFO.*' #不看INFO
+grep -one '.*' obcp-server29.log | grep '.*INFO.*' #查看INFO 
 
-find test | grep '.*.png' #查找当前路径 下 所有文件 深度优先 的 png图片文件
-
-// grep  ############
-{
-是指一个用来描述或者匹配一系列符合某个句法规则的字符串的单个字符串。本文介绍如何使用grep及egrep命令。
-而扩展正则表达式比基本正则表达式拥有更强大的功能。  
-grep的主要功能用于检索文件内容，字符串等的工具。
-可以根据用户指定的“模式（pattern）”对目标文本进行搜索过滤，显示出被“模式pattern”匹配到的行。 
- 
 grep [OPTIONS]PATTERN [FILE...] 
 PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件，
 用单引号‘ ’将pattern括起来以避免shell通配的影响，强引用不替换而显示字符本身。" " 双引号，
@@ -209,7 +198,6 @@ PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件
 -F  相当于fgrep 不支持正则表达式 
 --color对匹配的内容以颜色显示 
 -V  显示grep版本 
-}
 
 //设置时间
 ntpd -s -d  //自动同步 
@@ -284,6 +272,7 @@ zypper ar http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/11.3/repo/o
 zypper ar http://download.opensuse.org/distribution/11.3/repo/non-oss/suse/ nonoss
 zypper ar http://download.opensuse.org/update/11.3/suse update
 }
+
 //zypper
 {
     安装某个软件包
@@ -437,13 +426,6 @@ netstat -g 将会显示该主机订阅的所有多播网络。
 
 //Linux终端管理进程
 {
-    通配符 星号”*”
-    命令行历史 history
-    目录~,.& ..
-    后台运行命令 &
-    条件执行 && ||
-    
-    |less 命令对输出进行管道，这样你就可以按你的速度滚动阅读：
 top命令是一个常用的查看系统资源使用情况和查看占用系统资源最多的进程
 htop命令是top的改进版 Linux发行版本都没有安装htop——   apt-get install htop     
 ps命令可以列出正在运行的进程。以下命令列出所有在你系统上运行的命令： ps -A 
@@ -453,8 +435,6 @@ pgrep 会返回所有匹配这个关键词的进程ID。例如，你可以使用
 pkill & killall pkill和killall命令可以根据进程的名字杀死一个进程。使用以下任一方法都可以杀死Firefox进程： pkill firefox  killall firefox 
 renice 用来改变进程的nice值。nice值代表进程的优先级。renice 19 pid    -19的nice值是非常高的优先级，相反，19是非常低的优先级。0是默认的优先级。
 xkill 可以轻易杀死图形程度的命令。运行它之后，你的光标会变成x符号。点击相应的图形程序的窗口就可以杀死该程序。如果你中途要放弃操作，你可以点击鼠标右键取消。
-
-
 }
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
 {
