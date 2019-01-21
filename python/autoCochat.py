@@ -133,7 +133,7 @@ class AutoCochat:
                 while(i >= 0):
                     obj = self.sendList[i]
                     sendTime = int(obj.get("sendTime", 0))
-                    deta = int(obj.get("deta", 0))
+#                    deta = int(obj.get("deta", 0))
                     preTime = int(obj.get("preTime", 0))
                     type = str(obj.get("type", ""))
                     data = ast.literal_eval((str(obj.get("msg", ""))))
@@ -361,7 +361,8 @@ class AutoCochat:
                 if(reg is not None):
                     ttt = int(msg) * 1000
 
-
+                ttt = int(ttt)
+                
                 self.send("updateConversationStatus", {
                     'contactFullId': fullId,
                     'clientId': uid,
@@ -425,7 +426,7 @@ class AutoCochat:
                 obj["from"]["nickName"] = self.loginUser["ORG_VARS"]["@USER_NAME@"]   # "from-nickName"
                 obj["to"]["nickName"] = "to-nickName"
 
-                self.sendTrue("message", obj)
+#                self.sendTrue("message", obj)
             elif(str(mtype) == 'fun'):
                 pass
             elif(str(mtype) == 'event'):
