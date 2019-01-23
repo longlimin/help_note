@@ -13,23 +13,34 @@ source tools.sh
 function do_start_sftware_start(){
     toolsLineLong
 
-    out 'start linux software '
+
     local arr=( 
-    '/home/walker/software/eclipse/eclipse ' 
+    '/home/walker/software/eclipse/eclipse ' 'echo aaa'     
     '/home/walker/software/smartgit/bin/smartgit.sh ' 
+    
      )
+     
+    out 'start linux software '${#arr[@]}
+    toolsLineLong
     for ((i=0; i<${#arr[@]}; i++))
     do
-        item=${arr[$i]}
-        cmd='ps -lf | grep -v grep | grep '$item
-        res=`eval $cmd`
+        local item=${arr[$i]}
+        out 'Start '$i"\t"$item 
+        local cmd='ps -elf | grep -v grep | grep '$item
+        out $cmd
+        local res=`eval $cmd`
+        out $res        
         if [[ $res == "" ]]
         then
             call $item
         else
-            out 'have started'
-            out $res        
+            cmd='ps -elf | grep -v grep | grep '$item" | awk '{print \$4}'"
+            out $cmd
+            pid=`eval $cmd`
+            out 'have started pid '$pid
+
         fi
+        toolsLineLong
     done    
  
 

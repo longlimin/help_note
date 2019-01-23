@@ -93,9 +93,9 @@ eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php
 
 #杀死指定规则进程pid获取
 #字符分离数组
-ps -lf | grep 'python' | grep -v 'grep' | awk '{print $4}'
+ps -elf | grep 'python' | grep -v 'grep' | awk '{print $4}'
 #截取
-ps -lf | cut -c 9-15 
+ps -elf | cut -c 9-15 
 #kill
 '239 39234 2343' | xargs kill -9
 kill -9 25718 25719 25811 25812 依次排在后边
@@ -337,7 +337,7 @@ vi /usr/li b/ruby/vendor_ruby/rchardet/universaldetector.rb
 # encoding: US-ASCII
 
 apt-get install nmap  //渗透测试工具nmap:
-//////////////////////////////////////////////网站信息抓取//////////////////////////////////////////////////
+
 
 //php环境
 {
@@ -371,40 +371,39 @@ make install
     
 }
 
-//Linux 网络和监控命令
+//Linux 网络和监控
 {
-    ;/hostname
-hostname 没有选项，显示主机名字
-hostname –d 显示机器所属域名
-hostname –f 显示完整的主机名和域名
-hostname –i 显示当前机器的ip地址
-     ;/ping
-ping 将数据包发向用户指定地址。当包被接收，目标机器发送返回数据包。ping 主要有两个作用：
-用来确认网络连接是畅通的。
-用来查看连接的速度信息。
-    ifconfig
-查看用户网络配置。它显示当前网络设备配置。对于需要接收或者发送数据错误查找，这个工具极为好用。
-    iwconfig
-iwconfig 工具与 ifconfig 和ethtool类似。是用于无线网卡的 . 你可以用他查看设置基本的Wi-Fi 网络信息,例如 SSID, channel和encryption.还有其他很多配置你也可以查看和修改，, 包括 接收灵敏度, RTS/CTS, 发送数据包的分片大小,以及无线网卡的重传机制。
-    ;/nslookup
-nslookup 这个命令在 有ip地址时，可以用这个命令来显示主机名，可以找到给定域名的所有ip地址。而你必须连接到互联网才能使用这个命令。
-例子. nslookup blogger.com
-你也可以使用 nslookup 从ip获得主机名或从主机名获得ip。
-    ;/traceroute
-一个方便的工具。可用来查看数据包在提交到远程系统或者网站时候所经过的路由器的IP地址、跳数和响应时间。同样你必须链接到互联网才能使用这个命令
-    finger
-查看用户信息。显示用户的登录名字、真实名字以及登录终端的名字和登录权限。这是unix一个很老的命令，现在已很少使用了。
-    telnet
-通过telnet协议连接目标主机，如果telnet连接可以在任一端口上完成即代表着两台主机间的连接良好。
-telnet hostname port - 使用指定的端口telnet主机名。这通常用来测试主机是否在线或者网络是否正常。
-    ethtool
-ethtool允许你查看和更改网卡的许多设置（不包括Wi-Fi网卡）。你可以管理许多高级设置，包括tx/rx、校验及网络唤醒功能。下面是一些你可能感兴趣的基本命令：
+;/hostname <–d 显示机器所属域名> <–f 显示完整的主机名和域名> <–i 显示当前机器的ip地址>
+;/ping     网络畅通 网络速度
+
+;/ifconfig  查看用户网络配置。它显示当前网络设备配置。对于需要接收或者发送数据错误查找，这个工具极为好
+;/iwconfig  是用于无线网卡的 . 你可以用他查看设置基本的Wi-Fi 网络信息,例如 SSID, channel和encryption.包括 接收灵敏度, RTS/CTS 分片大小,重传机制。
+
+    wlp4s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+
+    service network start/stop      #服务形式
+    ifconfig wlp4s0 up/down    #关闭网络
+    iwlist wlp4s0 scan | grep ESSID    #扫描wifi可用
+    iwlist wlp4s0 scan | grep SSID | awk -F'"' '{print $2}'  #截取wifi-name
+    
+    iwconfig wlp4s0 essid <wifi-name>  #配置wifi  
+    iwconfig wlp4s0 key <wifi-pwd>     #配置密码
+    iwconfig wlp4s0 ap auto            #配置自动连接
+    ifconfig wlp4s0 192.168.1.120      #配置ip
+    
+    
+    
+
+;/nslookup www.*    在 有ip地址时，可以用这个命令来显示主机名，可以找到给定域名的所有ip地址。而你必须连接到互联网才能使用这个命令。
+;/traceroute www.*  查看数据包在提交到远程系统或者网站时候所经过的路由器的IP地址、跳数和响应时间。同样你必须链接到互联网才能使用这个命令
+;/finger    查看用户信息。显示用户的登录名字、真实名字以及登录终端的名字和登录权限。这是unix一个很老的命令，现在已很少使用了。
+;/telnet    通过telnet协议连接目标主机，如果telnet连接可以在任一端口上完成即代表着两台主机间的连接良好。
+ethtool 允许你查看和更改网卡的许多设置（不包括Wi-Fi网卡）。你可以管理许多高级设置，包括tx/rx、校验及网络唤醒功能。下面是一些你可能感兴趣的基本命令：
 ethtool -i 显示一个特定网卡的驱动信息，检查软件兼容性时尤其有用
 ethtool -p 启动一个适配器的指定行为，比如让适配器的LED灯闪烁，以帮助你在多个适配器或接口中标识接口名称
 ethtool -s 显示网络统计信息
-ethtool speed <10|100|1000> 设置适配器的连接速度，单位是Mbps
-    ;/netstat
-发现主机连接最有用最通用的Linux命令。你可以使用"netstat -g"查询该主机订阅的所有多播组（网络）
+ethtool speed <10|100|设置适配器的连接速度> 1000，单位是Mbps
+;/netstat 网络连接端口
 netstat -nap | grep port 将会显示使用该端口的应用程序的进程id
 netstat -a  or netstat –all 将会显示包括TCP和UDP的所有连接
 netstat --tcp  or netstat –t 将会显示TCP连接
@@ -438,14 +437,8 @@ xkill 可以轻易杀死图形程度的命令。运行它之后，你的光标�
 }
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
 {
-     service openbsd-inetd start  
-     /etc/init.d/openbsd-inetd restart
-    
-您的位置: Linux系统教程 > Ubuntu系统 >
-ubuntu 14.04中打开telnet服务步骤
-时间:2016-01-15来源:linux网站 作者:Linux_ever
-
- 
+service openbsd-inetd start  
+/etc/init.d/openbsd-inetd restart 
 1、首先查看telnet运行状态
 #netstat -a | grep telnet
 输出为空，表示没有开启该服务

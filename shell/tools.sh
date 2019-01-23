@@ -6,7 +6,7 @@
 _toolsres='toolsTemp.txt'
 
 function out(){
-    echo `date "+%Y-%m-%d %H:%M:%S" `' '$@
+    echo -e `date "+%Y-%m-%d %H:%M:%S" `' '$@
 }
 
 # start a function or a system call &
@@ -103,9 +103,9 @@ function toolsMakestr(){
 #Show the split line such as '-----------'
 #toolsLine <10>
 function toolsLine(){
-    split='-'
-    str=''
-    len=$1
+    local split='-'
+    local str=''
+    local len=$1
     if [ "$len" = "" ]
     then
         len=16
@@ -115,7 +115,7 @@ function toolsLine(){
 #        #echo "len is set !"
     fi
     
-    for ((i=0; i<$len; i++))
+    for ((tools_i=0; tools_i<$len; tools_i++))
     do
         str=$str""$split
     done

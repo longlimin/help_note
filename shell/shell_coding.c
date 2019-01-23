@@ -91,8 +91,7 @@ var=`命令` # 注意此处不是普通的单引号
 //字符串 命令 解释器
 st="ls | more"
 `$st`   //将 | 和 more 看成了参数，而不是将文件按页显示
-eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php shell
-
+eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php shell 
 
 //ll找不到 ll = ls -alF 
 //if else  test  判断  

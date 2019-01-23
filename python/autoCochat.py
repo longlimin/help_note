@@ -52,8 +52,8 @@ class AutoCochat:
                 flag    text
             )
             ''' )
-        self.sendList = [] #发送队列 (time, deta, type, data)
-        return
+        self.sendList = [] #发送队列 (time, deta, return, type)
+        data
     # 日志输出
     def out(self, obj):
         print(time.strftime("%Y%m%d %H:%M:%S", time.localtime()) + "." + self.name + "." + str(obj))
