@@ -199,6 +199,43 @@ PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件
 --color对匹配的内容以颜色显示 
 -V  显示grep版本 
 
+//系统 文件还原 进程
+lsof(list open files)是一个列出当前系统打开文件的工具。在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。所以如传输控制协议 (TCP) 和用户数据报协议 (UDP) 套接字等，系统在后台都为该应用程序分配了一个文件描述符，无论这个文件的本质如何，该文件描述符为应用程序与基础操作系统之间的交互提供了通用接口。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能够查看这个列表对系统监测以及排错将是很有帮助的。
+/proc/1917  某进程动id下的 内存文件配置 还原文件？
+[1]+  已停止               ./pipe_maker.sh
+1.找到目标文件使用进程pid 7570 该文件动文件描述符 255r
+lsof | grep pipe_maker
+pipe_make 7570                walker  255r      REG                8,6      2522      17692 /home/walker/e/help_note/shell/pipe_maker.sh
+2.查看该进程文件列表
+ll /proc/7570/fd 
+lrwx------ 1 walker walker 64 1月  24 15:36 1000 -> '/home/walker/e/help_note/shell/make.7570.fifo (deleted)'
+lrwx------ 1 walker walker 64 1月  24 15:36 2 -> /dev/pts/0
+lr-x------ 1 walker walker 64 1月  24 15:36 255 -> /home/walker/e/help_note/shell/pipe_maker.sh* (deleted)'
+3.读取 转储目标文件
+cat /proc/7570/fd/255 > pipe_maker.sh
+
+
+
+lsof输出各列信息的意义如下：
+COMMAND：进程的名称 PID：进程标识符
+USER：进程所有者
+FD：文件描述符，应用程序通过文件描述符识别该文件。如cwd、txt等 TYPE：文件类型，如DIR、REG等
+DEVICE：指定磁盘的名称
+SIZE：文件的大小
+NODE：索引节点（文件在磁盘上的标识）
+NAME：打开文件的确切名称
+FD 列中的文件描述符cwd 值表示应用程序的当前工作目录，这是该应用程序启动的目录，除非它本身对这个目录进行更改,txt 类型的文件是程序代码，如应用程序二进制文件本身或共享库，如上列表中显示的 /sbin/init 程序。
+lsof abc.txt #显示开启文件abc.txt的进程 
+lsof -c abc #显示abc进程现在打开的文件 
+lsof -c -p 1234 #列出进程号为1234的进程所打开的文件 
+lsof -g gid #显示归属gid的进程情况 
+lsof +d /usr/local/ #显示目录下被进程开启的文件 
+lsof +D /usr/local/ E同上，但是会搜索目录下的目录，时间较长 
+lsof -d 4 #显示使用fd为4的进程 
+lsof -i #用以显示符合条件的进程情况 
+lsof -i[46] [protocol][@hostname|hostaddr][:service|port]   46 --> IPv4 or IPv6   protocol --> TCP or UDP   hostname --> Internet host name   hostaddr --> IPv4地址   service --> /etc/service中的 service name (可以不止一个)   port --> 端口号 (可以不止一个)
+
+
 //设置时间
 ntpd -s -d  //自动同步 
 date --s="2014-08-21 12:33:22" //手动设置

@@ -69,7 +69,7 @@ var=`命令` # 注意此处不是普通的单引号
     [root@localhost log]# echo ${tmp%.*}
     file
     4、提取目录
-    ;//[root@localhost log]# echo ${var%/*}
+    ;//[echo ${var%/*}
     /dir1/dir2
     echo ${var:0:5}
     其中的 0 表示左边第一个字符开始，5 表示字符的总个数。

@@ -96,6 +96,7 @@ class Auto:
     # 认证登录
     def login(self):
         self.out("访问主页 获取 token session")
+#        http://content.icbc.com.cn/site1/a5f9ff6d068a46e68d363426ca69bd07/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=1548294412328
 # "http://content.icbc.com.cn/site1/a5f9ff6d068a46e68d363426ca69bd07/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=1545268253550"
         ttt = '1545268253550' #str(tool.getNowTime())
         kkk = 'a5f9ff6d068a46e68d363426ca69bd07'

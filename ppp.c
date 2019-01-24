@@ -3,9 +3,9 @@
 */
 
 14qr 
-14Qr
+14Qr ruaho.com
 qr36 git steam
-Qr36 oracle
+Qr36 oracle 
 16q
 p3
 

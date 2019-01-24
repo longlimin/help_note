@@ -15,9 +15,9 @@ function do_start_sftware_start(){
 
 
     local arr=( 
-    '/home/walker/software/eclipse/eclipse ' 'echo aaa'     
+    '/home/walker/software/eclipse/eclipse '
     '/home/walker/software/smartgit/bin/smartgit.sh ' 
-    
+    '/home/walker/help/python/ python autoCochatCph.py >> ~/auto.log'
      )
      
     out 'start linux software '${#arr[@]}
@@ -26,7 +26,20 @@ function do_start_sftware_start(){
     do
         local item=${arr[$i]}
         out 'Start '$i"\t"$item 
-        local cmd='ps -elf | grep -v grep | grep '$item
+        
+        local nowdir=`pwd`
+        
+        local ss=($item)
+        local len=${#ss[*]}
+        if (( $len > 1 ))
+        then
+            out 'stack push dir: '$nowdir 
+            cd ${ss[0]}
+            out 'turn to dir: '`pwd`
+            item=${item:${#ss[0]}}
+        fi
+        
+        local cmd='ps -elf | grep -v grep | grep "'$item'"'
         out $cmd
         local res=`eval $cmd`
         out $res        
@@ -34,22 +47,35 @@ function do_start_sftware_start(){
         then
             call $item
         else
-            cmd='ps -elf | grep -v grep | grep '$item" | awk '{print \$4}'"
+            cmd='ps -elf | grep -v grep | grep "'$item'"'   " | awk '{print \$4}'"
             out $cmd
             pid=`eval $cmd`
             out 'have started pid '$pid
 
         fi
+        
+        if (( $len > 1 ))
+        then
+            cd $nowdir
+            out 'stack pop dir: '`pwd`
+        fi
+        
         toolsLineLong
     done    
  
-
-    
     out 'start linux software over '
     toolsLineLong
 } 
 
-
+function startCochat(){
+    nowdir=`pwd`
+    echo 'stack pwd:' $nowdir
+    cd /home/walker/help/python/
+    pwd
+    nohup python autoCochatCph.py >> ~/auto.log &
+    cd $nowdir
+    pwd
+}
 
 
 
