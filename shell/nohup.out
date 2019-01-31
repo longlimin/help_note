@@ -312,3 +312,395 @@ org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration
 (SmartGit:11540): GLib-CRITICAL **: 17:12:08.887: g_base64_encode_step: assertion 'in != NULL' failed
 
 (SmartGit:11540): GLib-CRITICAL **: 17:12:08.888: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.349: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.359: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.360: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.360: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.592: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.593: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.597: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.597: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.598: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.598: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.686: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.687: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.815: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.815: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.830: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.830: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.831: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.831: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.953: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.954: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.954: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.954: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.956: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.956: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.982: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:29484): GLib-CRITICAL **: 16:27:14.982: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration bundle was activated before the state location was initialized.  Will retry after the state location is initialized.
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.343: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.344: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.344: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.344: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.392: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.392: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.394: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.394: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.395: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.395: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.427: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.427: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.485: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.485: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.491: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.491: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.492: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.492: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.540: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.540: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.541: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.541: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.543: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.543: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.566: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:29522): GLib-CRITICAL **: 16:27:18.566: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: Logback config file: /home/walker/e/workspace/.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://937.fwk22006205:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://937.fwk22006205:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+org.eclipse.m2e.logback.configuration: Initializing logback
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.267: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.267: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.267: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.267: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.268: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.268: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.268: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:29522): Gtk-WARNING **: 16:27:43.268: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.097: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.097: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.098: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.098: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.171: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.171: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.174: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.174: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.175: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.175: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.221: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.221: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.262: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.262: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.269: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.269: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.270: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.270: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.326: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.326: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.327: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.327: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.329: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.329: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.363: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:31154): GLib-CRITICAL **: 17:57:41.363: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration bundle was activated before the state location was initialized.  Will retry after the state location is initialized.
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.436: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.436: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.437: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.437: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.479: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.479: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.481: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.481: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.482: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.482: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.510: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.510: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.534: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.535: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.538: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.538: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.539: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.539: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.571: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.571: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.572: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.572: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.573: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.573: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.592: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:31202): GLib-CRITICAL **: 17:57:44.592: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: Logback config file: /home/walker/e/workspace/.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://937.fwk22006205:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://937.fwk22006205:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+org.eclipse.m2e.logback.configuration: Initializing logback
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.711: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.711: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.711: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.711: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.712: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.712: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.712: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:31202): Gtk-WARNING **: 17:57:56.712: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.211: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.211: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.212: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.212: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.255: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.255: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.257: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.257: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.258: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.258: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.287: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.287: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.312: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.313: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.316: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.316: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.317: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.317: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.351: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.351: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.352: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.352: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.353: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.353: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.374: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:8729): GLib-CRITICAL **: 09:06:40.374: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.293: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.293: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.293: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.293: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.350: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.350: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.353: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.353: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.353: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.353: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.383: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.383: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.409: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.409: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.413: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.413: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.414: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.414: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.448: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.448: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.449: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.449: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.450: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.450: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.471: g_base64_encode_step: assertion 'in != NULL' failed
+
+(SmartGit:12676): GLib-CRITICAL **: 14:49:02.471: g_base64_encode_step: assertion 'in != NULL' failed
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+
+(Eclipse:31202): Gtk-WARNING **: 15:43:14.262: gtk_widget_size_allocate(): attempt to allocate widget with width 12 and height -13
+
+(Eclipse:31202): Gtk-CRITICAL **: 15:43:14.262: gtk_box_gadget_distribute: assertion 'size >= 0' failed in GtkScrollbar
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+
+(Eclipse:31202): Gtk-WARNING **: 15:58:41.679: Failed to measure available space: 读取 /media/walker/2650-C0BB 文件系统信息时出错：没有那个文件或目录
+
+(Eclipse:31202): Gtk-WARNING **: 16:28:10.750: Failed to measure available space: 读取 /media/walker/2650-C0BB 文件系统信息时出错：没有那个文件或目录
+
+(Eclipse:31202): Gtk-WARNING **: 16:49:15.722: Failed to measure available space: 读取 /media/walker/2650-C0BB 文件系统信息时出错：没有那个文件或目录
+
+(Eclipse:31202): Gtk-WARNING **: 16:49:15.722: Failed to measure available space: 读取 /media/walker/2650-C0BB 文件系统信息时出错：没有那个文件或目录

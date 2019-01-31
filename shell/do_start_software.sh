@@ -15,8 +15,8 @@ function do_start_sftware_start(){
 
 
     local arr=( 
-    '/home/walker/software/eclipse/eclipse '
-    '/home/walker/software/smartgit/bin/smartgit.sh ' 
+    '/home/walker/software/eclipse/eclipse'
+    '/home/walker/software/smartgit/bin/smartgit.sh' 
     '/home/walker/help/python/ python autoCochatCph.py >> ~/auto.log'
      )
      
