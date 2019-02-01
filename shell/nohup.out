@@ -704,3 +704,11 @@ Set a breakpoint on '_pixman_log_error' to debug
 (Eclipse:31202): Gtk-WARNING **: 16:49:15.722: Failed to measure available space: 读取 /media/walker/2650-C0BB 文件系统信息时出错：没有那个文件或目录
 
 (Eclipse:31202): Gtk-WARNING **: 16:49:15.722: Failed to measure available space: 读取 /media/walker/2650-C0BB 文件系统信息时出错：没有那个文件或目录
+Gdk-Message: 15:40:29.270: Eclipse: Fatal IO error 11 (资源暂时不可用) on X server :0.
+
+Gdk-Message: 15:40:29.277: WebKitWebProcess: Fatal IO error 11 (资源暂时不可用) on X server :0.
+
+Gdk-Message: 15:40:29.336: SmartGit: Fatal IO error 11 (资源暂时不可用) on X server :0.
+
+Gdk-Message: 15:40:29.475: eclipse: Fatal IO error 0 (成功) on X server :0.
+
