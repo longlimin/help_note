@@ -112,6 +112,8 @@ alter table tb_a add  FOREIGN KEY(id ) REFERENCES tb_b(id);
 --修改表添加列 默认值
 alter table tb_group add( checked varchar(10) default 'true' );
 alter table tb_group rename column checked to newName;
+alter table tb_group modify column_name not null;
+alter table tb_group add unique(user_token)
 
 ---
 ---表数据管理

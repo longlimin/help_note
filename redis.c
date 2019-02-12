@@ -67,6 +67,15 @@ EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不
 返回 key 所储存的值的类型。
 
 
+//发布订阅模式
+docker exec -it redis bash        //进入redis容器中
+redis-cli                         //启动一个redis客户端
+publish chat aaa                  //发布一个chat主题的消息，内容为aaa
+subscribe chat                    //订阅一个chat主题的消息
+
+
+
+
 1	HDEL key field1 [field2] 
 删除一个或多个哈希表字段
 2	HEXISTS key field 
@@ -131,6 +140,8 @@ EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不
 17	RPUSHX key value 
 为已存在的列表添加值
 
+//set
+
 1	SADD key member1 [member2] 
 向集合添加一个或多个成员
 2	SCARD key 
@@ -163,6 +174,7 @@ EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不
 迭代集合中的元素
 
 
+//zet
 
 1	ZADD key score1 member1 [score2 member2] 
 向有序集合添加一个或多个成员，或者更新已存在成员的分数
@@ -178,6 +190,8 @@ EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置过期时间。 不
 在有序集合中计算指定字典区间内成员数量
 7	ZRANGE key start stop [WITHSCORES] 
 通过索引区间返回有序集合成指定区间内的成员
+    zrange add:kkd 0 -1
+    
 8	ZRANGEBYLEX key min max [LIMIT offset count] 
 通过字典区间返回有序集合的成员
 9	ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT] 
