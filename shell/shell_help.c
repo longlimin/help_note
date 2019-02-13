@@ -253,22 +253,25 @@ server time.nist.gov iburst
 
 
 //日期date格式化
-1.date "+%Y-%m-%d"  
-2.2013-02-19  
+date "+%Y-%m-%d"  
+2013-02-19  
 date "+%H:%M:%S"  
-4.13:13:59  
+13:13:59  
 date "+%Y-%m-%d %H:%M:%S"  
-6.2013-02-19 13:14:19  
-date "+%Y_%m_%d %H:%M:%S"    
-8.2013_02_19 13:14:58  
+2013-02-19 13:14:19   
 date -d today   
-10.Tue Feb 19 13:10:38 CST 2013  
+Tue Feb 19 13:10:38 CST 2013  
 date -d now  
-12.Tue Feb 19 13:10:43 CST 2013  
+Tue Feb 19 13:10:43 CST 2013  
 date -d tomorrow  
-14.Wed Feb 20 13:11:06 CST 2013  
+Wed Feb 20 13:11:06 CST 2013  
 date -d yesterday  
-16.Mon Feb 18 13:11:58 CST 2013  
+Mon Feb 18 13:11:58 CST 2013  
+date -d "2019-02-11 13:14:19" +%s #到s级别
+1549862059
+date -d @1549862059 "+%Y-%m-%d"
+2019-02-11
+
 
 //源配置
 {

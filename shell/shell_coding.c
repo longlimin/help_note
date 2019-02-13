@@ -92,6 +92,11 @@ var=`命令` # 注意此处不是普通的单引号
 st="ls | more"
 `$st`   //将 | 和 more 看成了参数，而不是将文件按页显示
 eval $st      //双次解析 一次解析变量 二次 放置执行？ 同js php shell 
+//单引号的输入输出 参数化 ' -> "'"    'xjakldjfasdf23423' 绝对字符except ' awk 
+cmd=$exe' keys '$key" | awk -OFS'\"' '"'{print $1}'"'"
+
+
+
 
 //ll找不到 ll = ls -alF 
 //if else  test  判断  
