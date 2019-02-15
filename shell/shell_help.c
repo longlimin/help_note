@@ -838,7 +838,28 @@ e2fsck -f /dev/vdb   # 诊治数据磁盘，返回磁盘信息
 resize2fs /dev/vdb   # 重置数据磁盘大小
 
 //启动项
+1.操作系统接管硬件以后，首先读入 /boot 目录下的内核文件
+2.内核文件加载以后，就开始运行第一个程序 /sbin/init，它的作用是初始化系统环境。由于init是第一个运行的程序，它的进程编号（pid）就是1。其他所有进程都从它衍生，都是它的子进程。
+3.许多程序需要开机启动。它们在Windows叫做"服务"（service），在Linux就叫做"守护进程"（daemon）。
+init进程的一大任务，就是去运行这些开机启动的程序。但是，不同的场合需要启动不同的程序，比如用作服务器时，需要启动Apache，用作桌面就不需要。Linux允许为不同的场合，分配不同的开机启动程序，这就叫做"运行级别"（runlevel）。也就是说，启动时根据"运行级别"，确定要运行哪些程序。
 
+cat /etc/inittab
+#各级别启动目录
+ls /etc/ | grep rc
+rc0.d # 0 - 停机（千万别把initdefault设置为0，否则系统永远无法启动）
+rc1.d # 1 - 单用户模式
+rc2.d # 2 - 多用户，没有 NFS
+rc3.d # 3 - 完全多用户模式(标准的运行级)
+rc4.d # 4 - 系统保留的
+rc5.d # 5 - X11 （x window)
+rc6.d # 6 - 重新启动
+rcS.d
+#每个级别都会在在对应的目录下有对应的启动文件
+ls /etc/rc3.d/
+初始化操作都在 /etc/init/*.conf文件中完成    */
+cat /etc/init/anacron.conf 
+start on runlevel [2345]
+stop on runlevel [!2345]
 
 
 //用户组问题

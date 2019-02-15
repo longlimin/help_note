@@ -10,7 +10,6 @@ import uuid
 import ast
 import tool
 import BeautifulSoup
-from socketIO_client import SocketIO
 from socketIo import Socket
 
 from http import Http

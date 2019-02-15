@@ -892,3 +892,198 @@ org.eclipse.m2e.logback.configuration: Initializing logback
 (SmartGit:7186): GLib-CRITICAL **: 12:31:03.844: g_base64_encode_step: assertion 'in != NULL' failed
 
 (SmartGit:7186): GLib-CRITICAL **: 12:31:03.845: g_base64_encode_step: assertion 'in != NULL' failed
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration bundle was activated before the state location was initialized.  Will retry after the state location is initialized.
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.012: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.012: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.013: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.013: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.084: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.084: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.087: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.087: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.088: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.088: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.134: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.135: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.175: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.176: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.182: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.182: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.184: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.184: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.239: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.239: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.240: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.240: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.242: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.242: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.266: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:30194): GLib-CRITICAL **: 16:27:42.266: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: Logback config file: /home/walker/e/workspace/.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://937.fwk483832253:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://937.fwk483832253:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+org.eclipse.m2e.logback.configuration: Initializing logback
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.201: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.201: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.202: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.202: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.202: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.202: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.202: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:27:53.202: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://repository.jboss.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+Caused by: java.lang.ClassNotFoundException: javax.xml.bind.JAXBContext cannot be found by org.sf.feeling.decompiler.source.attach_3.1.1.201811062102
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:511)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:422)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:414)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.loadClass(ModuleClassLoader.java:153)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:521)
+	... 4 more
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://oss.sonatype.org/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.ArtifactorySourceCodeFinder; serviceUrl=https://repo.grails.org/grails/webapp/home.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.EclipsePluginSourceByUrlPatternFinder; urlPattern=http://www.filewatcher.com/_/?q={0} /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+org.sf.feeling.decompiler.source.attach.finder.GrepCodeSourceCodeFinder@65aa1418 /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.SourceAttacherServiceSourceCodeFinder /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.net.SocketTimeoutException: connect timed out
+	at java.base/java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:399)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:242)
+	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:224)
+	at java.base/java.net.Socket.connect(Socket.java:591)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:177)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:474)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:569)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:242)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:341)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:362)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1242)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1181)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1075)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1009)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1581)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1509)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceAttacherServiceSourceCodeFinder.find(SourceAttacherServiceSourceCodeFinder.java:67)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://repository.apache.org/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://repository.ow2.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://maven.java.net/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://maven.nuxeo.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://maven.alfresco.com/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=http://nexus.xwiki.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.ArtifactorySourceCodeFinder; serviceUrl=https://repository.cloudera.com/artifactory/webapp/home.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.ArtifactorySourceCodeFinder; serviceUrl=https://repo.spring.io/webapp/home.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.EclipsePluginSourceByFTPSearchv3Finder; urlPattern=http://www.search-ftp.com/lsftp.ashx?s={0} /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.EclipsePluginSourceByUrlPatternFinder; urlPattern=http://www.mmnt.ru/int/get?st={0} /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+org.sf.feeling.decompiler.source.attach.finder.EclipseSourceReferencesSourceCodeFinder@61f6d3a0 /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+org.sf.feeling.decompiler.source.attach.finder.JreSourceCodeFinder@6fdeef40 /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+
+(Eclipse:30194): Gtk-WARNING **: 16:48:03.699: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:48:03.699: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:48:03.700: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:30194): Gtk-WARNING **: 16:48:03.700: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder /home/walker/e/workspace/message_system/server/lib/netty-socketio-1.7.12.jar
+class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder FOUND: SourceFileResult[source = /tmp/source8298013527220445422.tmp ; suggestedSourceFileName = netty-socketio-1.7.12-sources.jar ; accuracy = 100 ; binFile = /home/walker/e/workspace/message_system/server/lib/netty-socketio-1.7.12.jar ; finder = class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder]
+Trying (using InternalBasedSourceAttacherImpl36):  /tmp/.org.sf.feeling.decompiler1550046474574/source/netty-socketio-1.7.12-sources.jar
+Attached library source /tmp/.org.sf.feeling.decompiler1550046474574/source/netty-socketio-1.7.12-sources.jar
