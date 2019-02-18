@@ -1087,3 +1087,265 @@ class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder /
 class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder FOUND: SourceFileResult[source = /tmp/source8298013527220445422.tmp ; suggestedSourceFileName = netty-socketio-1.7.12-sources.jar ; accuracy = 100 ; binFile = /home/walker/e/workspace/message_system/server/lib/netty-socketio-1.7.12.jar ; finder = class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder]
 Trying (using InternalBasedSourceAttacherImpl36):  /tmp/.org.sf.feeling.decompiler1550046474574/source/netty-socketio-1.7.12-sources.jar
 Attached library source /tmp/.org.sf.feeling.decompiler1550046474574/source/netty-socketio-1.7.12-sources.jar
+org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration bundle was activated before the state location was initialized.  Will retry after the state location is initialized.
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.071: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.072: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.072: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.072: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.141: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.141: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.152: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.152: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.152: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.152: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.221: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.222: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.260: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.260: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.266: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.267: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.268: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.268: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.313: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.313: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.314: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.314: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.315: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.315: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.342: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:26491): GLib-CRITICAL **: 18:40:41.342: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: Logback config file: /home/walker/e/workspace_my/.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://937.fwk814886797:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://937.fwk814886797:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+org.eclipse.m2e.logback.configuration: Initializing logback
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.833: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.833: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.834: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.834: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.847: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.847: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.847: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:41:04.847: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:47:43.609: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:47:43.609: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:47:43.609: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 18:47:43.609: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.115: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.121: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.121: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.288: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.295: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.295: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.417: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.418: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.418: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.566: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.571: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:32:59.572: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:00.926: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:00.927: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:00.929: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.051: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.055: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.055: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.201: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.201: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.201: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.327: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.328: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.328: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.451: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.451: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.451: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.654: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.655: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.655: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.828: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.830: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.832: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.960: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.960: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:01.960: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.172: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.172: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.173: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.316: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.316: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.317: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.442: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.442: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.442: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.567: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.568: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.568: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.700: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.700: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:33:02.701: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+
+(Eclipse:26491): Gtk-WARNING **: 19:37:08.477: gtk_widget_size_allocate(): attempt to allocate widget with width 12 and height -13
+
+(Eclipse:26491): Gtk-CRITICAL **: 19:37:08.477: gtk_box_gadget_distribute: assertion 'size >= 0' failed in GtkScrollbar
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+
+(Eclipse:26491): Gtk-WARNING **: 19:37:57.024: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:37:57.024: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:37:57.025: Negative content width -1 (allocation 1, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+正在现有的浏览器会话中打开。
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+
+(Eclipse:26491): Gtk-WARNING **: 19:45:11.397: gtk_widget_size_allocate(): attempt to allocate widget with width 12 and height -13
+
+(Eclipse:26491): Gtk-CRITICAL **: 19:45:11.398: gtk_box_gadget_distribute: assertion 'size >= 0' failed in GtkScrollbar
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+正在现有的浏览器会话中打开。
+
+(Eclipse:26491): Gtk-WARNING **: 19:51:16.557: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:51:16.557: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:51:16.557: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:51:16.558: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+[13324:13324:0218/195155.932073:ERROR:sandbox_linux.cc(364)] InitializeSandbox() called with multiple threads in process gpu-process.
+正在现有的浏览器会话中打开。
+
+(Eclipse:26491): Gtk-WARNING **: 19:57:10.674: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:57:10.675: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:57:10.675: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 19:57:10.675: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+[13655:13655:0218/195803.683296:ERROR:sandbox_linux.cc(364)] InitializeSandbox() called with multiple threads in process gpu-process.
+正在现有的浏览器会话中打开。
