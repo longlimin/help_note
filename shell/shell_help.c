@@ -2,10 +2,10 @@ xuname -a  //查看系统信息
 cat /proc/version //正在运行的内核版本。
 cat /etc/issue //显示的是发行版本信息
 cat /proc/cpuinfo | more/less //分页查看
-cat /proc/meminfo 
 
 ethtool eth0 //网卡信息
-du -sh * #查看文件大小 占用
+du -sh * #查看文件大小 占用 ls -lth
+du -h *
 touch test.txt //创建文件
 
 //基本命令
@@ -14,9 +14,7 @@ touch test.txt //创建文件
     find / -name librtmp.so.1
     whereis 
     which
-    ls -d /imgs/        只显示目录
-    ls -F | grep '/$'
-    ls -I | grep '^d'
+    ls -lht <l>长信息 <h>size转换 <t>时间排序 <s>size排序 <d> 只显示目录 
     type ls 查看命令位置 查看执行结果?
     date --version / -v   --引领一整个英文单词
     date --set="1999-01-01 08:00:00" # 设置时间
@@ -31,8 +29,8 @@ touch test.txt //创建文件
     
     id  查看当前用户组及其他状态
 	apt-cache madison python-rpi.gpio	查看安装 的软件版本
-    tar -xvf 解压
-    tar -zvf 压缩
+    tar -xvf toname.gz 解压
+    tar -zvf toname.gz fromname.log 压缩
     unzip opencv-2.4.13.zip
     cd opencv-2.4.13/
     cmake -D WITH_GTK_2_X=ON -D CMAKE_INSTALL_PREFIX=/usr/local .
@@ -51,7 +49,7 @@ touch test.txt //创建文件
     chown -R wasup:wasgrp com 修改用户及组权限
 
     #去掉控制台颜色代码##########
-    top | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
+    edjfl | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
  
 
 安装ubuntu后操作记录
@@ -169,7 +167,8 @@ ORS        输出的记录分隔符，默认为换行符,即处理结果也是�
 //sed
 sed -n '5,10p' obcp-server29.log //5-10行
 //find
-find test | grep '.*.png' #查找当前路径 下 所有文件 深度优先 的 png图片文件
+find test</> | grep .png #查找当前路径 下 所有文件 深度优先 的 png图片文件
+find test</> -name '.*.png'
 
 // grep  ############
 #关键词前后10行 分页展示
@@ -215,8 +214,6 @@ lr-x------ 1 walker walker 64 1月  24 15:36 255 -> /home/walker/e/help_note/she
 3.读取 转储目标文件
 cat /proc/7570/fd/255 > pipe_maker.sh
 
-
-
 lsof输出各列信息的意义如下：
 COMMAND：进程的名称 PID：进程标识符
 USER：进程所有者
@@ -233,7 +230,7 @@ lsof -g gid #显示归属gid的进程情况
 lsof +d /usr/local/ #显示目录下被进程开启的文件 
 lsof +D /usr/local/ E同上，但是会搜索目录下的目录，时间较长 
 lsof -d 4 #显示使用fd为4的进程 
-lsof -i #用以显示符合条件的进程情况 
+lsof -i #show port tcp
 lsof -i[46] [protocol][@hostname|hostaddr][:service|port]   46 --> IPv4 or IPv6   protocol --> TCP or UDP   hostname --> Internet host name   hostaddr --> IPv4地址   service --> /etc/service中的 service name (可以不止一个)   port --> 端口号 (可以不止一个)
 lsof -i:8091 端口
 
@@ -464,18 +461,51 @@ netstat -g 将会显示该主机订阅的所有多播网络。
 套接字(socket)：套接字也是一种进程间通信机制，与其他通信机制不同的是，它可用于不同主机间的进程通信。
 }
 
-//Linux终端管理进程
+//Linux终端管理进程  memory
 {
 top命令是一个常用的查看系统资源使用情况和查看占用系统资源最多的进程
-htop命令是top的改进版 Linux发行版本都没有安装htop——   apt-get install htop     
-ps命令可以列出正在运行的进程。以下命令列出所有在你系统上运行的命令： ps -A 
+top -p 2833 查看指定
+htop    命令是top的改进版 Linux发行版本都没有安装htop——   apt-get install htop     
+
+#show memory
+free -h
+cat /proc/meminfo  #(free / ps / top)等的组合显示
+
+vmstat <1 sleep> <5 count> 
+procs -----------memory---------- ---swap-- -----io---- --system-- -----cpu-----
+
+ps -elf 
 pstree  以显示进程信息。它以树的形式显示
-kill 可以根据进程ID来杀死进程。你可以使用ps -A，top,或者grep命令获取到进程ID。 kill pid 
+kill -9
 pgrep 会返回所有匹配这个关键词的进程ID。例如，你可以使用以下命令寻找Firefox的PID: pgrep firefox 
 pkill & killall pkill和killall命令可以根据进程的名字杀死一个进程。使用以下任一方法都可以杀死Firefox进程： pkill firefox  killall firefox 
 renice 用来改变进程的nice值。nice值代表进程的优先级。renice 19 pid    -19的nice值是非常高的优先级，相反，19是非常低的优先级。0是默认的优先级。
-xkill 可以轻易杀死图形程度的命令。运行它之后，你的光标会变成x符号。点击相应的图形程序的窗口就可以杀死该程序。如果你中途要放弃操作，你可以点击鼠标右键取消。
 }
+
+//linux性能监控 分析工具 监控 cpu mem netstat 
+{
+apt-get install nmon 
+
+nmon -fT -s 5 -c 20
+nmon -f -T -s 5 -c 20 -m  ~/logs/
+
+-f标记，把nmon收集的数据保存到CSV格式的文件里，以_date_time.nmon方式命名。下面列出一些常用参数，更多可以查看帮助文档。
+-f 以后台方式运行nmon,把收集到的数据保存到csv文件中。 
+-t 包含top的输出------
+-T 输出最耗资源的进程
+-s 间隔时间
+-c 收集多少次 
+-m 生成目录
+好的 数据报表已经生成，可以下载出来再windows机器上用analyser日志分析工具打开
+
+nmon_analyser.xls excel脚本宏
+https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/Power%20Systems/page/nmon_analyser
+选择文件转换为excel格式 
+
+excel图表展示
+
+}
+
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
 {
 service openbsd-inetd start  
@@ -516,12 +546,10 @@ service openbsd-inetd start
 　　brk : 发送信号。
 　　上表所列命令以外的其他命令都将以字符串的形式发送至 Telnet 服务器。例如，sendabcd 将发送字符串 abcd 至 Telnet 服务器，这样，Telnet 会话窗口中将出现该字符串。
 　　quit
-　　使用 quit 命令可以退出 Telnet 客户端。
-
 
 }
 
-//ssh 通过winscp 和 putty<终端>  依靠ip/端口/用户名密码 远程登录
+//ssh putty<终端>  依靠ip/端口/用户名密码 远程登录
 {
     
 在计算机之间传递文件（使用scp）
@@ -530,20 +558,14 @@ X-forwarding – 连接到远端的机器，并且开启一个GUI应用，看起
 SOCKS 代理 – 允许你将一个支持SOCKET代理的应用上的所有连接转发到远端机器。这对于如何更安全使用公共wifi浏览网络和绕过严格的防火墙是很有用的。
 在本地机器输入一次密码，然后就可以通过ssh的key代理来使用安全身份登陆其余的远端机器，而不需要重复输入你的密码了。
 
+scp xxx.gz icbcmon@122.1.2.3:/approot/
 
 service ssh start   
- /etc/init.d/ssh restart
-下列软件包有未满足的依赖关系： 版本
- openssh-server : 依赖: openssh-client (= 1:6.6p1-2ubuntu1)
-E: 无法修正错误，因为您要求某些软件包保持现状，就是它们破坏了软件包间的依赖关系。
-apt-get install openssh-client=1:6.6p1-2ubuntu1
-openssh-server是依赖于openssh-clien的,那ubuntu不是自带了openssh-client吗?原由是自带的openssh-clien与所要安装的openssh-server所依赖的版本不同,这里所依赖的版本是
+/etc/init.d/ssh restart
 
 //免密码登录ssh
-对于debian/ubuntu系统来说，安装方式很简单：
 apt-get install sshpass
-对于其他的linux,可以编译sshpass的源码安装：
-wget http://sourceforge.net/projects/sshpass/files/sshpass/1.05/sshpass-1.05.tar.gz  
+2.wget http://sourceforge.net/projects/sshpass/files/sshpass/1.05/sshpass-1.05.tar.gz  
 tar xvzf sshpass-1.05.tar.gz  
 ./configure 
 make  
@@ -643,7 +665,7 @@ ln -s source     dist     #建立软连接 快捷方式
 ln     source     dist     #建立硬连接 硬链接不能连接两个不同文件系统上的文件 类似拷贝副本
 
 //sh ./ bash dash语法错误
-的原因在于两次执行的不是同一种shell，在用./sample的方式执行的时候，系统会使用脚本首行声明的/bin/bash来解释脚本，而用sh方式执行的时候，系统会调用sh这个程序，在我的机器上看一下sh这个程序的来源：
+的原因在于两次执行的不是同一种shell，在用./sample的方式执行的时候，系统会使用脚本首行声明的/bin/bash来解释脚本，而用sh方式执行的时候，系统会调用sh
 snow@snow-desktop:~$ ll `which sh`  
 lrwxrwxrwx 1 root root 4 11月  9 10:17 /bin/sh -> dash*  
 
@@ -654,11 +676,10 @@ dpkg-reconfigure dash
 
 //回响
 ///$ echo -e ${PATH////'\n'}
- -n 不尾随换行符 文件追加 lf lrlf异常
-  -e 启用解释反斜杠的转义功能
-  -E 禁用解释反斜杠的转义功能(默认)
-      --help 显示此帮助信息并退出
-      --version 显示版本信息并退出
+    -n 不尾随换行符 文件追加 lf lrlf异常
+    -e 启用解释反斜杠的转义功能
+    -E 禁用解释反斜杠的转义功能(默认)
+    --version 显示版本信息并退出
 若-e 可用，则以下序列即可识别：
   \\    反斜杠
   \a    响铃声
@@ -679,7 +700,6 @@ dpkg-reconfigure dash
 add-apt-repository ppa:fta/gnome3 
 apt-get update 
 apt-get install evolution
-
 
 //QQ
     dpkg -i fonts-wqy-microhei_0.2.0-beta-2_all.deb  
@@ -710,9 +730,8 @@ source /etc/profile
 //eclipse高版本配置 当path无效
 ln -s /home/walker/software/jdk11 jre
 
-
 //防火墙问题
-      {
+{
 一、Linux下开启/关闭防火墙命令
 1、永久性生效，重启后不会复原。
 开启： chkconfig iptables on
@@ -744,7 +763,6 @@ iptables -A INPUT -i !   PPP0   -j ACCEPT
 }
 //解压问题
 {
-	
 语法：tar [主选项+辅选项] 文件或者目录
 使用该命令时，主选项是必须要有的，它告诉tar要做什么事情，辅选项是辅助使用的，可以选用。
 主选项：
@@ -761,54 +779,17 @@ t 列出档案文件的内容，查看已经备份了哪些文件。
 tar –xvf file.tar //解压 tar包 
 tar -xzvf file.tar.gz //解压tar.gz 
 tar -xjvf file.tar.bz2 //解压 tar.bz2 
-tar –xZvf file.tar.Z //解压tar.Z 
+tar –xzvf file.tar.Z //解压tar.Z 
+--exclude FILE：在压缩的过程中，不要将 FILE 打包！
+
+将整个 /etc 目录下的文件全部打包成为 /tmp/etc.tar
+tar -cvf /tmp/etc.tar /etc　　　　<==仅打包，不压缩！
+tar -czvf /tmp/etc.tar.gz /etc　　<==打包后，以 gzip 压缩
+tar -jcvf /tmp/etc.tar.bz2 /etc　　<==打包后，以 bzip2 压缩
+
 unrar e file.rar //解压rar 
 unzip file.zip //解压zip 
---exclude FILE：在压缩的过程中，不要将 FILE 打包！
-范例一：将整个 /etc 目录下的文件全部打包成为 /tmp/etc.tar
-tar -cvf /tmp/etc.tar /etc　　　　<==仅打包，不压缩！
-tar -zcvf /tmp/etc.tar.gz /etc　　<==打包后，以 gzip 压缩
-tar -jcvf /tmp/etc.tar.bz2 /etc　　<==打包后，以 bzip2 压缩
-# 特别注意，在参数 f 之后的文件档名是自己取的，我们习惯上都用 .tar 来作为辨识。
-# 如果加 z 参数，则以 .tar.gz 或 .tgz 来代表 gzip 压缩过的 tar file ～
-# 如果加 j 参数，则以 .tar.bz2 来作为附档名啊～
-# 上述指令在执行的时候，会显示一个警告讯息：
-# '『tar: Removing leading `/" from member names』那是关於绝对路径的特殊设定。 '
-范例二：查阅上述 /tmp/etc.tar.gz 文件内有哪些文件？ 
-tar -ztvf /tmp/etc.tar.gz
-# 由於我们使用 gzip 压缩，所以要查阅该 tar file 内的文件时，
-# 就得要加上 z 这个参数了！这很重要的！
-范例三：将 /tmp/etc.tar.gz 文件解压缩在 /usr/local/src 底下
-cd /usr/local/src
-tar -zxvf /tmp/etc.tar.gz
-# 在预设的情况下，我们可以将压缩档在任何地方解开的！以这个范例来说
-# 我先将工作目录变换到 /usr/local/src 底下，并且解开 /tmp/etc.tar.gz
-# 则解开的目录会在 /usr/local/src/etc ，另外，如果您进入 /usr/local/src/etc
-# 则会发现，该目录下的文件属性与 /etc/ 可能会有所不同喔！
-范例四：在 /tmp 底下，我只想要将 /tmp/etc.tar.gz 内的 etc/passwd 解开而已
-cd /tmp
-tar -zxvf /tmp/etc.tar.gz etc/passwd
-# 我可以透过 tar -ztvf 来查阅 tarfile 内的文件名称，如果单只要一个文件，
-# 就可以透过这个方式来下达！注意到！ etc.tar.gz 内的根目录 / 是被拿掉了！
-范例五：我要备份 /home, /etc ，但不要 /home/dmtsai
-tar --exclude /home/dmtsai -zcvf myfile.tar.gz /home/* /etc  */
-另外：tar命令的C参数
-　　$ tar -cvf file2.tar /home/usr2/file2
-　　tar: Removing leading '/' from members names
-　　home/usr2/file2
-　　该命令可以将/home/usr2/file2文件打包到当前目录下的file2.tar中，需要注意的是：使用绝对路径标识的源文件，在用tar命令压缩后，文件名连同绝对路径（这里是home/usr2/，根目录'/'被自动去掉了）一并被压缩进来。使用tar命令解压缩后会出现以下情况：
-　　$ tar -xvf file2.tar
-　　$ ls
-　　…… …… home …… ……
-　　解压缩后的文件名不是想象中的file2，而是home/usr2/file2。
-　　$ tar -cvf file2.tar -C /home/usr2 file2
-　　该命令中的-C dir参数，将tar的工作目录从当前目录改为/home/usr2，将file2文件（不带绝对路径）压缩到file2.tar中。注意：-C dir参数的作用在于改变工作目录，其有效期为该命令中下一次-C dir参数之前。
-　　使用tar的-C dir参数，同样可以做到在当前目录/home/usr1下将文件解压缩到其他目录，例如：
-　　$ tar -xvf file2.tar -C /home/usr2
-　　而tar不用-C dir参数时是无法做到的：
-　　$ tar -xvf file2.tar /home/usr2
-　　tar: /tmp/file: Not found in archive
-　　tar: Error exit delayed from previous errors 
+
 //对于.7z
 支持 7Z,ZIP,Zip64,CAB,RAR,ARJ,GZIP,BZIP2,TAR,CPIO,RPM,ISO,DEB 压缩文件格式
 安装： apt-get install p7zip p7zip-full p7zip-rar
@@ -957,16 +938,15 @@ OpenSSL 1.0.1f 6 Jan 2014
 
 
 #定时任务
-crontab -e 
-crontab -l
+crontab -e #编辑
+crontab -l  #列表 
 //Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本；可执行的任务范围可以是每天夜里自动备份用户的home文件夹，也可以每个小时记录CPU的信息日志。
 //crontab（cron table）命令用于编辑执行中的定期任务列表，并且操作是基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
 */5 * * * * /usr/local/tomcat-6.0.41/tomcat_cardniu_stat/monitor.sh //每五分钟
 0 0 * * *  /home/pi/backup.sh //每天
-/etc/init.d/crond restart //重启服务
 // service crond restart
 service cron status
-/etc/init.d/cron {start|stop|status|restart|reload|force-reload}.
+/etc/init.d/cron {start|stop|status|restart|reload|force-reload} //重启服务
 */4 * * * * /home/pi/project/python/foStart.sh
 0 0 * * * /home/pi/project/python/foRestart.sh
 
@@ -987,20 +967,20 @@ Bash
 例程如下：
 Bash
 30 21 * * * /usr/local/etc/rc.d/lighttpd restart
-#上面的例子表示每晚的21:30重启apache。
+#每晚的21:30重启apache。
 45 4 1,10,22 * * /usr/local/etc/rc.d/lighttpd restart
-#上面的例子表示每月1、10、22日的4 : 45重启apache。
+#每月1、10、22日的4 : 45重启apache。
 10 1 * * 6,0 /usr/local/etc/rc.d/lighttpd restart
-#上面的例子表示每周六、周日的1 : 10重启apache。
+#每周六、周日的1 : 10重启apache。
 0,30 18-23 * * * /usr/local/etc/rc.d/lighttpd restart
-#上面的例子表示在每天18 : 00至23 : 00之间每隔30分钟重启apache。
+#在每天18 : 00至23 : 00之间每隔30分钟重启apache。
 0 23 * * 6 /usr/local/etc/rc.d/lighttpd restart
-#上面的例子表示每星期六的11 : 00 pm重启apache。
+#每星期六的11 : 00 pm重启apache。
 * */1 * * * /usr/local/etc/rc.d/lighttpd restart
 #每一小时重启apache
 * 23-7/1 * * * /usr/local/etc/rc.d/lighttpd restart
 #晚上11点到早上7点之间，每隔一小时重启apache
-0 11 4 * mon-wed /usr/local/etc/rc.d/lighttpd restart
+0 11 4 * mon-fri /usr/local/etc/rc.d/lighttpd restart
 #每月的4号与每周一到周三的11点重启apache
 0 4 1 jan * /usr/local/etc/rc.d/lighttpd restart
 #一月一号的4点重启apache

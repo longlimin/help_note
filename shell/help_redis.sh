@@ -44,25 +44,10 @@ function showValue(){
 }
 function delKey(){
     local key=$1
-    local cmdShowType=$exe' type '$key
-    local type=`eval $cmdShowType`
-    local cmdShow=''
-    if [[ $type == "string" ]]
-    then
-        cmdShow=$exe' del '$key
-    elif [[ $type == "set" ]]
-    then
-        cmdShow=$exe' smembers '$key 
-    elif [[ $type == "zset" ]]
-    then
-        cmdShow=$exe' zrange '$key' 0 -1'
-    elif [[ $type == "hash" ]]
-    then
-        cmdShow=$exe' hgetall '$key 
-    else 
-        echo 'What type ? '$type
-    fi
-    echo -e "$cmdShow \t `eval $cmdShow `"
+#    local cmdShowType=$exe' type '$key
+#    local type=`eval $cmdShowType`
+    local cmdShow=$exe' del '$key
+    
 }
 
 exe='/home/walker/software/redis-5.0.3/src/redis-cli ' #-a ruaho123
