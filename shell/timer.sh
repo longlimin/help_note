@@ -2,7 +2,7 @@
 ###########################################
 
 
-if [ -z $1 ];then
+if [ -z "$1" ];then
     echo "./timer.sh './help.sh adjf' <5 s> "
     exit
 fi
@@ -12,7 +12,7 @@ deta=5
 if [ ! -z $2 ];then
     deta=$2
 fi
-count=999
+count=999999
 if [ ! -z $3 ];then
     count=$3
 fi

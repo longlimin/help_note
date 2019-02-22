@@ -8,6 +8,17 @@ cmd路径 \ 反斜杠 linux
 
 %1% 取出第一个参数
 
+IF /? 帮助文档 命令介绍
+
+分支控制 EQU NEQ LSS LEQ GTR GEQ
+IF EXIST FILENAME. （
+    del filename.
+) ELSE （
+    echo filename. missing.
+)
+
+
+
 tasklist | find /i "node.exe" && taskkill /f /t /im node.exe
 
 tasklist | find /i "node.exe" || start "node" node proxy.js 
@@ -17,6 +28,8 @@ xcopy 复制文件夹
 
 等待耗时sleep
 TIMEOUT /T 2
+
+
 
 
 

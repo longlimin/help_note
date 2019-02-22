@@ -11,6 +11,7 @@ https://github.com/msopentech/redis/releases
 redis-cli.exe -h 127.0.0.1 -p 6379
 redis-cli -h host -p port -a password
 
+info 展示redis状态
 flushall 清空
 
 #########数据结构

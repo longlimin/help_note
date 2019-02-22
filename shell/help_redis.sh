@@ -37,6 +37,9 @@ function showValue(){
     elif [[ $type == "hash" ]]
     then
         cmdShow=$exe' hgetall '$key 
+    elif [[ $type == "list" ]]
+    then
+        cmdShow=$exe' lrange '$key' 0 -1'
     else 
         echo 'What type ? '$type
     fi

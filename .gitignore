@@ -12,4 +12,5 @@ WebContent/WEB-INF/classes
 *.o
 *.apk
 *.db
+*.~sql
 

@@ -1,151 +1,142 @@
 asdf;a;
---³£ÓÃ dml dcl ddl sqlÓï¾ä
+--dml dcl ddl
 sqlplus / as sysdba;
+sqlplus 
+conn scott/tiger
 
 ---
----oracle¹ÜÀí 
+---oracle
 ---
 
---²é¿´×Ö·û±àÂë
+--system
 select userenv('language') from dual;
-select * from V$NLS_PARAMETERS;
-SELECT VALUE FROM nls_database_parameters WHERE parameter='NLS_CHARACTERSET'
+select * from v$nls_parameters;
+select value from nls_database_parameters where parameter='nls_characterset'
 
 
---»á»° ½ø³Ì Á¬½ÓÊı ¼à¿Ø
-select count(*) from v$process; --²é¿´½ø³ÌÊıÁ¿
-SELECT * FROM v$process;
-select count(*) from v$session; --²é¿´»á»°
-SELECT * FROM v$session;
-SELECT * FROM v$session 
-where status='ACTIVE'; --²¢·¢Á¬½ÓÊı
---concat join with ','
-select vm_concat(name) from test;
+--session process
+select count(*) from v$process; 
+select * from v$process;
+select count(*) from v$session; 
+select * from v$session;
+select * from v$session 
+where status='active';  
 
 
---²é¿´»á»°Á¬½Ó Ëø ¹Ø±Õ»á»° sysdba
+--sysdba
 select session_id from v$locked_object;
 select sid, serial#, username, osuser from v$session;-- where sid=783;
-alter system kill session '783,18455'; --¹Ø±Õ»á»°
+alter system kill session '783,18455';
 
 select b.owner, b.object_name, a.session_id, a.locked_mode 
 from v$locked_object a, dba_objects b
 where b.object_id = a.object_id;
 
-select value from v$parameter where name = 'processes'; --Êı¾İ¿âÔÊĞíµÄ×î´óÁ¬½ÓÊı
-show parameter processes; --×î´óÁ¬½Ó
-alter system set processes=500 scope=spfile; --ÉèÖÃ½ø³ÌÊıÁ¿
-alter system set sessions=500 scope=spfile;--ÉèÖÃ»á»°ÊıÁ¿
-shutdown immediate;           --¹Ø±Õ  
-startup;     --Æô¶¯ 
+select value from v$parameter where name = 'processes';  
+show parameter processes; 
+alter system set processes=500 scope=spfile;
+alter system set sessions=500 scope=spfile;
+shutdown immediate; --shutdown db now
+startup;     --start db 
 
 ---
----ÓÃ»§¹ÜÀí
----½ÇÉ«¹ÜÀí
----È¨ÏŞ¹ÜÀí
+---user control
 ---
 
---1¡¢¸øÓÃ»§½âËø 
+--unlock 
 alter user scott account unlock; 
---2¡¢×¢Ïú¡¢¶Ï¿ª¡¢ÇĞ»»µ±Ç°ÓÃ»§Á¬½Ó 
-quit
-conn scott/tiger
---3¡¢ÓÃ»§È¨ÏŞ²éÑ¯
-select * from dba_users; --²é¿´Êı¾İ¿âÀïÃæËùÓĞÓÃ»§£¬Ç°ÌáÊÇÄãÊÇÓĞdbaÈ¨ÏŞµÄÕÊºÅ£¬Èçsys,system
-select * from all_users; --²é¿´ÄãÄÜ¹ÜÀíµÄËùÓĞÓÃ»§£¡
-select * from user_users; --²é¿´µ±Ç°ÓÃ»§ĞÅÏ¢ £¡
---B.²é¿´ÓÃ»§»ò½ÇÉ«ÏµÍ³È¨ÏŞ(Ö±½Ó¸³Öµ¸øÓÃ»§»ò½ÇÉ«µÄÏµÍ³È¨ÏŞ)£º
+
+--show
+select * from dba_users;
+select * from all_users;
+select * from user_users; 
+--b.²é¿¸óã»§»ò½çé«ïµí³è¨ïş(ö±½ó¸³öµ¸øóã»§»ò½çé«µäïµí³è¨ïş)£º
 select * from dba_sys_privs;
 select * from user_sys_privs;
---C.²é¿´½ÇÉ«(Ö»ÄÜ²é¿´µÇÂ½ÓÃ»§ÓµÓĞµÄ½ÇÉ«)Ëù°üº¬µÄÈ¨ÏŞ
+--c.²é¿¸½çé«(ö»äü²é¿¸µçâ½óã»§óµóğµä½çé«)ëù°üº¬µäè¨ïş
 select * from role_sys_privs;
---D.²é¿´ÓÃ»§¶ÔÏóÈ¨ÏŞ£º
+--d.²é¿¸óã»§¶ôïóè¨ïş£º
 select * from dba_tab_privs;
 select * from all_tab_privs;
 select * from user_tab_privs;
---E.²é¿´ËùÓĞ½ÇÉ«£º
+--show roles
 select * from dba_roles;
---F.²é¿´ÓÃ»§»ò½ÇÉ«ËùÓµÓĞµÄ½ÇÉ«£º
-select * from dba_role_privs; s
-elect * from user_role_privs;
---G.²é¿´ÄÄĞ©ÓÃ»§ÓĞsysdba»òsysoperÏµÍ³È¨ÏŞ(²éÑ¯Ê±ĞèÒªÏàÓ¦È¨ÏŞ)
-select * from V$PWFILE_USERS
---4¡¢ÓÃ»§¹ÜÀí
---A¡¢´´½¨ÓÃ»§
+--f.²é¿¸óã»§»ò½çé«ëùóµóğµä½çé«£º
+select * from dba_role_privs; 
+select * from user_role_privs;
+--g.²é¿¸ääğ©óã»§óğsysdba»òsysoperïµí³è¨ïş(²éñ¯ê±ğèòªïàó¨è¨ïş)
+select * from v$pwfile_users
+--update user pwd
 create user username identified by password;
-create user username identified by password default tablespace users quota 10M on users;
---B¡¢ĞŞ¸ÄÃÜÂë
-alter user username identified by pass;--ÃÜÂë¾Í´Ópassword¸Ä³ÉpassÁË£»Í¬ÑùµÇÂ½ºóÊäÈëpasswordÒ²¿ÉÒÔĞŞ¸ÄÃÜÂë
---C¡¢É¾³ıÓÃ»§
+create user username identified by password default tablespace users quota 10m on users;
+--delete the user
 drop user username;
-drop user username cascade; --¼¶Áª
-
-
-
+drop user username cascade; --link to all 
 
 
 ---
---oracle sql ²Ù×÷Ä£°å
+-- table control
 ---
 
+--show all table s
+select count(*) from user_tables;
 
---±í¼¯ºÏ
-SELECT count(*) from user_tables;
----²é¿´±íÁĞÃû
-SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE TABLE_NAME = upper('student') ORDER BY COLUMN_ID
-
---½¨±í
+--create
 create table test(id varchar(20), time date);
 create table test ( id varchar(20) primary key, time date, num number(3, 1), test varchar(20) not null, value varchar(20) default 'about' );
---1. ¸´ÖÆ±í½á¹¹¼°ÆäÊı¾İ£º 
+--1.create
 create table table_name_new as select * from table_name_old 
---2. Ö»¸´ÖÆ±í½á¹¹£º 
+--2.create
 create table table_name_new as select * from table_name_old where 1=2; 
 create table table_name_new like table_name_old 
 
---É¾³ı±í
+-- delete the table 
 drop  table test  ;
 
---ĞŞ¸Ä±í ÍâÂë Íâ¼ü
-alter table tb_a add  FOREIGN KEY(id ) REFERENCES tb_b(id);
+--index
+alter table tb_a add  foreign key(id ) references tb_b(id);
 
---ĞŞ¸Ä±íÌí¼ÓÁĞ Ä¬ÈÏÖµ
+--alter table
 alter table tb_group add( checked varchar(10) default 'true' );
-alter table tb_group rename column checked to newName;
+alter table tb_group rename column checked to newname;
 alter table tb_group modify column_name not null;
 alter table tb_group add unique(user_token)
 
+--show table column
+select * from all_tab_columns where table_name = upper('student') order by column_id
+--show index
+select * from user_indexs where table_name = upper('student') order by column_id
+--show table create sql (index column)
+select dbms_metadata.get_ddl('TABLE', 'STUDENT') from dual;
+
 ---
----±íÊı¾İ¹ÜÀí
+-- table date control  dml
 ---
---²éÑ¯²åÈë
+---insert 
 insert into table_name_new select * from table_name_old 
---²éÑ¯²åÈë2 
 insert into table_name_new(column1,column2...) select column1,column2... from table_name_old
---µ¥Ìõ²åÈë
 insert into test(id, time, test, num) values ('1', sysdate, 'test', '12.1');
 insert into test(id, time, test, num) values ('3', sysdate, 'test3', '12.2');
 insert into test(id, time, test, num) 
 values ('2', to_date('1000-12-12 22:22:22','yyyy-mm-dd hh24:mi:ss'), 'test', '12.1');
 insert into test2 values('1212', '1', 'name1');
 --update
-update  test set pwd=MD5('cc'||id||MD5('cc'||id||'qwer')) where id='admin';
---²éÈóupdate µ¥ĞĞ²Ù×÷
+update  test set pwd=md5('cc'||id||md5('cc'||id||'qwer')) where id='admin';
 update test
-SET(id,test,value)=(SELECT 'No.'||rownum newId,num,value FROM test WHERE 1=1 and id='1')
-WHERE id='1';
-SELECT * FROM test;
+set(id,test,value)=(select 'no.'||rownum newid,num,value from test where 1=1 and id='1')
+where id='1';
+select * from test;
 
---É¾³ıÊı¾İ
-DELETE FROM test where 1=1 and id = 'aaa';
---É¾³ıËùÓĞ±íÊı¾İ
+--delete
+delete from test where 1=1 and id = 'aaa';
+--drop table 
 truncate table test;
---²éÑ¯±í
-SELECT t.*,to_char(t.time, 'yyyy-mm-dd hh24:mi:ss') tochar FROM test t;
---count group having ¹ØÁª²éÑ¯
-SELECT tid, count(tid)  FROM 
+--time to_char
+select t.*,to_char(t.time, 'yyyy-mm-dd hh24:mi:ss') tochar from test t;
+--count group having 
+select tid, count(tid)  from 
 (
-SELECT t1.*,t2.id ttid,t2.tid,t2.name FROM test t1, test2 t2
+select t1.*,t2.id ttid,t2.tid,t2.name from test t1, test2 t2
 where 1=1
 and t1.id>0 
 and t1.id=t2.tid(+)
@@ -154,16 +145,15 @@ where 1=1
 group by tid
 having count(tid) >= 0
 
---×óÁ¬½Ó
-SELECT t1.*,count(t2.tid) FROM test t1 
+--join
+select t1.*,count(t2.tid) from test t1 
 left join test2 t2
 on t1.id=t2.tid
 where 1=1
 and t1.id>0  
 group by t2.tid
 
-
---·Ö×é²éÑ¯ Ã¿×éÈ¡µÚÒ»Ìõ
+--every row group one line
 select * from (
 select 
 row_number() over ( partition by t.test order by time desc) rn
@@ -172,150 +162,141 @@ from test t ) tt
 where 1=1
 and rn=1;
 
-
-
---ÁÙÊ±±í²éÑ¯
+--with temp table view?
 with 
-tempTable as (SELECT * FROM test),
-tempTable2 as (SELECT * FROM test)
-SELECT * FROM tempTable,tempTable2 whre a=1;
+temptable as (select * from test),
+temptable2 as (select * from test)
+select * from temptable,temptable2 whre a=1;
  
- 
---exists ´æÔÚÅĞ¶Ï
-select * from T1 where exists(select 1 from T2 where T1.a=T2.a) ;
+--exists 
+select * from t1 where exists(select 1 from t2 where t1.a=t2.a) ;
+
 
 
 
 ---
---- ´æ´¢¹ı³Ì ´¥·¢Æ÷ ÈÎÎñ ĞòÁĞ
+---  function  trigger  job  procedure seq  md5 
 ---
 
---´¥·¢Æ÷
-CREATE OR REPLACE TRIGGER tr_info 
-   BEFORE insert --Ö¸¶¨´¥·¢Ê±»úÎªÉ¾³ı²Ù×÷Ç°´¥·¢
-   ON info 
-   FOR EACH ROW   --ËµÃ÷´´½¨µÄÊÇĞĞ¼¶´¥·¢Æ÷ 
-BEGIN
-   --½«ĞŞ¸ÄÇ°Êı¾İ²åÈëµ½ÈÕÖ¾¼ÇÂ¼±í del_emp ,ÒÔ¹©¼à¶½Ê¹ÓÃ¡£
+create or replace trigger tr_info 
+   before insert  
+   on info 
+   for each row  
+begin
    update  info set about='1' where id like '%'||to_number(to_char(sysdate,'ss'))||'%' ;  
    update  info set about='0' where id like '%'||to_number(to_char(sysdate,'mi'))||'%' ;  
-END; 
---´¥·¢
-insert into info(id,userid) values(seq_info.nextval, 'test1');
- 
+end; 
 
---Ñ­»·´æ´¢¹ı³Ì
---Ïê¼ûplsql.sql
-create or replace procedure p_createRoomTest(cc in integer) as
+
+--more in plsql.sql
+create or replace procedure p_createroomtest(cc in integer) as
 i integer;
 begin
   i := cc;     
-  WHILE i > 0 LOOP
+  while i > 0 loop
   begin
-    insert into   kfgl_fj(id,roomnum,roomtype,curpeople,roomstat,stationid) values(SEQ_test.Nextval, 'T-' || SEQ_test1.Nextval,'43eb189e-a2be-4538-8276-94bc27c2a2b1','0','0','5103211993' ) ;
+    insert into   kfgl_fj(id,roomnum,roomtype,curpeople,roomstat,stationid) values(seq_test.nextval, 't-' || seq_test1.nextval,'43eb189e-a2be-4538-8276-94bc27c2a2b1','0','0','5103211993' ) ;
 
     i:= i - 1;
   end;
-  end LOOP;
+  end loop;
 
-end p_createRoomTest; 
+end p_createroomtest; 
 
 
---µ÷ÓÃ´æ´¢¹ı³Ì
+--do procedure
 begin
-  p_createRoomTest(800);
+  p_createroomtest(800);
   commit;
 end;
 
 
---ĞòÁĞ
-create sequence SEQ_file_down_up
+create sequence seq_file_down_up
 minvalue 1
 maxvalue 99999999
 start with 1
 increment by 1
 cache 20;
 
---job ÈÎÎñ
-VAR job1 NUMBER; 
-BEGIN 
-  dbms_job.submit(:job1,'P_JOB1_TEST;',sysdate,'sysdate+1/1440'); 
-  COMMIT; 
-END; 
+--sequece
+insert into info(id,userid) values(seq_info.nextval, 'test1');
+ 
 
-BEGIN 
+
+--job 
+var job1 number; 
+begin 
+  dbms_job.submit(:job1,'p_job1_test;',sysdate,'sysdate+1/1440'); 
+  commit; 
+end; 
+
+begin 
   dbms_job.run(:job1); 
-END; 
+end; 
 
 
 
 
 
 ---
----³£ÓÃº¯Êı 
+---functions  of system 
 ---
 
---¶¨³¤Î»Êı²¹Æë lpad
-select 'SCJS' || lpad(SEQ_T_CONTRACT_THREE.nextval,3, '0') from dual 
+--fill to length
+select 'scjs' || lpad(seq_t_contract_three.nextval,3, '0') from dual 
 
---ÅĞ¶Ï nvl nvl2 case when
+-- nvl nvl2 case when
 select 
  nvl(t.id,'id is null') idnull
 ,nvl2(t.id,'not null','id is null') idnull
-,(case when t.id='1' then 'Ê¡¹«Ë¾1' when t.id='2' then 'Ê¡¹«Ë¾2' else '·Ö¹«Ë¾' end) name
+,(case when t.id='1' then 'ê¡¹«ëÿ1' when t.id='2' then 'ê¡¹«ëÿ2' else '·ö¹«ëÿ' end) name
  from test t;
 
---×Ô¶¨Òåº¯Êı ÎÄ¼ş´óĞ¡¼ÆËãÎÄ±¾
-CREATE OR REPLACE FUNCTION FILE_SIZE(n IN VARCHAR2) RETURN VARCHAR2 IS retval varchar2(32);
-BEGIN
+--self function 
+create or replace function file_size(n in varchar2) return varchar2 is retval varchar2(32);
+begin
  retval := '';
  select
 (case
-when n>1024*1024*1024*1024 then trunc(n*10/1024/1024/1024/1024)/10||'TB'
-when n>1024*1024*1024 then trunc(n*10/1024/1024/1024)/10||'GB'
-when n>1024*1024 then trunc(n*10/1024/1024)/10||'MB'
-when n>1024 then trunc(n*10/1024)/10||'KB'
-else n||'B' 
+when n>1024*1024*1024*1024 then trunc(n*10/1024/1024/1024/1024)/10||'tb'
+when n>1024*1024*1024 then trunc(n*10/1024/1024/1024)/10||'gb'
+when n>1024*1024 then trunc(n*10/1024/1024)/10||'mb'
+when n>1024 then trunc(n*10/1024)/10||'kb'
+else n||'b' 
   end) res  into retval
 from dual  ;
- RETURN retval;
-END;
+ return retval;
+end;
 
---md5¼ÓÃÜº¯Êı DBMS_OBFUSCATION_TOOLKIT.MD5
-CREATE OR REPLACE FUNCTION MD5(passwd IN VARCHAR2) RETURN VARCHAR2 IS retval varchar2(32);
-BEGIN
- retval := Lower(utl_raw.cast_to_raw( DBMS_OBFUSCATION_TOOLKIT.MD5(INPUT_STRING => passwd)) );
- RETURN retval;
-END;
+-- dbms_obfuscation_toolkit.md5
+create or replace function md5(passwd in varchar2) return varchar2 is retval varchar2(32);
+begin
+ retval := lower(utl_raw.cast_to_raw( dbms_obfuscation_toolkit.md5(input_string => passwd)) );
+ return retval;
+end;
 
 select md5('123456') from  dual;
 
 
---¼ÆËã°Ù·Ö±È
-SELECT * FROM round(100 / 200, 4) * 100 || '%' from dual;
---Ëæ»úÊı
-SELECT  DBMS_RANDOM.VALUE(1,100) from dual;
+--0.5 -> 1
+select * from round(100 / 200, 4) * 100 || '%' from dual;
+--random
+select  dbms_random.value(1,100) from dual;
 
 
 
---Ê±¼ä¸ñÊ½×ª»»
+--time date chat string 
 insert into test values('0002', to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss') );
-SELECT  to_char(time, 'yyyy-mm-dd hh24:mi:ss' ), id  FROM test;
-SELECT substr(to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss:ff'), 0, 23 ) FROM dual; --ºÁÃë ½ØÈ¡
-SELECT  to_char(  to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') FROM dual
---Ê±¼ä²îÖµ
+select  to_char(time, 'yyyy-mm-dd hh24:mi:ss' ), id  from test;
+select substr(to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss:ff'), 0, 23 ) from dual; --ºáãë ½øè¡
+select  to_char(  to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') from dual
+--month + 1
 select to_char(add_months(trunc(sysdate),1),'yyyy-mm') from dual;
---µ±Ç°Ê±¼ä¼õÈ¥7·ÖÖÓµÄÊ±¼ä
-select  sysdate,sysdate - interval '7' MINUTE  from dual
---µ±Ç°Ê±¼ä¼õÈ¥7Ğ¡Ê±µÄÊ±¼ä
+select  sysdate,sysdate - interval '7' minute  from dual
 select  sysdate - interval '7' hour  from dual
---µ±Ç°Ê±¼ä¼õÈ¥7ÌìµÄÊ±¼ä
 select  sysdate - interval '7' day  from dual
---µ±Ç°Ê±¼ä¼õÈ¥7ÔÂµÄÊ±¼ä
 select  sysdate,sysdate - interval '7' month from dual
---µ±Ç°Ê±¼ä¼õÈ¥7ÄêµÄÊ±¼ä
 select  sysdate,sysdate - interval '7' year   from dual
---Ê±¼ä¼ä¸ô³ËÒÔÒ»¸öÊı×Ö
 select  sysdate,sysdate - 8 *interval '2' hour   from dual
 
 

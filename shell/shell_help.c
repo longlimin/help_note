@@ -276,11 +276,11 @@ date -d @1549862059 "+%Y-%m-%d"
 
 vim /etc/apt/sources.list                                                 
 
-	//for pi
+//for pi
 deb http://mirrors.aliyun.com/raspbian/raspbian/ stretch main contrib non-free rpi 
 
 
-	//for pc	
+//for pc	
 
 deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX main restricted universe multiverse
 deb http://mirrors.aliyun.com/ubuntu/ XXXXXXX-security main restricted universe multiverse
@@ -475,6 +475,9 @@ vmstat <1 sleep> <5 count>
 procs -----------memory---------- ---swap-- -----io---- --system-- -----cpu-----
 
 ps -elf 
+ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu   cpu使用倒序
+
+
 pstree  以显示进程信息。它以树的形式显示
 kill -9
 pgrep 会返回所有匹配这个关键词的进程ID。例如，你可以使用以下命令寻找Firefox的PID: pgrep firefox 
@@ -504,6 +507,47 @@ https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/Power%20S
 
 excel图表展示
 
+
+
+}
+netstat
+{
+netstat --help
+usage: netstat [-vWeenNcCF] [<Af>] -r         netstat {-V|--version|-h|--help}
+       netstat [-vWnNcaeol] [<Socket> ...]
+       netstat { [-vWeenNac] -i | [-cnNe] -M | -s [-6tuw] }
+
+        -r, --route              显示路由表
+        -i, --interfaces         display interface table
+        -g, --groups             display multicast group memberships
+        -s, --statistics         display networking statistics (like SNMP)
+        -M, --masquerade         display masqueraded connections
+
+        -v, --verbose            显示详细信息
+        -W, --wide               don't truncate IP addresses
+        -n, --numeric            不解析名称
+        --numeric-hosts          不解析主机名
+        --numeric-ports          忽略端口名称
+        --numeric-users          忽略用户名
+        -N, --symbolic           resolve hardware names
+        -e, --extend             显示更多信息
+        -p, --programs           display PID/Program name for sockets
+        -o, --timers             display timers
+        -c, --continuous         continuous listing
+
+        -l, --listening          display listening server sockets
+        -a, --all                display all sockets (default: connected)
+        -F, --fib                display Forwarding Information Base (default)
+        -C, --cache              display routing cache instead of FIB
+        -Z, --context            display SELinux security context for sockets
+
+  <Socket>={-t|--tcp} {-u|--udp} {-U|--udplite} {-S|--sctp} {-w|--raw}
+           {-x|--unix} --ax25 --ipx --netrom
+  <AF>=Use '-6|-4' or '-A <af>' or '--<af>'；默认： inet
+
+netstat -ano  所有 包括 udp 
+netstat -antl 所遇 tcp
+
 }
 
 //telnet 通过 cmd 依靠ip/端口/用户名密码 远程登录
@@ -513,21 +557,7 @@ service openbsd-inetd start
 1、首先查看telnet运行状态
 #netstat -a | grep telnet
 输出为空，表示没有开启该服务
-
-2、安装openbsd-inetd
-#apt-get install openbsd-inetd
-如果已经安装过了，会提示已经安装过了，直接执行下面的步骤就可以了。
-
-3、安装telnetd
-#apt-get install telnetd
-安装完之后，查看/etc/inetd.conf的内容会多了一行telnet    stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.telnetd
-#cat /etc/inetd.conf  | grep telnet
-输出： telnet     stream  tcp     nowait  telnetd /usr/sbin/tcpd  /usr/sbin/in.telnetd
-
-4、重启openbsd-inetd
-# /etc/init.d/openbsd-inetd restart
-输出：* Restarting internet superserver inetd
-
+ 
 5、查看telnet运行状态
 #netstat -a | grep telnet
 输出：tcp　　0　　0 *:telnet　　*:*　　LISTEN
@@ -693,23 +723,7 @@ dpkg-reconfigure dash
   \v    竖直制表符
   \0NNN   字节数以八进制数 NNN (1至3位)表示
   \xHH    字节数以十六进制数 HH (1至2位)表示
-
-//邮件
-安装 Evolution 
-有PPA可用，支持 Ubuntu 14.04 及衍生系统。打开终端，输入以下命令： 
-add-apt-repository ppa:fta/gnome3 
-apt-get update 
-apt-get install evolution
-
-//QQ
-    dpkg -i fonts-wqy-microhei_0.2.0-beta-2_all.deb  
-    dpkg -i ttf-wqy-microhei_0.2.0-beta-2_all.deb  
-    dpkg -i wine-qqintl_0.1.3-2_i386.deb   
-    如果，最后一步报错。使用如下命令修复：
-   [objc] view plain copy
-    apt-get -f install   
-    dpkg -i wine-qqintl_0.1.3-2_i386.deb  
-
+  
 //eclipse 启动
 一、把jre目录直接拷贝到eclipse目录下面
 二、在eclipse.ini里面添加，例如：
@@ -865,28 +879,7 @@ usermod -l walker walkerdust
 
 ps 查看tty？
 top来对进程排序，结束进程等.
-
-//python-rtmp
-{   
-pip install python-librtmp     //只需要此
-
-
-apt-get install gcc* python-dev libffi-dev* -y
-git clone git://git.ffmpeg.org/rtmpdump
-cd rtmpdump/librtmp
-make && make install 
-wget -S https://pypi.python.org/packages/83/3c/00b553fd05ae32f27b3637f705c413c4ce71290aa9b4c4764df694e906d9/cffi-1.7.0.tar.gz#md5=34122a545060cee58bab88feab57006d
-cd cffi-1.7.0
-python setup.py install
-wget -S https://pypi.python.org/packages/48/a6/33b1a5864e22de3e59dd29fcbc2602462511c04a31057b16baec639d7d4f/python-librtmp-0.3.0.tar.gz#md5=f7afe8d463214072281998fa84553927
-cd python-librtmp-0.3.0
-python setup.py install 
-python
-import librtmp
-find / -name librtmp.so.1
-ldconfig    //自动统计导入so文件
-
-}
+ 
 
 //编译安装ffmpeg
 {
@@ -940,8 +933,7 @@ OpenSSL 1.0.1f 6 Jan 2014
 #定时任务
 crontab -e #编辑
 crontab -l  #列表 
-//Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本；可执行的任务范围可以是每天夜里自动备份用户的home文件夹，也可以每个小时记录CPU的信息日志。
-//crontab（cron table）命令用于编辑执行中的定期任务列表，并且操作是基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
+//Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本； 基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
 */5 * * * * /usr/local/tomcat-6.0.41/tomcat_cardniu_stat/monitor.sh //每五分钟
 0 0 * * *  /home/pi/backup.sh //每天
 // service crond restart

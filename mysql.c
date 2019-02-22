@@ -3,6 +3,7 @@ d:/mysql/bin/mysqld
 
 //登录
 mysql -u root -proot
+mysql <-h 127.0.0.1> -u root -ppasswd <-P 3306>
 mysql -uuser -ppasswd -e "show databases;"
 // show
 select USER(), version(),current_date();
@@ -130,3 +131,25 @@ mysql>exit(推出)
 这种方式有个问题，就是设置的最大连接数只在mysql当前服务进程有效，一旦mysql重启，又会恢复到初始状态。因为mysql启动后的初始化工作是从其配置文件中读取数据的，而这种方式没有对其配置文件做更改。
 第二种：修改配置文件。
 这 种方式说来很简单，只要修改MySQL配置文件my.ini 或 my.cnf的参数max_connections，将其改为max_connections=1000，然后重启MySQL即可。但是有一点最难的就是my.ini这个文件在哪找。通常有两种可能，一个是在安装目录下（这是比较理想的情况），另一种是在数据文件的目录下，安装的时候如果没有人为改变目录的话，一般就在C:/ProgramData/MySQL往下的目录下。
+
+
+1、要查询表所占的容量，就是把表的数据和索引加起来就可以了
+
+select sum(DATA_LENGTH)+sum(INDEX_LENGTH) from information_schema.tables 
+where table_schema='数据库名';
+　　上面获取的结果是以字节为单位的，可以通过%1024在%1024的到M为单位的结果。
+
+　　2、查询所有的数据大小
+
+select concat(round(sum(DATA_LENGTH/1024/1024),2),'M') from tables; -- 查询所有的数据大小
+/
+查看mysql库容量大小 
+select
+table_schema as '数据库',
+sum(table_rows) as '记录数',
+sum(truncate(data_length/1024/1024, 2)) as '数据容量(MB)',
+sum(truncate(index_length/1024/1024, 2)) as '索引容量(MB)'
+from information_schema.tables
+where table_schema='mysql'
+
+
