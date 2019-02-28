@@ -11,16 +11,16 @@ function show(){
     local i=$1
     local key=$2
     local type=$3
-    echo -e "## $i\t ## $key"
     if [ -z $type ]
     then
-        showValue $key
+        showValue $key $i
     elif [[ $type == "del" ]]
     then
         delKey $key
     fi
 }
 function showValue(){
+    local i=$2
     local key=$1
     local cmdShowType=$exe' type '$key
     local type=`eval $cmdShowType`
@@ -43,6 +43,7 @@ function showValue(){
     else 
         echo 'What type ? '$type
     fi
+    echo -e "## $i\t ## $key"
     eval $cmdShow 
 }
 function delKey(){
@@ -50,6 +51,8 @@ function delKey(){
 #    local cmdShowType=$exe' type '$key
 #    local type=`eval $cmdShowType`
     local cmdShow=$exe' del '$key
+    
+    echo -e "## $i\t ## $key del `eval $cmdShow`"
     
 }
 

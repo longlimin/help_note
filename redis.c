@@ -14,6 +14,32 @@ redis-cli -h host -p port -a password
 info 展示redis状态
 flushall 清空
 
+
+
+Redis哨兵模式（sentinel）学习总结及部署记录（主从复制、读写分离、主从切换）
+1）redis cluster集群方案；2）master/slave主从方案；3）哨兵模式来进行主从替换以及故障恢复。
+
+一、sentinel哨兵模式介绍
+Sentinel(哨兵)是用于监控redis集群中Master状态的工具，是Redis 的高可用性解决方案，sentinel哨兵模式已经被集成在redis2.4之后的版本中。sentinel是redis高可用的解决方案，sentinel系统可以监视一个或者多个redis master服务，以及这些master服务的所有从服务；当某个master服务下线时，自动将该master下的某个从服务升级为master服务替代已下线的master服务继续处理请求。
+
+Sentinel 使用 TCP 端口 26379 （普通 Redis 服务器使用的是 6379 ）
+SENTINEL get-master-addr-by-name <master name>获取当前的主服务器IP地址和端口
+SENTINEL slaves <master name>获取所有的Slaves信息
+
+
+redis-cli info | grep role //查看主从
+role:slave
+role:master
+
+
+
+//发布订阅模式
+docker exec -it redis bash        //进入redis容器中
+redis-cli                         //启动一个redis客户端
+publish chat aaa                  //发布一个chat主题的消息，内容为aaa
+subscribe chat                    //订阅一个chat主题的消息
+PSUBSCRIBE *                      //订阅所有消息
+
 #########数据结构
 
 //string
@@ -74,14 +100,6 @@ expireat 的作用和 expire 类似，都用于为 key 设置过期时间。 不
 仅当 newkey 不存在时，将 key 改名为 newkey 。
 16	type key 
 返回 key 所储存的值的类型。
-
-
-//发布订阅模式
-docker exec -it redis bash        //进入redis容器中
-redis-cli                         //启动一个redis客户端
-publish chat aaa                  //发布一个chat主题的消息，内容为aaa
-subscribe chat                    //订阅一个chat主题的消息
-
 
 
 

@@ -126,6 +126,18 @@ cmd=$exe' keys '$key" | awk -OFS'\"' '"'{print $1}'"'"
     if [ ! -f "$myFile" ]; then
      touch "$myFile"
     fi
+    [ -x $redis ] || exit 5
+  
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    condrestart|try-restart)
+        rh_status_q || exit 0
+        ;;
+    *)    
+
 }
 
 //循环
