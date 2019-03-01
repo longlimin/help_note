@@ -4421,3 +4421,540 @@ Memory pressure relief: Total: res = 7434240/7442432/8192, res+swap = 6926336/69
 (Eclipse:26491): Gtk-WARNING **: 09:05:19.746: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
 
 (Eclipse:26491): Gtk-WARNING **: 09:05:19.746: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:12:16.987: gtk_widget_size_allocate(): attempt to allocate widget with width 12 and height -13
+
+(Eclipse:26491): Gtk-CRITICAL **: 15:12:16.987: gtk_box_gadget_distribute: assertion 'size >= 0' failed in GtkScrollbar
+
+(Eclipse:26491): Gtk-WARNING **: 15:14:05.984: gtk_widget_size_allocate(): attempt to allocate widget with width 12 and height -13
+
+(Eclipse:26491): Gtk-CRITICAL **: 15:14:05.984: gtk_box_gadget_distribute: assertion 'size >= 0' failed in GtkScrollbar
+
+(Eclipse:26491): Gtk-WARNING **: 15:15:42.923: gtk_widget_size_allocate(): attempt to allocate widget with width 12 and height -13
+
+(Eclipse:26491): Gtk-CRITICAL **: 15:15:42.923: gtk_box_gadget_distribute: assertion 'size >= 0' failed in GtkScrollbar
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-portlet:1.0.1
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: basedir, Value: /home/walker/e/workspace_my/TestMaven
+[INFO] Parameter: package, Value: test_maven.test_ma
+[INFO] Parameter: groupId, Value: test-maven
+[INFO] Parameter: artifactId, Value: test-ma
+[INFO] Parameter: packageName, Value: test_maven.test_ma
+[INFO] Parameter: version, Value: 0.0.1-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /home/walker/e/workspace_my/TestMaven/test-ma
+
+(Eclipse:26491): Gtk-WARNING **: 15:26:31.397: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:26:31.397: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:26:31.397: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:26:35.550: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:26:35.550: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:26:35.550: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:29.513: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:29.513: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:29.513: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:31.642: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:31.642: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:31.643: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:45.374: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:45.375: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:45.388: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:46.496: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:46.497: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:27:46.497: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+org.eclipse.core.runtime.OperationCanceledException
+	at org.eclipse.core.runtime.SubMonitor.checkCanceled(SubMonitor.java:607)
+	at org.eclipse.core.internal.resources.Resource.refreshLocal(Resource.java:1537)
+	at org.sonatype.m2e.mavenarchiver.internal.AbstractMavenArchiverConfigurator.refresh(AbstractMavenArchiverConfigurator.java:235)
+	at org.sonatype.m2e.mavenarchiver.internal.AbstractMavenArchiverConfigurator.mavenProjectChanged(AbstractMavenArchiverConfigurator.java:211)
+	at org.eclipse.m2e.wtp.mavenarchiver.AbstractWTPArchiverConfigurator.mavenProjectChanged(AbstractWTPArchiverConfigurator.java:54)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager.mavenProjectChanged(ProjectConfigurationManager.java:1037)
+	at org.eclipse.m2e.core.internal.project.registry.ProjectRegistryManager.notifyProjectChangeListeners(ProjectRegistryManager.java:777)
+	at org.eclipse.m2e.core.internal.project.registry.ProjectRegistryManager.applyMutableProjectRegistry(ProjectRegistryManager.java:921)
+	at org.eclipse.m2e.core.internal.project.registry.ProjectRegistryManager.refresh(ProjectRegistryManager.java:298)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager.configureNewMavenProjects(ProjectConfigurationManager.java:259)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager$1.call(ProjectConfigurationManager.java:175)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager$1.call(ProjectConfigurationManager.java:1)
+	at org.eclipse.m2e.core.internal.embedder.MavenExecutionContext.executeBare(MavenExecutionContext.java:177)
+	at org.eclipse.m2e.core.internal.embedder.MavenExecutionContext.execute(MavenExecutionContext.java:112)
+	at org.eclipse.m2e.core.internal.embedder.MavenExecutionContext.execute(MavenExecutionContext.java:99)
+	at org.eclipse.m2e.core.internal.embedder.MavenImpl.execute(MavenImpl.java:1336)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager.importProjects(ProjectConfigurationManager.java:143)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager.createArchetypeProjects0(ProjectConfigurationManager.java:863)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager$5.call(ProjectConfigurationManager.java:792)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager$5.call(ProjectConfigurationManager.java:1)
+	at org.eclipse.m2e.core.internal.embedder.MavenExecutionContext.executeBare(MavenExecutionContext.java:177)
+	at org.eclipse.m2e.core.internal.embedder.MavenExecutionContext.execute(MavenExecutionContext.java:151)
+	at org.eclipse.m2e.core.internal.embedder.MavenExecutionContext.execute(MavenExecutionContext.java:99)
+	at org.eclipse.m2e.core.internal.embedder.MavenImpl.execute(MavenImpl.java:1336)
+	at org.eclipse.m2e.core.internal.project.ProjectConfigurationManager.createArchetypeProjects(ProjectConfigurationManager.java:790)
+	at org.eclipse.m2e.core.ui.internal.wizards.MavenProjectWizard$5.doCreateMavenProjects(MavenProjectWizard.java:241)
+	at org.eclipse.m2e.core.ui.internal.wizards.AbstractCreateMavenProjectJob$1.doCreateMavenProjects(AbstractCreateMavenProjectJob.java:63)
+	at org.eclipse.m2e.core.ui.internal.wizards.AbstractCreateMavenProjectsOperation.run(AbstractCreateMavenProjectsOperation.java:73)
+	at org.eclipse.m2e.core.ui.internal.wizards.AbstractCreateMavenProjectJob.runInWorkspace(AbstractCreateMavenProjectJob.java:67)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:42)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:12.886: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:12.887: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:12.887: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:12.887: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:23.889: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:23.889: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:23.890: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:23.890: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:23.890: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:28:23.890: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:55.041: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:55.098: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:56.643: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:56.654: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:56.656: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:56.666: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:56.666: Negative content width -1 (allocation 1, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:04.083: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:04.083: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:04.083: Negative content width -1 (allocation 1, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.183: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.183: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.333: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.333: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.468: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.468: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.734: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.736: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.937: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:06.939: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.094: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.097: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.245: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.245: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.647: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.647: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.800: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:07.810: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:08.143: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:08.144: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:08.301: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:08.302: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:08.469: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:08.474: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:09.041: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:09.053: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:09.054: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:09.876: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:09.879: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:09.881: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.207: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.208: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.208: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.387: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.387: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.387: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.729: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.729: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.729: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.861: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.861: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:10.861: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.117: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.120: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.120: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.254: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.254: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.254: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.394: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.396: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.399: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.526: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.527: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.527: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.703: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.704: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.704: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.833: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.833: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:11.833: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:12.588: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:12.588: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:12.589: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.192: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.192: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.193: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.446: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.447: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.447: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.616: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.620: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.621: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.741: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.742: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.742: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.878: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.878: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:13.878: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.092: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.092: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.092: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.217: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.217: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.217: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.445: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.450: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.450: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.577: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.577: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.577: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.861: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.861: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.861: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.977: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.977: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:49:14.977: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node progress, owner GtkProgressBar)
+Memory pressure relief: Total: res = 9609216/9568256/-40960, res+swap = 9117696/9117696/0
+Memory pressure relief: Total: res = 8982528/8982528/0, res+swap = 8486912/8486912/0
+Memory pressure relief: Total: res = 8933376/8933376/0, res+swap = 8437760/8437760/0
+Memory pressure relief: Total: res = 8933376/8933376/0, res+swap = 8445952/8445952/0
+Memory pressure relief: Total: res = 8933376/8933376/0, res+swap = 8445952/8445952/0
+Memory pressure relief: Total: res = 8925184/8925184/0, res+swap = 8445952/8445952/0
+Memory pressure relief: Total: res = 8925184/8925184/0, res+swap = 8445952/8445952/0
+Memory pressure relief: Total: res = 8921088/8921088/0, res+swap = 8441856/8441856/0
+Memory pressure relief: Total: res = 9482240/9449472/-32768, res+swap = 8986624/8986624/0
+Memory pressure relief: Total: res = 9138176/9138176/0, res+swap = 8642560/8642560/0
+Memory pressure relief: Total: res = 9134080/9134080/0, res+swap = 8638464/8638464/0
+Memory pressure relief: Total: res = 9134080/9134080/0, res+swap = 8646656/8646656/0
+Memory pressure relief: Total: res = 9129984/9129984/0, res+swap = 8646656/8646656/0
+Memory pressure relief: Total: res = 9113600/9113600/0, res+swap = 8634368/8634368/0
+Memory pressure relief: Total: res = 9277440/9265152/-12288, res+swap = 8798208/8798208/0
+Memory pressure relief: Total: res = 9183232/9183232/0, res+swap = 8704000/8704000/0
+Memory pressure relief: Total: res = 9162752/9162752/0, res+swap = 8683520/8683520/0
+Memory pressure relief: Total: res = 9158656/9158656/0, res+swap = 8687616/8687616/0
+Memory pressure relief: Total: res = 9154560/9154560/0, res+swap = 8687616/8687616/0
+Memory pressure relief: Total: res = 9146368/9146368/0, res+swap = 8687616/8687616/0
+Memory pressure relief: Total: res = 9142272/9142272/0, res+swap = 8687616/8687616/0
+Memory pressure relief: Total: res = 9138176/9138176/0, res+swap = 8687616/8687616/0
+Memory pressure relief: Total: res = 9138176/9138176/0, res+swap = 8695808/8695808/0
+Memory pressure relief: Total: res = 9138176/9138176/0, res+swap = 8699904/8699904/0
+Memory pressure relief: Total: res = 9125888/9125888/0, res+swap = 8687616/8687616/0
+Memory pressure relief: Total: res = 9125888/9125888/0, res+swap = 8695808/8695808/0
+Memory pressure relief: Total: res = 9400320/9388032/-12288, res+swap = 8908800/8908800/0
+Memory pressure relief: Total: res = 9359360/9342976/-16384, res+swap = 8867840/8867840/0
+Memory pressure relief: Total: res = 10100736/10072064/-28672, res+swap = 9584640/9584640/0
+Memory pressure relief: Total: res = 9764864/9756672/-8192, res+swap = 9252864/9252864/0
+Memory pressure relief: Total: res = 9564160/9551872/-12288, res+swap = 9052160/9052160/0
+Memory pressure relief: Total: res = 9392128/9392128/0, res+swap = 8884224/8884224/0
+
+(Eclipse:26491): Gtk-WARNING **: 17:09:52.757: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 17:09:52.757: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 17:09:52.758: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 17:09:52.758: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+Memory pressure relief: Total: res = 10145792/10117120/-28672, res+swap = 9617408/9617408/0
+Memory pressure relief: Total: res = 9592832/9592832/0, res+swap = 9068544/9068544/0
+
+(Eclipse:26491): Gtk-WARNING **: 17:10:42.409: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 17:10:42.410: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 17:10:42.410: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 17:10:42.410: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+Memory pressure relief: Total: res = 9736192/9728000/-8192, res+swap = 9211904/9211904/0
+Memory pressure relief: Total: res = 9646080/9646080/0, res+swap = 9125888/9125888/0
+Memory pressure relief: Total: res = 9621504/9621504/0, res+swap = 9109504/9109504/0
+Memory pressure relief: Total: res = 9621504/9621504/0, res+swap = 9109504/9109504/0
+Memory pressure relief: Total: res = 9609216/9609216/0, res+swap = 9101312/9101312/0
+Memory pressure relief: Total: res = 9609216/9609216/0, res+swap = 9109504/9109504/0
+Memory pressure relief: Total: res = 9609216/9609216/0, res+swap = 9113600/9113600/0
+Memory pressure relief: Total: res = 9596928/9596928/0, res+swap = 9105408/9105408/0
+Memory pressure relief: Total: res = 9596928/9596928/0, res+swap = 9113600/9113600/0
+Memory pressure relief: Total: res = 9596928/9596928/0, res+swap = 9117696/9117696/0
+Memory pressure relief: Total: res = 9580544/9580544/0, res+swap = 9105408/9105408/0
+Memory pressure relief: Total: res = 9580544/9580544/0, res+swap = 9113600/9113600/0
+Memory pressure relief: Total: res = 9576448/9576448/0, res+swap = 9113600/9113600/0
+Memory pressure relief: Total: res = 9564160/9564160/0, res+swap = 9109504/9109504/0
+Memory pressure relief: Total: res = 10010624/9981952/-28672, res+swap = 9486336/9486336/0
+Memory pressure relief: Total: res = 10223616/10207232/-16384, res+swap = 9699328/9699328/0
+Memory pressure relief: Total: res = 10403840/10371072/-32768, res+swap = 9879552/9879552/0
+Memory pressure relief: Total: res = 10043392/10043392/0, res+swap = 9535488/9535488/0
+Memory pressure relief: Total: res = 9842688/9842688/0, res+swap = 9326592/9326592/0
+Memory pressure relief: Total: res = 9842688/9846784/4096, res+swap = 9338880/9338880/0
+Memory pressure relief: Total: res = 9846784/9846784/0, res+swap = 9347072/9347072/0
+Memory pressure relief: Total: res = 9842688/9842688/0, res+swap = 9347072/9347072/0
+Memory pressure relief: Total: res = 9826304/9826304/0, res+swap = 9334784/9334784/0
+Memory pressure relief: Total: res = 9826304/9826304/0, res+swap = 9338880/9338880/0
+Memory pressure relief: Total: res = 9822208/9822208/0, res+swap = 9338880/9338880/0
+Memory pressure relief: Total: res = 9822208/9822208/0, res+swap = 9342976/9342976/0
+Memory pressure relief: Total: res = 9822208/9822208/0, res+swap = 9347072/9347072/0
+Memory pressure relief: Total: res = 10178560/10166272/-12288, res+swap = 9674752/9674752/0
+Memory pressure relief: Total: res = 9064448/9064448/0, res+swap = 8556544/8556544/0
+Memory pressure relief: Total: res = 8912896/8912896/0, res+swap = 8409088/8409088/0
+Memory pressure relief: Total: res = 8912896/8912896/0, res+swap = 8413184/8413184/0
+Memory pressure relief: Total: res = 8908800/8908800/0, res+swap = 8417280/8417280/0
+Memory pressure relief: Total: res = 8896512/8896512/0, res+swap = 8409088/8409088/0
+Memory pressure relief: Total: res = 8896512/8896512/0, res+swap = 8413184/8413184/0
+Memory pressure relief: Total: res = 8892416/8892416/0, res+swap = 8413184/8413184/0
+Memory pressure relief: Total: res = 8892416/8892416/0, res+swap = 8417280/8417280/0
+Memory pressure relief: Total: res = 8925184/8925184/0, res+swap = 8466432/8466432/0
+Memory pressure relief: Total: res = 8720384/8724480/4096, res+swap = 8265728/8265728/0
+Memory pressure relief: Total: res = 8724480/8724480/0, res+swap = 8265728/8265728/0
+Memory pressure relief: Total: res = 8720384/8720384/0, res+swap = 8265728/8265728/0
+Memory pressure relief: Total: res = 8720384/8720384/0, res+swap = 8273920/8273920/0
+Memory pressure relief: Total: res = 8716288/8716288/0, res+swap = 8273920/8273920/0
+Memory pressure relief: Total: res = 8699904/8699904/0, res+swap = 8261632/8261632/0
+Memory pressure relief: Total: res = 9003008/8953856/-49152, res+swap = 8486912/8486912/0
+Memory pressure relief: Total: res = 8794112/8794112/0, res+swap = 8282112/8282112/0
+Memory pressure relief: Total: res = 8654848/8654848/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8609792/8609792/0, res+swap = 8105984/8105984/0
+Memory pressure relief: Total: res = 8990720/8962048/-28672, res+swap = 8470528/8470528/0
+Memory pressure relief: Total: res = 8630272/8630272/0, res+swap = 8114176/8114176/0
+Memory pressure relief: Total: res = 8630272/8630272/0, res+swap = 8118272/8118272/0
+Memory pressure relief: Total: res = 8622080/8622080/0, res+swap = 8122368/8122368/0
+Memory pressure relief: Total: res = 8802304/8790016/-12288, res+swap = 8286208/8286208/0
+Memory pressure relief: Total: res = 8822784/8777728/-45056, res+swap = 8306688/8306688/0
+Memory pressure relief: Total: res = 8581120/8585216/4096, res+swap = 8073216/8073216/0
+Memory pressure relief: Total: res = 8585216/8585216/0, res+swap = 8077312/8077312/0
+Memory pressure relief: Total: res = 8884224/8871936/-12288, res+swap = 8376320/8376320/0
+Memory pressure relief: Total: res = 8712192/8712192/0, res+swap = 8204288/8204288/0
+Memory pressure relief: Total: res = 8650752/8650752/0, res+swap = 8142848/8142848/0
+Memory pressure relief: Total: res = 8650752/8650752/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8638464/8638464/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8638464/8638464/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8634368/8634368/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8622080/8622080/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8622080/8622080/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8617984/8617984/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8609792/8609792/0, res+swap = 8138752/8138752/0
+Memory pressure relief: Total: res = 8609792/8609792/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8601600/8601600/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8601600/8601600/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8601600/8601600/0, res+swap = 8155136/8155136/0
+Memory pressure relief: Total: res = 8589312/8589312/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8589312/8589312/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8589312/8589312/0, res+swap = 8159232/8159232/0
+Memory pressure relief: Total: res = 8568832/8568832/0, res+swap = 8142848/8142848/0
+Memory pressure relief: Total: res = 8568832/8568832/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8568832/8568832/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8556544/8556544/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8556544/8556544/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8552448/8552448/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8540160/8540160/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8540160/8540160/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8540160/8540160/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8527872/8527872/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8527872/8527872/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8523776/8523776/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8511488/8511488/0, res+swap = 8146944/8146944/0
+Memory pressure relief: Total: res = 8511488/8511488/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8507392/8507392/0, res+swap = 8151040/8151040/0
+Memory pressure relief: Total: res = 8482816/8482816/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8482816/8482816/0, res+swap = 8134656/8134656/0
+Memory pressure relief: Total: res = 8466432/8466432/0, res+swap = 8126464/8126464/0
+Memory pressure relief: Total: res = 8462336/8462336/0, res+swap = 8122368/8122368/0
+Memory pressure relief: Total: res = 8462336/8462336/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8458240/8458240/0, res+swap = 8134656/8134656/0
+Memory pressure relief: Total: res = 8445952/8445952/0, res+swap = 8122368/8122368/0
+Memory pressure relief: Total: res = 8445952/8445952/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8441856/8441856/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8441856/8441856/0, res+swap = 8134656/8134656/0
+Memory pressure relief: Total: res = 8441856/8441856/0, res+swap = 8138752/8138752/0
+Memory pressure relief: Total: res = 8425472/8425472/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8425472/8425472/0, res+swap = 8134656/8134656/0
+Memory pressure relief: Total: res = 8425472/8425472/0, res+swap = 8138752/8138752/0
+Memory pressure relief: Total: res = 8413184/8413184/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8413184/8413184/0, res+swap = 8134656/8134656/0
+Memory pressure relief: Total: res = 8400896/8400896/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8392704/8392704/0, res+swap = 8126464/8126464/0
+Memory pressure relief: Total: res = 8392704/8392704/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8658944/8658944/0, res+swap = 8138752/8138752/0
+Memory pressure relief: Total: res = 8642560/8642560/0, res+swap = 8126464/8126464/0
+Memory pressure relief: Total: res = 8642560/8642560/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8642560/8642560/0, res+swap = 8138752/8138752/0
+Memory pressure relief: Total: res = 8626176/8626176/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8626176/8626176/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8626176/8626176/0, res+swap = 8138752/8138752/0
+Memory pressure relief: Total: res = 8609792/8609792/0, res+swap = 8126464/8126464/0
+Memory pressure relief: Total: res = 8609792/8609792/0, res+swap = 8130560/8130560/0
+Memory pressure relief: Total: res = 8609792/8609792/0, res+swap = 8138752/8138752/0
+Memory pressure relief: Total: res = 8589312/8224768/-364544, res+swap = 8122368/7757824/-364544
+Memory pressure relief: Total: res = 8175616/8167424/-8192, res+swap = 7708672/7708672/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8167424/8167424/0, res+swap = 7700480/7700480/0

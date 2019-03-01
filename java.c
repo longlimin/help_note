@@ -52,4 +52,27 @@ jmap -dump:format=b,live,file=~/logs/jmap_dump ${pid}
       #获取服务业务日志
       
       
+1. Provider: 服务提供者在启动时，向注册中心注册自己提供的服务。 Java项目
+2. Consumer: 服务消费者在启动时，向注册中心订阅自己所需的服务。 Java项目
+             从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。 
+3. Registry: 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。 zookeeper redis
+4. Monitor : 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。    
+
+注册中心
+zookeeper安装启动 port:2181
+wget http://mirrors.shu.edu.cn/apache/zookeeper/stable/zookeeper-3.4.12.tar.gz
+tar -xvf zookeeper-3.4.12.tar.gz
+cd zookeeper-3.4.12
+cp conf/zoo_sample.cfg conf/zoo.cfg
+vi conf/zoo.cfg     #修改 数据路径 dataDir=~/log/zookeeper
+
+bin/zkServer.sh start #</stop/status>
+注意要关闭linux的防火墙
+
+监控中心
+
+
+
+      
+      
       
