@@ -51,7 +51,7 @@ jmap -dump:format=b,live,file=~/logs/jmap_dump ${pid}
       #获取was相关日志: System.out 或 自动生成的其他日志
       #获取服务业务日志
       
-      
+0. Container: provider的运行容器。
 1. Provider: 服务提供者在启动时，向注册中心注册自己提供的服务。 Java项目
 2. Consumer: 服务消费者在启动时，向注册中心订阅自己所需的服务。 Java项目
              从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。 
