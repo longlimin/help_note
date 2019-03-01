@@ -16,8 +16,9 @@ function do_start_sftware_start(){
 
     local arr=( 
     '/home/walker/software/eclipse/eclipse'
+    '/home/walker/software/tomcat7/bin/startup.sh'
     '/home/walker/software/smartgit/bin/smartgit.sh' 
-    '/home/walker/help/python/ python autoCochatCph.py >> ~/auto.log'
+#    '/home/walker/help/python/ python autoCochatCph.py >> ~/auto.log'
      )
      
     out 'start linux software '${#arr[@]}

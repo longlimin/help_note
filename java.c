@@ -58,19 +58,35 @@ jmap -dump:format=b,live,file=~/logs/jmap_dump ${pid}
 3. Registry: 注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。 zookeeper redis
 4. Monitor : 服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。    
 
-注册中心
+//注册中心
 zookeeper安装启动 port:2181
 wget http://mirrors.shu.edu.cn/apache/zookeeper/stable/zookeeper-3.4.12.tar.gz
 tar -xvf zookeeper-3.4.12.tar.gz
 cd zookeeper-3.4.12
 cp conf/zoo_sample.cfg conf/zoo.cfg
-vi conf/zoo.cfg     #修改 数据路径 dataDir=~/log/zookeeper
+vi conf/zoo.cfg     #修改 数据路径 
+    dataDir=~/log/zookeeper
 
 bin/zkServer.sh start #</stop/status>
-注意要关闭linux的防火墙
+bin/zkCli.sh -server 127.0.0.1:2181  #测试
+注意防火墙
 
-监控中心
+//监控中心
+下载 dubbo-admin-2.5.7.war
 
+放入 tomcat/webapps/
+dubbo-admin-2.5.7/WEB-INF/dubbo.properties 修改地址 默认本机
+    dubbo.registry.address=zookeeper://127.0.0.1:2181
+    
+tomcat/bin/startup.sh 启动tomcat
+http://127.0.0.1:8080/dubbo-admin-2.5.7/
+root/root
+
+
+如果还是连不上 防火墙？ 
+/sbin/iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+service iptables save
+service iptables restar
 
 
       

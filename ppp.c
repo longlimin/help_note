@@ -6,7 +6,7 @@
 14Qr ruaho.com
 qr36 git steam
 Qr36 oracle 
-16q
+16q csdn
 p3
 
 
@@ -52,18 +52,3 @@ WALKER
     aes-256-cfb
 
 
-
-//
-39.107.26.100  
-root 
-R3 1
-
-
-
-
-/usr/local/nginx
-
-
-
-
-"18262600672", "654321"

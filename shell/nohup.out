@@ -4958,3 +4958,464 @@ Memory pressure relief: Total: res = 8163328/8171520/8192, res+swap = 7700480/77
 Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
 Memory pressure relief: Total: res = 8163328/8167424/4096, res+swap = 7700480/7700480/0
 Memory pressure relief: Total: res = 8167424/8167424/0, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8122368/8122368/0, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 8118272/8122368/4096, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 8122368/8122368/0, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 8122368/8122368/0, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 8118272/8122368/4096, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 8122368/8122368/0, res+swap = 7663616/7663616/0
+Memory pressure relief: Total: res = 8122368/8122368/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 8118272/8118272/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 8105984/8105984/0, res+swap = 7667712/7667712/0
+Memory pressure relief: Total: res = 8105984/8105984/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 8101888/8101888/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 8089600/8089600/0, res+swap = 7667712/7667712/0
+Memory pressure relief: Total: res = 8089600/8089600/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 8089600/8089600/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 8077312/8077312/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 8077312/8077312/0, res+swap = 7680000/7680000/0
+Memory pressure relief: Total: res = 8073216/8073216/0, res+swap = 7680000/7680000/0
+Memory pressure relief: Total: res = 8056832/8056832/0, res+swap = 7667712/7667712/0
+Memory pressure relief: Total: res = 8056832/8056832/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 8052736/8052736/0, res+swap = 7680000/7680000/0
+Memory pressure relief: Total: res = 8036352/8036352/0, res+swap = 7663616/7663616/0
+Memory pressure relief: Total: res = 8036352/8036352/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 8032256/8032256/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 8019968/8019968/0, res+swap = 7667712/7667712/0
+Memory pressure relief: Total: res = 8019968/8019968/0, res+swap = 7667712/7667712/0
+Memory pressure relief: Total: res = 8015872/8015872/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 8007680/8007680/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 8007680/8007680/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 8003584/8003584/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 7991296/7991296/0, res+swap = 7671808/7671808/0
+Memory pressure relief: Total: res = 7991296/7991296/0, res+swap = 7675904/7675904/0
+Memory pressure relief: Total: res = 7974912/7974912/0, res+swap = 7663616/7663616/0
+Memory pressure relief: Total: res = 7962624/7962624/0, res+swap = 7655424/7655424/0
+Memory pressure relief: Total: res = 7962624/7962624/0, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 7958528/7958528/0, res+swap = 7663616/7663616/0
+Memory pressure relief: Total: res = 7942144/7942144/0, res+swap = 7647232/7647232/0
+Memory pressure relief: Total: res = 7942144/7942144/0, res+swap = 7655424/7655424/0
+Memory pressure relief: Total: res = 7938048/7938048/0, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 7925760/7925760/0, res+swap = 7655424/7655424/0
+Memory pressure relief: Total: res = 7925760/7925760/0, res+swap = 7655424/7655424/0
+Memory pressure relief: Total: res = 7921664/7921664/0, res+swap = 7659520/7659520/0
+Memory pressure relief: Total: res = 7909376/7909376/0, res+swap = 7647232/7647232/0
+Memory pressure relief: Total: res = 7909376/7909376/0, res+swap = 7651328/7651328/0
+Memory pressure relief: Total: res = 7909376/7909376/0, res+swap = 7651328/7651328/0
+Memory pressure relief: Total: res = 7905280/7905280/0, res+swap = 7655424/7655424/0
+Memory pressure relief: Total: res = 8175616/8175616/0, res+swap = 7659520/7659520/0
+
+(Eclipse:26491): Gtk-WARNING **: 14:39:24.007: Attempting to read the recently used resources file at '/home/walker/.local/share/recently-used.xbel', but the parser failed: Failed to open file “/home/walker/.local/share/recently-used.xbel”: 权限不够.
+Memory pressure relief: Total: res = 8810496/8593408/-217088, res+swap = 8056832/8056832/0
+
+(Eclipse:26491): Gtk-WARNING **: 14:39:51.808: Attempting to read the recently used resources file at '/home/walker/.local/share/recently-used.xbel', but the parser failed: Failed to open file “/home/walker/.local/share/recently-used.xbel”: 权限不够.
+
+(Eclipse:26491): Gtk-WARNING **: 14:39:56.356: Attempting to read the recently used resources file at '/home/walker/.local/share/recently-used.xbel', but the parser failed: Failed to open file “/home/walker/.local/share/recently-used.xbel”: 权限不够.
+Memory pressure relief: Total: res = 8577024/8577024/0, res+swap = 7827456/7827456/0
+Memory pressure relief: Total: res = 8572928/8572928/0, res+swap = 7827456/7827456/0
+Memory pressure relief: Total: res = 8572928/8572928/0, res+swap = 7831552/7831552/0
+Memory pressure relief: Total: res = 8556544/8556544/0, res+swap = 7819264/7819264/0
+Memory pressure relief: Total: res = 8556544/8556544/0, res+swap = 7823360/7823360/0
+Memory pressure relief: Total: res = 8429568/8429568/0, res+swap = 7704576/7704576/0
+Memory pressure relief: Total: res = 8417280/8417280/0, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8417280/8417280/0, res+swap = 7704576/7704576/0
+Memory pressure relief: Total: res = 8413184/8413184/0, res+swap = 7708672/7708672/0
+Memory pressure relief: Total: res = 8400896/8400896/0, res+swap = 7704576/7704576/0
+Memory pressure relief: Total: res = 8400896/8400896/0, res+swap = 7704576/7704576/0
+Memory pressure relief: Total: res = 8323072/8314880/-8192, res+swap = 7634944/7634944/0
+Memory pressure relief: Total: res = 8306688/8302592/-4096, res+swap = 7618560/7618560/0
+Memory pressure relief: Total: res = 8298496/8302592/4096, res+swap = 7614464/7614464/0
+Memory pressure relief: Total: res = 8294400/8298496/4096, res+swap = 7610368/7610368/0
+Memory pressure relief: Total: res = 8294400/8302592/8192, res+swap = 7610368/7610368/0
+Memory pressure relief: Total: res = 8294400/8294400/0, res+swap = 7610368/7610368/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8298496/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+
+(Eclipse:26491): Gtk-WARNING **: 15:07:37.522: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:07:37.523: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:07:37.524: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:26491): Gtk-WARNING **: 15:07:37.525: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8294400/8294400/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8294400/8294400/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8294400/8294400/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8294400/8294400/0, res+swap = 7610368/7610368/0
+Memory pressure relief: Total: res = 8290304/8294400/4096, res+swap = 7614464/7614464/0
+Memory pressure relief: Total: res = 8294400/8294400/0, res+swap = 7618560/7618560/0
+Memory pressure relief: Total: res = 8294400/8294400/0, res+swap = 7626752/7626752/0
+Memory pressure relief: Total: res = 8282112/8282112/0, res+swap = 7618560/7618560/0
+Memory pressure relief: Total: res = 8282112/8282112/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8282112/8269824/-12288, res+swap = 7630848/7630848/0
+Memory pressure relief: Total: res = 8261632/8261632/0, res+swap = 7614464/7614464/0
+Memory pressure relief: Total: res = 8257536/8261632/4096, res+swap = 7610368/7610368/0
+Memory pressure relief: Total: res = 8253440/8257536/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8261632/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8257536/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8261632/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8257536/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8261632/8192, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8257536/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8257536/8257536/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8257536/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8257536/8257536/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8257536/8257536/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8253440/8257536/4096, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8257536/8257536/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8257536/8257536/0, res+swap = 7610368/7610368/0
+Memory pressure relief: Total: res = 8253440/8257536/4096, res+swap = 7610368/7610368/0
+Memory pressure relief: Total: res = 8257536/8257536/0, res+swap = 7614464/7614464/0
+Memory pressure relief: Total: res = 8257536/8257536/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8249344/8249344/0, res+swap = 7618560/7618560/0
+Memory pressure relief: Total: res = 8249344/8249344/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8249344/8249344/0, res+swap = 7630848/7630848/0
+Memory pressure relief: Total: res = 8232960/8232960/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8232960/8232960/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8232960/8232960/0, res+swap = 7630848/7630848/0
+Memory pressure relief: Total: res = 8216576/8216576/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8216576/8216576/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8216576/8216576/0, res+swap = 7630848/7630848/0
+Memory pressure relief: Total: res = 8200192/8200192/0, res+swap = 7622656/7622656/0
+Memory pressure relief: Total: res = 8200192/8200192/0, res+swap = 7626752/7626752/0
+Memory pressure relief: Total: res = 8200192/8200192/0, res+swap = 7630848/7630848/0
+Memory pressure relief: Total: res = 8167424/8167424/0, res+swap = 7606272/7606272/0
+Memory pressure relief: Total: res = 8060928/8060928/0, res+swap = 7503872/7503872/0
+Memory pressure relief: Total: res = 8060928/8060928/0, res+swap = 7512064/7512064/0
+Memory pressure relief: Total: res = 8056832/8056832/0, res+swap = 7512064/7512064/0
+Memory pressure relief: Total: res = 8605696/8650752/45056, res+swap = 7897088/7897088/0
+Memory pressure relief: Total: res = 8491008/8491008/0, res+swap = 7741440/7741440/0
+Memory pressure relief: Total: res = 8425472/8425472/0, res+swap = 7684096/7684096/0
+Memory pressure relief: Total: res = 8425472/8425472/0, res+swap = 7688192/7688192/0
+Memory pressure relief: Total: res = 8425472/8425472/0, res+swap = 7692288/7692288/0
+Memory pressure relief: Total: res = 8413184/8413184/0, res+swap = 7684096/7684096/0
+Memory pressure relief: Total: res = 8413184/8413184/0, res+swap = 7688192/7688192/0
+Memory pressure relief: Total: res = 8409088/8409088/0, res+swap = 7692288/7692288/0
+Memory pressure relief: Total: res = 8396800/8396800/0, res+swap = 7684096/7684096/0
+Memory pressure relief: Total: res = 8396800/8396800/0, res+swap = 7688192/7688192/0
+Memory pressure relief: Total: res = 8388608/8388608/0, res+swap = 7688192/7688192/0
+Memory pressure relief: Total: res = 8380416/8380416/0, res+swap = 7692288/7692288/0
+Memory pressure relief: Total: res = 8380416/8380416/0, res+swap = 7692288/7692288/0
+Memory pressure relief: Total: res = 8376320/8376320/0, res+swap = 7692288/7692288/0
+Memory pressure relief: Total: res = 8376320/8376320/0, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8376320/8376320/0, res+swap = 7704576/7704576/0
+Memory pressure relief: Total: res = 8355840/8355840/0, res+swap = 7688192/7688192/0
+Memory pressure relief: Total: res = 8355840/8355840/0, res+swap = 7696384/7696384/0
+Memory pressure relief: Total: res = 8355840/8355840/0, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8339456/8339456/0, res+swap = 7696384/7696384/0
+Memory pressure relief: Total: res = 8339456/8339456/0, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8339456/8339456/0, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8323072/8323072/0, res+swap = 7692288/7692288/0
+Memory pressure relief: Total: res = 8323072/8323072/0, res+swap = 7700480/7700480/0
+Memory pressure relief: Total: res = 8318976/8167424/-151552, res+swap = 7696384/7696384/0
+Memory pressure relief: Total: res = 8163328/8155136/-8192, res+swap = 7540736/7540736/0
+Memory pressure relief: Total: res = 8151040/8159232/8192, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8151040/8155136/4096, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8151040/8155136/4096, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8155136/8155136/0, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8155136/8155136/0, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8151040/8155136/4096, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8155136/8159232/4096, res+swap = 7532544/7532544/0
+
+(Eclipse:26491): Gtk-WARNING **: 15:48:11.212: gtk_widget_size_allocate(): attempt to allocate widget with width 12 and height -13
+
+(Eclipse:26491): Gtk-CRITICAL **: 15:48:11.212: gtk_box_gadget_distribute: assertion 'size >= 0' failed in GtkScrollbar
+Memory pressure relief: Total: res = 8151040/8155136/4096, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8155136/8155136/0, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8155136/8155136/0, res+swap = 7532544/7532544/0
+Memory pressure relief: Total: res = 8151040/8151040/0, res+swap = 7528448/7528448/0
+Using CATALINA_BASE:   /home/walker/software/tomcat7
+Using CATALINA_HOME:   /home/walker/software/tomcat7
+Using CATALINA_TMPDIR: /home/walker/software/tomcat7/temp
+Using JRE_HOME:        /home/walker/software/jdk11
+Using CLASSPATH:       /home/walker/software/tomcat7/bin/bootstrap.jar:/home/walker/software/tomcat7/bin/tomcat-juli.jar
+org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration bundle was activated before the state location was initialized.  Will retry after the state location is initialized.
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.868: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.868: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.869: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.869: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.980: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.980: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.994: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.994: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.994: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:24.995: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.040: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.040: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.080: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.080: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.086: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.095: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.096: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.096: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.148: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.148: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.149: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.149: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.151: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.151: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.179: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19400): GLib-CRITICAL **: 15:53:25.179: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: Logback config file: /home/walker/e/workspace/.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://937.fwk1375681611:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://937.fwk1375681611:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+org.eclipse.m2e.logback.configuration: Initializing logback
+class org.sf.feeling.decompiler.source.attach.finder.MavenRepoSourceCodeFinder /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.413: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.413: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.413: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.413: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.413: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.414: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.414: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19400): Gtk-WARNING **: 15:53:51.414: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://repository.jboss.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+Caused by: java.lang.ClassNotFoundException: javax.xml.bind.JAXBContext cannot be found by org.sf.feeling.decompiler.source.attach_3.1.1.201811062102
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:511)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:422)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:414)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.loadClass(ModuleClassLoader.java:153)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:521)
+	... 4 more
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://oss.sonatype.org/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.ArtifactorySourceCodeFinder; serviceUrl=https://repo.grails.org/grails/webapp/home.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.EclipsePluginSourceByUrlPatternFinder; urlPattern=http://www.filewatcher.com/_/?q={0} /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+org.sf.feeling.decompiler.source.attach.finder.GrepCodeSourceCodeFinder@c15b710 /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+Using CATALINA_BASE:   /home/walker/software/tomcat7
+Using CATALINA_HOME:   /home/walker/software/tomcat7
+Using CATALINA_TMPDIR: /home/walker/software/tomcat7/temp
+Using JRE_HOME:        /home/walker/software/jdk11
+Using CLASSPATH:       /home/walker/software/tomcat7/bin/bootstrap.jar:/home/walker/software/tomcat7/bin/tomcat-juli.jar
+class org.sf.feeling.decompiler.source.attach.finder.SourceAttacherServiceSourceCodeFinder /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.net.SocketTimeoutException: connect timed out
+	at java.base/java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:399)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:242)
+	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:224)
+	at java.base/java.net.Socket.connect(Socket.java:591)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:177)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:474)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:569)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:242)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:341)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:362)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1242)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1181)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1075)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1009)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1581)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1509)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceAttacherServiceSourceCodeFinder.find(SourceAttacherServiceSourceCodeFinder.java:67)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://repository.apache.org/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://repository.ow2.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://maven.java.net/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://maven.nuxeo.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=https://maven.alfresco.com/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder; serviceUrl=http://nexus.xwiki.org/nexus/index.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+java.lang.NoClassDefFoundError: javax/xml/bind/JAXBContext
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.findArtifactsUsingNexus(NexusSourceCodeFinder.java:216)
+	at org.sf.feeling.decompiler.source.attach.finder.NexusSourceCodeFinder.find(NexusSourceCodeFinder.java:65)
+	at org.sf.feeling.decompiler.source.attach.finder.SourceCodeFinderFacade.find(SourceCodeFinderFacade.java:140)
+	at org.sf.feeling.decompiler.source.attach.finder.FinderManager$Worker.run(FinderManager.java:128)
+class org.sf.feeling.decompiler.source.attach.finder.ArtifactorySourceCodeFinder; serviceUrl=https://repository.cloudera.com/artifactory/webapp/home.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.ArtifactorySourceCodeFinder; serviceUrl=https://repo.spring.io/webapp/home.html /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.EclipsePluginSourceByFTPSearchv3Finder; urlPattern=http://www.search-ftp.com/lsftp.ashx?s={0} /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+class org.sf.feeling.decompiler.source.attach.finder.EclipsePluginSourceByUrlPatternFinder; urlPattern=http://www.mmnt.ru/int/get?st={0} /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+org.sf.feeling.decompiler.source.attach.finder.EclipseSourceReferencesSourceCodeFinder@6256e9f9 /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+org.sf.feeling.decompiler.source.attach.finder.JreSourceCodeFinder@59780501 /home/walker/e/workspace/message_system/client/lib/rhmq.jar
+Using CATALINA_BASE:   /home/walker/software/tomcat7
+Using CATALINA_HOME:   /home/walker/software/tomcat7
+Using CATALINA_TMPDIR: /home/walker/software/tomcat7/temp
+Using JRE_HOME:        /home/walker/software/jdk11
+Using CLASSPATH:       /home/walker/software/tomcat7/bin/bootstrap.jar:/home/walker/software/tomcat7/bin/tomcat-juli.jar
+Using CATALINA_BASE:   /home/walker/software/tomcat7
+Using CATALINA_HOME:   /home/walker/software/tomcat7
+Using CATALINA_TMPDIR: /home/walker/software/tomcat7/temp
+Using JRE_HOME:        /home/walker/software/jdk11
+Using CLASSPATH:       /home/walker/software/tomcat7/bin/bootstrap.jar:/home/walker/software/tomcat7/bin/tomcat-juli.jar
+org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration bundle was activated before the state location was initialized.  Will retry after the state location is initialized.
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.332: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.332: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.332: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.332: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.382: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.382: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.384: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.384: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.385: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.385: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.418: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.418: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.447: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.447: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.452: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.452: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.453: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.453: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.491: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.491: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.492: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.492: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.493: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.493: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.516: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:19809): GLib-CRITICAL **: 15:56:14.516: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: Logback config file: /home/walker/e/workspace_my/.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://937.fwk814886797:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://937.fwk814886797:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+org.eclipse.m2e.logback.configuration: Initializing logback
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.280: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.280: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.280: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.280: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.280: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.281: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.281: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:19809): Gtk-WARNING **: 15:56:28.281: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)

@@ -12,7 +12,7 @@ deta=5
 if [ ! -z $2 ];then
     deta=$2
 fi
-count=999999
+count=999
 if [ ! -z $3 ];then
     count=$3
 fi
