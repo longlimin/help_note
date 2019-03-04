@@ -1,10 +1,9 @@
 //redis 数据库
 
-
 https://github.com/msopentech/redis/releases
 
 运行数据库服务器
-执行 redis-server.exe <redis.windows.conf>
+执行 redis-server.exe <redis.conf>
 
 运行客户端
 执行 
