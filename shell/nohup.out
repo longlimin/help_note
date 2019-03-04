@@ -5419,3 +5419,107 @@ org.eclipse.m2e.logback.configuration: Initializing logback
 (Eclipse:19809): Gtk-WARNING **: 15:56:28.281: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
 
 (Eclipse:19809): Gtk-WARNING **: 15:56:28.281: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+start the profile of walker
+Using CATALINA_BASE:   /home/walker/software/tomcat7
+/home/walker/shell/system_start.sh
+Using CATALINA_HOME:   /home/walker/software/tomcat7
+Using CATALINA_TMPDIR: /home/walker/software/tomcat7/temp
+Using JRE_HOME:        /home/walker/software/jdk1.7.0_80
+Using CLASSPATH:       /home/walker/software/tomcat7/bin/bootstrap.jar:/home/walker/software/tomcat7/bin/tomcat-juli.jar
+##########################################
+2019年 03月 04日 星期一 08:41:24 CST
+Start the software on system boot
+Start 0 	 /home/walker/software/redis-5.0.3/src/redis-server
+Start 1 	 date
+2019年 03月 04日 星期一 08:41:24 CST
+##########################################
+Exception in thread "main" java.lang.UnsupportedClassVersionError: com/syntevo/QBootLoader : Unsupported major.minor version 52.0
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
+	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+	at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
+	at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+	at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+org.eclipse.m2e.logback.configuration: The org.eclipse.m2e.logback.configuration bundle was activated before the state location was initialized.  Will retry after the state location is initialized.
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.057: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.062: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.062: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.062: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.341: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.342: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.345: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.345: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.346: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.346: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.420: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.420: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.498: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.498: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.525: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.525: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.527: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.527: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.598: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.598: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.599: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.599: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.601: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.601: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.635: g_base64_encode_step: assertion 'in != NULL' failed
+
+(Eclipse:2199): GLib-CRITICAL **: 08:41:36.635: g_base64_encode_step: assertion 'in != NULL' failed
+org.eclipse.m2e.logback.configuration: Logback config file: /home/walker/e/workspace_my/.metadata/.plugins/org.eclipse.m2e.logback.configuration/logback.1.10.0.20181127-2120.xml
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [bundleresource://937.fwk1375681611:1/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [bundleresource://937.fwk1375681611:2/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+org.eclipse.m2e.logback.configuration: Initializing logback
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.596: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.596: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.609: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.609: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.609: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.610: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.610: Negative content width -4 (allocation 2, extents 3x3) while allocating gadget (node progressbar, owner GtkProgressBar)
+
+(Eclipse:2199): Gtk-WARNING **: 08:42:16.610: Negative content width -2 (allocation 0, extents 1x1) while allocating gadget (node trough, owner GtkProgressBar)
