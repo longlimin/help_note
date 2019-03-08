@@ -193,7 +193,8 @@ PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件
 -A # 连同匹配行的下#行一并显示，#代表任意数字 
 -B # 连同匹配行的上#行一并显示，#代表任意数字 
 -C # 连同匹配行的上下#行一并显示，#代表任意数字 
--R或-r 递归搜索目录或子目录下匹配的字所在文件 可配合find命令 ############### 
+-R
+-r 递归搜索目录或子目录下匹配的字所在文件 可配合find命令 ############### 
 -E  相当于egrep 支持扩展的正则表达式 
 -F  相当于fgrep 不支持正则表达式 
 --color对匹配的内容以颜色显示 
@@ -265,9 +266,10 @@ date -d tomorrow
 Wed Feb 20 13:11:06 CST 2013  
 date -d yesterday  
 Mon Feb 18 13:11:58 CST 2013  
+date -d now +%s #到ms级别
 date -d "2019-02-11 13:14:19" +%s #到s级别
 1549862059
-date -d @1549862059 "+%Y-%m-%d"
+date -d @1549862059 "+%Y-%m-%d"   #反转
 2019-02-11
 
 
@@ -461,11 +463,48 @@ netstat -g 将会显示该主机订阅的所有多播网络。
 套接字(socket)：套接字也是一种进程间通信机制，与其他通信机制不同的是，它可用于不同主机间的进程通信。
 }
 
-//Linux终端管理进程  memory
+//Linux终端管理进程  memory ps top
 {
-top命令是一个常用的查看系统资源使用情况和查看占用系统资源最多的进程
-top -p 2833 查看指定
-htop    命令是top的改进版 Linux发行版本都没有安装htop——   apt-get install htop     
+top命令 持续查看cpu 内存 进程 和 线程！
+top <-H, 查看线程级别> 
+    <-p 2833, 查看指定pid> 
+    <-b -n 1, 非交互模式, 只跑一次>  
+    <-u walker, 只看某用户>
+top -b -n 1 -i -c
+
+top - 16:00:00 up 1 day,  7:20,  1 user,  load average: 1.93, 1.48, 0.90  
+#uptime 运行时间 登录用户数量 平均负载 5/10/15分钟
+任务: 285 total,   2 running, 233 sleeping,   0 stopped,   0 zombie 
+#进程数 总共 运行 休眠 停止 僵尸
+%Cpu(s):  8.2 us,  1.9 sy,  0.0 ni, 88.9 id,  1.0 wa,  0.0 hi,  0.0 si,  0.0 st
+#cpu使用 user用户 sys系统 nice调优 idle空闲 wait-io等待 hi-cpu处理硬中断 si-cpu处理软中断 st-虚拟机偷走的cpu
+#满负荷运行cpu的使用率最好是user空间保持在65%～70%，system空间保持在30%，空闲保持在0%~5% 。
+KiB Mem :  8084668 total,   807312 free,  4124104 used,  3153252 buff/cache
+KiB Swap:  1755988 total,  1755988 free,        0 used.  3252680 avail Mem 
+#free 全部可用内存、已使用内存、空闲内存、缓冲内存
+进�� USER      PR  NI    VIRT    RES    SHR �  %CPU %MEM     TIME+ COMMAND
+ 3332 walker    20   0 1829648 224564  64068 R 111.8  2.8   8:54.95 gedit
+  754 root      20   0   47136  27848   2384 S  29.4  0.3   3:09.34 /sbin/moun+
+  878 message+  20   0   51692   6164   3912 S   5.9  0.1   0:15.43 /usr/bin/d+
+22747 walker    20   0   51360   4004   3388 R   5.9  0.0   0:00.02 top -bn 1 +
+
+PR 进程的调度优先级。这个字段的一些值是’rt’。这意味这这些进程运行在实时态。
+NI 进程的nice值（优先级）。越小的值意味着越高的优先级。
+VIRT 进程使用的虚拟内存。
+RES 驻留内存大小。驻留内存是任务使用的非交换物理内存大小。
+SHR SHR是进程使用的共享内存。
+S 这个是进程的状态。它有以下不同的值:
+    D – 不可中断的睡眠态。
+    R – 运行态
+    S – 睡眠态
+    T – 被跟踪或已停止
+    Z – 僵尸态
+%CPU 自从上一次更新时到现在任务所使用的CPU时间百分比。
+%MEM 进程使用的可用物理内存百分比。
+TIME+ 任务启动后到现在所使用的全部CPU时间，精确到百分之一秒。
+COMMAND 运行进程所使用的命令。
+
+
 
 #show memory
 free -h
@@ -474,8 +513,39 @@ cat /proc/meminfo  #(free / ps / top)等的组合显示
 vmstat <1 sleep> <5 count> 
 procs -----------memory---------- ---swap-- -----io---- --system-- -----cpu-----
 
-ps -elf 
-ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu   cpu使用倒序
+
+//ps
+ps是显示瞬间进程的状态，并不动态连续；如果想对进程进行实时监控应该用top命令
+命令	含义
+e	显示所有进程,环境变量
+f	全格式
+h	不显示标题
+l	长格式
+w	宽输出
+a	显示终端上地所有进程,包括其他用户地进程
+r	只显示正在运行地进程
+x	显示没有控制终端地进程
+u	以用户为主的格式来显示程序状况
+au	显示较详细的资讯
+aux	显示所有包含其他使用者的行程
+    
+F 代表这个程序的旗标 (flag)， 4 代表使用者为 superuser；
+S 代表这个程序的状态 (STAT)；
+UID 代表执行者身份
+PID 进程的ID号！
+PPID 父进程的ID；
+C CPU使用的资源百分比
+PRI指进程的执行优先权(Priority的简写)，其值越小越早被执行；
+NI 这个进程的nice值，其表示进程可被执行的优先级的修正数值。
+ADDR 这个是内核函数，指出该程序在内存的那个部分。如果是个执行 的程序，一般就是『 - 』
+SZ 使用掉的内存大小；
+WCHAN 目前这个程序是否正在运作当中，若为 - 表示正在运作；
+TTY 登入者的终端机位置；
+TIME 使用掉的 CPU 时间。
+CMD 所下达的指令名称    
+
+ps -elf   aux
+ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu   #cpu使用倒序
 
 
 pstree  以显示进程信息。它以树的形式显示
@@ -799,7 +869,7 @@ tar –xzvf file.tar.Z //解压tar.Z
 将整个 /etc 目录下的文件全部打包成为 /tmp/etc.tar
 tar -cvf /tmp/etc.tar /etc　　　　<==仅打包，不压缩！
 tar -czvf /tmp/etc.tar.gz /etc　　<==打包后，以 gzip 压缩
-tar -jcvf /tmp/etc.tar.bz2 /etc　　<==打包后，以 bzip2 压缩
+tar -cjvf /tmp/etc.tar.bz2 /etc　　<==打包后，以 bzip2 压缩
 
 unrar e file.rar //解压rar 
 unzip file.zip //解压zip 
@@ -850,6 +920,7 @@ rc4.d # 4 - 系统保留的
 rc5.d # 5 - X11 （x window)
 rc6.d # 6 - 重新启动
 rcS.d
+
 #每个级别都会在在对应的目录下有对应的启动文件
 ls /etc/rc3.d/
 初始化操作都在 /etc/init/*.conf文件中完成    */

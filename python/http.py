@@ -14,7 +14,8 @@ class Http:
         self.opener = urllib2.build_opener(self.cookieHander)
 
         header = {
-            "User-Agent":"Mozilla/6.0",
+            "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
+            
         }
         turnHeader = []
         for item in header.keys():
@@ -23,6 +24,15 @@ class Http:
         self.opener.addheaders = turnHeader
         # urllib2.install_opener(opener)  
         return
+    def makeOpener(self, cookies, headers):
+        
+        return
+    def addHeader(self, header={}):
+        turnHeader = self.opener.addheaders
+        for item in header.keys():
+            turnHeader.append( (item, header[item]) )
+        self.opener.addheaders = turnHeader
+        
     def out(self, *obj):
         print("http." + str(obj))
 
@@ -32,18 +42,24 @@ class Http:
             res[item.name] = item.value
         return res
 
-
-    def show(self, response):
-        tool.line()
-        try:
-            self.out("Cookie:")
-            for item in self.cookie:
-                self.out( '##' + item.name + ':' + item.value)
-
+    def show(self, response=""):
+        if (response != ""):
+            tool.line()
             self.out("Code: " + str(response.getcode()))
             self.out("Res : " + str(response.msg))
             self.out("Headers : ")
-            self.out(str(response.headers))
+            print(response.headers)
+        
+    
+        tool.line()
+        try:
+            for item in self.cookie:
+                self.out("Cookie: ", item.name, item.value)
+
+            self.out("Headers Add : ")
+            header = self.opener.addheaders
+            for key, value in header:
+                self.out("Headers Add ", key, value)
         except Exception as e:
             print(traceback.format_exc())
         tool.line()

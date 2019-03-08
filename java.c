@@ -26,30 +26,84 @@ JDK 1.1 = 45
 
 
 
-性能分析
+性能分析  cpu冲高时
 
-重启前需要收集的信息:
-      #导出操作系统cpu信息
-      ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu > cpu.log
-      #导出网络连接信息
-      netstat -natl > netstat.log
-      #获取服务器nmon日志
-      #数据库连接池 进程等情况
-      #redis信息快照  
+1.查看日志，没有发现集中的错误日志，初步排除代码逻辑处理错误。
+2.首先联系了内部下游系统观察了他们的监控，发现一起正常。可以排除下游系统故障对我们的影响。
+3.查看provider接口的调用量，对比7天没有突增，排除业务方调用量的问题。
+4.查看tcp监控，TCP状态正常，可以排除是http请求第三方超时带来的问题。
+5.查看机器监控，6台机器cpu都在上升，每个机器情况一样。排除机器故障问题。
+
+
+top -Hp $pid    #查看该pid下线程对应的系统占用情况。
+
+#导出操作系统cpu信息
+ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu > cpu.log
+ps H -eo user,pid,ppid,tid,time,%cpu,command --sort=%cpu  > cpu_thread
+
+    netstat -natl > netstat.log     #导出网络连接信息
+    #获取服务器nmon日志
+    #数据库连接池 进程等情况
+    #redis信息快照  
+
+
+#JDK才有的jvm分析工具  jre不可用！
+#采集最消耗cpu的线程tid pid ppid command 
+#采集java线程栈 
+#采集jmap
+#################################################
+pid=`ps -elf | grep eclipse/jre | grep -v grep | awk '{print $4}' `   #获取pid
+ti=`date "+%Y%m%d-%H%M%S"`    #时间戳
+key=$pid.$ti        #命名键
+file=~/logs         #存储根路径
+file_cpu_thread=$file/$key.cpu_thread.log
+file_jstack=$file/$key.jstack.log
+file_jmap=$file/$key.jmap_dump.hprof
+
+#采集最消耗cpu的线程tid pid ppid command 可根据tid->16进制查找java线程栈
+#ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu  > $file_cpu_thread    
+ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu  | awk '{printf "0x%x\t %s\n", $4, $0}'  > $file_cpu_thread  #附带自动转换16进制
+
+jstack $pid > $file_jstack      #采集java线程栈 
+jmap -dump:format=b,live,file=$file_jmap $pid       #采集jmap
+#jhat -J-Xmx1024M $jmap_file #等待访问 http://127.0.0.1:7000
+jvisualvm $file_jmap &  #图形化分析工具
+
+#########################################################
+
+jdk1.6 中 Oracle可视化监控
+$JAVA_HOME/bin/jvisualvm.exe
+
+
+kill -3 [pid]
+在Linux 上找到Java所在的进程号，然后执行以上命令，线程的相关信息就输出到console
+
+
+//jmap jhat jstat jstack      
+jmap [option] $pid
+jmap [option] [server_id@]<remote server IP or hostname>
+    -<none> 这个意思是说，jmap可以不加任何option参数信息，只是指定Java进程的进程号。这种情况下，jmap命令将按照Linux操作系统进程内存分析命令pmap的相关性，输出内存分析结果。
+    -heap 查看整个JVM内存状态   改参数将输出当前指定java进程的堆内存概要信息。  使用CMS GC 情况下，jmap -heap的执行有可能会导致JAVA 进程挂起
+    -clstats 该参数将打印出当前java进程中，存在的每个类加载器，以及通过该类加载器已经完成加载的各类信息，包括但不限于类加载器的活动情况、已经加载的类数量、关联的父类加载器等等（class文件通过类加载器完成的载入、连接、验证初始化等过程可以在这个命令的输出详情中具体体现出来）。
+    finalizerinfo 该参数可打印出等待终结的对象信息，当Java进程在频繁进行Full GC的时候，可以通过该命令获取问题的排查依据。
+    -histo[:live] 查看JVM堆中对象详细占用情况 该参数可以输出每个class的实例数目、内存占用、类全名等信息。如果live子参数加上后,只统计活的对象数量。该命令非常有用，举个例子，你可以使用该名了检查软件系统的某种设计模式是否符合设计预期。
+    -dump:<dump-options> 取得当前指定java进程堆内存中各个class实例的详细信息，并输出到指定文件。dump命令还有三个子参数分别是。
+        live只分析输出目前有活动实例的class信息；
+        format输出格式，默认为“b”，可以使用配套的分析软件进行分析；
+        file子参数可以指定输出的文件，注意，如果输出文件已经存在，则可以使用-F 参数来强制执行命令。
+    案例：
+    jmap -dump:format=b,file=文件名 [pid]
+
+//在远程服务器server_address上执行:
+    1:服务器启动java应用，查询该进程的pid
+    2:rmiregistry -J-Xbootclasspath/p:$JAVA_HOME/lib/sa-jdi.jar &
+    3:执行jsadebugd pid server-id
+在客户端执行:
+    jmap -heap server_id@server_address
+    
       
-      #导出线程信息
-      $JAVA_HOME/bin/jstack ${pid} > jstack.log
-      #导出内存快照
-      jmap -dump:format=b,live,file=./jmap_dump ${pid}
-
-
-pid=`ps -elf | grep javaagent | grep -v grep | awk '{print $4}' `
-$JAVA_HOME/bin/jstack ${pid} > ~/logs/jstack.log
-jmap -dump:format=b,live,file=~/logs/jmap_dump ${pid}
-
-可重启后收集的信息：
-      #获取was相关日志: System.out 或 自动生成的其他日志
-      #获取服务业务日志
+///////////////////////////////////////////////////////////////////
+//dubbo zookeeper java 安装环境      
       
 0. Container: provider的运行容器。
 1. Provider: 服务提供者在启动时，向注册中心注册自己提供的服务。 Java项目

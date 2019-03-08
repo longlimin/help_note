@@ -1,24 +1,42 @@
 //redis 数据库
 
 https://github.com/msopentech/redis/releases
+cd redis-5.0.3
+make
+make install PREFIX=.  #选定目录安装生成bin目录  默认/usr/local/bin/
+./src/redis-server.sh <redis.conf>
+./src/redis-cli.sh -h 127.0.0.1 -p 6379
+./src/redis-cli -h host -p port -a password  <set key value>
 
-运行数据库服务器
-执行 redis-server.exe <redis.conf>
+//修改配置 redis.conf
+    daemonize：如需要在后台运行，把该项的值改为yes
+    pdifile：把pid文件放在/var/run/redis.pid，可以配置到其他地址
+    bind：指定redis只接收来自该IP的请求，如果不设置，那么将处理所有请求，在生产环节中最好设置该项
+    port：监听端口，默认为6379
+    timeout：设置客户端连接时的超时时间，单位为秒
+    loglevel：等级分为4级，debug，revbose，notice和warning。生产环境下一般开启notice
+    logfile：配置log文件地址，默认使用标准输出，即打印在命令行终端的端口上
+    database：设置数据库的个数，默认使用的数据库是0
+    save：设置redis进行数据库镜像的频率
+    rdbcompression：在进行镜像备份时，是否进行压缩
+    dbfilename：镜像备份文件的文件名
+    dir：数据库镜像备份的文件放置的路径
+    slaveof：设置该数据库为其他数据库的从数据库
+    masterauth：当主数据库连接需要密码验证时，在这里设定
+    requirepass：设置客户端连接后进行任何其他指定前需要使用的密码
+    maxclients：限制同时连接的客户端数量
+    maxmemory：设置redis能够使用的最大内存
+    appendonly：开启appendonly模式后，redis会把每一次所接收到的写操作都追加到appendonly.aof文件中，当redis重新启动时，会从该文件恢复出之前的状态
+    appendfsync：设置appendonly.aof文件进行同步的频率
+    vm_enabled：是否开启虚拟内存支持
+    vm_swap_file：设置虚拟内存的交换文件的路径
+    vm_max_momery：设置开启虚拟内存后，redis将使用的最大物理内存的大小，默认为0
+    vm_page_size：设置虚拟内存页的大小
+    vm_pages：设置交换文件的总的page数量
+    vm_max_thrrads：设置vm IO同时使用的线程数量
 
-运行客户端
-执行 
-redis-cli.exe -h 127.0.0.1 -p 6379
-redis-cli -h host -p port -a password
-
-info 展示redis状态
-flushall 清空
-
-
-
-Redis哨兵模式（sentinel）学习总结及部署记录（主从复制、读写分离、主从切换）
+//Redis哨兵模式（sentinel）学习总结及部署记录（主从复制、读写分离、主从切换）
 1）redis cluster集群方案；2）master/slave主从方案；3）哨兵模式来进行主从替换以及故障恢复。
-
-一、sentinel哨兵模式介绍
 Sentinel(哨兵)是用于监控redis集群中Master状态的工具，是Redis 的高可用性解决方案，sentinel哨兵模式已经被集成在redis2.4之后的版本中。sentinel是redis高可用的解决方案，sentinel系统可以监视一个或者多个redis master服务，以及这些master服务的所有从服务；当某个master服务下线时，自动将该master下的某个从服务升级为master服务替代已下线的master服务继续处理请求。
 
 Sentinel 使用 TCP 端口 26379 （普通 Redis 服务器使用的是 6379 ）
@@ -26,15 +44,13 @@ SENTINEL get-master-addr-by-name <master name>获取当前的主服务器IP地�
 SENTINEL slaves <master name>获取所有的Slaves信息
 
 
+info 展示redis状态
+flushall 清空
 redis-cli info | grep role //查看主从
 role:slave
 role:master
 
-
-
 //发布订阅模式
-docker exec -it redis bash        //进入redis容器中
-redis-cli                         //启动一个redis客户端
 publish chat aaa                  //发布一个chat主题的消息，内容为aaa
 subscribe chat                    //订阅一个chat主题的消息
 PSUBSCRIBE *                      //订阅所有消息
@@ -52,11 +68,8 @@ hmset user:1 username runoob password runoob points 200
 //list
 lpush [lpush key valus...]  类似于压栈操作，将元素放入头部
 lpushx [lpushx key valus]:只能插入已经存在的key,且一次只能插入一次
-
 rpush  [rpush key valus...]  将元素push在list的尾部
-
 lrange runoob 0 10 查询
-
 
 //set 不重复
 sadd key member
@@ -64,7 +77,6 @@ sadd key member
 //zset(sorted set：有序集合)
 zadd key score member 
 #zrangebyscore runoob 0 1000
-
 
  
 1	del key
@@ -99,7 +111,6 @@ expireat 的作用和 expire 类似，都用于为 key 设置过期时间。 不
 仅当 newkey 不存在时，将 key 改名为 newkey 。
 16	type key 
 返回 key 所储存的值的类型。
-
 
 
 1	hdel key field1 [field2] 
@@ -198,7 +209,6 @@ expireat 的作用和 expire 类似，都用于为 key 设置过期时间。 不
 所有给定集合的并集存储在 destination 集合中
 15	sscan key cursor [match pattern] [count count] 
 迭代集合中的元素
-
 
 //zet
 

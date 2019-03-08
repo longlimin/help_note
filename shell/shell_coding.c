@@ -13,14 +13,29 @@ var=`命令` # 注意此处不是普通的单引号
     函数变量 和 全局变量 冲突域 公用？ 递归注意？
     a=1     =不要空格
     str="abc" / '123' / `cat text.txt`      绝对字符串'' 可编译嵌入变量"" 命令返回结果``
-    #shell中对变量的值添加单引号，双引号和不添加的区别：对类型来说是无关的，即不是添加了引号就变成了字符串类型，
+    #shell中对变量的值添加单引号，双引号和不添加的区别：对类型来说是无关的，即
+    //不是添加了引号就变成了字符串类型，
     #单引号不对相关量进行替换，如不对$符号解释成变量引用，从而用对应变量的值替代，双引号则会进行替代
     echo $a"abc"'123'
-    echo $[1+2]
-    echo $[a+1]
+    整数运算
+    a=`expr 1 + $a ` # +-*/%
+    a=$((w*a))
+    a=$[a+1]
     c=let $a+1 
-    val=`expr 2 + 2`
-    val=$((2 + 2))
+    小数运算
+    a=`"scale=2;3/10" | bc`
+    a=${float%.*} 取整
+    进制转换 赋值
+    let i=16#ff
+    let aaa=n#[0 - n-1] #n进制定义
+    let i=0xff  011
+    echo 命令以十进制显示数据
+    ((var=base#number));echo $var
+    printf "%x\n" 65536
+    
+    bc命令格式转换
+    echo "obase=进制;值" | bc
+    echo "obase=16;65536" | bc
     
 //数组
     arr=(1 2 3)     一对括号表示是数组，数组元素用“空格”符号分割开
@@ -100,7 +115,7 @@ cmd=$exe' keys '$key" | awk -OFS'\"' '"'{print $1}'"'"
 
 //ll找不到 ll = ls -alF 
 //if else  test  判断  
-//[ ] 实际上是bash 中 test 命令 ，用于判断类型 -z -f -d -n
+//[ ] 实际上是bash 中 test 命令 ，用于判断类型 -z -f -d -n<! -z>
 // [[ expr ]] 是bash中真正的条件判断语句 < > == != 
 // (( $i < 5 )) 算数大小比较
 {
@@ -127,6 +142,20 @@ cmd=$exe' keys '$key" | awk -OFS'\"' '"'{print $1}'"'"
      touch "$myFile"
     fi
     [ -x $redis ] || exit 5
+等于        equal       -eq
+不同等于  not equal     -ne           
+小于      less than     -lt
+小于等于 less equal     -le
+大于     greater than   -gt
+大于等于 greater equal  -ge
+[ -d  文件或目录  ]  测试是否存在且为目录 directory
+[ -f  文件或目录  ]  测试是否存在且为文件 file
+[ -e  文件或目录  ]  测试是否存在      exist
+[ -s  文件  ]  测试是大小是否大与0  size
+
+[ -r  文件  ]  ---------文档存在且具备读权限为真
+[ -w  文件  ] ---------文档存在且具备写权限为真
+[ -x  文件  ] ---------文档存在且具备执行权限为真
   
 case "$1" in
     start)
@@ -137,6 +166,13 @@ case "$1" in
         rh_status_q || exit 0
         ;;
     *)    
+
+&&  并且    A  &&   B    A成功了，才会去执行B，B不一定会成功；若A不成功,则B不执行
+||   或者    A  ||   B   A成功，则不执行B。如A不成功，则执行B。
+;   A；B  不管A成不成功都执行B
+
+读取输入
+read -p "请输入用户名：" name   #录入name变量
 
 }
 
@@ -212,25 +248,6 @@ $$<PID 59>
 -rw-r--r-- 1 root root 0 Oct 9 21:22 stu_02.jpg 
 }
 
-//日期格式化
-[root@root ~]# date "+%Y-%m-%d"  
-2013-02-19  
-[root@root ~]# date "+%H:%M:%S"  
-13:13:59  
-[root@root ~]# date "+%Y-%m-%d %H:%M:%S"  
-2013-02-19 13:14:19  
-[root@root ~]# date "+%Y_%m_%d %H:%M:%S"    
-2013_02_19 13:14:58  
-[root@root ~]# date -d today   
-Tue Feb 19 13:10:38 CST 2013  
-[root@root ~]# date -d now  
-Tue Feb 19 13:10:43 CST 2013  
-[root@root ~]# date -d tomorrow  
-Wed Feb 20 13:11:06 CST 2013  
-[root@root ~]# date -d yesterday  
-Mon Feb 18 13:11:58 CST 2013  
-
-
 //进程并发数控制 管道 同步
 见pipe_maker.sh 案例
 
@@ -259,3 +276,4 @@ echo -e '222\nbbb' | ./exe_reader.sh
 
 
 
+    2. 十进制转换为其它进制。

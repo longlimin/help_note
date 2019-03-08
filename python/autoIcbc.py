@@ -98,10 +98,30 @@ class Auto:
         self.out("访问主页 获取 token session")
 #        http://content.icbc.com.cn/site1/a5f9ff6d068a46e68d363426ca69bd07/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=1548294412328
 # "http://content.icbc.com.cn/site1/a5f9ff6d068a46e68d363426ca69bd07/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=1545268253550"
-        ttt = '1545268253550' #str(tool.getNowTime())
+#http://content.icbc.com.cn/site1/a5f9ff6d068a46e68d363426ca69bd07/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=1552005766720
+        ttt = str(tool.getNowTime())
         kkk = 'a5f9ff6d068a46e68d363426ca69bd07'
         url = "http://content.icbc.com.cn/site1/" + kkk + "/login_unfirst.html?pageOrder=login_unfirst.html;index.html&_mp_cmp_ttime=" + ttt
         
+        
+#BIGipServerwifi_ContextPlat_80_Pool	2097346570.20480.0000	N/A	N/A	N/A	59				
+#cmp_glb_param	98f7808c851a9f53da5f0c3f1639b678	N/A	N/A	N/A	46				
+#layerNettimeType	true	N/A	N/A	N/A	23				
+#layerPosterType	true	N/A	N/A	N/A	22				
+#layerSafeType	true	N/A	N/A	N/A	20
+
+#Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+#Accept-Encoding: gzip, deflate
+#Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+#Connection: keep-alive
+
+        header = {
+            "Cookie"    : "BIGipServerwifi_ContextPlat_80_Pool=2097346570.20480.0000; layerSafeType=true; layerPosterType=true; layerNettimeType=true; cmp_glb_param=98f7808c851a9f53da5f0c3f1639b678"
+            
+        }
+        self.http.addHeader(header)
+        
+        self.http.show()
         responce = self.http.doGet(url)
         re = responce.read()
         soup =BeautifulSoup.BeautifulSoup(re)
@@ -109,12 +129,16 @@ class Auto:
         if(len(nameList) > 0):
             self.out(nameList)
             self.out("抓取成功: ")
-            self.out("cookie\t " + tool.toString(self.http.getCookie()))
+            self.http.show(responce)
             self.out("模拟登录")
 # http://content.icbc.com.cn/cmp/AuthSkipController.do?method=authSkip&ajaxRequest=true
             url = "http://content.icbc.com.cn/cmp/AuthSkipController.do?method=authSkip&ajaxRequest=true"
+#{"msg":"GlbInfo检查不通过","retCode":1,"success":false,"data":{"needJump":"http%3A%2F%2Fwww.baidu.com%2F"}}
+
             json=self.http.doJson(url)
             self.out((json))
+            self.out(json["msg"])
+            self.out(json["data"]["needJump"])
         else:
             self.out("error！ 没能抓取到token")
         return False
