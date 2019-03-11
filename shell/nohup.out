@@ -6359,3 +6359,61 @@ source do_start_software.sh
 2019-03-11 08:36:46 >>params:
 2019-03-11 08:36:46 --------
 update add/commt/pull: /home/walker/e/help_note
+来自 https://github.com/1424234500/help_note
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_my/BaseSSM
+来自 https://github.com/1424234500/BaseSSM
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_android/cc
+来自 https://github.com/1424234500/cc
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_my/GraphicsTools
+来自 https://github.com/1424234500/GraphicsTools
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_my/AngularApp
+来自 https://github.com/1424234500/AngularApp
+ * branch            master     -> FETCH_HEAD
+2019-03-11 08:36:59 --------------------------------
+
+Using CATALINA_BASE:   /home/walker/software/tomcat7
+Using CATALINA_HOME:   /home/walker/software/tomcat7
+Using CATALINA_TMPDIR: /home/walker/software/tomcat7/temp
+Using JRE_HOME:        /home/walker/software/jdk1.7.0_80
+Using CLASSPATH:       /home/walker/software/tomcat7/bin/bootstrap.jar:/home/walker/software/tomcat7/bin/tomcat-juli.jar
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_clean.sh
+Git log file: /home/walker/e/git.log
+source do_git.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_renames.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_dirfile.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_clean.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_start_software.sh
+
+2019-03-11 08:37:09 --------------------------------
+2019-03-11 08:37:09 >>shell: /home/walker/e/help_note/shell/do
+2019-03-11 08:37:09 >>params: update
+2019-03-11 08:37:09 --------
+2019-03-11 08:37:09 >>method: update
+2019-03-11 08:37:09 >>params:
+2019-03-11 08:37:09 --------
+update add/commt/pull: /home/walker/e/help_note

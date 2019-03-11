@@ -60,11 +60,11 @@ function do_start_sftware_start(){
 
         fi
         
-        if (( $len > 1 ))
-        then
-            cd $nowdir
-            out 'stack pop dir: '`pwd`
-        fi
+#        if (( $len > 1 ))
+#        then
+#            cd $nowdir
+#            out 'stack pop dir: '`pwd`
+#        fi
         
         toolsLineLong
     done    
