@@ -12,7 +12,6 @@ WebContent/WEB-INF/classes
 *.o
 *.apk
 *.db
-nohup.out
-log.txt
 *.~sql
 
+*.out
