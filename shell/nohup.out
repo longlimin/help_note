@@ -6484,3 +6484,81 @@ Start 1 	 date
 2019-03-11 08:40:18 >>params:
 2019-03-11 08:40:18 --------
 update add/commt/pull: /home/walker/e/help_note
+Exception in thread "main" java.lang.UnsupportedClassVersionError: com/syntevo/QBootLoader : Unsupported major.minor version 52.0
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:800)
+	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+	at java.net.URLClassLoader.defineClass(URLClassLoader.java:449)
+	at java.net.URLClassLoader.access$100(URLClassLoader.java:71)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:355)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:354)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:425)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+	at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:482)
+来自 https://github.com/1424234500/help_note
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_my/BaseSSM
+来自 https://github.com/1424234500/BaseSSM
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_android/cc
+来自 https://github.com/1424234500/cc
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_my/GraphicsTools
+来自 https://github.com/1424234500/GraphicsTools
+ * branch            master     -> FETCH_HEAD
+update add/commt/pull: /home/walker/e/workspace_my/AngularApp
+来自 https://github.com/1424234500/AngularApp
+ * branch            master     -> FETCH_HEAD
+2019-03-11 08:40:25 --------------------------------
+
+
+(gedit:3835): Gtk-WARNING **: 10:52:15.132: Attempting to read the recently used resources file at '/home/walker/.local/share/recently-used.xbel', but the parser failed: Failed to open file “/home/walker/.local/share/recently-used.xbel”: 权限不够.
+
+(gedit:3835): Gtk-WARNING **: 10:52:27.751: Attempting to read the recently used resources file at '/home/walker/.local/share/recently-used.xbel', but the parser failed: Failed to open file “/home/walker/.local/share/recently-used.xbel”: 权限不够.
+
+(gedit:3835): Gtk-WARNING **: 10:52:30.302: Attempting to read the recently used resources file at '/home/walker/.local/share/recently-used.xbel', but the parser failed: Failed to open file “/home/walker/.local/share/recently-used.xbel”: 权限不够.
+Using CATALINA_BASE:   /home/walker/software/tomcat7
+Using CATALINA_HOME:   /home/walker/software/tomcat7
+Using CATALINA_TMPDIR: /home/walker/software/tomcat7/temp
+Using JRE_HOME:        /home/walker/software/jdk1.7.0_80
+Using CLASSPATH:       /home/walker/software/tomcat7/bin/bootstrap.jar:/home/walker/software/tomcat7/bin/tomcat-juli.jar
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_clean.sh
+Git log file: /home/walker/e/git.log
+source do_git.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_renames.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_dirfile.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_clean.sh
+source tools.sh
+System root: /home/walker/e
+source tools.sh
+source do_start_software.sh
+
+2019-03-11 10:59:30 --------------------------------
+2019-03-11 10:59:30 >>shell: /home/walker/e/help_note/shell/do
+2019-03-11 10:59:30 >>params: update
+2019-03-11 10:59:30 --------
+2019-03-11 10:59:30 >>method: update
+2019-03-11 10:59:30 >>params:
+2019-03-11 10:59:30 --------
+update add/commt/pull: /home/walker/e/help_note

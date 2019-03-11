@@ -211,8 +211,8 @@ pipe_make 7570                walker  255r      REG                8,6      2522
 ll /proc/7570/fd 
 lrwx------ 1 walker walker 64 1月  24 15:36 1000 -> '/home/walker/e/help_note/shell/make.7570.fifo (deleted)'
 lrwx------ 1 walker walker 64 1月  24 15:36 2 -> /dev/pts/0
-lr-x------ 1 walker walker 64 1月  24 15:36 255 -> /home/walker/e/help_note/shell/pipe_maker.sh* (deleted)'
-3.读取 转储目标文件
+lr-x------ 1 walker walker 64 1月  24 15:36 255 -> /home/walker/e/help_note/shell/pipe_maker.sh* (deleted)
+3.读取 转储目标文件 
 cat /proc/7570/fd/255 > pipe_maker.sh
 
 lsof输出各列信息的意义如下：
@@ -675,78 +675,6 @@ sshpass -p "XXX" ssh user@IP
 //之后才能使用sshpass登录?
 }
 
-//管道 多进程 并发
-{
-1.1. linux后台进程 
-Unix是一个多任务系统，允许多用户同时运行多个程序。shell的元字符&提供了在后台运行不需要键盘输入的程序的方法。输入命令后，其后紧跟&字符，该命令就会被送往到Linux后台执行，而终端又可以继续输入下一个命令了。 
-比如： 
-sh a.sh & 
-这三个命令就会被同时送往linux后台执行，在这个程度上，认为这三个命令并发执行了。
-1.2. linux文件描述符
-文件描述符（缩写fd）在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符。每一个unix进程，都会拥有三个标准的文件描述符，来对应三种不同的流：
-文件描述符	名称
-0	Standard Input
-1	Standard Output
-2	Standard Error
-每一个文件描述符会对应一个打开文件，同时，不同的文件描述符也可以对应同一个打开文件；同一个文件可以被不同的进程打开，也可以被同一个进程多次打开。
-
-在/proc/PID/fd中，列举了进程PID所拥有的文件描述符，例如
-
-#!/bin/bash
-source /etc/profile;
-
-# $$表示当前进程的PID
-PID=$$
-
-# 查看当前进程的文件描述符指向
-ll /proc/$PID/fd
-
-# 文件描述符1与文件tempfd1进行绑定
-( [ -e ./tempfd1 ] || touch ./tempfd1 ) && exec 1<>./tempfd1
-
-[ouyangyewei@localhost learn_linux]$ sh learn_redirect.sh 
-total 0
-lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 0 -> /dev/pts/0
-lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 1 -> /dev/pts/0
-lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 2 -> /dev/pts/0
-lr-x------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 255 -> /home/ouyangyewei/workspace/learn_linux/learn_redirect.sh
--------------------
-
-[ouyangyewei@localhost learn_linux]$ cat tempfd1 
-total 0
-lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 0 -> /dev/pts/0
-lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 1 -> /home/ouyangyewei/workspace/learn_linux/tempfd1
-lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 2 -> /dev/pts/0
-lr-x------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 255 -> /home/ouyangyewei/workspace/learn_linux/learn_redirect.sh
--------------------
-上述的例子中第12行，将文件描述符1与文件tempfile进行了绑定，此后，文件描述符1指向了tempfile文件，标准输出被重定向到了文件tempfile中。
-1.3. linux管道
-在Unix或类Unix操作系统中，管道是一个由标准输入输出链接起来的进程集合，因此，每一个进程的输出将直接作为下一个进程的输入，
-linux管道包含两种：
-匿名管道 命名管道
-管道有一个特点，如果管道中没有数据，那么取管道数据的操作就会滞留，直到管道内进入数据，然后读出后才会终止这一操作；同理，写入管道的操作如果没有读取管道的操作，这一动作就会滞留。
-1.3.1. 匿名管道
-在Unix或类Unix操作系统的命令行中，匿名管道使用ASCII中垂直线|作为匿名管道符，匿名管道的两端是两个普通的，匿名的，打开的文件描述符：一个只读端和一个只写端，这就让其它进程无法连接到该匿名管道。
-cat file | less
-1
-1
-为了执行上面的指令，Shell创建了两个进程来分别执行cat和less。下图展示了这两个进程是如何使用管道的：
-unix_unnamed_pipe 
-有一点值得注意的是两个进程都连接到了管道上，这样写入进程cat就将其标准输出（文件描述符为fd 1）连接到了管道的写入端，读取进程less就将其标准输入（文件描述符为fd 0）连接到了管道的读入端。实际上，这两个进程并不知道管道的存在，它们只是从标准文件描述符中读取数据和写入数据。shell必须要完成相关的工作。
-
-1.3.2. 命名管道（FIFO，First In First Out）
-
-命名管道也称FIFO，从语义上来讲，FIFO其实与匿名管道类似，但值得注意：
-
-在文件系统中，FIFO拥有名称，并且是以设备特俗文件的形式存在的；
-任何进程都可以通过FIFO共享数据；
-除非FIFO两端同时有读与写的进程，否则FIFO的数据流通将会阻塞；
-匿名管道是由shell自动创建的，存在于内核中；而FIFO则是由程序创建的（比如mkfifo命令），存在于文件系统中；
-匿名管道是单向的字节流，而FIFO则是双向的字节流；
-比如，可以利用FIFO实现单服务器、多客户端的应用程序: 
-unix_named_pipe
-
-
 
 //mv命令既可以重命名
 {
@@ -906,11 +834,13 @@ resize2fs /dev/vdb   # 重置数据磁盘大小
 //启动项
 1.操作系统接管硬件以后，首先读入 /boot 目录下的内核文件
 2.内核文件加载以后，就开始运行第一个程序 /sbin/init，它的作用是初始化系统环境。由于init是第一个运行的程序，它的进程编号（pid）就是1。其他所有进程都从它衍生，都是它的子进程。
-3.许多程序需要开机启动。它们在Windows叫做"服务"（service），在Linux就叫做"守护进程"（daemon）。
-init进程的一大任务，就是去运行这些开机启动的程序。但是，不同的场合需要启动不同的程序，比如用作服务器时，需要启动Apache，用作桌面就不需要。Linux允许为不同的场合，分配不同的开机启动程序，这就叫做"运行级别"（runlevel）。也就是说，启动时根据"运行级别"，确定要运行哪些程序。
 
-cat /etc/inittab
-#各级别启动目录
+注意如果脚本需要用到网络，则NN需设置一个比较大的数字，如99。
+sudo update-rc.d test defaults 95 #优先级配置
+
+#总启动项 在 /etc/init.d文件夹下是全部的服务程序，将脚本复制或者软连接到/etc/init.d/目录下，
+ls /etc/init.d
+#各级别启动目录 软连接 init.d目录下的应用 每个rc(1-6).d只链接它自己启动需要的相应的服务程序！
 ls /etc/ | grep rc
 rc0.d # 0 - 停机（千万别把initdefault设置为0，否则系统永远无法启动）
 rc1.d # 1 - 单用户模式
@@ -923,11 +853,25 @@ rcS.d
 
 #每个级别都会在在对应的目录下有对应的启动文件
 ls /etc/rc3.d/
-初始化操作都在 /etc/init/*.conf文件中完成    */
+初始化操作都在 /etc/init/*.conf文件中完成     */
 cat /etc/init/anacron.conf 
 start on runlevel [2345]
 stop on runlevel [!2345]
 
+#启动1
+vim /etc/rc.local
+/etc/init.d/test.sh start 
+#启动2
+cp test.sh /etc/profile.d/ 
+#启动3
+cp test.sh /etc/init.d/
+ln -s /etc/init.d/test.sh /etc/rc3.d/init.d/
+vim 启动文件，文件前面务必添加如下三行代码，否侧会提示chkconfig不支持
+#!/bin/sh #告诉系统使用的shell,所以的shell脚本都是这样
+#chkconfig: 35 20 80 #分别代表运行级别，启动优先权，关闭优先权，此行代码必须
+#description: http server #（自己随便发挥）//两行都注释掉！！！，此行代码必须
+
+chkconfig --add test.sh
 
 //用户组问题
 adduser walker 新建用户
@@ -948,9 +892,6 @@ usermod -l walker walkerdust
 输入 root 密码 安装时 设置的是用户密码 而不是root 密码 ununtu 只能调用 root 不能直接 root登录
 输入 passwd root
 
-ps 查看tty？
-top来对进程排序，结束进程等.
- 
 
 //编译安装ffmpeg
 {
@@ -1001,7 +942,7 @@ ldd /usr/local/openssl/bin/openssl
 OpenSSL 1.0.1f 6 Jan 2014
 
 
-#定时任务
+//定时任务
 crontab -e #编辑
 crontab -l  #列表 
 //Cron是Unix系统的一个配置定期任务的工具，用于定期或者以一定的时间间隔执行一些命令或者脚本； 基于每个用户的，每一个用户（包括root用户）都拥有自己的crontab。
@@ -1049,6 +990,79 @@ Bash
 #一月一号的4点重启apache
 
 
+
+//管道 多进程 并发
+{
+1.1. linux后台进程 
+Unix是一个多任务系统，允许多用户同时运行多个程序。shell的元字符&提供了在后台运行不需要键盘输入的程序的方法。输入命令后，其后紧跟&字符，该命令就会被送往到Linux后台执行，而终端又可以继续输入下一个命令了。 
+比如： 
+sh a.sh & 
+这三个命令就会被同时送往linux后台执行，在这个程度上，认为这三个命令并发执行了。
+1.2. linux文件描述符
+文件描述符（缩写fd）在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符。每一个unix进程，都会拥有三个标准的文件描述符，来对应三种不同的流：
+文件描述符	名称
+0	Standard Input
+1	Standard Output
+2	Standard Error
+每一个文件描述符会对应一个打开文件，同时，不同的文件描述符也可以对应同一个打开文件；同一个文件可以被不同的进程打开，也可以被同一个进程多次打开。
+
+在/proc/PID/fd中，列举了进程PID所拥有的文件描述符，例如
+
+#!/bin/bash
+source /etc/profile;
+
+# $$表示当前进程的PID
+PID=$$
+
+# 查看当前进程的文件描述符指向
+ll /proc/$PID/fd
+
+# 文件描述符1与文件tempfd1进行绑定
+( [ -e ./tempfd1 ] || touch ./tempfd1 ) && exec 1<>./tempfd1
+
+[ouyangyewei@localhost learn_linux]$ sh learn_redirect.sh 
+total 0
+lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 0 -> /dev/pts/0
+lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 1 -> /dev/pts/0
+lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 2 -> /dev/pts/0
+lr-x------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 255 -> /home/ouyangyewei/workspace/learn_linux/learn_redirect.sh
+-------------------
+
+[ouyangyewei@localhost learn_linux]$ cat tempfd1 
+total 0
+lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 0 -> /dev/pts/0
+lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 1 -> /home/ouyangyewei/workspace/learn_linux/tempfd1
+lrwx------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 2 -> /dev/pts/0
+lr-x------. 1 ouyangyewei ouyangyewei 64 Jan  4 22:17 255 -> /home/ouyangyewei/workspace/learn_linux/learn_redirect.sh
+-------------------
+上述的例子中第12行，将文件描述符1与文件tempfile进行了绑定，此后，文件描述符1指向了tempfile文件，标准输出被重定向到了文件tempfile中。
+1.3. linux管道
+在Unix或类Unix操作系统中，管道是一个由标准输入输出链接起来的进程集合，因此，每一个进程的输出将直接作为下一个进程的输入，
+linux管道包含两种：
+匿名管道 命名管道
+管道有一个特点，如果管道中没有数据，那么取管道数据的操作就会滞留，直到管道内进入数据，然后读出后才会终止这一操作；同理，写入管道的操作如果没有读取管道的操作，这一动作就会滞留。
+1.3.1. 匿名管道
+在Unix或类Unix操作系统的命令行中，匿名管道使用ASCII中垂直线|作为匿名管道符，匿名管道的两端是两个普通的，匿名的，打开的文件描述符：一个只读端和一个只写端，这就让其它进程无法连接到该匿名管道。
+cat file | less
+1
+1
+为了执行上面的指令，Shell创建了两个进程来分别执行cat和less。下图展示了这两个进程是如何使用管道的：
+unix_unnamed_pipe 
+有一点值得注意的是两个进程都连接到了管道上，这样写入进程cat就将其标准输出（文件描述符为fd 1）连接到了管道的写入端，读取进程less就将其标准输入（文件描述符为fd 0）连接到了管道的读入端。实际上，这两个进程并不知道管道的存在，它们只是从标准文件描述符中读取数据和写入数据。shell必须要完成相关的工作。
+
+1.3.2. 命名管道（FIFO，First In First Out）
+
+命名管道也称FIFO，从语义上来讲，FIFO其实与匿名管道类似，但值得注意：
+
+在文件系统中，FIFO拥有名称，并且是以设备特俗文件的形式存在的；
+任何进程都可以通过FIFO共享数据；
+除非FIFO两端同时有读与写的进程，否则FIFO的数据流通将会阻塞；
+匿名管道是由shell自动创建的，存在于内核中；而FIFO则是由程序创建的（比如mkfifo命令），存在于文件系统中；
+匿名管道是单向的字节流，而FIFO则是双向的字节流；
+比如，可以利用FIFO实现单服务器、多客户端的应用程序: 
+unix_named_pipe
+
+}
 
 
 
