@@ -17,8 +17,8 @@ function do_start_sftware_start(){
     local arr=( 
     '/home/walker/software/eclipse/eclipse'
     '/home/walker/software/tomcat7/bin/startup.sh'
-    '/home/walker/software/smartgit/bin/smartgit.sh' 
-#    '/home/walker/help/python/ python autoCochatCph.py >> ~/auto.log'
+    'do update'
+#    '/home/walker/software/smartgit/bin/smartgit.sh' 
      )
      
     out 'start linux software '${#arr[@]}
@@ -30,23 +30,28 @@ function do_start_sftware_start(){
         
         local nowdir=`pwd`
         
-        local ss=($item)
-        local len=${#ss[*]}
-        if (( $len > 1 ))
-        then
-            out 'stack push dir: '$nowdir 
-            cd ${ss[0]}
-            out 'turn to dir: '`pwd`
-            item=${item:${#ss[0]}}
-        fi
-        
+#        local ss=($item)
+#        local len=${#ss[*]}
+#        if (( $len > 1 ))
+#        then
+#            out 'stack push dir: '$nowdir 
+#            cd ${ss[0]}
+#            out 'turn to dir: '`pwd`
+#            item=${item:${#ss[0]}}
+#        fi
+#        
         local cmd='ps -elf | grep -v grep | grep "'$item'"'
         out $cmd
         local res=`eval $cmd`
         out $res        
         if [[ $res == "" ]]
         then
-            call $item
+#            call $item
+            
+            local tools_out='nohup '$item' & '
+            out $tools_out
+            eval $tools_out
+#            out $pid
         else
             cmd='ps -elf | grep -v grep | grep "'$item'"'   " | awk '{print \$4}'"
             out $cmd
