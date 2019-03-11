@@ -18,7 +18,8 @@ function do_start_sftware_start(){
     '/home/walker/software/eclipse/eclipse'
     '/home/walker/software/tomcat7/bin/startup.sh'
     'do update'
-#    '/home/walker/software/smartgit/bin/smartgit.sh' 
+    'gedit'
+    '/home/walker/software/smartgit/bin/smartgit.sh' 
      )
      
     out 'start linux software '${#arr[@]}
