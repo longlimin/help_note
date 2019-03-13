@@ -23,10 +23,14 @@ select * from v$session
 where status='active';  
 
 
---sysdba
+--sysdba lock session process  kill 
 select session_id from v$locked_object;
 select sid, serial#, username, osuser from v$session;-- where sid=783;
+
+select sid||','||serial# kill, sid, serial#, username, osuser from v$session where sid in (select session_id from v$locked_object)
 alter system kill session '783,18455';
+
+
 
 select b.owner, b.object_name, a.session_id, a.locked_mode 
 from v$locked_object a, dba_objects b
@@ -40,6 +44,18 @@ shutdown immediate; --shutdown db now
 startup;     --start db 
 
 ---
+---db link
+---
+grant CREATE PUBLIC DATABASE LINKï¼ŒDROP PUBLIC DATABASE LINK to scott;
+create database link DBLINK_NAME connect to USER01 identified by PASSWORD using 'TNS_NAME';
+DBLINK_NAME : DB_LINKçš„åå­—
+USER01ã€€ã€€     : è¿œç¨‹æ•°æ®åº“çš„è´¦æˆ·
+PASSWORD     : è¿œç¨‹æ•°æ®åº“çš„è´¦æˆ·
+TNS_NAME      : è¿œç¨‹æ•°æ®åº“æœåŠ¡å 122.2312.13/orcl
+select owner,db_link,username from dba_db_links;
+select * from scott.tb_test@DBLINK_NAME;
+
+---
 ---user control
 ---
 
@@ -50,21 +66,21 @@ alter user scott account unlock;
 select * from dba_users;
 select * from all_users;
 select * from user_users; 
---b.²é¿¸óã»§»ò½çé«ïµí³è¨ïş(ö±½ó¸³öµ¸øóã»§»ò½çé«µäïµí³è¨ïş)£º
+--b.Â²Ã©Â¿Å¾Ã³Ã£Â»Â§Â»Ã²Å“Ã§Ã©Â«Ã¯ÂµÃ­Â³Ã¨Å¡Ã¯Ã¾(Ã¶Â±Å“Ã³Å¾Â³Ã¶ÂµÅ¾Ã¸Ã³Ã£Â»Â§Â»Ã²Å“Ã§Ã©Â«ÂµÃ¤Ã¯ÂµÃ­Â³Ã¨Å¡Ã¯Ã¾)Â£Âº
 select * from dba_sys_privs;
 select * from user_sys_privs;
---c.²é¿¸½çé«(ö»äü²é¿¸µçâ½óã»§óµóğµä½çé«)ëù°üº¬µäè¨ïş
+--c.Â²Ã©Â¿Å¾Å“Ã§Ã©Â«(Ã¶Â»Ã¤Ã¼Â²Ã©Â¿Å¾ÂµÃ§Ã¢Å“Ã³Ã£Â»Â§Ã³ÂµÃ³Ã°ÂµÃ¤Å“Ã§Ã©Â«)Ã«Ã¹Â°Ã¼ÂºÂ¬ÂµÃ¤Ã¨Å¡Ã¯Ã¾
 select * from role_sys_privs;
---d.²é¿¸óã»§¶ôïóè¨ïş£º
+--d.Â²Ã©Â¿Å¾Ã³Ã£Â»Â§Â¶Ã´Ã¯Ã³Ã¨Å¡Ã¯Ã¾Â£Âº
 select * from dba_tab_privs;
 select * from all_tab_privs;
 select * from user_tab_privs;
 --show roles
 select * from dba_roles;
---f.²é¿¸óã»§»ò½çé«ëùóµóğµä½çé«£º
+--f.Â²Ã©Â¿Å¾Ã³Ã£Â»Â§Â»Ã²Å“Ã§Ã©Â«Ã«Ã¹Ã³ÂµÃ³Ã°ÂµÃ¤Å“Ã§Ã©Â«Â£Âº
 select * from dba_role_privs; 
 select * from user_role_privs;
---g.²é¿¸ääğ©óã»§óğsysdba»òsysoperïµí³è¨ïş(²éñ¯ê±ğèòªïàó¨è¨ïş)
+--g.Â²Ã©Â¿Å¾Ã¤Ã¤Ã°Â©Ã³Ã£Â»Â§Ã³Ã°sysdbaÂ»Ã²sysoperÃ¯ÂµÃ­Â³Ã¨Å¡Ã¯Ã¾(Â²Ã©Ã±Â¯ÃªÂ±Ã°Ã¨Ã²ÂªÃ¯Ã Ã³Å¡Ã¨Å¡Ã¯Ã¾)
 select * from v$pwfile_users
 --update user pwd
 create user username identified by password;
@@ -249,7 +265,7 @@ select 'scjs' || lpad(seq_t_contract_three.nextval,3, '0') from dual
 select 
  nvl(t.id,'id is null') idnull
 ,nvl2(t.id,'not null','id is null') idnull
-,(case when t.id='1' then 'ê¡¹«ëÿ1' when t.id='2' then 'ê¡¹«ëÿ2' else '·ö¹«ëÿ' end) name
+,(case when t.id='1' then 'ÃªÂ¡Â¹Â«Ã«Ã¿1' when t.id='2' then 'ÃªÂ¡Â¹Â«Ã«Ã¿2' else 'Â·Ã¶Â¹Â«Ã«Ã¿' end) name
  from test t;
 
 --self function 
@@ -288,7 +304,7 @@ select  dbms_random.value(1,100) from dual;
 --time date chat string 
 insert into test values('0002', to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss') );
 select  to_char(time, 'yyyy-mm-dd hh24:mi:ss' ), id  from test;
-select substr(to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss:ff'), 0, 23 ) from dual; --ºáãë ½øè¡
+select substr(to_char(systimestamp, 'yyyy-mm-dd hh24:mi:ss:ff'), 0, 23 ) from dual; --ÂºÃ¡Ã£Ã« Å“Ã¸Ã¨Â¡
 select  to_char(  to_date('1000-12-12','yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') from dual
 --month + 1
 select to_char(add_months(trunc(sysdate),1),'yyyy-mm') from dual;
