@@ -63,7 +63,7 @@ file_jmap=$file/$key.jmap_dump.hprof
 #采集最消耗cpu的线程tid pid ppid command 可根据tid->16进制查找java线程栈
 #ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu  > $file_cpu_thread    
 ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu  | awk '{printf "0x%x\t %s\n", $4, $0}'  > $file_cpu_thread  #附带自动转换16进制
-
+jps  #查看java程序的pid 和 commond <-q>
 jstack $pid > $file_jstack      #采集java线程栈 
 jmap -dump:format=b,live,file=$file_jmap $pid       #采集jmap
 #jhat -J-Xmx1024M $jmap_file #等待访问 http://127.0.0.1:7000
@@ -79,7 +79,7 @@ kill -3 [pid]
 在Linux 上找到Java所在的进程号，然后执行以上命令，线程的相关信息就输出到console
 
 
-//jmap jhat jstat jstack      
+//jmap jhat jstat jstack  jps     
 jmap [option] $pid
 jmap [option] [server_id@]<remote server IP or hostname>
     -<none> 这个意思是说，jmap可以不加任何option参数信息，只是指定Java进程的进程号。这种情况下，jmap命令将按照Linux操作系统进程内存分析命令pmap的相关性，输出内存分析结果。

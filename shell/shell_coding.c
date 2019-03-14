@@ -58,7 +58,7 @@ var=`命令` # 注意此处不是普通的单引号
     if [[ $strA =~ $strB ]]
     if [[ $A == *$B* ]]
 
-//字符串截取      # % 保留左右
+//字符串截取      # % 保留左右  *key key*
     var=http://www.aaa.com/123.htm.  
     echo ${var#*//} # *// 删除匹配到的 *//之前
     即删除 http://
@@ -214,14 +214,26 @@ IFS=$IFS_old #恢复原IFS值
 
 
 //文件读取 while read line
-while read line
+1. 迭代文件中的每一行
+while read line;
 do
-       …
-done < file
+    echo $line;
+done < file.txt
 
-command | while read line
+cat file.txt | (while read line;do echo $line;done)
+
+cat file.txt| awk ‘{print}’
+
+2.迭代一行中的每一个单词
+for word in $line;
+do 
+    echo $word;
+done
+
+3. 迭代每一个字符
+for((i=0;i<${#word};i++))
 do
-    …
+    echo ${word:i:1);
 done
 
 //函数

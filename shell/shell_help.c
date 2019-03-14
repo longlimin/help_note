@@ -200,6 +200,11 @@ PATTERN:是文本字符和正则表达式的元字符组合而成的匹配条件
 --color对匹配的内容以颜色显示 
 -V  显示grep版本 
 
+
+wc -l file // 统计行数
+wc -w file // 统计单词数
+wc -c file // 统计字符数
+
 //系统 文件还原 进程
 lsof(list open files)是一个列出当前系统打开文件的工具。在linux环境下，任何事物都以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。所以如传输控制协议 (TCP) 和用户数据报协议 (UDP) 套接字等，系统在后台都为该应用程序分配了一个文件描述符，无论这个文件的本质如何，该文件描述符为应用程序与基础操作系统之间的交互提供了通用接口。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能够查看这个列表对系统监测以及排错将是很有帮助的。
 /proc/1917  某进程动id下的 内存文件配置 还原文件？
@@ -515,38 +520,73 @@ procs -----------memory---------- ---swap-- -----io---- --system-- -----cpu-----
 
 
 //ps
+ps H -eo user,pid,ppid,tid,time,%cpu --sort=+%cpu   #cpu使用倒序
+
 ps是显示瞬间进程的状态，并不动态连续；如果想对进程进行实时监控应该用top命令
-命令	含义
-e	显示所有进程,环境变量
-f	全格式
-h	不显示标题
-l	长格式
-w	宽输出
-a	显示终端上地所有进程,包括其他用户地进程
-r	只显示正在运行地进程
-x	显示没有控制终端地进程
-u	以用户为主的格式来显示程序状况
-au	显示较详细的资讯
-aux	显示所有包含其他使用者的行程
-    
-F 代表这个程序的旗标 (flag)， 4 代表使用者为 superuser；
-S 代表这个程序的状态 (STAT)；
-UID 代表执行者身份
-PID 进程的ID号！
-PPID 父进程的ID；
-C CPU使用的资源百分比
-PRI指进程的执行优先权(Priority的简写)，其值越小越早被执行；
-NI 这个进程的nice值，其表示进程可被执行的优先级的修正数值。
-ADDR 这个是内核函数，指出该程序在内存的那个部分。如果是个执行 的程序，一般就是『 - 』
-SZ 使用掉的内存大小；
-WCHAN 目前这个程序是否正在运作当中，若为 - 表示正在运作；
-TTY 登入者的终端机位置；
-TIME 使用掉的 CPU 时间。
-CMD 所下达的指令名称    
+命令	含义 
+   -e	显示所有进程,环境变量
+    f	全格式
+    h	不显示标题
+    l	长格式
+    w	宽输出
+    a	显示终端上地所有进程,包括其他用户地进程
+    r	只显示正在运行地进程
+    x	显示没有控制终端地进程
+    u	以用户为主的格式来显示程序状况
+    au	显示较详细的资讯
+    aux	显示所有包含其他使用者的行程
 
-ps -elf   aux
-ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu   #cpu使用倒序
+    -o c,C,f,g,G    按照指定格式输出
+    args：进程名(command)
+        c cmd   可执行地简单名称 
+        C cmdline   完整命令行 
+        f flags   长模式标志 
+        g pgrp   进程地组ID 
+        G tpgid   控制tty进程组ID 
+        j cutime   累计用户时间 
+        J cstime   累计系统时间 
+        k utime   用户时间 
+        K stime   系统时间 
+        m min_flt   次要页错误地数量 
+        M maj_flt   重点页错误地数量 
+        n cmin_flt 累计次要页错误 
+        N cmaj_flt 累计重点页错误 
+        o session   对话ID 
+        p pid   进程ID 
+        P ppid   父进程ID 
+        r rss   驻留大小 
+        R resident 驻留页 
+        s size   内存大小(千字节) 
+        S share   共享页地数量 
+        t tty   tty次要设备号 
+        T start_time 进程启动地时间 
+        U uid   UID
+        u user   用户名
+        v vsize   总地虚拟内存数量(字节) 
+        y priority 内核调度优先级
 
+
+//sort
+ps | sort
+sort 选项与参数：
+-f  ：忽略大小写的差异，例如 A 与 a 视为编码相同；
+-b  ：忽略最前面的空格符部分；
+-M  ：以月份的名字来排序，例如 JAN, DEC 等等的排序方法；
+-n  ：使用『纯数字』进行排序(默认是以文字型态来排序的)；
+-r  ：反向排序；
+-u  ：就是 uniq ，相同的数据中，仅出现一行代表；
+-t  ：分隔符，默认是用 [tab] 键来分隔；
+-k  ：以那个区间 (field) 来进行排序的意思
+
+ps -eo rss,pmem,pcpu,vsize,args |  sort -k 1 -r -n | less
+
+    sort命令对ps结果进行排序
+    -k 1 :按第一个参数 rss进行排
+    -r：逆序
+    -n：numeric，按数字来排序
+
+ps --sort=[+|-] key
+按CPU降序排列：ps aux --sort=[-|+]%cpu
 
 pstree  以显示进程信息。它以树的形式显示
 kill -9
@@ -616,7 +656,7 @@ usage: netstat [-vWeenNcCF] [<Af>] -r         netstat {-V|--version|-h|--help}
   <AF>=Use '-6|-4' or '-A <af>' or '--<af>'；默认： inet
 
 netstat -ano  所有 包括 udp 
-netstat -antl 所遇 tcp
+netstat -antl 所有 tcp
 
 }
 
