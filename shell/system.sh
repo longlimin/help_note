@@ -58,7 +58,7 @@ function onCpuMax(){
     echo "ps thread"
     #采集最消耗cpu的线程tid pid ppid command 可根据tid->16进制查找java线程栈
     #ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu  > $file_cpu_thread    
-    ps H -eo user,pid,ppid,tid,time,%cpu --sort=-%cpu  | awk '{printf "0x%x\t %s\n", $4, $0}'  > $file_cpu_thread  #附带自动转换16进制
+    ps H -eo tid,%cpu,pid,ppid,time,user,cmd --sort=+%cpu  | awk '{printf "0x%x\t %s\n", $1, $0}'  > $file_cpu_thread  #附带自动转换16进制
     
     echo "jstack ${pid_commond[@]} "
     echo "jstack ${pid_commond[@]} " > $file_jstack
@@ -66,7 +66,7 @@ function onCpuMax(){
     do
         item=${pid_commond[$i]}
         echo -e "\n\n\n\n--$i\t------$item\t--------\n" >> $file_jstack
-        jstack $item >> $file_jstack      #采集java线程栈 
+        jstack -l $item >> $file_jstack      #采集java线程栈 
     done  
     
     echo "jmap"

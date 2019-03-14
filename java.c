@@ -64,7 +64,10 @@ file_jmap=$file/$key.jmap_dump.hprof
 #ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu  > $file_cpu_thread    
 ps H -eo user,pid,ppid,tid,time,%cpu --sort=%cpu  | awk '{printf "0x%x\t %s\n", $4, $0}'  > $file_cpu_thread  #附带自动转换16进制
 jps  #查看java程序的pid 和 commond <-q>
-jstack $pid > $file_jstack      #采集java线程栈 
+
+jstack -l $pid > $file_jstack      #采集java线程栈 
+#kill -3 [pid]   #自动生成java core ?
+
 jmap -dump:format=b,live,file=$file_jmap $pid       #采集jmap
 #jhat -J-Xmx1024M $jmap_file #等待访问 http://127.0.0.1:7000
 jvisualvm $file_jmap &  #图形化分析工具
@@ -75,8 +78,6 @@ jdk1.6 中 Oracle可视化监控
 $JAVA_HOME/bin/jvisualvm.exe
 
 
-kill -3 [pid]
-在Linux 上找到Java所在的进程号，然后执行以上命令，线程的相关信息就输出到console
 
 
 //jmap jhat jstat jstack  jps     
@@ -123,6 +124,10 @@ vi conf/zoo.cfg     #修改 数据路径
 
 bin/zkServer.sh start #</stop/status>
 bin/zkCli.sh -server 127.0.0.1:2181  #测试
+    ls /    4）查看有哪些zookeeper节点； 
+
+    ls /daily_orderServer_group（节点名称） 5）查看注册了哪些服务，如图2； 
+
 注意防火墙
 
 //监控中心
