@@ -43,7 +43,7 @@ function onCpuMax(){
     mkdir $file
     mkdir $file_gz
     file_cpu_thread=$file/$key.cpu_thread.log    
-    file_jstack=$file/$key.jstack.log
+    file_jstack=$file/$key.jstack.log  #$file/$ip-$pid.$ti.$1
     file_jmap=$file/$key.jmap_dump.hprof
     file_net=$file/$key.net.log
     file_7z=$file_gz/$key.tar.gz
@@ -61,16 +61,16 @@ function onCpuMax(){
     ps H -eo tid,%cpu,pid,ppid,time,user,cmd --sort=+%cpu  | awk '{printf "0x%x\t %s\n", $1, $0}'  > $file_cpu_thread  #附带自动转换16进制
     
     echo "jstack ${pid_commond[@]} "
-    echo "jstack ${pid_commond[@]} " > $file_jstack
+#    echo "jstack ${pid_commond[@]} " > $file_jstack
     for ((i=0; i<${#pid_commond[@]}; i++))
     do
         item=${pid_commond[$i]}
         echo -e "\n\n\n\n--$i\t------$item\t--------\n" >> $file_jstack
-        jstack -l $item >> $file_jstack      #采集java线程栈 
+        jstack -l $item > $file/$ip-$item.$ti.$1.jstack.log      #采集java线程栈 
     done  
     
     echo "jmap"
-    #jmap -dump:format=b,live,file=$file_jmap $pid       #采集jmap
+    jmap -dump:format=b,live,file=$file_jmap $pid       #采集jmap
     
     echo "Begin comp"`date "+%Y-%m-%d %H:%M:%S"`
     cd $file #避免压缩文件夹路径

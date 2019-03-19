@@ -8,6 +8,8 @@ cmd路径 \ 反斜杠 linux
 
 %1% 取出第一个参数
 
+
+
 IF /? 帮助文档 命令介绍
 
 分支控制 EQU NEQ LSS LEQ GTR GEQ
@@ -17,6 +19,17 @@ IF EXIST FILENAME. （
     echo filename. missing.
 )
 
+for
+for  %%I in (ABC) do echo %%I
+pause
+
+@echo off
+set num=0
+:ok
+set /a num+=1
+echo.test-%num%
+if "%num%"=="10" pause&&echo.over！
+goto ok
 
 
 tasklist | find /i "node.exe" && taskkill /f /t /im node.exe

@@ -3,14 +3,10 @@ cat /proc/version //正在运行的内核版本。
 cat /etc/issue //显示的是发行版本信息
 cat /proc/cpuinfo | more/less //分页查看
 
-ethtool eth0 //网卡信息
 du -sh * #查看文件大小 占用 ls -lth
-du -h *
-touch test.txt //创建文件
-
+df -h   #磁盘
 //基本命令
 {
-    
     find / -name librtmp.so.1
     whereis 
     which
@@ -29,13 +25,7 @@ touch test.txt //创建文件
     
     id  查看当前用户组及其他状态
 	apt-cache madison python-rpi.gpio	查看安装 的软件版本
-    tar -xvf toname.gz 解压
-    tar -zvf toname.gz fromname.log 压缩
     unzip opencv-2.4.13.zip
-    cd opencv-2.4.13/
-    cmake -D WITH_GTK_2_X=ON -D CMAKE_INSTALL_PREFIX=/usr/local .
-    make    # make -j4表示开4个线程来进行编译
-    make install
     
     命令行历史 history
     date &              #后台执行
@@ -45,9 +35,7 @@ touch test.txt //创建文件
     ldconfig 通常在系统启动时运行，加载新的动态链接库时，就需要手工运行这个命令。 
     ln -s source     dist     #建立软连接 快捷方式
     ln     source     dist     #建立硬连接 硬链接不能连接两个不同文件系统上的文件 类似拷贝副本
-    
     chown -R wasup:wasgrp com 修改用户及组权限
-
     #去掉控制台颜色代码##########
     edjfl | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
  
@@ -902,14 +890,16 @@ stop on runlevel [!2345]
 vim /etc/rc.local
 /etc/init.d/test.sh start 
 #启动2
-cp test.sh /etc/profile.d/ 
+cp test.sh /etc/pr
+ofile.d/ 
 #启动3
 cp test.sh /etc/init.d/
 ln -s /etc/init.d/test.sh /etc/rc3.d/init.d/
+
 vim 启动文件，文件前面务必添加如下三行代码，否侧会提示chkconfig不支持
 #!/bin/sh #告诉系统使用的shell,所以的shell脚本都是这样
 #chkconfig: 35 20 80 #分别代表运行级别，启动优先权，关闭优先权，此行代码必须
-#description: http server #（自己随便发挥）//两行都注释掉！！！，此行代码必须
+#description: http server #（ 两行都注释掉！！！，此行代码必须
 
 chkconfig --add test.sh
 

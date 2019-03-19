@@ -102,6 +102,18 @@ jmap [option] [server_id@]<remote server IP or hostname>
 在客户端执行:
     jmap -heap server_id@server_address
     
+    
+1. JVM执行异常时，自动生成Javacore
+1.1 发生了引起JVM停止运行的本地错误时，会自动产生Javacore文件
+1.2 JVM内存不足时，会自动产生Javacore文件
+2. 触发JVM生成JDK
+2.1 （常用）从命令行中发出kill -3 <pid>指令，生成Javacore
+2.2 在应用中调用com.ibm.jvm.Dump.JavaDump()方法，生成Javacore
+2.3 使用WAS wsadmin utility命令生成Javacore, 以Jython语言为例：
+jvm = AdminControl.completeObjectName('type=JVM,process=server1,*')
+AdminControl.invoke(jvm, 'dumpThreads')
+2.4 可以配置dump agent触发生成Javacore
+dump agent提供了一些可配置的选项，详细见文档
       
 ///////////////////////////////////////////////////////////////////
 //dubbo zookeeper java 安装环境      
