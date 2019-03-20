@@ -106,6 +106,7 @@ less比more更强大，提供翻页，跳转，查找等命令
 
 ps -lf | awk -Fwalker '{print NR,NF,$1,$NF}' OFS="\t"
 ps -lf | awk -F" " 'NR!=1{print NR,NF,$1,$NF}' OFS="\t" #不要第一行
+-F'[ :]'   #' ' || '"' 多分隔符
 ----------------------------------------
 ps -lf | awk -F" " '
 BEGIN{before=0;after=0;deta=5000}
