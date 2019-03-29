@@ -6,6 +6,7 @@ function help(){
     echo ' show ms-broadcast* list, list keys '
     echo ' show ms-broadcast-group, show the key and value '
     echo ' show ms-broadcast*     , show the keys and values '
+    eval $exe
 }
 function show(){
     local i=$1

@@ -891,8 +891,7 @@ stop on runlevel [!2345]
 vim /etc/rc.local
 /etc/init.d/test.sh start 
 #启动2
-cp test.sh /etc/pr
-ofile.d/ 
+cp test.sh /etc/profile.d/ 
 #启动3
 cp test.sh /etc/init.d/
 ln -s /etc/init.d/test.sh /etc/rc3.d/init.d/
