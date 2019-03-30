@@ -68,7 +68,7 @@ then
         type=$2
     fi
     
-    cmd=$exe" keys "$key" | awk -F'\"'  '"'{print $1}'"'"
+    cmd=$exe" keys "$key" | awk -F'\"'  '"'{print $1}'"' | sort"  
     echo $cmd 
     #eval $cmd 
     listKey=(`eval $cmd`)
