@@ -34,13 +34,13 @@ function showValue(){
         cmdShow=$exe' smembers '$key 
     elif [[ $type == "zset" ]]
     then
-        cmdShow=$exe' zrange '$key' 0 -1'
+        cmdShow=$exe' zrange '$key' 0 '$end
     elif [[ $type == "hash" ]]
     then
         cmdShow=$exe' hgetall '$key 
     elif [[ $type == "list" ]]
     then
-        cmdShow=$exe' lrange '$key' 0 -1'
+        cmdShow=$exe' lrange '$key' 0 '$end
     else 
         echo 'What type ? '$type
     fi
@@ -60,6 +60,7 @@ function delKey(){
 exe='/home/walker/software/redis-5.0.3/src/redis-cli ' #-a ruaho123
 key=''
 type=''
+end=20
 if [ ! -z $1 ]
 then
     key=$1
