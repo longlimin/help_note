@@ -250,7 +250,7 @@ from test t ) tt
 where 1=1
 and rn=1;
 
---with temp table view?
+--with temp table view? 查询完毕直接清除
 with 
 temptable as (select * from test),
 temptable2 as (select * from test)
@@ -259,6 +259,18 @@ select * from temptable,temptable2 whre a=1;
 --exists 
 select * from t1 where exists(select 1 from t2 where t1.a=t2.a) ;
 
+
+1.会话级别临时表
+会话级临时表是指临时表中的数据只在会话生命周期之中存在，当用户退出会话结束的时候，Oracle自动清除临时表中数据。
+create global temporary table aaa(id number) on commit oreserve rows;
+create global temporary table tempp on commit oreserve rows as select * from test;
+
+insert into aaa values(100);
+select * from aaa;
+这是当你在打开另一个会话窗口的时候再次查询，表内的数据就查询不到了。
+2.事务级别的临时表
+create global temporary table bbb(id number) on commit delete rows;
+insert into bbb values(200);
 
 
 

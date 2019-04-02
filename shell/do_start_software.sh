@@ -17,8 +17,9 @@ function do_start_sftware_start(){
     local arr=( 
     '/home/walker/software/eclipse/eclipse'
     '/home/walker/software/tomcat7/bin/startup.sh'
-    'do update'
+#    'do update'
     'gedit'
+    '/home/walker/software/redis-5.0.3/src/redis-server'
     #'/home/walker/software/smartgit/bin/smartgit.sh' 
      )
      
@@ -41,7 +42,8 @@ function do_start_sftware_start(){
 #            item=${item:${#ss[0]}}
 #        fi
 #        
-        local cmd='ps -elf | grep -v grep | grep "'$item'"'
+        local key=${item##*/}
+        local cmd="ps -elf | grep -v grep | grep '$key'"
         out $cmd
         local res=`eval $cmd`
         out $res        
@@ -54,10 +56,9 @@ function do_start_sftware_start(){
             eval $tools_out
 #            out $pid
         else
-            cmd='ps -elf | grep -v grep | grep "'$item'"'   " | awk '{print \$4}'"
-            out $cmd
-            pid=`eval $cmd`
-            out 'have started pid '$pid
+            pid=`ps -elf | grep "$key"  | grep -v grep | awk '{print $4}' `   #获取jmap 关键词pid
+            out '###########have started pid '$pid'##########################'
+            echo 
 
         fi
         

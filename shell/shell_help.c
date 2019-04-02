@@ -1095,4 +1095,8 @@ unix_named_pipe
 }
 
 
+/dev/null  ： 空设备，是一个特殊的设备文件，弃一切写入其中的数据（但报告写入操作成功），读取它则会立即得到一个EOF。
+称为位桶(bit bucket)或者黑洞(black hole)。
+通常被用于丢弃不需要的输出流
+提供无限的空字符(NULL, ASCII NUL, 0x00)。
 

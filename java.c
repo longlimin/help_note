@@ -142,6 +142,7 @@ bin/zkCli.sh -server 127.0.0.1:2181  #测试
 
 注意防火墙
 
+//tomcat
 //监控中心
 下载 dubbo-admin-2.5.7.war
 
@@ -159,7 +160,19 @@ root/root
 service iptables save
 service iptables restar
 
+//配置tomcat特定jdk jre
+vim tomcat/bin/setclasspath.sh
+# -----------------------------------------------------------------------------
+#  Set JAVA_HOME or JRE_HOME if not already set, ensure any provided settings
+#  are valid and consistent with the selected start-up options and set up the
+#  endorsed directory.
+#
+#  $Id: setclasspath.sh 1430568 2013-01-08 22:08:57Z schultz $
+# -----------------------------------------------------------------------------
+set JAVA_HOME=/home/walker/software/jdk1.7.0_80/
+set JRE_HOME=/home/walker/software/jdk1.7.0_80/jre
 
+      
       
       
       

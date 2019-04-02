@@ -166,6 +166,11 @@ case "$1" in
         rh_status_q || exit 0
         ;;
     *)    
+    
+case "$1" in
+OS400*) os400=true;;
+esac
+
 
 &&  并且    A  &&   B    A成功了，才会去执行B，B不一定会成功；若A不成功,则B不执行
 ||   或者    A  ||   B   A成功，则不执行B。如A不成功，则执行B。
