@@ -203,7 +203,16 @@ archetype-catalog.xml
 
 创建项目
 选择模板/简易项目
+导入依赖
+清理编译
+mvn clean compile
+mvn clean package，执行打包命令前，会先执行编译和测试命令
+mvn clean install ，执行安装命令前，会先执行编译、测试、打包命令
+mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-WebApp -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+mvn package，构建成功后，myWebApp目录目录下多了一个target目录，在这个目录下会打包成myWebApp目录.war，把这个war包拷贝到Tomcat的发布目录下就可以运行了
+mvn jetty:run启动Jetty服务器
 
 
 
-      
+
+
