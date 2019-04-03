@@ -2,6 +2,7 @@ github cmd / shell  git-bash
 https://github.com/1424234500/help_note.git		-> E:/ help_note	
 https://github.com/1424234500/base.git			-> E:/ workspqce_my/ * 
 https://github.com/1424234500/BaseSSM.git
+https://github.com/1424234500/walker.git
 https://github.com/1424234500/cc.git
 https://github.com/1424234500/GraphicsTools.git 
 
@@ -47,8 +48,8 @@ git push origin master  //推送上传
 6.Finally, force update your repository 
    git push -f origin master
 
-;/仓库zip下载 链接 更新 ##########################
-unzip xxx.zip
+//仓库zip下载 链接 更新 ##########################
+//…or push an existing repository from the command line 
 git init
 git add .
 git remote add origin https://github.com/1424234500/help_note.git
@@ -56,11 +57,8 @@ git remote update
 
 git push -u origin master
 
-;/…or push an existing repository from the command line 
-git remote add origin https://github.com/1424234500/help_note.git
-git push -u origin master
 
-;/同步 分享 与 更新项目 push fetch remote 
+//同步 分享 与 更新项目 push fetch remote 
 git remote <-v url> 列出远端别名
 #如果没有任何参数，Git 会列出它存储的远端仓库别名了事。
 默认情况下，如果你的项目是克隆的（与本地创建一个新的相反）， 
@@ -80,15 +78,15 @@ git remote add origin https://github.com/1424234500/BaseSSM.git
 随便什么都可以。
 
 git remote rm 删除现存的某个别名 
-;/git fetch <远程主机名> <分支名>  更新 同步  clone 下载项目
+//git fetch <远程主机名> <分支名>  更新 同步  clone 下载项目
 将你的仓库与远端仓库同步，提取所有它独有的数据到本地分支以合并或者怎样。
-;/git pull origin master  下载并合并fetch and merge 
+//git pull origin master  下载并合并fetch and merge 
 #Push your local version repertory to your github where is at the web / internet
-;/git push -u origin master 推送上传
+//git push -u origin master 推送上传
 git push [alias] [branch]，就会将你的 [branch] 分支推送成为 [alias] 远端上的 [branch] 分支。 
 
 
-使用 ;/本地仓库
+使用 //本地仓库
 git add 添加需要追踪的新文件和待提交的更改， 然后使用 
 git status 和 
 git diff [version commit name branch name] 查看有何改动， 最后用 
@@ -106,13 +104,13 @@ git diff <--cached> <HEAD> <-STAT>
 #Commit to local <cache> ! version repertory with some info / about 
 git commit -m "commit log about"
 #缓存并提交每个改动（不含新文件） 通常直接从硬盘删除文件，然后执行 
-;/git commit -am "info" 会简单些。 它会自动将删除的文件从索引中移除。
+//git commit -am "info" 会简单些。 它会自动将删除的文件从索引中移除。
 
 #取消缓存已缓存的内容
 git reset HEAD 
 
 
-;/分支
+//分支
 git branch (branchname) 
 来创建分支， 使用 
 git checkout (branchname) 命令
@@ -133,7 +131,7 @@ git merge (branchname) 将分支合并到你的当前分支
 #不仅仅是简单的文件添加、移除的操作，Git 也会合并修改 —— 事实上，它很会合并修改
 git add (filename) 要告诉 Git 文件冲突已经解决，你必须把它写入缓存区。 
 
-;/日志log
+//日志log
 git log <--oneline 紧凑简洁> <--graph 图形界面> <--decorate 详细> 达成当前快照的所有提交消息的工具，叫做 
 git log --oneline erlang ^master 想要看“erlang”分支中但不在主分支中的提交
 git log --oneline --before={3.weeks.ago} --after={2010-04-18} --no-merges --all-match(并且，默认或) 日期范围以过滤你的提交
