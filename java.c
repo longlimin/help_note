@@ -160,6 +160,9 @@ root/root
 service iptables save
 service iptables restar
 
+
+
+
 //配置tomcat特定jdk jre
 vim tomcat/bin/setclasspath.sh
 # -----------------------------------------------------------------------------
@@ -173,6 +176,34 @@ set JAVA_HOME=/home/walker/software/jdk1.7.0_80/
 set JRE_HOME=/home/walker/software/jdk1.7.0_80/jre
 
       
-      
-      
+
+//maven
+wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz
+tar -xzvf apache-maven-3.6.0-bin.tar.gz
+//默认本地仓库~/.m2/
+//配置maven地址
+vim apache-maven-3.6.0/conf/settings.xml
+<mirror>
+        <id>nexus-aliyun</id>
+        <mirrorOf>*</mirrorOf>
+        <name>Nexus aliyun</name>
+        <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+</mirror>
+
+//配置环境变量
+PATH=PATH:/home/walker/software/apache-maven-3.6.0/bin
+
+maven项目中运行mvn install，项目将会自动打包并安装到本地仓库中
+
+配置eclipse
+1.配置模板 下载local  让可以使用模板创建项目
+archetype-catalog.xml
+2.配置文件源Maven-User Settings-Global Settings 让使用新的配置文件 源
+/home/walker/software/apache-maven-3.6.0/conf/settings.xml
+
+创建项目
+选择模板/简易项目
+
+
+
       
