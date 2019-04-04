@@ -175,44 +175,34 @@ vim tomcat/bin/setclasspath.sh
 set JAVA_HOME=/home/walker/software/jdk1.7.0_80/
 set JRE_HOME=/home/walker/software/jdk1.7.0_80/jre
 
-      
-
-//maven
-wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz
-tar -xzvf apache-maven-3.6.0-bin.tar.gz
-//默认本地仓库~/.m2/
-//配置maven地址
-vim apache-maven-3.6.0/conf/settings.xml
-<mirror>
-        <id>nexus-aliyun</id>
-        <mirrorOf>*</mirrorOf>
-        <name>Nexus aliyun</name>
-        <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-</mirror>
-
-//配置环境变量
-PATH=PATH:/home/walker/software/apache-maven-3.6.0/bin
-
-maven项目中运行mvn install，项目将会自动打包并安装到本地仓库中
-
-配置eclipse
-1.配置模板 下载local  让可以使用模板创建项目
-archetype-catalog.xml
-2.配置文件源Maven-User Settings-Global Settings 让使用新的配置文件 源
-/home/walker/software/apache-maven-3.6.0/conf/settings.xml
-
-创建项目
-选择模板/简易项目
-导入依赖
-清理编译
-mvn clean compile
-mvn clean package，执行打包命令前，会先执行编译和测试命令
-mvn clean install ，执行安装命令前，会先执行编译、测试、打包命令
-mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-WebApp -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
-mvn package，构建成功后，myWebApp目录目录下多了一个target目录，在这个目录下会打包成myWebApp目录.war，把这个war包拷贝到Tomcat的发布目录下就可以运行了
-mvn jetty:run启动Jetty服务器
 
 
+//tomcat maven web
+1.进入tomcat_home/conf/tomcat_users.xml:修改如下：
 
+<role rolename="admin-gui"/>  
+<role rolename="admin-script"/>  
+<role rolename="manager-gui"/>  
+<role rolename="manager-script"/>  
+<role rolename="manager-jmx"/>  
+<role rolename="manager-status"/>  
+<user username="admin" password="pwd" roles="manager-gui,manager-script,manager-jmx,manager-status,admin-script,admin-gui"/>
 
+2.进入maven_home/conf/settings.xml:修改如下：
+<server>  
+    <id>tomcat</id>  
+    <username>admin</username>  
+    <password>pwd</password>  
+</server> 
 
+3.pom.xml
+        <plugin>  
+            <groupId>org.codehaus.mojo</groupId>  
+            <artifactId>tomcat-maven-plugin</artifactId>  
+            <configuration>  
+                <warFile>target/balaba.war</warFile>  
+                <server>tomcat</server>  
+                <url>http://localhost:8080/balaba</url>  
+                <path>/balaba</path>  
+            </configuration>  
+        </plugin>  
