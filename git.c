@@ -52,9 +52,13 @@ git push origin master  //推送上传
 //…or push an existing repository from the command line 
 git init
 git add .
-git remote add origin https://github.com/1424234500/help_note.git
-git remote update
 
+git remote add origin https://github.com/1424234500/walker.git
+git remote update
+git add -A  #添加需要提交的<修改>文件以及 新建的文件
+git commit -am "update" #a表示自动添加 修改过的文件？ 但不包括新建的文件
+git pull origin master  #下载并合并到当前分支
+git push origin master  #推送上传
 git push -u origin master
 
 

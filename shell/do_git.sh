@@ -31,7 +31,7 @@ function commit(){
 function push(){ 
     toolsLineLong
     # clean python 
-    clean_clean 
+#    clean_clean 
     toolsLineLong
     git_exefun 'git_add_commit_push' $1    
 }
