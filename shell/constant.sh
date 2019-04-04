@@ -41,7 +41,7 @@ toolsMakefile $server_python_socket_log
 
 # local filedirs
 git_help_note=$_root'/help_note'
-git_walker=$_root'/walker'
+git_walker=$_root'/workspace_my/walker'
 git_base=$_root'/workspace_my/base'
 git_BaseSSM=$_root'/workspace_my/BaseSSM'
 git_cc_old=$_root'/workspace_my/cc_old'
@@ -49,7 +49,7 @@ git_cc=$_root'/workspace_android/cc'
 git_GraphicsTools=$_root'/workspace_my/GraphicsTools'
 git_AngularApp=$_root'/workspace_my/AngularApp'
 
-git_local_dirs=($git_help_note $git_walker $git_BaseSSM $git_cc_old $git_cc $git_GraphicsTools $git_AngularApp)
+git_local_dirs=($git_help_note $git_walker $git_BaseSSM $git_cc $git_GraphicsTools $git_AngularApp)
 # $git_base 
 
 # remote urls
@@ -62,7 +62,7 @@ git_remote_cc='https://github.com/1424234500/cc.git'
 git_remote_GraphicsTools='https://github.com/1424234500/GraphicsTools.git'
 git_remote_AngularApp='https://github.com/1424234500/AngularApp.git'
 
-git_remote_urls=($git_remote_help_note $git_remote_walker $git_remote_BaseSSM $git_remote_cc_old $git_remote_cc $git_remote_GraphicsTools $git_remote_AngularApp)
+git_remote_urls=($git_remote_help_note $git_remote_walker $git_remote_BaseSSM $git_remote_cc $git_remote_GraphicsTools $git_remote_AngularApp)
 # $git_remote_base 
 
 #echo $_root
