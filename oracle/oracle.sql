@@ -382,7 +382,8 @@ select md5('123456') from  dual;
 select * from round(100 / 200, 4) * 100 || '%' from dual;
 --random
 select  dbms_random.value(1,100) from dual;
-
+--to number
+select 
 
 
 --time date chat string 
