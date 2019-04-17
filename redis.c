@@ -210,7 +210,7 @@ expireat 的作用和 expire 类似，都用于为 key 设置过期时间。 不
 15	sscan key cursor [match pattern] [count count] 
 迭代集合中的元素
 
-//zet
+//zset z轴有序列表
 
 1	zadd key score1 member1 [score2 member2] 
 向有序集合添加一个或多个成员，或者更新已存在成员的分数
@@ -223,7 +223,7 @@ expireat 的作用和 expire 类似，都用于为 key 设置过期时间。 不
 5	zinterstore destination numkeys key [key ...] 
 计算给定的一个或多个有序集的交集并将结果集存储在新的有序集合 key 中
 6	zlexcount key min max 
-在有序集合中计算指定字典区间内成员数量
+在有序集合中计算指定字典区间内成员数量 [附加序列号]
 7	zrange key start stop [withscores] 
 通过索引区间返回有序集合成指定区间内的成员
     zrange add:kkd 0 -1
