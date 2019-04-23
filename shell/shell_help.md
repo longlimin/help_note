@@ -35,7 +35,8 @@ df -h   #磁盘
     ldconfig 通常在系统启动时运行，加载新的动态链接库时，就需要手工运行这个命令。 
     ln -s source     dist     #建立软连接 快捷方式
     ln     source     dist     #建立硬连接 硬链接不能连接两个不同文件系统上的文件 类似拷贝副本
-    chown -R wasup:wasgrp com 修改用户及组权限
+    chown -R wasup:wasgrp com 修改文件所属用户及组权限
+    
     #去掉控制台颜色代码##########
     edjfl | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]####g"
  
@@ -65,6 +66,8 @@ df -h   #磁盘
     esc :set number 显示行号 
     esc :set nu
     esc /str 查找1 正向 支持 * 通配符号
+    esc :{作用范围}s/{目标}/{替换}/{替换标志}
+        :%s/foo/bar/g
     esc ?str 查找2 反向  n next  shift+n/N previous
     esc shift + * 查找当前所在单词
     esc yw 复制当前到单词结尾
