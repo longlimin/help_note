@@ -1,4 +1,24 @@
 
+//maven 项目模块拆分
+java 后台 jdk maven springboot/ 
+    core 
+        annotation
+        cache       缓存           ehcache redis map db
+        database    数据库         mysql oracle redis      c3p0 dbcp
+        
+        file        文件操作上传下载 分布式虚拟存储 网络存储 网盘？？？         
+        http        网络访问
+        service     服务化          rmi dubbo webservice
+        
+        encode      编码解码加密      md5 sha crc pingyin 
+        
+        pipe        生产消费者模式      
+        route       发布订阅者模式      
+        scheduler   定时器         quartz
+        
+        util        通用工具
+
+vue 前端
 
 
 
@@ -181,40 +201,20 @@ set JAVA_HOME=/home/walker/software/jdk1.7.0_80/
 set JRE_HOME=/home/walker/software/jdk1.7.0_80/jre
 
 
-//maven 项目模块拆分
-java 后台 jdk maven springboot/ 
-    core 
-        annotation
-        cache       缓存           ehcache redis map db
-        database    数据库         mysql oracle redis      c3p0 dbcp
-        
-        file        文件操作上传下载          
-        http        网络访问
-        service     服务化          rmi dubbo webservice
-        
-        encode      编码解码加密      md5 sha crc pingyin 
-        
-        pipe        生产消费者模式      
-        route       发布订阅者模式      
-        scheduler   定时器         quartz
-        
-        util        通用工具
-
-vue 前端
     
 
 //tomcat maven web
 配置  Project Facets 
-Dynamic Web Module
-Java 1.7
-
+Dynamic Web Module 3.0
+Java 1.8
 配置  Java Compiler
-
+jdk1.8
 配置  Java Build Path
-
+jdk1.8
 配置  Deployment Assembly
 
-
+配置tomcat特定jdk eclipse 
+导入tomcat可选定jdk
 
 
 
