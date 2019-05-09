@@ -217,5 +217,9 @@ jdk1.8
 导入tomcat可选定jdk
 
 
+依赖树
+mvn dependency:tree
+
+
 
 
