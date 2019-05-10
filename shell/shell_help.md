@@ -786,6 +786,9 @@ netstat
     -v ：压缩的过程中显示文件！这个常用
     -f ：使用档名，请留意，在 f 之后要立即接档名喔！不要再加其他参数！
     -p ：使用原文件的原来属性（属性不会依据使用者而变）
+    
+    xz -d linux-3.12.tar.xz
+    
     tar –xvf file.tar ####解压 tar包 
     tar -xzvf file.tar.gz ####解压tar.gz 
     tar -xjvf file.tar.bz2 ####解压 tar.bz2 
@@ -873,6 +876,7 @@ rcS.d
 
 ####用户组问题
     adduser walker 新建用户
+    useradd -g root -s /home/walker -m walker
     passwd walker 修改密码
     userdel walker 删除用户
     groupadd admin 用户组
