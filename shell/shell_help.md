@@ -801,16 +801,17 @@ netstat
     tar -cjvf /tmp/etc.tar.bz2 /etc　　<==打包后，以 bzip2 压缩
 
     unrar e file.rar ####解压rar 
+    zip -r xxx.zip ./*  #当前目录的内容为xxx.zip文件
     unzip file.zip ####解压zip 
 
     ####对于.7z
     支持 7Z,ZIP,Zip64,CAB,RAR,ARJ,GZIP,BZIP2,TAR,CPIO,RPM,ISO,DEB 压缩文件格式
     安装： apt-get install p7zip p7zip-full p7zip-rar
-    # 7z a yajiu.7z yajiu.jpg yajiu.png 将yajiu.jpg和yajiu.png压缩成一个7z包
-    # 7z a yajiu.7z *.jpg 将所有.jpg的文件压缩成一个7z包
-    # 7z a yajiu.7z yajiu 将文件夹yajiu压缩成一个7z包
-    # 7z e yajiu.7z 将yajiu.7z中的所有文件解压出来，e是解压到当前路径
-    # 7z x yajiu.7z 将yajiu.7z中的所有文件解压出来，x是解压到压缩包命名的目录下
+    7z a yajiu.7z yajiu.jpg yajiu.png 将yajiu.jpg和yajiu.png压缩成一个7z包
+    7z a yajiu.7z *.jpg 将所有.jpg的文件压缩成一个7z包
+    7z a yajiu.7z yajiu 将文件夹yajiu压缩成一个7z包
+    7z e yajiu.7z 将yajiu.7z中的所有文件解压出来，e是解压到当前路径
+    7z x yajiu.7z 将yajiu.7z中的所有文件解压出来，x是解压到压缩包命名的目录下
 
 
 ####挂载ntfs磁盘问题

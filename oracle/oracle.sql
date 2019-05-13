@@ -376,7 +376,7 @@ begin
 end;
 
 select md5('123456') from  dual;
-
+select greatest('2', '3', 1'') from dual;   --math.max
 
 --0.5 -> 1
 select * from round(100 / 200, 4) * 100 || '%' from dual;
