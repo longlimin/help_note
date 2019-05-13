@@ -214,7 +214,10 @@ update test
 set(id,test,value)=(select 'no.'||rownum newid,num,value from test where 1=1 and id='1')
 where id='1';
 select * from test;
-
+--page query
+select * from ( select t.*,rownum rowno from ( 
+        select * from tb_user_msg order by time
+ ) t where rownum < 10 ) where rowno > 2
 --delete
 delete from test where 1=1 and id = 'aaa';
 --drop table 
