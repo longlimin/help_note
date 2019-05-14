@@ -37,7 +37,7 @@ CREATE DATABASE IF NOT EXISTS walker default charset utf8 COLLATE utf8_general_c
 drop database walker;
 USE walker;
 
-CREATE TABLE test (id VARCHAR(20), name CHAR(10));
+CREATE TABLE  IF NOT EXISTS  test (id VARCHAR(20), name CHAR(10));
 drop table test;
 SHOW TABLES;
 DESCRIBE test; 
@@ -50,6 +50,7 @@ update test set name='walker1';
 select * from test;
 select * from test limit 0,1;
 
+select COLUMN_NAME from information_schema.COLUMNS where table_name = 'test';   //查看列名
 NOT NULL auto_increment,
 
 //安全模式
