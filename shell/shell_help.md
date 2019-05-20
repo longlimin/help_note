@@ -349,12 +349,10 @@ zypper ar http://download.opensuse.org/update/11.3/suse update
     apt-get check 检查是否有损坏的依赖
     ####指定版本安装
     apt-cache madison <<package name>>
+    apt-cache policy <<package>>
     将列出所有来源的版本。如下输出所示：
     apt-cache madison vim
        vim | 2:7.3.547-1 | http://debian.mirrors.tds.net/debian/ unstable/main amd64 Packages
-       vim | 2:7.3.429-2 | http://debian.mirrors.tds.net/debian/ testing/main amd64 Packages
-       vim | 2:7.3.429-2 | http://http.us.debian.org/debian/ testing/main amd64 Packages
-       vim | 2:7.3.429-2 | http://debian.mirrors.tds.net/debian/ testing/main Sources
        vim | 2:7.3.547-1 | http://debian.mirrors.tds.net/debian/ unstable/main Sources
     apt-get install <<package name>>=<<version>>
     apt-get install open-client=1:6.6p1-2ubuntu1

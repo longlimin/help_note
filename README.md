@@ -1,3 +1,7 @@
+## 记事本
+notepad++ c语言显示 ./正则加粗 //注释变色 1.序号变色 #号变色
+retext   md格式    见markdown.md介绍使用方式
+
 
 # help_note
 这是在下的学习旅途中所涉及到的 脚本类的各种语言(cmd,shell,python...) 各种帮助文档(正则,wireshark,nginx,makefile,git,gcc,ffmpeg,opencv,mysql,oracle,redis...) 及demo案例以及工具(个人项目git同步,差异制作补丁,cmd启动常用软件...)

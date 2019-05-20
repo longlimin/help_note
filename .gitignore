@@ -1,10 +1,7 @@
 .idea/
 .settings/
-
 build/
-
 WebContent/WEB-INF/classes
-
 *.bak
 *.class
 *.log
@@ -13,5 +10,4 @@ WebContent/WEB-INF/classes
 *.apk
 *.db
 *.~sql
-
 *.out

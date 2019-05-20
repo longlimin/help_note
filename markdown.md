@@ -58,12 +58,12 @@
 单行代码
 `create database hero;`
 代码块
-(```)
+```
     function fun(){
          echo "这是一句非常牛逼的代码";
     }
     fun();
-(```)
+```
 
 ## 9.流程图
 

@@ -4,9 +4,9 @@ https://github.com/msopentech/redis/releases
 cd redis-5.0.3
 make
 make install PREFIX=.  #选定目录安装生成bin目录  默认/usr/local/bin/
+
 ./src/redis-server.sh <redis.conf>
-./src/redis-cli.sh -h 127.0.0.1 -p 6379
-./src/redis-cli -h host -p port -a password  <set key value>
+./src/redis-cli <-h host/12.0.0.1> <-p port/6379> <-a password>  <set key value>
 
 //修改配置 redis.conf
     daemonize：如需要在后台运行，把该项的值改为yes
