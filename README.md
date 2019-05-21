@@ -2,9 +2,22 @@
 notepad++ c语言显示 ./正则加粗 //注释变色 1.序号变色 #号变色
 retext   md格式    见markdown.md介绍使用方式
 
+## 命令执行注释规范
+date --help
+Display the current time in the given FORMAT, or set the system date.
+Usage: date [-u|--utc|--universal] [MMDDhhmm[[CC]YY][.ss]]
+  -d, --date=STRING          display time described by STRING, not 'now'
+      --debug                annotate the parsed date,
+  -f, --file=DATEFILE        like --date; once for each line of DATEFILE
+  -r, --reference=FILE       display the last modification time of FILE
+  -s, --set=STRING           set time described by STRING
+  -u, --utc, --universal     print or set Coordinated Universal Time (UTC)
+      --help		显示此帮助信息并退出
+      --version		显示版本信息并退出
+
 
 # help_note
-这是在下的学习旅途中所涉及到的 脚本类的各种语言(cmd,shell,python...) 各种帮助文档(正则,wireshark,nginx,makefile,git,gcc,ffmpeg,opencv,mysql,oracle,redis...) 及demo案例以及工具(个人项目git同步,差异制作补丁,cmd启动常用软件...)
+这是学习旅途中所涉及到的 脚本类的各种语言(cmd,shell,python...) 各种帮助文档(正则,wireshark,nginx,makefile,git,gcc,ffmpeg,opencv,mysql,oracle,redis...) 及demo案例以及工具(个人项目git同步,差异制作补丁,cmd启动常用软件...)
 
 # 项目路径结构
     

@@ -645,19 +645,52 @@ netstat
 
 ####ssh scp putty<终端>  依靠ip/端口/用户名密码 远程登录
     **ssh密钥配置
-    ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-        1
+        ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
         参数说明： 
         -t 加密算法类型，这里是使用rsa算法 
         -P 指定私钥的密码，不需要可以不指定 
         -f 指定生成秘钥对保持的位置 
-    ssh-copy-id root@bigdata2   #客户端公钥发送个服务端 追加到服务端对应用户的$HOME/.ssh/authorized_keys
-    
+    >server config  
+        sudo vim /etc/ssh/sshd_config
+            RSAAuthentication yes 
+            PubkeyAuthentication yes 
+            AuthorizedKeysFile %h/.ssh/authorized_keys
+            StrictModes no
+        >create pub and private key
+        ssh-keygen -t rsa   
+        ssh-add ~/.ssh/id_rsa
+        cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+        chmod 644 ~/.ssh/authorized_keys
+        chmod 700 ~/.ssh
+        >restart
+        service ssh restart        
+        service sshd restart   
+        /etc/init.d/ssh restart
+        >check
+        ssh localhost 
+    >client config
+        ssh-keygen -t rsa 
+        >ss客户端公钥发送个服务端 追加到服务端对应用户的  ~/.ssh/authorized_keys
+        ssh root@127.23.1.2 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+        ||
+        ssh-copy-id root@127.23.1.2
+        ||
+        scp ~/.ssh/id_rsa.pub icbcmon@122.1.2.3:/approot/id_rsa.pub.new
+        ssh root@127.23.1.2 "cat ~/.ssh/id_rsa.pub.new >> ~/.ssh/authorized_keys"        
+
+        
 
     **ssh 远程登录 和 执行命令
     ssh username@127.23.1.2 "ls -lth /home/walker | grep hello "        
     ssh username@127.23.1.2 < fff.sh
-        
+    >ssh file download
+    ssh user@host 'tar cz src' | tar xzv
+    cd && tar czv src | ssh user@host 'tar xz'
+    >port bind and proxy 本地端口:目标主机:目标主机端口"
+    ssh -D 8080 user@host
+    ssh -L 2121:host2:21 host3
+    ssh -L 5900:localhost:5900 host3
+
     scp命令传输上传下载文件 
     ####上传文件
     scp xxx.gz icbcmon@122.1.2.3:/approot/
@@ -672,12 +705,10 @@ netstat
     -r  递归复制整个目录。  
     -v 详细方式显示输出。
 
-    service ssh start   
-    /etc/init.d/ssh restart
 
     ####免密码登录sshpass
     apt-get install sshpass
-    2.wget http://sourceforge.net/projects/sshpass/files/sshpass/1.05/sshpass-1.05.tar.gz  
+    wget http://sourceforge.net/projects/sshpass/files/sshpass/1.05/sshpass-1.05.tar.gz  
     tar xvzf sshpass-1.05.tar.gz  
     ./configure 
     make  
