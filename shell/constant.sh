@@ -49,7 +49,8 @@ git_cc=$_root'/workspace_android/cc'
 git_GraphicsTools=$_root'/workspace_my/GraphicsTools'
 git_AngularApp=$_root'/workspace_my/AngularApp'
 
-git_local_dirs=($git_help_note $git_walker $git_BaseSSM $git_cc $git_GraphicsTools $git_AngularApp)
+git_local_dirs=($git_help_note $git_walker)
+#git_local_dirs=($git_help_note $git_walker $git_BaseSSM $git_cc $git_GraphicsTools $git_AngularApp)
 # $git_base 
 
 # remote urls
