@@ -62,7 +62,8 @@ git_remote_cc='https://github.com/1424234500/cc.git'
 git_remote_GraphicsTools='https://github.com/1424234500/GraphicsTools.git'
 git_remote_AngularApp='https://github.com/1424234500/AngularApp.git'
 
-git_remote_urls=($git_remote_help_note $git_remote_walker $git_remote_BaseSSM $git_remote_cc $git_remote_GraphicsTools $git_remote_AngularApp)
+git_remote_urls=($git_remote_help_note $git_remote_walker)
+#git_remote_urls=($git_remote_help_note $git_remote_walker $git_remote_BaseSSM $git_remote_cc $git_remote_GraphicsTools $git_remote_AngularApp)
 # $git_remote_base 
 
 #echo $_root
